@@ -1,0 +1,553 @@
+/* ========================================
+   All Invoices - shadcn/ui Inspired Design
+======================================== */
+
+.page-container {
+  padding: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1200px) {
+  .stats-bar {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Filter Bar ── */
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.filter-buttons {
+  flex: 1;
+}
+
+.search-box {
+  min-width: 280px;
+  flex: 0 0 280px;
+}
+
+/* shadcn Button variant=outline */
+.filter-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+/* ── Bills Grid ── */
+.bills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .bills-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Bill Card (shadcn Card) ── */
+.bill-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 150ms ease;
+}
+
+.bill-card:hover {
+  border-color: var(--border-color-hover);
+}
+
+.bill-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bill-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.bill-title-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.bill-room {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--card-foreground);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bill-invoice {
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  letter-spacing: 0.02em;
+}
+
+.bill-header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.bill-amount {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--card-foreground);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ── Card Body ── */
+.bill-card-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bill-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bill-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.bill-meta-item app-icon {
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.bill-purpose {
+  font-size: 0.75rem;
+  color: var(--card-foreground);
+  font-weight: 500;
+  padding: 4px 10px;
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--brand-accent);
+}
+
+/* ── Bill Items ── */
+.bill-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  font-size: 0.6875rem;
+  border-radius: var(--radius-xs);
+  transition: background 150ms ease;
+}
+
+.item-row:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='dark'] .item-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.item-row.item-incident {
+  background: var(--danger-bg);
+}
+
+.item-row.item-cancellation {
+  background: var(--warning-bg);
+}
+
+.item-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.meeting-badge {
+  background: var(--info-bg);
+  color: var(--info);
+  border: 1px solid var(--info-border);
+}
+
+.incident-badge {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.cancellation-badge {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border: 1px solid var(--warning-border);
+}
+
+.item-desc {
+  color: var(--muted-foreground);
+  flex: 1;
+  margin-right: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-amount {
+  font-weight: 600;
+  color: var(--card-foreground);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Bill Footer Summary ── */
+.bill-footer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.bill-summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 4px;
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  gap: 3px;
+  transition: background 150ms ease;
+}
+
+.bill-summary-item:hover {
+  background: var(--accent);
+}
+
+.bill-summary-item.bill-paid {
+  background: var(--success-bg);
+}
+
+.bill-summary-item.bill-due {
+  background: var(--info-bg);
+}
+
+.bill-summary-label {
+  font-size: 0.5625rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.bill-summary-value {
+  font-size: 0.75rem;
+  color: var(--card-foreground);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── State Panel ── */
+.state-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  text-align: center;
+  color: var(--muted-foreground);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--card);
+  min-height: 200px;
+}
+
+.state-panel svg {
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.state-panel h3 {
+  margin: 0 0 8px;
+  color: var(--card-foreground);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.state-panel p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+/* ── Loading Spinner ── */
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--brand-accent);
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .bill-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .bill-footer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 48rem) {
+  :host {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  /* Compact padding */
+  .page-content,
+  .main-content,
+  .content-wrapper,
+  .dashboard-content {
+    padding: 12px !important;
+  }
+
+  /* Stack grids */
+  .stats-row,
+  .stats-grid,
+  .overview-cards,
+  .quick-links-grid,
+  .status-breakdown-grid,
+  .room-overview-grid,
+  .finance-grid,
+  .revenue-sources-grid,
+  .payment-status-grid,
+  .two-col-grid,
+  .three-col-grid,
+  .four-col-grid,
+  .dashboard-columns {
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+  }
+
+  /* Compact cards */
+  .card,
+  .card-row,
+  .bill-card,
+  .usage-card,
+  .damage-card,
+  .booking-card,
+  .room-card,
+  .quick-link-card,
+  .stat-card {
+    padding: 12px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Compact typography */
+  h1 { font-size: 1.25rem !important; }
+  h2 { font-size: 1rem !important; }
+  h3 { font-size: 0.875rem !important; }
+
+  /* Full-width buttons */
+  .action-buttons,
+  .card-actions,
+  .btn-group {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .action-buttons .btn,
+  .card-actions .btn,
+  .btn-group .btn {
+    width: 100% !important;
+  }
+
+  /* Compact badges */
+  .badge {
+    padding: 2px 6px !important;
+    font-size: 0.625rem !important;
+  }
+
+  /* Compact metric chips */
+  .metric-chip {
+    padding: 2px 6px !important;
+    min-width: auto !important;
+  }
+
+  /* Scrollable filter bar */
+  .filter-bar {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Compact section headings */
+  .section-header {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .section-header h2 {
+    font-size: 1rem !important;
+  }
+
+  /* Compact form fields */
+  .form-field {
+    margin-bottom: 12px !important;
+  }
+
+  .form-field label {
+    font-size: 0.75rem !important;
+  }
+
+  /* Hide decorative elements */
+  .deco-circle,
+  .banner-deco,
+  .deco-lines,
+  .deco-dots,
+  .deco-triangle {
+    display: none !important;
+  }
+
+  /* Compact tables */
+  .table-wrapper {
+    font-size: 0.75rem !important;
+  }
+
+  /* Modal full-screen */
+  .modal-overlay,
+  .detail-overlay,
+  .conflict-overlay {
+    padding: 8px !important;
+  }
+
+  .modal-content,
+  .detail-panel,
+  .conflict-modal {
+    max-height: 95vh !important;
+    border-radius: var(--radius-md) !important;
+  }
+}
+
+@media (max-width: 22.5rem) {
+  /* Ultra-compact */
+  .card-row {
+    padding: 10px !important;
+    gap: 4px !important;
+  }
+
+  .meta-item {
+    font-size: 0.6875rem !important;
+  }
+
+  .revenue-total-amount,
+  .total-amount {
+    font-size: 1rem !important;
+  }
+}

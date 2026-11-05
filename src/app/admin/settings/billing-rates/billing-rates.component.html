@@ -1,0 +1,100 @@
+<div class="settings-page">
+  <app-page-banner
+    [icon]="LucideDollarSign"
+    eyebrow="Settings"
+    title="Billing &amp; Rates"
+    description="Configure overrun rates,
+    no-show fees, cancellation policies, and invoice settings."
+  ></app-page-banner>
+  @if (error()) {
+    <div class="notice notice-error">{{ error() }}</div>
+  }
+  @if (saved()) {
+    <div class="notice notice-success">
+      Settings saved successfully.
+    </div>
+  }
+  @if (loading()) {
+    <div class="loading-panel">Loading settings...</div>
+  } @else {
+    <div class="settings-panel">
+      <div class="settings-section">
+        <h2 class="section-title">
+          Billing Policy &amp; Rates
+        </h2>
+        <div class="settings-grid">
+          @for (setting of settings(); track setting.key) {
+            <div class="setting-card">
+              <label class="setting-label">{{
+                setting.label
+              }}</label>
+              <p class="setting-description">
+                {{ setting.description }}
+              </p>
+              @if (setting.valueType === 'number') {
+                <input
+                  type="number"
+                  step="any"
+                  class="setting-input"
+                  [value]="getValue(setting.key)"
+                  (input)="
+                    setValue(
+                      setting.key,
+                      $any($event).target.value
+                    )
+                  "
+                />
+              } @else if (setting.valueType === 'string') {
+                <input
+                  type="text"
+                  class="setting-input"
+                  [value]="getValue(setting.key)"
+                  (input)="
+                    setValue(
+                      setting.key,
+                      $any($event).target.value
+                    )
+                  "
+                />
+              } @else if (setting.valueType === 'boolean') {
+                <label class="toggle-switch">
+                  <input
+                    type="checkbox"
+                    [checked]="
+                      getValue(setting.key) === 'true'
+                    "
+                    (change)="
+                      setValue(
+                        setting.key,
+                        $any($event).target.checked
+                          ? 'true'
+                          : 'false'
+                      )
+                    "
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              }
+              @if (!setting.systemDefault) {
+                <span class="modified-badge">Modified</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <div class="save-bar">
+        <button
+          class="btn btn-save"
+          (click)="save()"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span class="spinner"></span> Saving...
+          } @else {
+            Save Changes
+          }
+        </button>
+      </div>
+    </div>
+  }
+</div>

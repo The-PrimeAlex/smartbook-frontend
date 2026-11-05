@@ -1,0 +1,203 @@
+<div class="page-container">
+  <app-page-banner
+    [icon]="LucideTriangleAlert"
+    eyebrow="My Activity"
+    title="Report an Incident"
+    description="Report damage or issues from your current meeting room"
+  ></app-page-banner>
+  <!-- Success Message -->
+  @if (success()) {
+    <div class="success-bar">
+      <app-icon
+        [icon]="LucideCheckCircle"
+        [size]="20"
+      ></app-icon>
+      <span
+        >Incident reported successfully. It will be reviewed
+        by an administrator.</span
+      >
+    </div>
+  }
+  <!-- Error Message -->
+  @if (error()) {
+    <div class="error-bar">
+      <app-icon
+        [icon]="LucideXCircle"
+        [size]="20"
+      ></app-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+  }
+  <!-- No Checked-In Bookings -->
+  @if (!loading() && checkedInRooms().length === 0) {
+    <app-empty-state
+      [icon]="LucideCalendar"
+      title="No Eligible Bookings"
+      message="You can only report incidents from a room you have checked into or completed."
+    >
+      <button
+        class="action-button"
+        (click)="
+          router.navigate(['/app/bookings/upcoming'])
+        "
+      >
+        View Your Bookings
+      </button>
+    </app-empty-state>
+  }
+  <!-- Main Content -->
+  @if (!loading() && checkedInRooms().length > 0) {
+    <div class="content-grid">
+      <!-- Room Selection Panel -->
+      <div class="room-panel">
+        <h2 class="panel-title">
+          <app-icon
+            [icon]="LucideHome"
+            [size]="18"
+          ></app-icon>
+          Select Room
+        </h2>
+        <p class="panel-hint">
+          Choose the room where the incident occurred
+        </p>
+        <div class="room-list">
+          @for (
+            room of checkedInRooms();
+            track room.roomId
+          ) {
+            <div
+              class="room-item"
+              [class.selected]="
+                selectedRoom()?.roomId === room.roomId
+              "
+              (click)="selectRoom(room)"
+            >
+              <div class="room-info">
+                <div class="room-name">
+                  {{ room.roomName }}
+                </div>
+                <div class="room-purpose">
+                  {{ room.purpose }}
+                </div>
+                <div class="room-time">
+                  <app-icon
+                    [icon]="LucideClock"
+                    [size]="14"
+                  ></app-icon>
+                  {{ room.startTime | date: 'short' }} –
+                  {{ room.endTime | date: 'short' }}
+                </div>
+              </div>
+              <div class="room-status">
+                <app-status-badge
+                  [label]="
+                    room.bookingStatus === 'CHECKED_IN'
+                      ? 'Checked In'
+                      : 'Completed'
+                  "
+                  [variant]="
+                    getBadgeVariant(room.bookingStatus)
+                  "
+                ></app-status-badge>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <!-- Incident Form Panel -->
+      <div class="form-panel">
+        <h2 class="panel-title">
+          <app-icon
+            [icon]="LucideFileText"
+            [size]="18"
+          ></app-icon>
+          Incident Details
+        </h2>
+        @if (selectedRoom()) {
+          <div class="form-section">
+            <div class="selected-room-info">
+              <strong>Room:</strong>
+              {{ selectedRoom()?.roomName }}
+            </div>
+
+            <div class="form-field">
+              <label for="incidentType"
+                >Incident Type *</label
+              >
+              <select
+                id="incidentType"
+                [(ngModel)]="incidentType"
+                name="incidentType"
+                required
+              >
+                <option value="" disabled>
+                  Select incident type
+                </option>
+                @for (
+                  type of incidentTypes;
+                  track type.value
+                ) {
+                  <option [value]="type.value">
+                    {{ type.label }}
+                  </option>
+                }
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="description">Description *</label>
+              <textarea
+                id="description"
+                [(ngModel)]="description"
+                name="description"
+                rows="6"
+                placeholder="Describe the incident in detail..."
+                required
+              ></textarea>
+            </div>
+            <div class="form-actions">
+              <button
+                class="submit-button"
+                (click)="submitIncident()"
+                [disabled]="
+                  saving() ||
+                  !incidentType() ||
+                  !description()
+                "
+              >
+                @if (!saving()) {
+                  <app-icon
+                    [icon]="LucideCheckCircle"
+                    [size]="18"
+                  ></app-icon>
+                }
+                @if (saving()) {}
+                {{
+                  saving()
+                    ? 'Submitting...'
+                    : 'Report Incident'
+                }}
+              </button>
+            </div>
+          </div>
+        }
+        @if (!selectedRoom()) {
+          <div class="form-placeholder">
+            <app-icon
+              [icon]="LucideZap"
+              [size]="48"
+              [strokeWidth]="1.5"
+            ></app-icon>
+            <p>Select a room to report an incident</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

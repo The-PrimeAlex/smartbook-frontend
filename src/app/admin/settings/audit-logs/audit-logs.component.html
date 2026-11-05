@@ -1,0 +1,137 @@
+<div class="settings-page">
+  <app-page-banner
+    [icon]="LucideFileClock"
+    eyebrow="Settings"
+    title="Audit Logs"
+    description="Configure audit logging retention and view all modified system settings."
+  ></app-page-banner>
+  @if (error()) {
+    <div class="notice notice-error">{{ error() }}</div>
+  }
+  @if (saved()) {
+    <div class="notice notice-success">
+      Settings saved successfully.
+    </div>
+  }
+  @if (loading()) {
+    <div class="loading-panel">Loading settings...</div>
+  } @else {
+    <div class="settings-panel">
+      <div class="settings-section">
+        <h2 class="section-title">Audit Configuration</h2>
+        <div class="settings-grid">
+          @for (setting of settings(); track setting.key) {
+            <div class="setting-card">
+              <label class="setting-label">{{
+                setting.label
+              }}</label>
+              <p class="setting-description">
+                {{ setting.description }}
+              </p>
+              @if (setting.valueType === 'number') {
+                <input
+                  type="number"
+                  class="setting-input"
+                  [value]="getValue(setting.key)"
+                  (input)="
+                    setValue(
+                      setting.key,
+                      $any($event).target.value
+                    )
+                  "
+                />
+              } @else if (setting.valueType === 'boolean') {
+                <label class="toggle-switch">
+                  <input
+                    type="checkbox"
+                    [checked]="
+                      getValue(setting.key) === 'true'
+                    "
+                    (change)="
+                      setValue(
+                        setting.key,
+                        $any($event).target.checked
+                          ? 'true'
+                          : 'false'
+                      )
+                    "
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <div class="save-bar">
+        <button
+          class="btn btn-save"
+          (click)="save()"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span class="spinner"></span> Saving...
+          } @else {
+            Save Changes
+          }
+        </button>
+      </div>
+    </div>
+
+    <!-- Modified Settings Log -->
+    <div class="settings-panel audit-log-panel">
+      <h2 class="section-title">
+        Modified Settings Audit Trail
+      </h2>
+      @if (sortedModifiedSettings.length === 0) {
+        <app-empty-state
+          [icon]="LucideFileClock"
+          title="No Modified Settings"
+          message="All settings are currently using their default values."
+        ></app-empty-state>
+      } @else {
+        <div class="audit-table-wrapper">
+          <table class="audit-table">
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Category</th>
+                <th>Default Value</th>
+                <th>Current Value</th>
+                <th>Last Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (
+                item of sortedModifiedSettings;
+                track item.id
+              ) {
+                <tr>
+                  <td>
+                    <strong>{{ item.label }}</strong>
+                  </td>
+                  <td>
+                    <span class="category-badge">{{
+                      item.category
+                    }}</span>
+                  </td>
+                  <td>
+                    <code>{{ item.defaultValue }}</code>
+                  </td>
+                  <td>
+                    <code class="modified-value">{{
+                      item.value
+                    }}</code>
+                  </td>
+                  <td>
+                    {{ item.updatedAt | date: 'medium' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</div>

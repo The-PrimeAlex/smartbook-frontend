@@ -1,0 +1,111 @@
+<section class="form-panel" aria-labelledby="login-heading">
+  <form
+    [formGroup]="form"
+    class="login-form"
+    (ngSubmit)="onSubmit()"
+  >
+    <h2 id="login-heading">Sign In.</h2>
+    <p class="form-description">
+      Welcome back. Sign in to manage your meetings and
+      workspaces.
+    </p>
+    <div class="field">
+      <input
+        class="login-form-input"
+        [class.auth-invalid]="!!errorMessage()"
+        type="email"
+        id="email"
+        formControlName="email"
+        [class.email-required]="
+          emailControl?.hasError('required') &&
+          (emailControl?.dirty || emailControl?.touched)
+        "
+        [placeholder]="
+          emailControl?.hasError('required') &&
+          (emailControl?.dirty || emailControl?.touched)
+            ? 'Email is required'
+            : ' '
+        "
+        autocomplete="username"
+      />
+      <label for="email">Email</label>
+      @if (
+        emailControl?.hasError('email') &&
+        (emailControl?.dirty || emailControl?.touched)
+      ) {
+        <small class="error-message">
+          Please enter a valid email.
+        </small>
+      }
+    </div>
+
+    <div class="field password-field">
+      <input
+        class="login-form-input"
+        [class.auth-invalid]="!!errorMessage()"
+        [type]="showPassword() ? 'text' : 'password'"
+        id="password"
+        name="password"
+        placeholder=" "
+        autocomplete="current-password"
+        required
+        formControlName="password"
+      />
+
+      <label for="password">Password</label>
+
+      <button
+        type="button"
+        class="password-toggle"
+        (click)="setShowPassword()"
+        [attr.aria-label]="
+          showPassword() ? 'Hide password' : 'Show password'
+        "
+      >
+        {{ showPassword() ? 'Hide' : 'Show' }}
+      </button>
+    </div>
+
+    <div class="form-options">
+      <a
+        class="forgot-link"
+        routerLink="/forgot-password"
+        [routerLink]="['/forgot-password']"
+      >
+        Forgot password?
+      </a>
+    </div>
+
+    <button
+      type="submit"
+      class="login-button"
+      [disabled]="form.invalid || loading()"
+    >
+      {{ loading() ? 'Signing in…' : 'Sign in' }}
+      <span aria-hidden="true">→</span>
+    </button>
+
+    @if (errorMessage()) {
+      <div
+        class="auth-error"
+        role="alert"
+        aria-live="polite"
+      >
+        <span class="auth-error-icon" aria-hidden="true"
+          >!</span
+        >
+        <p>{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <p class="account-help">
+      Don't have an account? <br />
+      <a
+        class="admin-link"
+        [routerLink]="['/registration-request']"
+      >
+        Ask your administrator to create one for you
+      </a>
+    </p>
+  </form>
+</section>

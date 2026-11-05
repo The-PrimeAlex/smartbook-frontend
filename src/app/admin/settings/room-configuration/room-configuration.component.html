@@ -1,0 +1,313 @@
+<div class="settings-page">
+  <app-page-banner
+    [icon]="LucideLayoutGrid"
+    eyebrow="Settings"
+    title="Room Configuration"
+    description="Select a room from the list below to view and edit its configuration details."
+  ></app-page-banner>
+
+  @if (error()) {
+    <div class="notice notice-error">{{ error() }}</div>
+  }
+  @if (saved()) {
+    <div class="notice notice-success">
+      Room updated successfully.
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-panel">Loading rooms...</div>
+  } @else {
+    <div class="config-layout">
+      <!-- Left Panel: Room List -->
+      <div class="room-panel">
+        <div class="toolbar">
+          <app-search-box
+            placeholder="Search rooms..."
+            [value]="searchQuery()"
+            (change)="setSearch($event)"
+          ></app-search-box>
+          <span class="room-count"
+            >{{ filteredRooms().length }} of
+            {{ rooms().length }} rooms</span
+          >
+        </div>
+
+        @if (rooms().length === 0) {
+          <app-empty-state
+            [icon]="LucideLayoutGrid"
+            title="No Rooms Found"
+            message="No rooms have been created yet. Go to View Rooms to add your first room."
+          ></app-empty-state>
+        } @else if (filteredRooms().length === 0) {
+          <app-empty-state
+            [icon]="LucideSearch"
+            title="No Matching Rooms"
+            [message]="
+              'No rooms match &quot;' +
+              searchQuery() +
+              '&quot;. Try a different search term.'
+            "
+          ></app-empty-state>
+        } @else {
+          <div class="room-list">
+            <div class="list-header">
+              <span class="col-name">Room Name</span>
+              <span class="col-type">Type</span>
+              <span class="col-capacity">Capacity</span>
+              <span class="col-rate">Hourly Rate</span>
+              <span class="col-status">Status</span>
+            </div>
+            <div class="list-body">
+              @for (
+                room of filteredRooms();
+                track room.roomId;
+                let i = $index
+              ) {
+                <div
+                  class="list-row"
+                  [class.selected]="
+                    selectedRoom()?.roomId === room.roomId
+                  "
+                  (click)="selectRoom(room)"
+                  [style.animation-delay]="i * 50 + 'ms'"
+                >
+                  <span class="col-name">
+                    <span class="row-icon">🏢</span>
+                    <span class="name-text">
+                      <span class="name">{{
+                        room.roomName
+                      }}</span>
+                      @if (room.description) {
+                        <span class="description">{{
+                          room.description
+                        }}</span>
+                      }
+                    </span>
+                  </span>
+                  <span class="col-type">
+                    <span class="type-badge">{{
+                      formatRoomType(room.roomType)
+                    }}</span>
+                  </span>
+                  <span class="col-capacity">
+                    <span class="icon">👥</span>
+                    {{ room.capacity }}
+                  </span>
+                  <span class="col-rate">
+                    KES
+                    {{ room.hourlyRate.toLocaleString() }}
+                  </span>
+                  <span class="col-status">
+                    <span
+                      class="status-badge status-{{
+                        room.status.toLowerCase()
+                      }}"
+                    >
+                      <span class="status-dot"></span>
+                      {{ formatStatus(room.status) }}
+                    </span>
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Right Panel: Room Edit Form -->
+      <div class="edit-panel">
+        @if (selectedRoom()) {
+          <div class="edit-card">
+            <div class="edit-card-header">
+              <div>
+                <span class="section-eyebrow"
+                  >EDIT ROOM</span
+                >
+                <h2>{{ selectedRoom()!.roomName }}</h2>
+              </div>
+              @if (!editing()) {
+                <button
+                  class="btn-edit"
+                  (click)="startEditing()"
+                >
+                  ✏️ Edit
+                </button>
+              }
+            </div>
+
+            @if (!editing()) {
+              <!-- View Mode: Display room details -->
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <span class="detail-label"
+                    >Room Type</span
+                  >
+                  <span class="detail-value">{{
+                    formatRoomType(selectedRoom()!.roomType)
+                  }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Status</span>
+                  <span
+                    class="status-badge status-{{
+                      selectedRoom()!.status.toLowerCase()
+                    }}"
+                  >
+                    <span class="status-dot"></span>
+                    {{
+                      formatStatus(selectedRoom()!.status)
+                    }}
+                  </span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Capacity</span>
+                  <span class="detail-value"
+                    >👥
+                    {{
+                      selectedRoom()!.capacity
+                    }}
+                    people</span
+                  >
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label"
+                    >Hourly Rate</span
+                  >
+                  <span class="detail-value rate"
+                    >KES
+                    {{
+                      selectedRoom()!.hourlyRate.toLocaleString()
+                    }}</span
+                  >
+                </div>
+                @if (selectedRoom()!.description) {
+                  <div class="detail-item full-width">
+                    <span class="detail-label"
+                      >Description</span
+                    >
+                    <span class="detail-value">{{
+                      selectedRoom()!.description
+                    }}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <!-- Edit Mode: Form fields -->
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label"
+                    >Room Name</label
+                  >
+                  <input
+                    class="form-input"
+                    type="text"
+                    [(ngModel)]="draft().roomName"
+                    placeholder="e.g. Boardroom A"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label"
+                    >Room Type</label
+                  >
+                  <select
+                    class="form-select"
+                    [(ngModel)]="draft().roomType"
+                  >
+                    @for (type of roomTypes; track type) {
+                      <option [value]="type">
+                        {{ formatRoomType(type) }}
+                      </option>
+                    }
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Status</label>
+                  <select
+                    class="form-select"
+                    [(ngModel)]="draft().status"
+                  >
+                    @for (
+                      status of roomStatuses;
+                      track status
+                    ) {
+                      <option [value]="status">
+                        {{ formatStatus(status) }}
+                      </option>
+                    }
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Capacity</label>
+                  <input
+                    class="form-input"
+                    type="number"
+                    min="1"
+                    [(ngModel)]="draft().capacity"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label"
+                    >Hourly Rate (KES)</label
+                  >
+                  <input
+                    class="form-input"
+                    type="number"
+                    min="0"
+                    [(ngModel)]="draft().hourlyRate"
+                  />
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label"
+                    >Description</label
+                  >
+                  <textarea
+                    class="form-textarea"
+                    rows="3"
+                    [(ngModel)]="draft().description"
+                    placeholder="Room description..."
+                  ></textarea>
+                </div>
+
+                <div class="form-actions">
+                  <button
+                    class="btn btn-cancel"
+                    (click)="cancelEditing()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    class="btn btn-save"
+                    (click)="saveRoom()"
+                    [disabled]="saving()"
+                  >
+                    @if (saving()) {
+                      <span class="spinner"></span>
+                      Saving...
+                    } @else {
+                      Save Changes
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="edit-placeholder">
+            <p class="placeholder-icon">👈</p>
+            <h3>Select a Room</h3>
+            <p>
+              Click on a room from the list to view its
+              details and configure its settings.
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

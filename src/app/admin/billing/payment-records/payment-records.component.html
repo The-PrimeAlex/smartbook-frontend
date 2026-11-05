@@ -1,0 +1,167 @@
+<div class="page-container">
+  <app-page-banner
+    [icon]="LucideCreditCard"
+    eyebrow="Billing"
+    title="Payment Records"
+    description="View all payment transactions — M-Pesa, card, bank transfer, and cash payments."
+  ></app-page-banner>
+
+  <section class="stats-bar">
+    <app-stat-card
+      [icon]="LucideCreditCard"
+      [iconBg]="'rgba(59,130,246,0.12)'"
+      [iconColor]="'var(--info,#3b82f6)'"
+      delay="0s"
+    >
+      <span stat-value>{{ totalPayments() }}</span>
+      <span stat-label>Total Payments</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideCreditCard"
+      [iconBg]="'rgba(34,197,94,0.12)'"
+      [iconColor]="'var(--success,#22c55e)'"
+      delay="0.05s"
+    >
+      <span stat-value>{{ successCount() }}</span>
+      <span stat-label>Successful</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideCreditCard"
+      [iconBg]="'rgba(245,158,11,0.12)'"
+      [iconColor]="'var(--warning,#f59e0b)'"
+      delay="0.1s"
+    >
+      <span stat-value>{{ pendingCount() }}</span>
+      <span stat-label>Pending</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideCreditCard"
+      [iconBg]="'rgba(239,68,68,0.12)'"
+      [iconColor]="'var(--error,#ef4444)'"
+      delay="0.15s"
+    >
+      <span stat-value>{{ failedCount() }}</span>
+      <span stat-label>Failed</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideCreditCard"
+      [iconBg]="'rgba(20,184,166,0.12)'"
+      [iconColor]="'var(--teal,#14b8a6)'"
+      delay="0.2s"
+    >
+      <span stat-value
+        >KES
+        {{
+          totalAmount().toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+          })
+        }}</span
+      >
+      <span stat-label>Total Collected</span>
+    </app-stat-card>
+  </section>
+
+  <div class="filter-bar">
+    <app-filter-group
+      [filters]="filterOptions"
+      [activeFilter]="selectedFilter()"
+      (select)="setFilter($event)"
+    ></app-filter-group>
+  </div>
+
+  <section class="payments-section">
+    @if (loading() && payments().length === 0) {
+      <div class="state-panel" role="status">
+        <span
+          class="loading-spinner"
+          aria-hidden="true"
+        ></span>
+        <p>Loading payment records...</p>
+      </div>
+    } @else if (filteredPayments().length === 0) {
+      <app-empty-state
+        [icon]="LucideCreditCard"
+        title="No payment records"
+        [message]="
+          selectedFilter() === 'ALL'
+            ? 'Payment records will appear here when users make payments.'
+            : 'There are no payments with this status.'
+        "
+      ></app-empty-state>
+    } @else {
+      <div class="payments-grid">
+        @for (
+          payment of filteredPayments();
+          track payment.paymentId;
+          let i = $index
+        ) {
+          <article
+            class="payment-card"
+            [style.animation-delay]="(i * 0.05) + 's'"
+          >
+            <div class="payment-card-header">
+              <div class="payment-header-left">
+                <app-status-badge
+                  [label]="
+                    getStatusLabel(payment.paymentStatus)
+                  "
+                  [variant]="
+                    getBadgeVariant(payment.paymentStatus)
+                  "
+                ></app-status-badge>
+                <span class="method-badge">{{
+                  getMethodLabel(payment.paymentMethod)
+                }}</span>
+              </div>
+              <span class="payment-amount">{{
+                formatCurrency(
+                  payment.amount,
+                  payment.currency
+                )
+              }}</span>
+            </div>
+
+            <div class="payment-card-body">
+              <div class="payment-info-row">
+                <span class="payment-label">User</span>
+                <span class="payment-value">{{
+                  payment.userName
+                }}</span>
+              </div>
+              <div class="payment-info-row">
+                <span class="payment-label">Room</span>
+                <span class="payment-value">{{
+                  payment.roomName
+                }}</span>
+              </div>
+              <div class="payment-info-row">
+                <span class="payment-label">Date</span>
+                <span class="payment-value">{{
+                  formatDateTime(payment.createdAt)
+                }}</span>
+              </div>
+              @if (payment.transactionReference) {
+                <div class="payment-info-row">
+                  <span class="payment-label"
+                    >Reference</span
+                  >
+                  <span class="payment-value">{{
+                    payment.transactionReference
+                  }}</span>
+                </div>
+              }
+              @if (payment.paidAt) {
+                <div class="payment-info-row">
+                  <span class="payment-label">Paid At</span>
+                  <span class="payment-value">{{
+                    formatDateTime(payment.paidAt)
+                  }}</span>
+                </div>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>

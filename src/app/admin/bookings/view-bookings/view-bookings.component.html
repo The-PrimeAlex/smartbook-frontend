@@ -1,0 +1,295 @@
+<main class="bookings-page">
+  <app-page-banner
+    [icon]="LucideCalendar"
+    eyebrow="Bookings"
+    title="All Bookings"
+    description="View and manage all user bookings — pending, confirmed, checked in, no shows, and more."
+  >
+    <button
+      type="button"
+      [disabled]="loading()"
+      (click)="loadBookings()"
+    >
+      <app-icon [icon]="LucideRefreshCw" [size]="14"></app-icon>
+      {{ loading() ? 'Refreshing...' : 'Refresh' }}
+    </button>
+  </app-page-banner>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error" role="alert">
+      <span>{{ errorMessage() }}</span>
+      <button
+        type="button"
+        class="alert-dismiss"
+        aria-label="Dismiss error"
+        (click)="errorMessage.set('')"
+      >
+        &times;
+      </button>
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success" role="status">
+      <span>{{ successMessage() }}</span>
+      <button
+        type="button"
+        class="alert-dismiss"
+        aria-label="Dismiss message"
+        (click)="successMessage.set('')"
+      >
+        &times;
+      </button>
+    </div>
+  }
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-blue">
+        <app-icon [icon]="LucideCalendar" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ totalBookings() }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-amber">
+        <app-icon [icon]="LucideClock" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ pendingCount() }}</span>
+        <span class="stat-label">Pending</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-green">
+        <app-icon [icon]="LucideCheckCircle" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ activeCount() }}</span>
+        <span class="stat-label">Active</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-teal">
+        <app-icon [icon]="LucideCheckCircle2" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ completedCount() }}</span>
+        <span class="stat-label">Completed</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-purple">
+        <app-icon [icon]="LucideXCircle" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ noShowCount() }}</span>
+        <span class="stat-label">No Shows</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-red">
+        <app-icon [icon]="LucideBan" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ cancelledCount() }}</span>
+        <span class="stat-label">Cancelled</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="bookings-section">
+    <div class="section-heading">
+      <div>
+        <h2>All user bookings</h2>
+        <p>Filter by status and manage any booking.</p>
+      </div>
+
+      <span class="result-count">
+        {{ filteredBookings().length }}
+        {{
+          filteredBookings().length === 1
+            ? 'booking'
+            : 'bookings'
+        }}
+      </span>
+    </div>
+
+    <nav class="filter-list" aria-label="Filter bookings">
+      @for (filter of filters; track filter.value) {
+        <button
+          type="button"
+          class="filter-button"
+          [class.filter-active]="
+            selectedFilter() === filter.value
+          "
+          [attr.aria-pressed]="
+            selectedFilter() === filter.value
+          "
+          (click)="setFilter(filter.value)"
+        >
+          {{ filter.label }}
+        </button>
+      }
+    </nav>
+
+    @if (loading() && bookings().length === 0) {
+      <div class="state-panel" role="status">
+        <span
+          class="loading-spinner"
+          aria-hidden="true"
+        ></span>
+        <p>Loading bookings...</p>
+      </div>
+    } @else if (filteredBookings().length === 0) {
+      <app-empty-state
+        [icon]="LucideCalendar"
+        title="No bookings found"
+        [message]="
+          selectedFilter() === 'ALL'
+            ? 'No bookings exist yet. Bookings will appear here when users create them.'
+            : 'There are no bookings with this status.'
+        "
+      >
+        @if (selectedFilter() !== 'ALL') {
+          <button
+            type="button"
+            class="btn btn-outline"
+            (click)="setFilter('ALL')"
+          >
+            View all bookings
+          </button>
+        }
+      </app-empty-state>
+    } @else {
+      <div class="booking-list">
+        @for (
+          booking of filteredBookings();
+          track booking.bookingId
+        ) {
+          <article class="booking-card">
+            <div class="booking-card-top">
+              <div class="booking-info">
+                <h3 class="booking-room">{{ booking.roomName }}</h3>
+                <p class="booking-purpose">{{ booking.purpose }}</p>
+              </div>
+              <app-status-badge
+                [label]="statusLabel(booking.bookingStatus)"
+                [variant]="getBadgeVariant(booking.bookingStatus)"
+              ></app-status-badge>
+            </div>
+
+            <div class="booking-card-meta">
+              <span class="meta-chip">
+                <app-icon [icon]="LucideCalendar" [size]="14" class="meta-chip-icon"></app-icon>
+                {{ booking.startTime | date: 'mediumDate' }}
+              </span>
+              <span class="meta-chip">
+                <app-icon [icon]="LucideClock" [size]="14" class="meta-chip-icon"></app-icon>
+                {{ booking.startTime | date: 'shortTime' }} — {{ booking.endTime | date: 'shortTime' }}
+              </span>
+              <span class="meta-chip">
+                <app-icon [icon]="LucideUser" [size]="14" class="meta-chip-icon"></app-icon>
+                {{ booking.userName }}
+              </span>
+              @if (booking.bookedHourlyRate !== null) {
+                <span class="meta-chip">
+                  <app-icon [icon]="LucideCheckCircle" [size]="14" class="meta-chip-icon"></app-icon>
+                  {{ booking.bookedHourlyRate | currency:'KSH ':'symbol-narrow' }}
+                </span>
+              }
+            </div>
+
+            @if (
+              booking.bookingStatus === 'CANCELLED' ||
+              booking.bookingStatus === 'NO_SHOW'
+            ) {
+              <div class="booking-note">
+                @if (booking.cancellationReason) {
+                  <span>Reason: {{ booking.cancellationReason }}</span>
+                }
+                @if (booking.cancelledAt) {
+                  <span>Cancelled: {{ booking.cancelledAt | date: 'medium' }}</span>
+                }
+              </div>
+            }
+
+            <div class="booking-card-actions">
+              @if (canConfirm(booking)) {
+                <button
+                  type="button"
+                  class="action-btn action-btn-success"
+                  [disabled]="isProcessing(booking.bookingId)"
+                  (click)="confirmBooking(booking)"
+                >
+                  <app-icon [icon]="LucideCheckCircle" [size]="14"></app-icon>
+                  {{ isProcessing(booking.bookingId) ? 'Processing...' : 'Confirm' }}
+                </button>
+              }
+
+              @if (canCheckIn(booking)) {
+                <button
+                  type="button"
+                  class="action-btn action-btn-success"
+                  [disabled]="isProcessing(booking.bookingId)"
+                  (click)="checkInBooking(booking)"
+                >
+                  <app-icon [icon]="LucideCheckCircle" [size]="14"></app-icon>
+                  {{ isProcessing(booking.bookingId) ? 'Processing...' : 'Check In' }}
+                </button>
+              }
+
+              @if (canCheckOut(booking)) {
+                <button
+                  type="button"
+                  class="action-btn action-btn-primary"
+                  [disabled]="isProcessing(booking.bookingId)"
+                  (click)="checkOutBooking(booking)"
+                >
+                  <app-icon [icon]="LucideClock" [size]="14"></app-icon>
+                  {{ isProcessing(booking.bookingId) ? 'Processing...' : 'Check Out' }}
+                </button>
+              }
+
+              @if (canCancel(booking)) {
+                <button
+                  type="button"
+                  class="action-btn action-btn-danger"
+                  [disabled]="isProcessing(booking.bookingId)"
+                  (click)="cancelBooking(booking)"
+                >
+                  <app-icon [icon]="LucideBan" [size]="14"></app-icon>
+                  Cancel
+                </button>
+              }
+
+              @if (booking.bookingStatus === 'COMPLETED') {
+                <span class="status-note status-note-success">
+                  <app-icon [icon]="LucideCheckCircle2" [size]="14"></app-icon>
+                  Completed
+                </span>
+              }
+
+              @if (booking.bookingStatus === 'CANCELLED') {
+                <span class="status-note status-note-muted">
+                  <app-icon [icon]="LucideBan" [size]="14"></app-icon>
+                  Cancelled
+                </span>
+              }
+
+              @if (booking.bookingStatus === 'NO_SHOW') {
+                <span class="status-note status-note-muted">
+                  <app-icon [icon]="LucideXCircle" [size]="14"></app-icon>
+                  No-show
+                </span>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</main>

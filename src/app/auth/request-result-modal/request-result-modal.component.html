@@ -1,0 +1,31 @@
+<div class="modal-overlay visible" (click)="closeModal()">
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-header">
+      @if (type() === 'success') {
+        <div class="modal-icon success-icon">
+          <app-icon
+            [icon]="LucideCheckCircle2"
+            [size]="28"
+          ></app-icon>
+        </div>
+      } @else {
+        <div class="modal-icon pending-icon">
+          <app-icon
+            [icon]="LucideClock"
+            [size]="28"
+          ></app-icon>
+        </div>
+      }
+      <h3>{{ title() }}</h3>
+      <p>{{ message() }}</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" (click)="closeModal()">
+        OK, got it
+      </button>
+    </div>
+  </div>
+</div>

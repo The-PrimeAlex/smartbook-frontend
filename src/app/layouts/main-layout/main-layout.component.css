@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100dvh;
+}
+
+.app-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--app-layout-bg);
+}
+
+app-sidebar {
+  flex: 0 0 auto;
+  height: 100%;
+  position: relative;
+  z-index: 10;
+  /* Floating card sidebar has its own spacing and shadow */
+}
+
+.app-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--app-content-padding);
+  background: var(--app-layout-bg);
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 48rem) {
+  .app-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 30rem) {
+  .app-content {
+    padding: 0;
+  }
+}

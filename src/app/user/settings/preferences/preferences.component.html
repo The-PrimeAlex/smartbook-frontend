@@ -1,0 +1,203 @@
+<div class="page-container">
+  <app-page-banner
+    [icon]="LucideSettings"
+    eyebrow="Settings"
+    title="Preferences"
+    description="Configure your timezone, language, currency, and display preferences."
+  ></app-page-banner>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="notice notice-error">
+      <app-icon
+        [icon]="LucideXCircle"
+        [size]="18"
+      ></app-icon>
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Success -->
+  @if (saved()) {
+    <div class="notice notice-success">
+      <app-icon
+        [icon]="LucideCheckCircle2"
+        [size]="18"
+      ></app-icon>
+      Preferences saved successfully.
+    </div>
+  }
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="loading-panel">
+      <div class="spinner"></div>
+      Loading preferences...
+    </div>
+  } @else {
+    <div class="preferences-card">
+      <div class="section-heading">
+        <div class="pref-icon" aria-hidden="true">
+          <app-icon
+            [icon]="LucideSettings"
+            [size]="24"
+          ></app-icon>
+        </div>
+        <div>
+          <h2>Display &amp; Regional</h2>
+          <p>
+            Customize how SmartBook displays dates, times,
+            and currency.
+          </p>
+        </div>
+      </div>
+
+      <div class="pref-grid">
+        <!-- Timezone -->
+        <div class="pref-field">
+          <label class="pref-label" for="timezone"
+            >Timezone</label
+          >
+          <p class="pref-description">
+            Used for scheduling and displaying meeting
+            times.
+          </p>
+          <select
+            id="timezone"
+            class="pref-select"
+            [value]="getValue('general.timezone')"
+            (change)="
+              setValue(
+                'general.timezone',
+                $any($event).target.value
+              )
+            "
+          >
+            @for (tz of timezoneOptions; track tz) {
+              <option [value]="tz">{{ tz }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Currency -->
+        <div class="pref-field">
+          <label class="pref-label" for="currency"
+            >Currency</label
+          >
+          <p class="pref-description">
+            Default currency for billing and invoices.
+          </p>
+          <input
+            id="currency"
+            type="text"
+            class="pref-input"
+            [value]="getValue('general.currency')"
+            (input)="
+              setValue(
+                'general.currency',
+                $any($event).target.value
+              )
+            "
+            placeholder="KES"
+            maxlength="3"
+          />
+        </div>
+
+        <!-- Week Start -->
+        <div class="pref-field">
+          <label class="pref-label" for="weekStart"
+            >Week Starts On</label
+          >
+          <p class="pref-description">
+            First day of the week in calendar views.
+          </p>
+          <select
+            id="weekStart"
+            class="pref-select"
+            [value]="getValue('general.week_start')"
+            (change)="
+              setValue(
+                'general.week_start',
+                $any($event).target.value
+              )
+            "
+          >
+            @for (day of weekStartOptions; track day) {
+              <option [value]="day">{{ day }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Business Name (read-only for regular users) -->
+      <div class="pref-field read-only-field">
+        <label class="pref-label">Business Name</label>
+        <p class="pref-description">
+          Organization name displayed on invoices.
+        </p>
+        <input
+          type="text"
+          class="pref-input"
+          [value]="getValue('general.business_name')"
+          disabled
+        />
+        <span class="field-hint">Set by administrator</span>
+      </div>
+
+      <!-- Dark Mode Toggle -->
+      <div class="pref-field dark-mode-field">
+        <div class="dark-mode-header">
+          <div>
+            <label class="pref-label">Dark Mode</label>
+            <p class="pref-description">
+              Switch between light and dark theme for a more
+              comfortable viewing experience.
+            </p>
+          </div>
+          <button
+            class="toggle-switch"
+            [class.active]="darkMode()"
+            (click)="toggleDarkMode()"
+            aria-label="Toggle dark mode"
+          >
+            <span class="toggle-slider">
+              <span class="toggle-icon">
+                @if (darkMode()) {
+                  <app-icon
+                    [icon]="LucideMoon"
+                    [size]="16"
+                  ></app-icon>
+                } @else {
+                  <app-icon
+                    [icon]="LucideSun"
+                    [size]="16"
+                  ></app-icon>
+                }
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Save button -->
+      <div class="save-bar">
+        <button
+          class="btn btn-save"
+          (click)="save()"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span class="spinner"></span>
+            Saving...
+          } @else {
+            <app-icon
+              [icon]="LucideFileBox"
+              [size]="18"
+            ></app-icon>
+            Save Changes
+          }
+        </button>
+      </div>
+    </div>
+  }
+</div>

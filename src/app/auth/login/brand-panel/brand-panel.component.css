@@ -1,0 +1,324 @@
+:host {
+  display: flex;
+  flex: 0 0 43%;
+  min-width: 0;
+  background: #14213d;
+  color: #ffffff;
+  animation: slideInLeft 0.5s ease-out both;
+}
+
+.brand-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.75rem, 4vw, 2.625rem);
+  background: #14213d;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle orange decorative circles */
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  border: 2px dashed rgba(242, 140, 40, 0.12);
+  border-radius: 50%;
+  animation: brandFloat 6s ease-in-out infinite;
+}
+
+.brand-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 40px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(
+    circle,
+    rgba(242, 140, 40, 0.08) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: brandFloat 5s ease-in-out infinite 1s;
+}
+
+@keyframes brandFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.brand {
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(1.375rem, 2.5vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.25;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.5s ease-out 0.1s both;
+}
+
+.brand span {
+  color: #f28c28;
+  transition: color 0.3s ease;
+}
+
+.brand:hover span {
+  color: #ffb366;
+}
+
+.brand-content {
+  margin: clamp(2.5rem, 5vw, 3.5rem) 0;
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  margin-bottom: 1rem;
+  color: #f28c28;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  animation: fadeUp 0.5s ease-out 0.2s both;
+}
+
+.brand-content h1 {
+  margin-bottom: 1.25rem;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(1.875rem, 3.5vw, 2.6875rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  animation: fadeUp 0.5s ease-out 0.3s both;
+}
+
+.brand-content p {
+  max-width: 18.75rem;
+  color: #d5d9e1;
+  font-size: 0.8125rem;
+  line-height: 1.9;
+  animation: fadeUp 0.5s ease-out 0.4s both;
+}
+
+.brand-footer {
+  color: #aab3c3;
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.5s ease-out 0.5s both;
+  transition: color 0.3s ease;
+}
+
+.brand-footer:hover {
+  color: #c9d1e0;
+}
+
+/* Responsive layout */
+@media (max-width: 43.75rem) {
+  :host {
+    flex: none;
+    width: 100%;
+  }
+
+  .brand-panel {
+    padding: 1.5rem 1.75rem;
+  }
+
+  .brand-content {
+    margin: 1.75rem 0 0;
+  }
+
+  .brand-content h1 {
+    max-width: 25rem;
+    margin-bottom: 0;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+
+  .brand-content p,
+  .brand-footer {
+    display: none;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.625rem;
+  }
+}
+
+@media (max-width: 22rem) {
+  .brand-panel {
+    padding: 1.25rem;
+  }
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 48rem) {
+  :host {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  /* Compact padding */
+  .page-content,
+  .main-content,
+  .content-wrapper,
+  .dashboard-content {
+    padding: 12px !important;
+  }
+
+  /* Stack grids */
+  .stats-row,
+  .stats-grid,
+  .overview-cards,
+  .quick-links-grid,
+  .status-breakdown-grid,
+  .room-overview-grid,
+  .finance-grid,
+  .revenue-sources-grid,
+  .payment-status-grid,
+  .two-col-grid,
+  .three-col-grid,
+  .four-col-grid,
+  .dashboard-columns {
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+  }
+
+  /* Compact cards */
+  .card,
+  .card-row,
+  .bill-card,
+  .usage-card,
+  .damage-card,
+  .booking-card,
+  .room-card,
+  .quick-link-card,
+  .stat-card {
+    padding: 12px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Compact typography */
+  h1 { font-size: 1.25rem !important; }
+  h2 { font-size: 1rem !important; }
+  h3 { font-size: 0.875rem !important; }
+
+  /* Full-width buttons */
+  .action-buttons,
+  .card-actions,
+  .btn-group {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .action-buttons .btn,
+  .card-actions .btn,
+  .btn-group .btn {
+    width: 100% !important;
+  }
+
+  /* Compact badges */
+  .badge {
+    padding: 2px 6px !important;
+    font-size: 0.625rem !important;
+  }
+
+  /* Compact metric chips */
+  .metric-chip {
+    padding: 2px 6px !important;
+    min-width: auto !important;
+  }
+
+  /* Scrollable filter bar */
+  .filter-bar {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Compact section headings */
+  .section-header {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .section-header h2 {
+    font-size: 1rem !important;
+  }
+
+  /* Compact form fields */
+  .form-field {
+    margin-bottom: 12px !important;
+  }
+
+  .form-field label {
+    font-size: 0.75rem !important;
+  }
+
+  /* Hide decorative elements */
+  .deco-circle,
+  .banner-deco,
+  .deco-lines,
+  .deco-dots,
+  .deco-triangle {
+    display: none !important;
+  }
+
+  /* Compact tables */
+  .table-wrapper {
+    font-size: 0.75rem !important;
+  }
+
+  /* Modal full-screen */
+  .modal-overlay,
+  .detail-overlay,
+  .conflict-overlay {
+    padding: 8px !important;
+  }
+
+  .modal-content,
+  .detail-panel,
+  .conflict-modal {
+    max-height: 95vh !important;
+    border-radius: var(--radius-md) !important;
+  }
+}
+
+@media (max-width: 22.5rem) {
+  /* Ultra-compact */
+  .card-row {
+    padding: 10px !important;
+    gap: 4px !important;
+  }
+
+  .meta-item {
+    font-size: 0.6875rem !important;
+  }
+
+  .revenue-total-amount,
+  .total-amount {
+    font-size: 1rem !important;
+  }
+}

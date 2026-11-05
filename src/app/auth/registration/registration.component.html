@@ -1,0 +1,485 @@
+<main class="registration-page">
+  <div class="registration-container">
+    <header class="registration-header">
+      <div class="header-decoration" aria-hidden="true">
+        <span class="hero-ring hero-ring-large"></span>
+        <span class="hero-ring hero-ring-small"></span>
+        <span class="hero-dot hero-dot-one"></span>
+        <span class="hero-dot hero-dot-two"></span>
+        <span class="hero-square"></span>
+      </div>
+
+      <a class="back-link" routerLink="/login">
+        <app-icon
+          [icon]="LucideArrowLeft"
+          [size]="18"
+        ></app-icon>
+        <span>Back to sign in</span>
+      </a>
+
+      <div class="header-content">
+        <div class="header-icon">
+          <app-icon
+            [icon]="LucideBuilding"
+            [size]="26"
+            [strokeWidth]="1.8"
+          ></app-icon>
+        </div>
+
+        <p class="eyebrow">SMARTBOOK REGISTRATION</p>
+
+        <h1>Register your organisation</h1>
+
+        <p class="header-description">
+          Request access to SmartBook to start booking
+          meeting rooms.
+        </p>
+      </div>
+    </header>
+
+    <section class="registration-form-card">
+      <div class="form-heading">
+        <div class="section-icon">
+          <app-icon
+            [icon]="LucideUserRound"
+            [size]="22"
+            [strokeWidth]="1.9"
+          ></app-icon>
+        </div>
+
+        <div>
+          <h2>Organisation details</h2>
+          <p>
+            Enter your details to request an organisation
+            account.
+          </p>
+        </div>
+      </div>
+
+      <form
+        [formGroup]="registrationForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+      >
+        <div class="form-section">
+          <div class="section-label">
+            <span class="section-number">01</span>
+            <h3>Contact person</h3>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="firstName">
+                First name
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                id="firstName"
+                type="text"
+                formControlName="firstName"
+                placeholder="Enter first name"
+                autocomplete="given-name"
+                [class.invalid]="showError('firstName')"
+                [attr.aria-invalid]="showError('firstName')"
+                [attr.aria-describedby]="
+                  showError('firstName')
+                    ? 'firstName-error'
+                    : null
+                "
+              />
+
+              @if (showError('firstName')) {
+                <p class="field-error" id="firstName-error">
+                  First name is required.
+                </p>
+              }
+            </div>
+
+            <div class="form-field">
+              <label for="lastName">
+                Last name
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                id="lastName"
+                type="text"
+                formControlName="lastName"
+                placeholder="Enter last name"
+                autocomplete="family-name"
+                [class.invalid]="showError('lastName')"
+                [attr.aria-invalid]="showError('lastName')"
+                [attr.aria-describedby]="
+                  showError('lastName')
+                    ? 'lastName-error'
+                    : null
+                "
+              />
+
+              @if (showError('lastName')) {
+                <p class="field-error" id="lastName-error">
+                  Last name is required.
+                </p>
+              }
+            </div>
+
+            <div class="form-field">
+              <label for="email">
+                Email address
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                [class.invalid]="showError('email')"
+                [attr.aria-invalid]="showError('email')"
+                [attr.aria-describedby]="
+                  showError('email') ? 'email-error' : null
+                "
+              />
+
+              @if (showError('email')) {
+                <p class="field-error" id="email-error">
+                  @if (
+                    registrationForm.controls.email.hasError(
+                      'required'
+                    )
+                  ) {
+                    Email address is required.
+                  } @else {
+                    Enter a valid email address.
+                  }
+                </p>
+              }
+            </div>
+
+            <div class="form-field">
+              <label for="phoneNumber">
+                Phone number
+                <span class="required-mark">*</span>
+              </label>
+
+              <div
+                class="phone-control"
+                [class.invalid]="showError('phoneNumber')"
+              >
+                <div class="country-picker">
+                  <button
+                    class="country-trigger"
+                    type="button"
+                    (click)="toggleCountryDropdown()"
+                    [attr.aria-expanded]="
+                      countryDropdownOpen
+                    "
+                    aria-label="Choose country calling code"
+                  >
+                    @if (selectedCountry; as country) {
+                      <span class="country-flag">{{
+                        country.flag
+                      }}</span>
+                      <span class="country-iso">{{
+                        country.countryCode
+                      }}</span>
+                      <span
+                        class="country-chevron"
+                        [class.rotated]="
+                          countryDropdownOpen
+                        "
+                      ></span>
+                    }
+                  </button>
+                  @if (countryDropdownOpen) {
+                    <div class="country-dropdown">
+                      <div class="country-search">
+                        <input
+                          #countrySearchInput
+                          type="text"
+                          aria-label="Search countries"
+                          placeholder="Search country or +code"
+                          [value]="countrySearch"
+                          (input)="
+                            onCountrySearch(
+                              countrySearchInput.value
+                            )
+                          "
+                          (keydown)="
+                            onCountrySearchKeydown($event)
+                          "
+                          autofocus
+                        />
+                      </div>
+                      <div class="country-options">
+                        @for (
+                          country of filteredCountries;
+                          track country.countryCode
+                        ) {
+                          <button
+                            class="country-option"
+                            type="button"
+                            (click)="selectCountry(country)"
+                          >
+                            <span class="option-flag">{{
+                              country.flag
+                            }}</span>
+                            <span class="option-name">{{
+                              country.countryName
+                            }}</span>
+                            <span class="option-code">{{
+                              country.callingCode
+                            }}</span>
+                          </button>
+                        } @empty {
+                          <p class="no-countries">
+                            No matching countries found.
+                          </p>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+                @if (selectedCountry; as country) {
+                  <span class="calling-code">{{
+                    country.callingCode
+                  }}</span>
+                }
+                <span class="phone-divider"></span>
+                <input
+                  id="phoneNumber"
+                  type="tel"
+                  formControlName="phoneNumber"
+                  class="phone-input"
+                  placeholder="712345678"
+                  autocomplete="tel-national"
+                  inputmode="numeric"
+                  (input)="
+                    onPhoneInput(
+                      registrationForm.get('phoneNumber')
+                        ?.value ?? ''
+                    )
+                  "
+                  [attr.aria-invalid]="
+                    showError('phoneNumber')
+                  "
+                />
+              </div>
+
+              <p class="field-hint">
+                Choose a country, then enter the phone
+                number using digits only.
+              </p>
+
+              @if (showError('phoneNumber')) {
+                <p
+                  class="field-error"
+                  id="phoneNumber-error"
+                >
+                  @if (
+                    registrationForm.controls.phoneNumber.hasError(
+                      'required'
+                    )
+                  ) {
+                    Phone number is required.
+                  } @else if (
+                    registrationForm.controls.phoneNumber.hasError(
+                      'pattern'
+                    )
+                  ) {
+                    Use digits only, without spaces or
+                    symbols.
+                  } @else if (
+                    registrationForm.controls.phoneNumber.hasError(
+                      'invalidPhone'
+                    )
+                  ) {
+                    Enter a valid phone number for the
+                    selected country.
+                  } @else {
+                    Phone number is required.
+                  }
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="form-section">
+          <div class="section-label">
+            <span class="section-number">02</span>
+            <h3>Organisation information</h3>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="companyName">
+                Organisation name
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                id="companyName"
+                type="text"
+                formControlName="companyName"
+                placeholder="Enter organisation name"
+                autocomplete="organization"
+                [class.invalid]="showError('companyName')"
+                [attr.aria-invalid]="
+                  showError('companyName')
+                "
+                [attr.aria-describedby]="
+                  showError('companyName')
+                    ? 'companyName-error'
+                    : null
+                "
+              />
+
+              @if (showError('companyName')) {
+                <p
+                  class="field-error"
+                  id="companyName-error"
+                >
+                  Organisation name is required.
+                </p>
+              }
+            </div>
+
+            <div class="form-field">
+              <label for="registrationNumber">
+                Registration number
+                <span class="optional-label">Optional</span>
+              </label>
+
+              <input
+                id="registrationNumber"
+                type="text"
+                formControlName="registrationNumber"
+                placeholder="Enter registration number"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-field form-field-full">
+              <label for="contactEmail">
+                Organisation contact email
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                id="contactEmail"
+                type="email"
+                formControlName="contactEmail"
+                placeholder="e.g. admin@organisation.com"
+                autocomplete="off"
+                [class.invalid]="showError('contactEmail')"
+                [attr.aria-invalid]="
+                  showError('contactEmail')
+                "
+                [attr.aria-describedby]="
+                  showError('contactEmail')
+                    ? 'contactEmail-error'
+                    : null
+                "
+              />
+
+              @if (showError('contactEmail')) {
+                <p
+                  class="field-error"
+                  id="contactEmail-error"
+                >
+                  @if (
+                    registrationForm.controls.contactEmail.hasError(
+                      'required'
+                    )
+                  ) {
+                    Organisation contact email is required.
+                  } @else {
+                    Enter a valid email address.
+                  }
+                </p>
+              }
+
+              <p class="field-hint">
+                Use an email address your organisation can
+                access.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="privacy-notice">
+          <div class="privacy-icon">
+            <app-icon
+              [icon]="LucideShieldCheck"
+              [size]="21"
+              [strokeWidth]="1.9"
+            ></app-icon>
+          </div>
+
+          <p>
+            Your information will be used to review your
+            registration request and set up your
+            organisation's access to SmartBook.
+          </p>
+        </div>
+
+        @if (errorMessage) {
+          <div
+            class="auth-error"
+            role="alert"
+            aria-live="polite"
+          >
+            <span class="auth-error-icon" aria-hidden="true"
+              >!</span
+            >
+            <p>{{ errorMessage }}</p>
+          </div>
+        }
+
+        <button
+          class="submit-button"
+          type="submit"
+          [disabled]="loading"
+        >
+          <span>{{
+            loading
+              ? 'Submitting…'
+              : 'Submit registration request'
+          }}</span>
+
+          <app-icon
+            [icon]="LucideArrowRight"
+            [size]="19"
+          ></app-icon>
+        </button>
+
+        <p class="required-note">
+          Fields marked with
+          <span class="required-mark">*</span> are required.
+        </p>
+      </form>
+    </section>
+
+    <!-- Request Result Modal -->
+    @if (showModal) {
+      <app-request-result-modal
+        [type]="modalType"
+        [title]="modalTitle"
+        [message]="modalMessage"
+        (close)="closeModal()"
+      />
+    }
+
+    <footer class="registration-footer">
+      <span class="footer-brand">SMARTBOOK</span>
+      <p class="footer-tagline">
+        Your space, your schedule.
+      </p>
+    </footer>
+  </div>
+</main>

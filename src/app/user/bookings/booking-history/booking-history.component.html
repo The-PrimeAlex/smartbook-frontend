@@ -1,0 +1,195 @@
+<main class="bookings-page">
+  <app-page-banner
+    [icon]="LucideCalendar"
+    eyebrow="Bookings"
+    title="Booking History"
+    description="View your past completed bookings and no-show records."
+  >
+    <button
+      type="button"
+      [disabled]="loading()"
+      (click)="loadBookings()"
+    >
+      <app-icon [icon]="LucideRefreshCw" [size]="14"></app-icon>
+      {{ loading() ? 'Refreshing...' : 'Refresh' }}
+    </button>
+  </app-page-banner>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error" role="alert">
+      <span>{{ errorMessage() }}</span>
+      <button
+        type="button"
+        class="alert-dismiss"
+        aria-label="Dismiss error"
+        (click)="errorMessage.set('')"
+      >
+        &times;
+      </button>
+    </div>
+  }
+
+  <section
+    class="stats-grid"
+    aria-label="Booking statistics"
+  >
+    <app-stat-card
+      [icon]="LucideCalendar"
+      [iconBg]="'rgba(59,130,246,0.12)'"
+      [iconColor]="'var(--info,#3b82f6)'"
+      delay="0s"
+    >
+      <span stat-value>{{ totalCount() }}</span>
+      <span stat-label>Total</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideCheckCircle2"
+      [iconBg]="'rgba(34,197,94,0.12)'"
+      [iconColor]="'var(--success,#22c55e)'"
+      delay="0.05s"
+    >
+      <span stat-value>{{ completedCount() }}</span>
+      <span stat-label>Completed</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideXCircle"
+      [iconBg]="'rgba(139,92,246,0.12)'"
+      [iconColor]="'var(--purple,#8b5cf6)'"
+      delay="0.1s"
+    >
+      <span stat-value>{{ noShowCount() }}</span>
+      <span stat-label>No Shows</span>
+    </app-stat-card>
+  </section>
+
+  <section class="bookings-section">
+    <div class="section-heading">
+      <div>
+        <h2>Your past reservations</h2>
+        <p>Completed bookings and no-show records.</p>
+      </div>
+
+      <span class="result-count">
+        {{ historyBookings().length }}
+        {{
+          historyBookings().length === 1
+            ? 'booking'
+            : 'bookings'
+        }}
+      </span>
+    </div>
+
+    @if (loading() && bookings().length === 0) {
+      <div class="state-panel" role="status">
+        <span
+          class="loading-spinner"
+          aria-hidden="true"
+        ></span>
+        <p>Loading your booking history...</p>
+      </div>
+    } @else if (historyBookings().length === 0) {
+      <app-empty-state
+        [icon]="LucideCalendar"
+        title="No booking history"
+        message="Your past completed bookings and no-show records will appear here."
+      ></app-empty-state>
+    } @else {
+      <div class="booking-list">
+        @for (
+          booking of historyBookings();
+          track booking.bookingId
+        ) {
+          <article class="booking-card">
+            <div class="booking-main">
+              <div class="booking-title-row">
+                <div class="room-icon" aria-hidden="true">
+                  ⌂
+                </div>
+
+                <div class="booking-title">
+                  <h3>{{ booking.roomName }}</h3>
+                  <p class="booking-reference">
+                    Booking #{{ booking.bookingId }}
+                  </p>
+                </div>
+
+                <app-status-badge
+                  [label]="
+                    statusLabel(booking.bookingStatus)
+                  "
+                  [variant]="
+                    getBadgeVariant(booking.bookingStatus)
+                  "
+                ></app-status-badge>
+              </div>
+
+              <div class="booking-details">
+                <div class="detail-item">
+                  <span class="detail-label"
+                    >Start time</span
+                  >
+                  <span class="detail-value">
+                    {{ booking.startTime | date: 'medium' }}
+                  </span>
+                </div>
+
+                <div class="detail-item">
+                  <span class="detail-label">End time</span>
+                  <span class="detail-value">
+                    {{ booking.endTime | date: 'medium' }}
+                  </span>
+                </div>
+
+                <div class="detail-item">
+                  <span class="detail-label"
+                    >Hourly rate</span
+                  >
+                  <span class="detail-value">
+                    @if (
+                      booking.bookedHourlyRate !== null
+                    ) {
+                      {{
+                        booking.bookedHourlyRate | currency
+                      }}
+                    } @else {
+                      Not specified
+                    }
+                  </span>
+                </div>
+
+                <div class="detail-item">
+                  <span class="detail-label"
+                    >Booked by</span
+                  >
+                  <span class="detail-value">{{
+                    booking.userName
+                  }}</span>
+                </div>
+              </div>
+
+              <div class="purpose-block">
+                <span class="detail-label">Purpose</span>
+                <p>{{ booking.purpose }}</p>
+              </div>
+            </div>
+
+            <div class="booking-actions">
+              @if (booking.bookingStatus === 'COMPLETED') {
+                <span class="completed-note">
+                  <span aria-hidden="true">✓</span>
+                  Booking completed
+                </span>
+              }
+
+              @if (booking.bookingStatus === 'NO_SHOW') {
+                <span class="terminal-note">
+                  This booking was marked as a no-show.
+                </span>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</main>

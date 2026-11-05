@@ -1,0 +1,452 @@
+<div class="page-container">
+  <app-page-banner
+    [icon]="LucideCreditCard"
+    eyebrow="Billing"
+    title="My Charges"
+    description="View your invoices and make payments"
+  ></app-page-banner>
+  <div class="stats-grid">
+    <app-stat-card
+      [icon]="LucideFileText"
+      [iconBg]="'rgba(59,130,246,0.12)'"
+      [iconColor]="'var(--info,#3b82f6)'"
+      delay="0s"
+    >
+      <span stat-value>{{ bills().length }}</span>
+      <span stat-label>Total Invoices</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideClock"
+      [iconBg]="'rgba(245,158,11,0.12)'"
+      [iconColor]="'var(--warning,#f59e0b)'"
+      delay="0.05s"
+    >
+      <span stat-value>{{ unpaidCount }}</span>
+      <span stat-label>Unpaid</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideDollarSign"
+      [iconBg]="'rgba(242,140,40,0.12)'"
+      [iconColor]="'var(--brand-accent,#f28c28)'"
+      delay="0.1s"
+    >
+      <span stat-value>{{
+        totalOutstanding | number: '1.2-2'
+      }}</span>
+      <span stat-label>Outstanding</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideCheckCircle"
+      [iconBg]="'rgba(34,197,94,0.12)'"
+      [iconColor]="'var(--success,#22c55e)'"
+      delay="0.15s"
+    >
+      <span stat-value>{{
+        totalPaid | number: '1.2-2'
+      }}</span>
+      <span stat-label>Total Paid</span>
+    </app-stat-card>
+  </div>
+  <div class="filter-bar">
+    <app-filter-group
+      [filters]="filterOptions"
+      [activeFilter]="filterStatus()"
+      (select)="filterStatus.set($event)"
+    ></app-filter-group>
+  </div>
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-grid">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="skeleton-card"></div>
+      }
+    </div>
+  }
+  <!-- Error State -->
+  @if (error() && !loading()) {
+    <div class="error-state">
+      <app-icon
+        [icon]="LucideCircleAlert"
+        [size]="48"
+      ></app-icon>
+      <h3>{{ error() }}</h3>
+      <button class="retry-btn" (click)="loadBills()">
+        Try Again
+      </button>
+    </div>
+  }
+  <!-- Bills List -->
+  @if (!loading() && !error()) {
+    <div class="bills-list">
+      @if (filteredBills.length === 0) {
+        <app-empty-state
+          [icon]="LucideCreditCard"
+          title="No invoices found"
+          message="You don't have any invoices with this status."
+        ></app-empty-state>
+      }
+      @for (
+        bill of filteredBills;
+        track bill.billId;
+        let i = $index
+      ) {
+        <div
+          class="bill-card"
+          [style.animation-delay]="i * 50 + 'ms'"
+        >
+          <div class="bill-header">
+            <div class="bill-info">
+              @if (bill.booking) {
+                <h3 class="bill-room">
+                  {{ bill.booking.roomName }}
+                </h3>
+                <p class="bill-purpose">
+                  {{ bill.booking.purpose }}
+                </p>
+              } @else {
+                <h3 class="bill-room">Incident Charge</h3>
+              }
+              @if (bill.invoiceNumber) {
+                <p class="bill-invoice-number">
+                  {{ bill.invoiceNumber }}
+                </p>
+              }
+              @if (bill.booking) {
+                <div class="bill-meta">
+                  <span class="meta-item">
+                    <app-icon
+                      [icon]="LucideCalendar"
+                      [size]="14"
+                    ></app-icon>
+                    {{
+                      formatDateTime(bill.booking.startTime)
+                    }}
+                  </span>
+                </div>
+              }
+            </div>
+            <div class="bill-amount-section">
+              <app-status-badge
+                [label]="getStatusLabel(bill.billStatus)"
+                [variant]="getBadgeVariant(bill.billStatus)"
+              ></app-status-badge>
+              <div class="bill-amount">
+                {{
+                  formatCurrency(
+                    bill.totalAmount,
+                    bill.currency
+                  )
+                }}
+              </div>
+              @if (bill.amountPaid > 0) {
+                <div class="bill-paid">
+                  Paid:
+                  {{
+                    formatCurrency(
+                      bill.amountPaid,
+                      bill.currency
+                    )
+                  }}
+                </div>
+              }
+            </div>
+          </div>
+          <!-- Bill Items -->
+          <div class="bill-items">
+            @for (item of bill.items; track $index) {
+              <div
+                class="item-row"
+                [class.item-incident]="
+                  item.itemType === 'INCIDENT'
+                "
+                [class.item-cancellation]="
+                  item.itemType === 'CANCELLATION_FEE'
+                "
+              >
+                @if (item.itemType === 'INCIDENT') {
+                  <span
+                    class="item-type-badge incident-badge"
+                  >
+                    <app-icon
+                      [icon]="LucideTriangleAlert"
+                      [size]="14"
+                    ></app-icon>
+                    Incident
+                  </span>
+                } @else if (item.itemType === 'CANCELLATION_FEE') {
+                  <span
+                    class="item-type-badge cancellation-badge"
+                  >
+                    <app-icon
+                      [icon]="LucideXCircle"
+                      [size]="14"
+                    ></app-icon>
+                    Cancellation
+                  </span>
+                } @else {
+                  <span
+                    class="item-type-badge meeting-badge"
+                  >
+                    <app-icon
+                      [icon]="LucideCalendar"
+                      [size]="14"
+                    ></app-icon>
+                    Meeting
+                  </span>
+                }
+                <span class="item-desc">{{
+                  item.description
+                }}</span>
+                <span class="item-amount">{{
+                  formatCurrency(item.amount, bill.currency)
+                }}</span>
+              </div>
+            }
+          </div>
+          <!-- Bill Footer -->
+          <div class="bill-footer">
+            <div class="bill-details-row">
+              <span class="detail-item"
+                ><strong>Subtotal:</strong>
+                {{
+                  formatCurrency(
+                    bill.subtotal,
+                    bill.currency
+                  )
+                }}</span
+              >
+              <span class="detail-item"
+                ><strong>Tax:</strong>
+                {{
+                  formatCurrency(
+                    bill.taxAmount,
+                    bill.currency
+                  )
+                }}</span
+              >
+              <span class="detail-item"
+                ><strong>Due:</strong>
+                {{ formatDate(bill.dueAt) }}</span
+              >
+            </div>
+            @if (
+              bill.billStatus !== 'PAID' &&
+              bill.billStatus !== 'VOID'
+            ) {
+              <div class="bill-actions">
+                <button
+                  class="pay-btn"
+                  (click)="openPayment(bill)"
+                >
+                  <app-icon
+                    [icon]="LucideCreditCard"
+                  ></app-icon>
+                  Pay Now
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+  <!-- Payment Modal -->
+  <div
+    class="modal-overlay"
+    [class.visible]="showPaymentModal()"
+    (click)="closePaymentModalIfOverlayClick($event)"
+  >
+    <div
+      class="payment-modal"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <h2>Make Payment</h2>
+        <button
+          class="close-btn"
+          (click)="closePaymentModal()"
+        >
+          <app-icon [icon]="LucideX" [size]="20"></app-icon>
+        </button>
+      </div>
+      <!-- Waiting for M-Pesa Confirmation -->
+      @if (paymentWaiting()) {
+        <div class="waiting-state">
+          <div class="waiting-spinner"></div>
+          <h3>Waiting for Payment</h3>
+          <p>
+            Please check your phone and enter your M-Pesa
+            PIN to complete the payment.
+          </p>
+          <p class="waiting-hint">
+            We are checking for confirmation...
+          </p>
+        </div>
+      }
+      <!-- Success State -->
+      @if (!paymentWaiting() && paymentSuccess()) {
+        <div class="success-state">
+          <app-icon
+            [icon]="LucideCheckCircle"
+            [size]="64"
+          ></app-icon>
+          <h3>Payment Confirmed</h3>
+          <p>
+            Your payment has been confirmed successfully.
+          </p>
+          <button
+            class="done-btn"
+            (click)="closePaymentModal()"
+          >
+            Done
+          </button>
+        </div>
+      }
+      <!-- Payment Form -->
+      @if (!paymentWaiting() && !paymentSuccess()) {
+        <div class="payment-form">
+          @if (selectedBill()) {
+            <div class="bill-summary">
+              @if (selectedBill()!.booking) {
+                <p>
+                  <strong>{{ selectedBill()!.booking!.roomName }}</strong>
+                </p>
+                <p>{{ selectedBill()!.booking!.purpose }}</p>
+              } @else {
+                <p><strong>Incident Charge</strong></p>
+              }
+              <div class="summary-amount">
+                <span>Amount Due</span>
+                <strong>{{
+                  formatCurrency(
+                    selectedBill()!.totalAmount -
+                      selectedBill()!.amountPaid,
+                    selectedBill()!.currency
+                  )
+                }}</strong>
+              </div>
+            </div>
+          }
+          <div class="form-group">
+            <label for="payment-method"
+              >Payment Method</label
+            >
+            <select
+              id="payment-method"
+              [ngModel]="paymentMethod()"
+              (ngModelChange)="paymentMethod.set($event)"
+              name="paymentMethod"
+            >
+              @for (
+                method of paymentMethods;
+                track method.value
+              ) {
+                <option [value]="method.value">
+                  {{ method.label }}
+                </option>
+              }
+            </select>
+          </div>
+          <!-- M-Pesa Info Box -->
+          @if (paymentMethod() === 'MPESA') {
+            <div class="mpesa-info-box">
+              <app-icon
+                [icon]="LucideSmartphone"
+                [size]="20"
+              ></app-icon>
+              <div class="mpesa-info-content">
+                <h4>M-Pesa STK Push</h4>
+                <p>
+                  A payment prompt will be sent to your
+                  phone. Enter your M-Pesa PIN to complete
+                  the payment.
+                </p>
+              </div>
+            </div>
+          }
+          <!-- Phone Number - M-Pesa only -->
+          @if (paymentMethod() === 'MPESA') {
+            <div class="form-group">
+              <label for="phone-number"
+                >Phone Number
+                <span class="required">*</span></label
+              >
+              <input
+                type="tel"
+                id="phone-number"
+                [ngModel]="phoneNumber()"
+                (ngModelChange)="phoneNumber.set($event)"
+                name="phoneNumber"
+                placeholder="e.g. 0712345678 or 254712345678"
+              />
+              <span class="field-hint"
+                >Enter the phone number to receive the
+                M-Pesa prompt</span
+              >
+            </div>
+          }
+          <div class="form-group">
+            <label for="payment-amount">Amount</label>
+            <input
+              type="number"
+              id="payment-amount"
+              [ngModel]="paymentAmount()"
+              (ngModelChange)="paymentAmount.set($event)"
+              name="paymentAmount"
+              min="0"
+              step="0.01"
+              placeholder="Enter amount"
+            />
+          </div>
+
+          @if (paymentMethod() !== 'MPESA') {
+            <div class="form-group">
+              <label for="transaction-ref"
+                >Transaction Reference
+                <span class="optional"
+                  >(optional)</span
+                ></label
+              >
+              <input
+                type="text"
+                id="transaction-ref"
+                [ngModel]="transactionReference()"
+                (ngModelChange)="
+                  transactionReference.set($event)
+                "
+                name="transactionReference"
+                placeholder="e.g. Bank transfer reference"
+              />
+            </div>
+          }
+          @if (paymentError()) {
+            <div class="error-message">
+              {{ paymentError() }}
+            </div>
+          }
+          <div class="form-actions">
+            <button
+              class="cancel-btn"
+              (click)="closePaymentModal()"
+              [disabled]="paying()"
+            >
+              Cancel
+            </button>
+            <button
+              class="submit-pay-btn"
+              (click)="submitPayment($event)"
+              [disabled]="paying()"
+            >
+              @if (paying()) {}
+              {{
+                paying()
+                  ? 'Processing...'
+                  : 'Confirm Payment'
+              }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

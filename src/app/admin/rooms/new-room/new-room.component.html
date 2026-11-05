@@ -1,0 +1,229 @@
+<div class="new-room-page">
+  <app-page-banner
+    [icon]="LucideLayoutGrid"
+    eyebrow="Room Management"
+    title="Add New Room"
+    description="Create a meeting space in SmartBook and configure its capacity, room type, hourly rate and availability."
+  ></app-page-banner>
+
+  <div class="breadcrumb">
+    <a routerLink="/admin/rooms">Rooms</a>
+    <span aria-hidden="true">/</span>
+    <span>Add New Room</span>
+  </div>
+
+  <section class="form-card">
+    <div class="form-heading">
+      <div>
+        <span class="section-eyebrow">ROOM DETAILS</span>
+        <h2>Room information</h2>
+        <p>Fields marked with * are required.</p>
+      </div>
+
+      <span class="required-note">
+        <span aria-hidden="true">*</span> Required
+      </span>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error" role="alert">
+        <span class="alert-icon" aria-hidden="true">!</span>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="alert alert-success" role="status">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <form
+      [formGroup]="roomForm"
+      (ngSubmit)="submitRoom()"
+      novalidate
+    >
+      <div class="form-grid">
+        <div class="form-field full-width">
+          <label for="roomName"
+            >Room name <span>*</span></label
+          >
+          <input
+            id="roomName"
+            type="text"
+            formControlName="roomName"
+            placeholder="e.g. Executive Boardroom"
+            maxlength="100"
+            autocomplete="off"
+            [class.invalid]="fieldInvalid('roomName')"
+          />
+
+          @if (fieldInvalid('roomName')) {
+            <small class="field-error">
+              @if (
+                roomForm.controls.roomName.hasError(
+                  'required'
+                )
+              ) {
+                Room name is required.
+              } @else if (
+                roomForm.controls.roomName.hasError(
+                  'maxlength'
+                )
+              ) {
+                Room name cannot exceed 100 characters.
+              }
+            </small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="roomType"
+            >Room type <span>*</span></label
+          >
+          <select
+            id="roomType"
+            formControlName="roomType"
+            [class.invalid]="fieldInvalid('roomType')"
+          >
+            @for (type of roomTypes; track type.value) {
+              <option [value]="type.value">
+                {{ type.label }}
+              </option>
+            }
+          </select>
+
+          @if (fieldInvalid('roomType')) {
+            <small class="field-error"
+              >Please select a room type.</small
+            >
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="capacity"
+            >Maximum capacity <span>*</span></label
+          >
+          <div class="input-with-suffix">
+            <input
+              id="capacity"
+              type="number"
+              formControlName="capacity"
+              min="1"
+              max="1000"
+              step="1"
+              [class.invalid]="fieldInvalid('capacity')"
+            />
+            <span>people</span>
+          </div>
+
+          @if (fieldInvalid('capacity')) {
+            <small class="field-error">
+              Enter a capacity between 1 and 1000.
+            </small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="hourlyRate"
+            >Hourly rate <span>*</span></label
+          >
+          <div class="input-with-prefix">
+            <span>KES</span>
+            <input
+              id="hourlyRate"
+              type="number"
+              formControlName="hourlyRate"
+              min="0"
+              step="0.01"
+              [class.invalid]="fieldInvalid('hourlyRate')"
+            />
+          </div>
+
+          @if (fieldInvalid('hourlyRate')) {
+            <small class="field-error">
+              Enter a valid rate of zero or more.
+            </small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="status"
+            >Initial status <span>*</span></label
+          >
+          <select
+            id="status"
+            formControlName="status"
+            [class.invalid]="fieldInvalid('status')"
+          >
+            @for (
+              status of roomStatuses;
+              track status.value
+            ) {
+              <option [value]="status.value">
+                {{ status.label }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            rows="5"
+            maxlength="1000"
+            placeholder="Describe the room, its layout, facilities or intended use..."
+          ></textarea>
+          <small class="field-hint">
+            Optional. Maximum 1000 characters.
+          </small>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <p class="form-footer-note">
+          You can manage room equipment separately after
+          creating the room.
+        </p>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="button button-secondary"
+            (click)="resetForm()"
+            [disabled]="submitting()"
+          >
+            Reset
+          </button>
+
+          <a
+            class="button button-outline"
+            routerLink="/admin/rooms"
+            [attr.aria-disabled]="submitting()"
+          >
+            Cancel
+          </a>
+
+          <button
+            type="submit"
+            class="button button-primary"
+            [disabled]="submitting()"
+          >
+            @if (submitting()) {
+              <span
+                class="button-spinner"
+                aria-hidden="true"
+              ></span>
+              Creating...
+            } @else {
+              <span aria-hidden="true">+</span>
+              Create Room
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,312 @@
+<div class="page-container">
+  <app-page-banner
+    [icon]="LucideUser"
+    eyebrow="Profile"
+    title="Personal Information"
+    description="Manage your personal details and contact information."
+  ></app-page-banner>
+
+  <!-- Profile Card -->
+  <div class="profile-card">
+    @if (loading()) {
+      <div class="state-card" role="status">
+        <span class="loader"></span>
+        <p>Loading your profile...</p>
+      </div>
+    } @else if (errorMessage() && !profile()) {
+      <div class="state-card error-state" role="alert">
+        <p>{{ errorMessage() }}</p>
+        <button
+          class="action-btn primary"
+          type="button"
+          (click)="loadProfile()"
+        >
+          Try again
+        </button>
+      </div>
+    } @else if (profile(); as user) {
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="profile-avatar">{{ initials() }}</div>
+        <div class="profile-heading">
+          <h2>{{ fullName() }}</h2>
+          <p>{{ user.email }}</p>
+        </div>
+        @if (!editing()) {
+          <button
+            class="action-btn edit"
+            (click)="startEditing()"
+          >
+            <app-icon [icon]="LucidePencil"></app-icon>
+            Edit
+          </button>
+        }
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Success / Error Messages -->
+      @if (successMessage()) {
+        <div class="alert success-alert" role="status">
+          <app-icon
+            [icon]="LucideCheckCircle2"
+            [size]="18"
+          ></app-icon>
+          {{ successMessage() }}
+        </div>
+      }
+
+      @if (errorMessage()) {
+        <div class="alert error-alert" role="alert">
+          <app-icon
+            [icon]="LucideXCircle"
+            [size]="18"
+          ></app-icon>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Personal Details Form -->
+      <div class="section-subheading">
+        <h3>Personal details</h3>
+        <p>Your registered contact information.</p>
+      </div>
+
+      @if (editing()) {
+        <form
+          [formGroup]="profileForm"
+          (ngSubmit)="saveProfile()"
+          class="details-form"
+        >
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="firstName">First name</label>
+              <input
+                id="firstName"
+                formControlName="firstName"
+                type="text"
+                placeholder="Enter your first name"
+              />
+              @if (
+                profileForm.controls.firstName.touched &&
+                profileForm.controls.firstName.hasError(
+                  'required'
+                )
+              ) {
+                <span class="field-error"
+                  >First name is required.</span
+                >
+              }
+            </div>
+
+            <div class="form-field">
+              <label for="lastName">Last name</label>
+              <input
+                id="lastName"
+                formControlName="lastName"
+                type="text"
+                placeholder="Enter your last name"
+              />
+              @if (
+                profileForm.controls.lastName.touched &&
+                profileForm.controls.lastName.hasError(
+                  'required'
+                )
+              ) {
+                <span class="field-error"
+                  >Last name is required.</span
+                >
+              }
+            </div>
+
+            <div class="form-field">
+              <label for="email">Email address</label>
+              <input
+                id="email"
+                formControlName="email"
+                type="email"
+                placeholder="Enter your email"
+                [disabled]="true"
+              />
+              <span class="field-hint"
+                >Email address cannot be changed.</span
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="phoneNumber">Phone number</label>
+              <input
+                id="phoneNumber"
+                formControlName="phoneNumber"
+                type="tel"
+                placeholder="Enter your phone number"
+              />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="action-btn secondary"
+              (click)="cancelEditing()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="action-btn primary"
+              [disabled]="saving()"
+            >
+              @if (saving()) {
+                <span class="button-spinner"></span>
+                Saving...
+              } @else {
+                Save changes
+              }
+            </button>
+          </div>
+        </form>
+      } @else {
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <app-icon
+                [icon]="LucideUser"
+                [size]="19"
+                [strokeWidth]="1.7"
+              ></app-icon>
+            </div>
+            <div class="detail-content">
+              <span class="detail-label">First name</span>
+              <span class="detail-value">{{
+                user.firstName || '—'
+              }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-icon">
+              <app-icon
+                [icon]="LucideUser"
+                [size]="19"
+                [strokeWidth]="1.7"
+              ></app-icon>
+            </div>
+            <div class="detail-content">
+              <span class="detail-label">Last name</span>
+              <span class="detail-value">{{
+                user.lastName || '—'
+              }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-icon">
+              <app-icon
+                [icon]="LucideMail"
+                [size]="19"
+                [strokeWidth]="1.7"
+              ></app-icon>
+            </div>
+            <div class="detail-content">
+              <span class="detail-label"
+                >Email address</span
+              >
+              <span class="detail-value">{{
+                user.email || '—'
+              }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-icon">
+              <app-icon
+                [icon]="LucidePhone"
+                [size]="19"
+                [strokeWidth]="1.7"
+              ></app-icon>
+            </div>
+            <div class="detail-content">
+              <span class="detail-label">Phone number</span>
+              <span class="detail-value">{{
+                user.phoneNumber || '—'
+              }}</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Organization Details (Read Only) -->
+      @if (user.organization; as organization) {
+        <div class="divider"></div>
+
+        <div
+          class="section-subheading organization-heading"
+        >
+          <div>
+            <h3>Organization details</h3>
+            <p>
+              Company information associated with your
+              account.
+            </p>
+          </div>
+          <span class="readonly-badge">Read only</span>
+        </div>
+
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <app-icon
+                [icon]="LucideBuilding2"
+                [size]="19"
+                [strokeWidth]="1.7"
+              ></app-icon>
+            </div>
+            <div class="detail-content">
+              <span class="detail-label">Company name</span>
+              <span class="detail-value">{{
+                organization.name || '—'
+              }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-icon">
+              <app-icon
+                [icon]="LucideMail"
+                [size]="19"
+                [strokeWidth]="1.7"
+              ></app-icon>
+            </div>
+            <div class="detail-content">
+              <span class="detail-label"
+                >Organization email</span
+              >
+              <span class="detail-value">{{
+                organization.email || '—'
+              }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-icon">
+              <app-icon
+                [icon]="LucideFileText"
+                [size]="19"
+                [strokeWidth]="1.7"
+              ></app-icon>
+            </div>
+            <div class="detail-content">
+              <span class="detail-label"
+                >Registration number</span
+              >
+              <span class="detail-value">{{
+                organization.registrationNumber || '—'
+              }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

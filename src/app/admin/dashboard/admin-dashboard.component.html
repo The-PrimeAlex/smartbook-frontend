@@ -1,0 +1,474 @@
+<main class="admin-dashboard">
+  <app-page-banner
+    [icon]="LucideLayoutDashboard"
+    eyebrow="ADMIN PANEL"
+    title="Admin Dashboard"
+    [description]="
+      'Welcome back, ' +
+      fullName() +
+      ' — system overview and quick actions.'
+    "
+  ></app-page-banner>
+
+  <!-- Loading Skeleton -->
+  @if (loading()) {
+    <div class="skeleton-grid">
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+        <div class="skeleton-card"></div>
+      }
+    </div>
+  } @else {
+    <!-- System Stats Overview -->
+    <section class="stats-row">
+      <app-stat-card
+        [icon]="LucideMapPin"
+        [iconBg]="'linear-gradient(135deg, #fc8311, #e07a0f)'"
+        [iconColor]="'#ffffff'"
+        delay="0ms"
+      >
+        <span stat-value>{{ totalRooms() }}</span>
+        <span stat-label>Total Rooms</span>
+      </app-stat-card>
+      <app-stat-card
+        [icon]="LucideActivity"
+        [iconBg]="'linear-gradient(135deg, #22c55e, #16a34a)'"
+        [iconColor]="'#ffffff'"
+        delay="50ms"
+      >
+        <span stat-value>{{ occupiedRooms() }}</span>
+        <span stat-label>Rooms Occupied</span>
+      </app-stat-card>
+      <app-stat-card
+        [icon]="LucideCalendar"
+        [iconBg]="'linear-gradient(135deg, #142b4a, #0d1e35)'"
+        [iconColor]="'#ffffff'"
+        delay="100ms"
+      >
+        <span stat-value>{{ totalBookings() }}</span>
+        <span stat-label>Total Bookings</span>
+      </app-stat-card>
+      <app-stat-card
+        [icon]="LucideUsers"
+        [iconBg]="'linear-gradient(135deg, #3b82f6, #2563eb)'"
+        [iconColor]="'#ffffff'"
+        delay="150ms"
+      >
+        <span stat-value>{{ totalUsers() }}</span>
+        <span stat-label>Registered Users</span>
+      </app-stat-card>
+      <app-stat-card
+        [icon]="LucideTriangleAlert"
+        [iconBg]="'linear-gradient(135deg, #f59e0b, #d97706)'"
+        [iconColor]="'#ffffff'"
+        delay="200ms"
+      >
+        <span stat-value>{{ reportedIncidents() }}</span>
+        <span stat-label>Pending Incidents</span>
+      </app-stat-card>
+      <app-stat-card
+        [icon]="LucideCreditCard"
+        [iconBg]="'linear-gradient(135deg, #8b5cf6, #7c3aed)'"
+        [iconColor]="'#ffffff'"
+        delay="250ms"
+      >
+        <span stat-value>{{
+          formatCurrency(totalRevenue())
+        }}</span>
+        <span stat-label>Total Revenue</span>
+      </app-stat-card>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>Quick Actions</h2>
+      </div>
+      <div class="quick-links-grid">
+        @for (
+          link of quickLinks;
+          track link.label;
+          let i = $index
+        ) {
+          <button
+            class="quick-link-card"
+            [style.animation-delay]="i * 50 + 'ms'"
+            (click)="navigateTo(link.route)"
+          >
+            <div
+              class="quick-link-icon"
+              [style.background]="link.color + '15'"
+              [style.color]="link.color"
+            >
+              <app-icon
+                [icon]="link.icon"
+                [size]="24"
+              ></app-icon>
+            </div>
+            <span class="quick-link-label">{{
+              link.label
+            }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- Two Column Layout: Live Room Status + Recent Bookings -->
+    <div class="dashboard-columns">
+      <!-- Live Room Status -->
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h2>Live Room Status</h2>
+          <button
+            class="view-all-link"
+            (click)="navigateTo('/admin/monitoring')"
+          >
+            View all
+          </button>
+        </div>
+        @if (liveStatus().length > 0) {
+          <div class="live-status-list">
+            @for (
+              room of liveStatus().slice(0, 5);
+              track room.roomId;
+              let i = $index
+            ) {
+              <div
+                class="live-status-card"
+                [style.animation-delay]="i * 50 + 'ms'"
+              >
+                <div class="live-status-info">
+                  <div class="live-status-header">
+                    <span class="room-name">{{
+                      room.roomName || 'Unknown Room'
+                    }}</span>
+                    <span
+                      class="status-badge {{
+                        getLiveStatusClass(
+                          room.liveStatus || ''
+                        )
+                      }}"
+                    >
+                      {{ room.liveStatus || 'Unknown' }}
+                    </span>
+                  </div>
+                  @if (room.bookerName) {
+                    <span class="booker-name">{{
+                      room.bookerName
+                    }}</span>
+                  }
+                  @if (room.startTime) {
+                    <span class="time-slot">{{
+                      formatDateTime(room.startTime)
+                    }}</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <app-empty-state
+            [icon]="LucideMonitor"
+            title="No live data"
+            message="Room monitoring data will appear here."
+          ></app-empty-state>
+        }
+      </section>
+
+      <!-- Recent Bookings -->
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h2>Recent Bookings</h2>
+          <button
+            class="view-all-link"
+            (click)="navigateTo('/admin/bookings')"
+          >
+            View all
+          </button>
+        </div>
+        @if (recentBookings().length > 0) {
+          <div class="bookings-list">
+            @for (
+              booking of recentBookings();
+              track booking.bookingId;
+              let i = $index
+            ) {
+              <div
+                class="booking-card"
+                [style.animation-delay]="i * 50 + 'ms'"
+              >
+                <div class="booking-time-block">
+                  <span class="booking-date">{{
+                    formatDate(booking.startTime)
+                  }}</span>
+                  <span class="booking-time">{{
+                    formatDateTime(booking.startTime)
+                  }}</span>
+                </div>
+                <div class="booking-details">
+                  <div class="booking-header">
+                    <span class="booking-room">{{
+                      booking.roomName
+                    }}</span>
+                    <span
+                      class="status-badge {{
+                        getBookingStatusClass(
+                          booking.bookingStatus
+                        )
+                      }}"
+                    >
+                      {{
+                        getBookingStatusLabel(
+                          booking.bookingStatus
+                        )
+                      }}
+                    </span>
+                  </div>
+                  <span class="booking-purpose">{{
+                    booking.purpose
+                  }}</span>
+                  @if (
+                    booking.bookingStatus === 'PENDING' ||
+                    booking.bookingStatus === 'CONFIRMED'
+                  ) {
+                    <span class="booking-countdown">{{
+                      timeUntil(booking.startTime)
+                    }}</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <app-empty-state
+            [icon]="LucideCalendar"
+            title="No bookings yet"
+            message="Bookings will appear here as they are created."
+          >
+            <button
+              class="empty-action"
+              (click)="navigateTo('/admin/bookings/new')"
+            >
+              Create Booking
+            </button>
+          </app-empty-state>
+        }
+      </section>
+    </div>
+
+    <!-- Booking Status Breakdown -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>Booking Status Breakdown</h2>
+      </div>
+      <div class="status-breakdown-grid">
+        <div
+          class="breakdown-card"
+          [style.animation-delay]="'0ms'"
+        >
+          <div
+            class="breakdown-icon"
+            style="
+              background: rgba(245, 158, 11, 0.1);
+              color: #f59e0b;
+            "
+          >
+            <app-icon
+              [icon]="LucideClock"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="breakdown-info">
+            <span class="breakdown-value">{{
+              pendingBookings()
+            }}</span>
+            <span class="breakdown-label">Pending</span>
+          </div>
+        </div>
+
+        <div
+          class="breakdown-card"
+          [style.animation-delay]="'50ms'"
+        >
+          <div
+            class="breakdown-icon"
+            style="
+              background: rgba(59, 130, 246, 0.1);
+              color: #3b82f6;
+            "
+          >
+            <app-icon
+              [icon]="LucideShieldCheck"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="breakdown-info">
+            <span class="breakdown-value">{{
+              confirmedBookings()
+            }}</span>
+            <span class="breakdown-label">Confirmed</span>
+          </div>
+        </div>
+
+        <div
+          class="breakdown-card"
+          [style.animation-delay]="'100ms'"
+        >
+          <div
+            class="breakdown-icon"
+            style="
+              background: rgba(16, 185, 129, 0.1);
+              color: #10b981;
+            "
+          >
+            <app-icon
+              [icon]="LucideActivity"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="breakdown-info">
+            <span class="breakdown-value">{{
+              checkedInBookings()
+            }}</span>
+            <span class="breakdown-label">Checked In</span>
+          </div>
+        </div>
+
+        <div
+          class="breakdown-card"
+          [style.animation-delay]="'150ms'"
+        >
+          <div
+            class="breakdown-icon"
+            style="
+              background: rgba(239, 68, 68, 0.1);
+              color: #ef4444;
+            "
+          >
+            <app-icon
+              [icon]="LucideTriangleAlert"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="breakdown-info">
+            <span class="breakdown-value">{{
+              noShowBookings()
+            }}</span>
+            <span class="breakdown-label">No Shows</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Room Overview -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>Room Overview</h2>
+        <button
+          class="view-all-link"
+          (click)="navigateTo('/admin/rooms')"
+        >
+          View all
+        </button>
+      </div>
+      <div class="room-overview-grid">
+        <div
+          class="overview-card"
+          [style.animation-delay]="'0ms'"
+        >
+          <div
+            class="overview-icon"
+            style="
+              background: rgba(16, 185, 129, 0.1);
+              color: #10b981;
+            "
+          >
+            <app-icon
+              [icon]="LucideActivity"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="overview-info">
+            <span class="overview-value">{{
+              activeRooms()
+            }}</span>
+            <span class="overview-label">Active Rooms</span>
+          </div>
+        </div>
+
+        <div
+          class="overview-card"
+          [style.animation-delay]="'50ms'"
+        >
+          <div
+            class="overview-icon"
+            style="
+              background: rgba(245, 158, 11, 0.1);
+              color: #f59e0b;
+            "
+          >
+            <app-icon
+              [icon]="LucideSettings"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="overview-info">
+            <span class="overview-value">{{
+              maintenanceRooms()
+            }}</span>
+            <span class="overview-label">Maintenance</span>
+          </div>
+        </div>
+
+        <div
+          class="overview-card"
+          [style.animation-delay]="'100ms'"
+        >
+          <div
+            class="overview-icon"
+            style="
+              background: rgba(59, 130, 246, 0.1);
+              color: #3b82f6;
+            "
+          >
+            <app-icon
+              [icon]="LucideUsers"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="overview-info">
+            <span class="overview-value">{{
+              totalCapacity()
+            }}</span>
+            <span class="overview-label"
+              >Total Capacity</span
+            >
+          </div>
+        </div>
+
+        <div
+          class="overview-card"
+          [style.animation-delay]="'150ms'"
+        >
+          <div
+            class="overview-icon"
+            style="
+              background: rgba(239, 68, 68, 0.1);
+              color: #ef4444;
+            "
+          >
+            <app-icon
+              [icon]="LucideTriangleAlert"
+              [size]="20"
+            ></app-icon>
+          </div>
+          <div class="overview-info">
+            <span class="overview-value">{{
+              overrunRooms()
+            }}</span>
+            <span class="overview-label">Overruns</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+</main>

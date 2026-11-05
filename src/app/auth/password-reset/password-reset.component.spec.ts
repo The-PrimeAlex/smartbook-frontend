@@ -1,0 +1,26 @@
+import {
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
+import { PasswordResetComponent } from './password-reset.component.css';
+
+describe('PasswordResetComponent', () => {
+  let component: PasswordResetComponent;
+  let fixture: ComponentFixture<PasswordResetComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PasswordResetComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(
+      PasswordResetComponent,
+    );
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

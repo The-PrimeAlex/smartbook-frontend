@@ -1,0 +1,239 @@
+<div class="page-container">
+  <app-page-banner
+    [icon]="LucideMail"
+    eyebrow="Users & Roles"
+    title="Registration Requests"
+    description="Review and manage account registration requests from users"
+  ></app-page-banner>
+
+  <!-- Success Message -->
+  @if (successMessage()) {
+    <div class="success-alert">
+      <app-icon
+        [icon]="LucideCheckCircle"
+        [size]="18"
+      ></app-icon>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  <div class="stats-bar">
+    <app-stat-card
+      [icon]="LucideMail"
+      [iconBg]="'var(--brand-accent-bg)'"
+      [iconColor]="'var(--brand-accent)'"
+      delay="0s"
+    >
+      <span stat-value>{{ totalCount() }}</span>
+      <span stat-label>Total Requests</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideClock"
+      [iconBg]="'var(--warning-bg)'"
+      [iconColor]="'var(--warning)'"
+      delay="0.05s"
+    >
+      <span stat-value>{{ pendingCount() }}</span>
+      <span stat-label>Pending</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideCheckCircle"
+      [iconBg]="'var(--success-bg)'"
+      [iconColor]="'var(--success)'"
+      delay="0.1s"
+    >
+      <span stat-value>{{ approvedCount() }}</span>
+      <span stat-label>Approved</span>
+    </app-stat-card>
+    <app-stat-card
+      [icon]="LucideXCircle"
+      [iconBg]="'var(--danger-bg)'"
+      [iconColor]="'var(--danger)'"
+      delay="0.15s"
+    >
+      <span stat-value>{{ rejectedCount() }}</span>
+      <span stat-label>Rejected</span>
+    </app-stat-card>
+  </div>
+
+  <app-filter-group
+    [filters]="filterOptions"
+    [activeFilter]="selectedFilter()"
+    (select)="setFilter($event)"
+  >
+    <button
+      class="refresh-btn"
+      (click)="loadRequests()"
+      title="Refresh"
+    >
+      <app-icon
+        [icon]="LucideRefreshCw"
+        [size]="16"
+      ></app-icon>
+    </button>
+  </app-filter-group>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-grid">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="request-card skeleton">
+          <div
+            class="skeleton-line"
+            style="width: 40%; height: 20px"
+          ></div>
+          <div
+            class="skeleton-line"
+            style="
+              width: 60%;
+              height: 16px;
+              margin-top: 8px;
+            "
+          ></div>
+          <div
+            class="skeleton-line"
+            style="
+              width: 80%;
+              height: 16px;
+              margin-top: 16px;
+            "
+          ></div>
+          <div
+            class="skeleton-line"
+            style="
+              width: 50%;
+              height: 16px;
+              margin-top: 8px;
+            "
+          ></div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading() && filteredRequests().length === 0) {
+    <app-empty-state
+      [icon]="LucideMail"
+      title="No Registration Requests"
+      [message]="
+        selectedFilter() !== 'ALL'
+          ? 'No requests with the selected filter.'
+          : 'There are no registration requests yet.'
+      "
+    ></app-empty-state>
+  }
+
+  <!-- Requests Grid -->
+  @if (!loading() && filteredRequests().length > 0) {
+    <div class="requests-grid">
+      @for (
+        request of filteredRequests();
+        track request.requestId
+      ) {
+        <div class="request-card">
+          <div class="request-card-header">
+            <div class="requester-name">
+              <app-icon
+                [icon]="LucideUser"
+                [size]="16"
+              ></app-icon>
+              <span
+                >{{ request.firstName }}
+                {{ request.lastName }}</span
+              >
+            </div>
+            <app-status-badge
+              [label]="getStatusLabel(request.status)"
+              [variant]="getBadgeVariant(request.status)"
+            ></app-status-badge>
+          </div>
+
+          <div class="request-card-body">
+            <div class="request-detail">
+              <app-icon
+                [icon]="LucideMail"
+                [size]="14"
+              ></app-icon>
+              <span>{{ request.email }}</span>
+            </div>
+            <div class="request-detail">
+              <app-icon
+                [icon]="LucideBuilding"
+                [size]="14"
+              ></app-icon>
+              <span>{{ request.companyName }}</span>
+            </div>
+            <div class="request-detail">
+              <app-icon
+                [icon]="LucidePhone"
+                [size]="14"
+              ></app-icon>
+              <span>{{ request.phoneNumber }}</span>
+            </div>
+            @if (request.registrationNumber) {
+              <div class="request-detail">
+                <span class="detail-label">Reg #:</span>
+                <span>{{
+                  request.registrationNumber
+                }}</span>
+              </div>
+            }
+            <div class="request-detail">
+              <span class="detail-label">Contact:</span>
+              <span>{{ request.contactEmail }}</span>
+            </div>
+          </div>
+
+          <div class="request-card-footer">
+            <span class="request-date">
+              <app-icon
+                [icon]="LucideClock"
+                [size]="14"
+              ></app-icon>
+              {{ formatDate(request.createdAt) }}
+            </span>
+          </div>
+
+          @if (request.status === 'PENDING') {
+            <div class="request-card-actions">
+              <button
+                class="action-btn approve"
+                (click)="approveRequest(request)"
+                [disabled]="
+                  processingId() === request.requestId
+                "
+              >
+                @if (processingId() === request.requestId) {
+                  <span class="spinner"></span>
+                } @else {
+                  <app-icon
+                    [icon]="LucideCheck"
+                    [size]="16"
+                  ></app-icon>
+                  <span>Approve</span>
+                }
+              </button>
+              <button
+                class="action-btn reject"
+                (click)="rejectRequest(request)"
+                [disabled]="
+                  processingId() === request.requestId
+                "
+              >
+                @if (processingId() === request.requestId) {
+                  <span class="spinner"></span>
+                } @else {
+                  <app-icon
+                    [icon]="LucideXCircle"
+                    [size]="16"
+                  ></app-icon>
+                  <span>Reject</span>
+                }
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

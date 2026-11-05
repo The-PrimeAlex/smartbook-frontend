@@ -1,0 +1,162 @@
+<!-- Warning Modal: About to be logged out -->
+@if (warningVisible()) {
+  <div class="modal-overlay modal-overlay-visible">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="logout-warning-title"
+    >
+      <div class="modal-icon warning">
+        <app-icon
+          [icon]="LucideCircleAlert"
+          [size]="48"
+          [strokeWidth]="1.5"
+        ></app-icon>
+      </div>
+
+      <h2 id="logout-warning-title" class="modal-title">
+        Session Expiring Soon
+      </h2>
+
+      <p class="modal-message">
+        You have been inactive for 10 minutes. You will be
+        automatically logged out due to inactivity.
+      </p>
+
+      <div class="countdown-wrapper">
+        <div class="countdown-circle">
+          <svg class="countdown-ring" viewBox="0 0 120 120">
+            <circle
+              class="countdown-track"
+              cx="60"
+              cy="60"
+              r="54"
+              fill="none"
+              stroke="var(--neutral-200)"
+              stroke-width="6"
+            />
+            <circle
+              class="countdown-progress"
+              cx="60"
+              cy="60"
+              r="54"
+              fill="none"
+              stroke="var(--warning)"
+              stroke-width="6"
+              stroke-dasharray="339.292"
+              [attr.stroke-dashoffset]="
+                339.292 * (1 - secondsRemaining() / 60)
+              "
+              stroke-linecap="round"
+              transform="rotate(-90 60 60)"
+            />
+          </svg>
+          <span class="countdown-number">{{
+            secondsRemaining()
+          }}</span>
+        </div>
+        <span class="countdown-label"
+          >seconds remaining</span
+        >
+      </div>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-stay"
+          (click)="stay()"
+        >
+          <app-icon [icon]="LucideX" [size]="18"></app-icon>
+          Stay Logged In
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Back Navigation Warning Modal: User pressed back button after logout -->
+@if (backNavWarning()) {
+  <div class="modal-overlay modal-overlay-visible">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="back-nav-title"
+    >
+      <div class="modal-icon back-nav">
+        <app-icon
+          [icon]="LucideArrowLeft"
+          [size]="48"
+          [strokeWidth]="1.5"
+        ></app-icon>
+      </div>
+
+      <h2 id="back-nav-title" class="modal-title">
+        Session Expired
+      </h2>
+
+      <p class="modal-message">
+        You have been logged out due to inactivity. Please
+        log in again to continue.
+      </p>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-confirm-logout"
+          (click)="confirmBackNavigation()"
+        >
+          <app-icon
+            [icon]="LucideLogOut"
+            [size]="18"
+          ></app-icon>
+          Go to Login
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Logged Out Modal: Already logged out -->
+@if (loggedOut()) {
+  <div class="modal-overlay modal-overlay-visible">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="logged-out-title"
+    >
+      <div class="modal-icon logged-out">
+        <app-icon
+          [icon]="LucideLogOut"
+          [size]="48"
+          [strokeWidth]="1.5"
+        ></app-icon>
+      </div>
+
+      <h2 id="logged-out-title" class="modal-title">
+        Session Ended
+      </h2>
+
+      <p class="modal-message">
+        You have been logged out due to inactivity. Please
+        log in again to continue.
+      </p>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-login"
+          (click)="goToLogin()"
+        >
+          <app-icon
+            [icon]="LucideLogOut"
+            [size]="18"
+          ></app-icon>
+          Log In
+        </button>
+      </div>
+    </div>
+  </div>
+}

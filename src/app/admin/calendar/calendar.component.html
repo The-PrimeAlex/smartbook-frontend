@@ -1,0 +1,393 @@
+<section class="calendar-page">
+  <header class="calendar-header" data-deco="a">
+    <div class="calendar-heading">
+      <p class="eyebrow">SMARTBOOK</p>
+      <h1>Booking Calendar</h1>
+      <p class="calendar-subtitle">
+        Manage room bookings and keep your Google Calendar
+        in sync.
+      </p>
+    </div>
+    <div class="calendar-actions">
+      <button
+        type="button"
+        class="btn btn-google"
+        (click)="connectGoogleCalendar()"
+        [disabled]="googleConnecting()"
+      >
+        {{
+          googleConnecting()
+            ? 'Connecting...'
+            : 'Connect Google Calendar'
+        }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-sync"
+        (click)="syncBookingsToGoogleCalendar()"
+        [disabled]="googleSyncing() || bookingsLoading()"
+      >
+        {{
+          googleSyncing() ? 'Syncing...' : 'Sync Bookings'
+        }}
+      </button>
+    </div>
+  </header>
+  @if (googleConnectionMessage()) {
+    <div class="notice notice-success" role="status">
+      {{ googleConnectionMessage() }}
+    </div>
+  }
+  @if (googleConnectionError()) {
+    <div class="notice notice-error" role="alert">
+      {{ googleConnectionError() }}
+    </div>
+  }
+  @if (googleEventsError()) {
+    <div class="notice notice-error" role="alert">
+      {{ googleEventsError() }}
+    </div>
+  }
+  @if (bookingsError()) {
+    <div class="notice notice-error" role="alert">
+      {{ bookingsError() }}
+      <button
+        type="button"
+        class="btn btn-small"
+        (click)="loadSmartBookBookings()"
+      >
+        Retry
+      </button>
+    </div>
+  }
+  @if (googleSyncMessage()) {
+    <div class="notice notice-success" role="status">
+      {{ googleSyncMessage() }}
+    </div>
+  }
+  @if (googleSyncError()) {
+    <div class="notice notice-error" role="alert">
+      {{ googleSyncError() }}
+    </div>
+  }
+  <section
+    class="summary-grid"
+    aria-label="Booking summary"
+  >
+    <article class="summary-card">
+      <span class="summary-label">Total bookings</span>
+      <strong class="summary-value">{{
+        totalBookings()
+      }}</strong>
+      <span class="summary-detail"
+        >All displayed sources</span
+      >
+    </article>
+    <article class="summary-card">
+      <span class="summary-label">Today's bookings</span>
+      <strong class="summary-value">{{
+        todayBookings()
+      }}</strong>
+      <span class="summary-detail"
+        >Scheduled for today</span
+      >
+    </article>
+    <article class="summary-card">
+      <span class="summary-label">Confirmed</span>
+      <strong class="summary-value">{{
+        confirmedBookings()
+      }}</strong>
+      <span class="summary-detail"
+        >Confirmed bookings and events</span
+      >
+    </article>
+    <article class="summary-card">
+      <span class="summary-label">Pending</span>
+      <strong class="summary-value">{{
+        pendingBookings()
+      }}</strong>
+      <span class="summary-detail"
+        >Awaiting confirmation</span
+      >
+    </article>
+  </section>
+  <section class="calendar-panel">
+    <div class="calendar-toolbar">
+      <div class="calendar-toolbar-title">
+        <h2>{{ monthTitle() }}</h2>
+        <p>Select a date to view its bookings.</p>
+      </div>
+      <div class="calendar-navigation">
+        <button
+          type="button"
+          class="btn btn-small"
+          (click)="previousMonth()"
+          aria-label="Previous month"
+        >
+          &larr;
+        </button>
+        <button
+          type="button"
+          class="btn btn-small"
+          (click)="goToToday()"
+        >
+          Today
+        </button>
+        <button
+          type="button"
+          class="btn btn-small"
+          (click)="nextMonth()"
+          aria-label="Next month"
+        >
+          &rarr;
+        </button>
+      </div>
+    </div>
+    <div
+      class="room-filters"
+      aria-label="Filter bookings by room type"
+    >
+      @for (roomType of roomTypes; track roomType) {
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedRoomType() === roomType"
+          [attr.aria-pressed]="
+            selectedRoomType() === roomType
+          "
+          (click)="selectRoomType(roomType)"
+        >
+          {{ roomType }}
+        </button>
+      }
+    </div>
+    @if (bookingsLoading() || googleEventsLoading()) {
+      <p class="loading-message" role="status">
+        @if (bookingsLoading()) {
+          Loading SmartBook bookings...
+        }
+
+        @if (googleEventsLoading()) {
+          Loading Google Calendar events...
+        }
+      </p>
+    }
+    <div
+      class="calendar-grid"
+      aria-label="Monthly calendar"
+    >
+      <div class="weekday-heading">Mon</div>
+      <div class="weekday-heading">Tue</div>
+      <div class="weekday-heading">Wed</div>
+      <div class="weekday-heading">Thu</div>
+      <div class="weekday-heading">Fri</div>
+      <div class="weekday-heading">Sat</div>
+      <div class="weekday-heading">Sun</div>
+
+      @for (
+        day of monthDays();
+        track trackDay($index, day)
+      ) {
+        <button
+          type="button"
+          class="calendar-day"
+          [class.other-month]="!day.isCurrentMonth"
+          [class.today]="day.isToday"
+          [class.selected]="day.isSelected"
+          [attr.aria-label]="
+            (day.date | date: 'fullDate') +
+            ', ' +
+            bookingsForDate(day.date).length +
+            ' bookings'
+          "
+          [attr.aria-pressed]="day.isSelected"
+          (click)="selectDate(day.date)"
+        >
+          <span class="day-number">{{
+            day.date.getDate()
+          }}</span>
+
+          @if (bookingsForDate(day.date).length > 0) {
+            <span class="day-booking-count">
+              {{ bookingsForDate(day.date).length }}
+              {{
+                bookingsForDate(day.date).length === 1
+                  ? 'booking'
+                  : 'bookings'
+              }}
+            </span>
+
+            <span class="day-booking-preview">
+              {{ bookingsForDate(day.date)[0].title }}
+            </span>
+          } @else {
+            <span class="day-empty">No bookings</span>
+          }
+        </button>
+      }
+    </div>
+  </section>
+  <section class="calendar-panel week-panel">
+    <div class="calendar-toolbar">
+      <div class="calendar-toolbar-title">
+        <h2>Week schedule</h2>
+        <p>{{ weekTitle() }}</p>
+      </div>
+
+      <div class="calendar-navigation">
+        <button
+          type="button"
+          class="btn btn-small"
+          (click)="previousWeek()"
+          aria-label="Previous week"
+        >
+          &larr;
+        </button>
+        <button
+          type="button"
+          class="btn btn-small"
+          (click)="nextWeek()"
+          aria-label="Next week"
+        >
+          &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="week-grid">
+      @for (
+        day of weekDays();
+        track trackDay($index, day)
+      ) {
+        <button
+          type="button"
+          class="week-day"
+          [class.today]="day.isToday"
+          [class.selected]="day.isSelected"
+          (click)="selectDate(day.date)"
+        >
+          <span class="week-day-name">
+            {{ day.date | date: 'EEE' }}
+          </span>
+          <strong>{{ day.date | date: 'd' }}</strong>
+          <span class="week-day-count">
+            {{ bookingsForDate(day.date).length }}
+            {{
+              bookingsForDate(day.date).length === 1
+                ? 'booking'
+                : 'bookings'
+            }}
+          </span>
+        </button>
+      }
+    </div>
+  </section>
+  <section class="calendar-panel agenda-panel">
+    <div class="calendar-toolbar">
+      <div class="calendar-toolbar-title">
+        <h2>Day agenda</h2>
+        <p>{{ selectedDateTitle() }}</p>
+      </div>
+
+      <span class="agenda-count">
+        {{ dayBookings().length }}
+        {{
+          dayBookings().length === 1
+            ? 'booking'
+            : 'bookings'
+        }}
+      </span>
+    </div>
+    @if (dayBookings().length === 0) {
+      <app-empty-state
+        [icon]="LucideCalendar"
+        title="No bookings for this date"
+        message="Try another date or change the room filter to see more bookings."
+      ></app-empty-state>
+    } @else {
+      <div class="agenda-list">
+        @for (
+          booking of dayBookings();
+          track trackBooking($index, booking)
+        ) {
+          <article class="agenda-item">
+            <div class="agenda-time">
+              <strong>{{
+                formatTime(booking.startTime)
+              }}</strong>
+              <span
+                >to {{ formatTime(booking.endTime) }}</span
+              >
+            </div>
+
+            <div class="agenda-content">
+              <h3>{{ booking.title }}</h3>
+              <p>
+                {{ booking.room }} ·
+                {{ booking.customerName }}
+              </p>
+
+              <div class="agenda-meta">
+                <span
+                  class="status-pill"
+                  [class.status-confirmed]="
+                    booking.status === 'Confirmed'
+                  "
+                  [class.status-pending]="
+                    booking.status === 'Pending'
+                  "
+                  [class.status-cancelled]="
+                    booking.status === 'Cancelled'
+                  "
+                >
+                  {{ booking.status }}
+                </span>
+
+                <span
+                  class="source-pill"
+                  [class.source-google]="
+                    booking.source === 'GOOGLE'
+                  "
+                >
+                  {{
+                    booking.source === 'GOOGLE'
+                      ? 'Google Calendar'
+                      : 'SmartBook'
+                  }}
+                </span>
+              </div>
+            </div>
+
+            @if (booking.eventUrl) {
+              <a
+                class="event-link"
+                [href]="booking.eventUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open event
+              </a>
+            }
+          </article>
+        }
+      </div>
+    }
+  </section>
+  <footer class="calendar-footer">
+    <span>
+      @if (bookingsLoading()) {
+        Updating SmartBook bookings...
+      } @else {
+        SmartBook bookings loaded:
+        {{ smartBookBookings().length }}
+      }
+    </span>
+    <span>
+      @if (googleEventsLoading()) {
+        Updating Google Calendar...
+      } @else {
+        Google Calendar events loaded:
+        {{ googleEvents().length }}
+      }
+    </span>
+  </footer>
+</section>

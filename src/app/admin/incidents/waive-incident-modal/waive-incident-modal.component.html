@@ -1,0 +1,58 @@
+<div
+  class="modal-overlay"
+  [class.visible]="visible"
+  (click)="onBackdropClick($event)"
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-header">
+      <div class="modal-icon waive-icon">
+        <app-icon [icon]="LucideX" [size]="28"></app-icon>
+      </div>
+      <h3>Waive Charge</h3>
+      <p>Let this incident go without charging the user</p>
+    </div>
+
+    <form #waiveForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <div class="form-field">
+          <label>Reason (optional)</label>
+          <textarea
+            name="waiveReason"
+            [(ngModel)]="waiveReason"
+            placeholder="e.g., Minor damage, no charge needed"
+            rows="3"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="onCancel()"
+          [disabled]="loading"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn-primary btn-waive-action"
+          [disabled]="loading"
+        >
+          @if (loading) {
+            <svg
+              class="spinner"
+              [lucideIcon]="LucideLoader"
+              [size]="16"
+              [strokeWidth]="2"
+            ></svg>
+          }
+          Let it Go
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

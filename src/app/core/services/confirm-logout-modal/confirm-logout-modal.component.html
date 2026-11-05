@@ -1,0 +1,52 @@
+<div
+  class="modal-overlay"
+  [class.modal-overlay-visible]="visible()"
+  (click)="hide()"
+>
+  <div
+    class="modal-card"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Icon -->
+    <div class="modal-icon warning">
+      <app-icon
+        [icon]="LucideLogOut"
+        [size]="36"
+        [strokeWidth]="1.5"
+      ></app-icon>
+    </div>
+
+    <!-- Title -->
+    <h2 class="modal-title">Sign Out?</h2>
+
+    <!-- Message -->
+    <p class="modal-message">
+      Are you sure you want to sign out? You will need to
+      log in again to access your account.
+    </p>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="hide()"
+      >
+        <app-icon [icon]="LucideX" [size]="18"></app-icon>
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn-confirm"
+        (click)="confirm()"
+      >
+        <app-icon
+          [icon]="LucideLogOut"
+          [size]="18"
+        ></app-icon>
+        Sign Out
+      </button>
+    </div>
+  </div>
+</div>

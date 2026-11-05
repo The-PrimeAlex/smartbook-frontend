@@ -1,0 +1,22 @@
+<main class="forbidden-page">
+  <div class="forbidden-card">
+    <div class="forbidden-icon-wrap">
+      <app-icon [icon]="LucideShieldAlert" [size]="64"></app-icon>
+    </div>
+
+    <h1 class="forbidden-title">Access Denied</h1>
+
+    <p class="forbidden-description">
+      You don't have permission to view this page. This could mean your
+      account doesn't have the required role, or the link you followed
+      is restricted.
+    </p>
+
+    <div class="forbidden-actions">
+      <a class="forbidden-btn primary" routerLink="/dashboard">
+        <app-icon [icon]="LucideShieldAlert" [size]="18"></app-icon>
+        Return to Dashboard
+      </a>
+    </div>
+  </div>
+</main>

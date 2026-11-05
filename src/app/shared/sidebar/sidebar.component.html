@@ -1,0 +1,190 @@
+<aside class="sidebar" [class.collapsed]="collapsed()">
+  <!-- Brand and collapse control -->
+  <div class="brand">
+    <a class="brand-link" routerLink="/dashboard">
+      <span class="brand-mark">B</span>
+
+      @if (!collapsed()) {
+        <span class="brand-copy">
+          <span class="brand-name">BookSmart</span>
+          <span class="brand-subtitle">{{
+            subtitle()
+          }}</span>
+        </span>
+      }
+    </a>
+
+    <button
+      type="button"
+      class="collapse-button"
+      (click)="toggleSidebar()"
+      [attr.aria-label]="
+        collapsed() ? 'Expand sidebar' : 'Collapse sidebar'
+      "
+      [attr.data-tooltip]="
+        collapsed() ? 'Expand sidebar' : null
+      "
+    >
+      {{ collapsed() ? '›' : '‹' }}
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navigation" aria-label="Main navigation">
+    @for (section of menu(); track section.label) {
+      <div class="menu-section">
+        @if (!collapsed()) {
+          <p class="section-label">{{ section.label }}</p>
+        }
+
+        @for (item of section.items; track item.label) {
+          <div class="menu-entry">
+            @if (hasChildren(item)) {
+              <!-- Parent menu item -->
+              <button
+                type="button"
+                class="menu-item"
+                [class.menu-item-expanded]="
+                  isExpanded(item.label)
+                "
+                (click)="toggleMenu(item.label)"
+                [attr.data-tooltip]="
+                  collapsed() ? item.label : null
+                "
+                [attr.aria-expanded]="
+                  isExpanded(item.label)
+                "
+              >
+                @if (iconMap[item.icon]) {
+                  <app-icon
+                    [icon]="iconMap[item.icon]"
+                    [size]="18"
+                  ></app-icon>
+                }
+
+                @if (!collapsed()) {
+                  <span class="menu-label">{{
+                    item.label
+                  }}</span>
+
+                  <span
+                    class="chevron"
+                    [class.chevron-open]="
+                      isExpanded(item.label)
+                    "
+                  >
+                    ›
+                  </span>
+                }
+              </button>
+
+              <!-- Submenu -->
+              <div
+                class="submenu-wrapper"
+                [class.submenu-open]="
+                  isExpanded(item.label) && !collapsed()
+                "
+              >
+                <div class="submenu">
+                  @for (
+                    child of item.children;
+                    track child.label
+                  ) {
+                    <a
+                      class="submenu-item"
+                      [routerLink]="child.route ?? null"
+                      routerLinkActive="submenu-item-active"
+                      [routerLinkActiveOptions]="{
+                        exact: true,
+                      }"
+                    >
+                      @if (iconMap[child.icon]) {
+                        <app-icon
+                          [icon]="iconMap[child.icon]"
+                          [size]="16"
+                        ></app-icon>
+                      }
+
+                      <span class="menu-label">{{
+                        child.label
+                      }}</span>
+                    </a>
+                  }
+                </div>
+              </div>
+            } @else {
+              <!-- Regular menu link -->
+              <a
+                class="menu-item"
+                [routerLink]="item.route ?? null"
+                routerLinkActive="menu-item-active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                [attr.data-tooltip]="
+                  collapsed() ? item.label : null
+                "
+                (click)="openSidebarOnClick()"
+              >
+                @if (iconMap[item.icon]) {
+                  <app-icon
+                    [icon]="iconMap[item.icon]"
+                    [size]="18"
+                  ></app-icon>
+                }
+
+                @if (!collapsed()) {
+                  <span class="menu-label">{{
+                    item.label
+                  }}</span>
+                }
+              </a>
+            }
+          </div>
+        }
+      </div>
+    }
+  </nav>
+
+  <!-- Account and sign out -->
+  <footer class="sidebar-footer">
+    <div class="account-summary">
+      <span class="account-avatar">{{ initials() }}</span>
+
+      @if (!collapsed()) {
+        <div class="account-details">
+          <strong class="account-name">{{
+            fullName()
+          }}</strong>
+          <span class="account-email">{{ email() }}</span>
+          <small class="account-role">{{
+            subtitle()
+          }}</small>
+        </div>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="logout-button"
+      (click)="signOut()"
+      [attr.aria-label]="collapsed() ? 'Sign out' : null"
+    >
+      <span class="logout-icon">
+        <app-icon
+          [icon]="LucidLogOut"
+          [size]="18"
+          [strokeWidth]="1.8"
+        ></app-icon>
+      </span>
+
+      @if (!collapsed()) {
+        <span class="menu-label">Sign out</span>
+      } @else {
+        <span class="visually-hidden">Sign out</span>
+      }
+    </button>
+  </footer>
+</aside>
+
+<app-confirm-logout-modal
+  (confirmed)="performSignOut()"
+></app-confirm-logout-modal>

@@ -1,0 +1,141 @@
+<div class="settings-page">
+  <app-page-banner
+    [icon]="LucideSettings"
+    eyebrow="Settings"
+    title="General Settings"
+    description="Configure your business name, timezone, currency, and other system-wide preferences."
+  ></app-page-banner>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="notice notice-error">{{ error() }}</div>
+  }
+
+  <!-- Success -->
+  @if (saved()) {
+    <div class="notice notice-success">
+      Settings saved successfully.
+    </div>
+  }
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="loading-panel">Loading settings...</div>
+  } @else {
+    <div class="settings-panel">
+      <div class="settings-section">
+        <h2 class="section-title">Business Information</h2>
+        <div class="settings-grid">
+          @for (setting of settings(); track setting.key) {
+            <div class="setting-card">
+              <label class="setting-label">{{
+                setting.label
+              }}</label>
+              <p class="setting-description">
+                {{ setting.description }}
+              </p>
+              @if (setting.valueType === 'string') {
+                <input
+                  type="text"
+                  class="setting-input"
+                  [value]="getValue(setting.key)"
+                  (input)="
+                    setValue(
+                      setting.key,
+                      $any($event).target.value
+                    )
+                  "
+                  placeholder="Enter value..."
+                />
+              } @else if (setting.valueType === 'number') {
+                <input
+                  type="number"
+                  class="setting-input"
+                  [value]="getValue(setting.key)"
+                  (input)="
+                    setValue(
+                      setting.key,
+                      $any($event).target.value
+                    )
+                  "
+                />
+              } @else if (setting.valueType === 'boolean') {
+                <label class="toggle-switch">
+                  <input
+                    type="checkbox"
+                    [checked]="
+                      getValue(setting.key) === 'true'
+                    "
+                    (change)="
+                      setValue(
+                        setting.key,
+                        $any($event).target.checked
+                          ? 'true'
+                          : 'false'
+                      )
+                    "
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              }
+              @if (!setting.systemDefault) {
+                <span class="modified-badge">Modified</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Dark Mode Toggle -->
+      <div class="dark-mode-setting">
+        <div class="dark-mode-card">
+          <div class="dark-mode-header">
+            <div>
+              <label class="setting-label">Dark Mode</label>
+              <p class="setting-description">
+                Switch between light and dark theme for a
+                more comfortable viewing experience.
+              </p>
+            </div>
+            <button
+              class="toggle-switch"
+              [class.active]="darkMode()"
+              (click)="toggleDarkMode()"
+              aria-label="Toggle dark mode"
+            >
+              <span class="toggle-slider">
+                @if (darkMode()) {
+                  <app-icon
+                    [icon]="LucideMoon"
+                    [size]="16"
+                  ></app-icon>
+                } @else {
+                  <app-icon
+                    [icon]="LucideSun"
+                    [size]="16"
+                  ></app-icon>
+                }
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save button -->
+      <div class="save-bar">
+        <button
+          class="btn btn-save"
+          (click)="save()"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span class="spinner"></span>
+            Saving...
+          } @else {
+            Save Changes
+          }
+        </button>
+      </div>
+    </div>
+  }
+</div>
