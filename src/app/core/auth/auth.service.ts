@@ -49,7 +49,6 @@ export class AuthService {
 
   private readonly httpOptions = { withCredentials: true };
 
-
   getAccessToken(): string | null {
     return this.accessTokenState();
   }
@@ -195,5 +194,4 @@ export class AuthService {
     this.accessTokenState.set(response.accessToken);
     this.currentUserState.set(response.user);
   }
-
 }

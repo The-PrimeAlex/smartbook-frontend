@@ -5,22 +5,16 @@ import {
   signal,
 } from '@angular/core';
 import { finalize } from 'rxjs';
-import {
-  LucideCreditCard,
-  
-} from '@lucide/angular';
+import { LucideCreditCard } from '@lucide/angular';
 import {
   AdminBillingService,
   AdminPaymentRecord,
 } from '../admin-billing.service';
 import {
-  IconComponent,
   StatusBadgeComponent,
   StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
   FilterGroupComponent,
-  SearchBoxComponent,
   PageBannerComponent,
   type FilterOption,
   type BadgeVariant,
@@ -36,14 +30,10 @@ import {
   selector: 'app-payment-records',
   standalone: true,
   imports: [
-    
-    IconComponent,
     StatusBadgeComponent,
     StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
     FilterGroupComponent,
-    SearchBoxComponent,
     PageBannerComponent,
   ],
   templateUrl: './payment-records.component.html',
@@ -51,7 +41,6 @@ import {
 })
 export class PaymentRecordsComponent implements OnInit {
   readonly LucideCreditCard = LucideCreditCard;
-
   readonly payments = signal<AdminPaymentRecord[]>([]);
   readonly loading = signal(true);
   readonly selectedFilter = signal<string>('ALL');
@@ -62,7 +51,6 @@ export class PaymentRecordsComponent implements OnInit {
     if (filter === 'ALL') return all;
     return all.filter((p) => p.paymentStatus === filter);
   });
-
   readonly totalPayments = computed(
     () => this.payments().length,
   );
@@ -89,22 +77,18 @@ export class PaymentRecordsComponent implements OnInit {
       .filter((p) => p.paymentStatus === 'SUCCESS')
       .reduce((sum, p) => sum + p.amount, 0),
   );
-
   readonly filterOptions: FilterOption[] = [
     { value: 'ALL', label: 'All' },
     { value: 'SUCCESS', label: 'Success' },
     { value: 'PENDING', label: 'Pending' },
     { value: 'FAILED', label: 'Failed' },
   ];
-
   constructor(
     private billingService: AdminBillingService,
   ) {}
-
   ngOnInit(): void {
     this.loadPayments();
   }
-
   loadPayments(): void {
     this.loading.set(true);
     this.billingService
@@ -115,11 +99,9 @@ export class PaymentRecordsComponent implements OnInit {
         error: () => this.loading.set(false),
       });
   }
-
   setFilter(filter: string): void {
     this.selectedFilter.set(filter);
   }
-
   getStatusClass(status: string): string {
     switch (status) {
       case 'SUCCESS':
@@ -134,9 +116,7 @@ export class PaymentRecordsComponent implements OnInit {
         return '';
     }
   }
-
   getStatusLabel = getPaymentStatusLabel;
-
   getMethodLabel(method: string): string {
     switch (method) {
       case 'MPESA':
@@ -151,7 +131,6 @@ export class PaymentRecordsComponent implements OnInit {
         return method;
     }
   }
-
   formatCurrency = formatCurrency;
   formatDateTime = formatDateTime;
   getBadgeVariant = getPaymentBadgeVariant;

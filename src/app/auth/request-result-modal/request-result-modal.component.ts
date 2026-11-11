@@ -2,7 +2,6 @@ import { Component, input, output } from '@angular/core';
 import {
   LucideCheckCircle2,
   LucideClock,
-  
 } from '@lucide/angular';
 import { IconComponent } from '../../shared/ui';
 
@@ -11,7 +10,7 @@ export type ModalType = 'success' | 'pending';
 @Component({
   selector: 'app-request-result-modal',
   standalone: true,
-  imports: [ IconComponent],
+  imports: [IconComponent],
   templateUrl: './request-result-modal.component.html',
   styleUrl: './request-result-modal.component.css',
 })

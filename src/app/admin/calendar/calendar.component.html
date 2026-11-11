@@ -31,6 +31,18 @@
           googleSyncing() ? 'Syncing...' : 'Sync Bookings'
         }}
       </button>
+      <button
+        type="button"
+        class="btn btn-disconnect"
+        (click)="disconnectGoogleCalendar()"
+        [disabled]="googleDisconnecting()"
+      >
+        {{
+          googleDisconnecting()
+            ? 'Disconnecting...'
+            : 'Disconnect Google Calendar'
+        }}
+      </button>
     </div>
   </header>
   @if (googleConnectionMessage()) {
@@ -68,6 +80,16 @@
   @if (googleSyncError()) {
     <div class="notice notice-error" role="alert">
       {{ googleSyncError() }}
+    </div>
+  }
+  @if (googleDisconnectMessage()) {
+    <div class="notice notice-success" role="status">
+      {{ googleDisconnectMessage() }}
+    </div>
+  }
+  @if (googleDisconnectError()) {
+    <div class="notice notice-error" role="alert">
+      {{ googleDisconnectError() }}
     </div>
   }
   <section
@@ -183,7 +205,6 @@
       <div class="weekday-heading">Fri</div>
       <div class="weekday-heading">Sat</div>
       <div class="weekday-heading">Sun</div>
-
       @for (
         day of monthDays();
         track trackDay($index, day)
@@ -216,7 +237,6 @@
                   : 'bookings'
               }}
             </span>
-
             <span class="day-booking-preview">
               {{ bookingsForDate(day.date)[0].title }}
             </span>
@@ -287,7 +307,6 @@
         <h2>Day agenda</h2>
         <p>{{ selectedDateTitle() }}</p>
       </div>
-
       <span class="agenda-count">
         {{ dayBookings().length }}
         {{
@@ -318,14 +337,12 @@
                 >to {{ formatTime(booking.endTime) }}</span
               >
             </div>
-
             <div class="agenda-content">
               <h3>{{ booking.title }}</h3>
               <p>
                 {{ booking.room }} ·
                 {{ booking.customerName }}
               </p>
-
               <div class="agenda-meta">
                 <span
                   class="status-pill"
@@ -341,7 +358,6 @@
                 >
                   {{ booking.status }}
                 </span>
-
                 <span
                   class="source-pill"
                   [class.source-google]="
@@ -356,7 +372,6 @@
                 </span>
               </div>
             </div>
-
             @if (booking.eventUrl) {
               <a
                 class="event-link"

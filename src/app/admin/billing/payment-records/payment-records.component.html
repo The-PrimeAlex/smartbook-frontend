@@ -3,7 +3,8 @@
     [icon]="LucideCreditCard"
     eyebrow="Billing"
     title="Payment Records"
-    description="View all payment transactions — M-Pesa, card, bank transfer, and cash payments."
+    description="View all payment transactions — M-Pesa
+    , card, bank transfer, and cash payments."
   ></app-page-banner>
 
   <section class="stats-bar">
@@ -97,7 +98,7 @@
         ) {
           <article
             class="payment-card"
-            [style.animation-delay]="(i * 0.05) + 's'"
+            [style.animation-delay]="i * 0.05 + 's'"
           >
             <div class="payment-card-header">
               <div class="payment-header-left">

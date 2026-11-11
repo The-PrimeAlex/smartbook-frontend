@@ -1,7 +1,3 @@
-/* ========================================
-   Usage Charges - shadcn/ui Inspired Design
-======================================== */
-
 .page-container {
   padding: 24px;
   max-width: 1440px;
@@ -15,19 +11,16 @@
   gap: 12px;
   margin-bottom: 24px;
 }
-
 @media (max-width: 1200px) {
   .stats-bar {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 768px) {
   .stats-bar {
     grid-template-columns: 1fr;
   }
 }
-
 /* ── Filter Bar ── */
 .filter-bar {
   display: flex;
@@ -36,16 +29,13 @@
   align-items: center;
   margin-bottom: 24px;
 }
-
 .filter-buttons {
   flex: 1;
 }
-
 .search-box {
   min-width: 280px;
   flex: 0 0 280px;
 }
-
 .filter-btn {
   padding: 6px 14px;
   border: 1px solid var(--border);
@@ -58,32 +48,30 @@
   transition: all 150ms ease;
   white-space: nowrap;
 }
-
 .filter-btn:hover {
   background: var(--accent);
   color: var(--accent-foreground);
 }
-
 .filter-btn.active {
   background: var(--primary);
   color: var(--primary-foreground);
   border-color: var(--primary);
 }
-
 /* ── Usage Grid ── */
 .usage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(380px, 1fr)
+  );
   gap: 8px;
 }
-
 @media (max-width: 768px) {
   .usage-grid {
     grid-template-columns: 1fr;
   }
 }
-
-/* ── Usage Card (shadcn Card) ── */
+/* ── Usage Card (shading Card) ── */
 .usage-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -91,19 +79,15 @@
   overflow: hidden;
   transition: border-color 150ms ease;
 }
-
 .usage-card:hover {
   border-color: var(--border-color-hover);
 }
-
 .usage-card.has-overrun {
   border-color: var(--warning-border);
 }
-
 .usage-card.has-overrun:hover {
   border-color: var(--warning);
 }
-
 .usage-card-header {
   display: flex;
   justify-content: space-between;
@@ -112,14 +96,12 @@
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
 }
-
 .usage-header-left {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
 }
-
 .usage-room {
   font-size: 0.875rem;
   font-weight: 600;
@@ -129,7 +111,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .badge {
   display: inline-flex;
   align-items: center;
@@ -140,13 +121,11 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-
 .auto-closed {
   background: var(--info-bg);
   color: var(--info);
   border: 1px solid var(--info-border);
 }
-
 .usage-header-right {
   display: flex;
   flex-direction: column;
@@ -154,7 +133,6 @@
   gap: 2px;
   flex-shrink: 0;
 }
-
 .usage-total-amount {
   font-size: 1rem;
   font-weight: 600;
@@ -162,13 +140,11 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
-
 .usage-duration {
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--muted-foreground);
 }
-
 /* ── Card Body ── */
 .usage-card-body {
   padding: 14px 16px;
@@ -176,13 +152,11 @@
   flex-direction: column;
   gap: 10px;
 }
-
 .usage-meta-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .usage-meta-item {
   display: inline-flex;
   align-items: center;
@@ -190,12 +164,10 @@
   font-size: 0.75rem;
   color: var(--muted-foreground);
 }
-
 .usage-meta-item app-icon {
   flex-shrink: 0;
   opacity: 0.5;
 }
-
 .usage-purpose {
   font-size: 0.75rem;
   color: var(--card-foreground);
@@ -205,13 +177,11 @@
   border-radius: var(--radius-sm);
   border-left: 2px solid var(--info, #3b82f6);
 }
-
 .usage-times {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
 }
-
 .usage-time-block {
   display: flex;
   flex-direction: column;
@@ -220,7 +190,6 @@
   background: var(--muted);
   border-radius: var(--radius-sm);
 }
-
 .usage-time-label {
   font-size: 0.5625rem;
   color: var(--muted-foreground);
@@ -228,13 +197,11 @@
   letter-spacing: 0.05em;
   font-weight: 600;
 }
-
 .usage-time-value {
   font-size: 0.75rem;
   color: var(--card-foreground);
   font-weight: 500;
 }
-
 /* ── Charge Breakdown ── */
 .usage-charges {
   display: flex;
@@ -243,7 +210,6 @@
   padding-top: 10px;
   border-top: 1px solid var(--border);
 }
-
 .usage-charge-row {
   display: flex;
   justify-content: space-between;
@@ -253,12 +219,10 @@
   border-radius: var(--radius-sm);
   gap: 8px;
 }
-
 .usage-charge-row.has-overrun {
   background: var(--warning-bg);
   border: 1px solid var(--warning-border);
 }
-
 .usage-charge-label {
   font-size: 0.6875rem;
   color: var(--muted-foreground);
@@ -267,11 +231,9 @@
   align-items: center;
   gap: 5px;
 }
-
 .usage-charge-row.has-overrun .usage-charge-label {
   color: var(--warning);
 }
-
 .usage-charge-value {
   font-size: 0.75rem;
   color: var(--card-foreground);
@@ -279,7 +241,6 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-
 /* ── Overrun Alert ── */
 .overrun-alert {
   display: flex;
@@ -293,7 +254,6 @@
   font-size: 0.75rem;
   font-weight: 500;
 }
-
 .overrun-alert svg {
   flex-shrink: 0;
 }
@@ -343,7 +303,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ── Responsive ── */
@@ -403,9 +365,15 @@
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

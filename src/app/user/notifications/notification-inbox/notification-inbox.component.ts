@@ -12,7 +12,6 @@ import {
   LucideCheckCheck,
   LucideCircle,
   LucideClock,
-  
   LucideTriangleAlert,
 } from '@lucide/angular';
 import { Notification } from '../../../shared/models/notification.model';
@@ -30,7 +29,7 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    
+
     PageBannerComponent,
     StatCardComponent,
     FilterGroupComponent,

@@ -13,7 +13,6 @@ import {
   LucideChevronDown,
   LucideClock,
   LucideDollarSign,
-  
   LucideMapPin,
   LucideMonitor,
   LucideSearch,
@@ -63,7 +62,6 @@ interface RoomCardData {
   selector: 'app-find-rooms',
   standalone: true,
   imports: [
-    
     PageBannerComponent,
     StatCardComponent,
     SearchBoxComponent,

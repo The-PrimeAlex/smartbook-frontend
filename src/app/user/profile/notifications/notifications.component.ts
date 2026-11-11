@@ -9,7 +9,6 @@ import { FormsModule } from '@angular/forms';
 import {
   LucideBell,
   LucideCheckCircle2,
-  
   LucideFileBox,
   LucideXCircle,
 } from '@lucide/angular';
@@ -30,7 +29,7 @@ interface NotificationPreferenceDef {
   standalone: true,
   imports: [
     FormsModule,
-    
+
     PageBannerComponent,
     IconComponent,
   ],
@@ -38,49 +37,57 @@ interface NotificationPreferenceDef {
   styleUrl: './notifications.component.css',
 })
 export class NotificationsComponent implements OnInit {
-  private readonly preferencesService =
-    inject(UserNotificationPreferencesService);
+  private readonly preferencesService = inject(
+    UserNotificationPreferencesService,
+  );
 
   readonly LucideBell = LucideBell;
   readonly LucideCheckCircle2 = LucideCheckCircle2;
   readonly LucideFileBox = LucideFileBox;
   readonly LucideXCircle = LucideXCircle;
 
-  readonly preferenceDefinitions: NotificationPreferenceDef[] = [
-    {
-      key: 'booking_confirmation',
-      label: 'Booking Confirmation',
-      description: 'Receive an email when your booking is confirmed.',
-    },
-    {
-      key: 'send_reminders',
-      label: 'Meeting Reminders',
-      description: 'Receive a reminder email before your meeting starts.',
-    },
-    {
-      key: 'noshow_notification',
-      label: 'No-Show Notification',
-      description: 'Receive a notification when a booking is marked as no-show.',
-    },
-    {
-      key: 'overrun_notification',
-      label: 'Overrun Notification',
-      description: 'Receive a notification when your booking goes into overrun.',
-    },
-    {
-      key: 'invoice_email',
-      label: 'Invoice Email',
-      description: 'Receive an invoice email after checkout.',
-    },
-  ];
+  readonly preferenceDefinitions: NotificationPreferenceDef[] =
+    [
+      {
+        key: 'booking_confirmation',
+        label: 'Booking Confirmation',
+        description:
+          'Receive an email when your booking is confirmed.',
+      },
+      {
+        key: 'send_reminders',
+        label: 'Meeting Reminders',
+        description:
+          'Receive a reminder email before your meeting starts.',
+      },
+      {
+        key: 'noshow_notification',
+        label: 'No-Show Notification',
+        description:
+          'Receive a notification when a booking is marked as no-show.',
+      },
+      {
+        key: 'overrun_notification',
+        label: 'Overrun Notification',
+        description:
+          'Receive a notification when your booking goes into overrun.',
+      },
+      {
+        key: 'invoice_email',
+        label: 'Invoice Email',
+        description:
+          'Receive an invoice email after checkout.',
+      },
+    ];
 
-  readonly preferences = signal<UserNotificationPreferences>({
-    booking_confirmation: true,
-    send_reminders: true,
-    noshow_notification: true,
-    overrun_notification: true,
-    invoice_email: true,
-  });
+  readonly preferences =
+    signal<UserNotificationPreferences>({
+      booking_confirmation: true,
+      send_reminders: true,
+      noshow_notification: true,
+      overrun_notification: true,
+      invoice_email: true,
+    });
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly saved = signal(false);
@@ -123,14 +130,18 @@ export class NotificationsComponent implements OnInit {
       });
   }
 
-  togglePreference(key: keyof UserNotificationPreferences): void {
+  togglePreference(
+    key: keyof UserNotificationPreferences,
+  ): void {
     this.preferences.update((prefs) => ({
       ...prefs,
       [key]: !prefs[key],
     }));
   }
 
-  isPreferenceEnabled(key: keyof UserNotificationPreferences): boolean {
+  isPreferenceEnabled(
+    key: keyof UserNotificationPreferences,
+  ): boolean {
     return this.preferences()[key];
   }
 }

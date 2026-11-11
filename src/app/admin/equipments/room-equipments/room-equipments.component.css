@@ -2,7 +2,6 @@
   display: block;
   color: var(--text-primary);
 }
-
 /* ── Animations ── */
 @keyframes fadeUp {
   from {
@@ -14,7 +13,6 @@
     transform: translateY(0);
   }
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -23,7 +21,6 @@
     opacity: 1;
   }
 }
-
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -34,7 +31,6 @@
     max-height: 800px;
   }
 }
-
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -43,13 +39,11 @@
     background-position: 200% 0;
   }
 }
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
 @keyframes scaleIn {
   from {
     opacity: 0;
@@ -60,7 +54,6 @@
     transform: scale(1);
   }
 }
-
 /* ── Page Container ── */
 .equipment-page {
   max-width: 1500px;
@@ -70,7 +63,6 @@
   min-height: 100%;
   animation: fadeIn 400ms ease-out;
 }
-
 /* ── Page Header ── */
 .page-header {
   display: flex;
@@ -80,7 +72,6 @@
   margin-bottom: 24px;
   animation: fadeUp 400ms ease-out;
 }
-
 .page-header h1 {
   margin: 0;
   color: var(--text-primary);
@@ -88,14 +79,12 @@
   font-weight: 700;
   letter-spacing: -0.02em;
 }
-
 .page-header p {
   margin: 6px 0 0;
   color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.5;
 }
-
 .btn-refresh {
   display: inline-flex;
   align-items: center;
@@ -113,21 +102,17 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 .btn-refresh:hover {
   background: var(--neutral-50);
   border-color: var(--border-color-hover);
   color: var(--text-primary);
 }
-
 .btn-refresh svg {
   transition: transform 300ms ease;
 }
-
 .btn-refresh:hover svg {
   transform: rotate(180deg);
 }
-
 /* ── Summary Bar ── */
 .summary-bar {
   display: flex;
@@ -142,7 +127,6 @@
   box-shadow: var(--card-shadow);
   animation: fadeUp 400ms ease-out 80ms both;
 }
-
 .summary-item {
   display: flex;
   flex-direction: column;
@@ -155,12 +139,10 @@
   min-width: 100px;
   transition: all var(--transition);
 }
-
 .summary-item:hover {
   border-color: var(--border-color-hover);
   background: var(--card-bg);
 }
-
 .summary-label {
   font-size: 10px;
   color: var(--text-secondary);
@@ -168,29 +150,24 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
 .summary-value {
   font-size: 22px;
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1;
 }
-
 .summary-active {
   color: var(--success);
 }
-
 .summary-out {
   color: var(--warning);
 }
-
 .summary-filters {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-left: auto;
 }
-
 .search-box {
   display: flex;
   align-items: center;
@@ -202,18 +179,15 @@
   transition: all var(--transition);
   min-width: 200px;
 }
-
 .search-box:focus-within {
   border-color: var(--brand-accent);
   box-shadow: 0 0 0 3px rgb(242 140 40 / 14%);
 }
-
 .search-icon {
   color: var(--text-secondary);
   font-size: 16px;
   line-height: 1;
 }
-
 .search-box input {
   flex: 1;
   min-width: 0;
@@ -225,11 +199,9 @@
   font: inherit;
   font-size: 0.8125rem;
 }
-
 .search-box input::placeholder {
   color: var(--text-muted);
 }
-
 .filter-select {
   padding: 9px 12px;
   border: 1px solid var(--border-color);
@@ -243,16 +215,13 @@
   cursor: pointer;
   transition: all var(--transition);
 }
-
 .filter-select:hover {
   border-color: var(--border-color-hover);
 }
-
 .filter-select:focus {
   border-color: var(--brand-accent);
   box-shadow: 0 0 0 3px rgb(242 140 40 / 14%);
 }
-
 /* ── Room Grid ── */
 .room-grid {
   display: grid;
@@ -262,7 +231,6 @@
   );
   gap: 16px;
 }
-
 /* ── Room Card ── */
 .room-card {
   background: var(--card-bg);
@@ -273,19 +241,16 @@
   transition: all var(--transition-slow);
   animation: scaleIn 400ms ease-out both;
 }
-
 .room-card:hover {
   border-color: var(--border-color-hover);
   box-shadow: var(--card-shadow-hover);
   transform: translateY(-2px);
 }
-
 .room-card.expanded {
   border-color: var(--brand-accent);
   box-shadow: 0 8px 32px rgb(242 140 40 / 10%);
   transform: translateY(-1px);
 }
-
 /* ── Card Header ── */
 .card-header {
   display: flex;
@@ -297,11 +262,9 @@
   transition: background var(--transition);
   user-select: none;
 }
-
 .card-header:hover {
   background: var(--neutral-50);
 }
-
 .card-header-left {
   display: flex;
   align-items: center;
@@ -309,7 +272,6 @@
   min-width: 0;
   flex: 1;
 }
-
 .room-icon-badge {
   display: grid;
   flex-shrink: 0;
@@ -321,17 +283,14 @@
   color: var(--text-primary);
   transition: all var(--transition);
 }
-
 .room-card:hover .room-icon-badge {
   background: var(--brand-accent-light);
   color: var(--brand-accent);
 }
-
 .room-info {
   min-width: 0;
   flex: 1;
 }
-
 .room-name {
   margin: 0;
   font-size: 0.9375rem;
@@ -1026,9 +985,15 @@
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

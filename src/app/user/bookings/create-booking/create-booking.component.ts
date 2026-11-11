@@ -1,5 +1,10 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -41,7 +46,7 @@ import {
   imports: [
     FormsModule,
     CurrencyPipe,
-    
+
     PageBannerComponent,
     IconComponent,
     DatePickerComponent,
@@ -351,76 +356,110 @@ export class CreateBookingComponent implements OnInit {
       purpose: `${this.meetingTitle.trim()} — ${this.purpose.trim()}`,
     };
 
-    this.bookingService.createBooking(booking).pipe(
-      finalize(() => {
-        // Always stop the spinner when the request completes (success or error)
-        this.saving = false;
-      })
-    ).subscribe({
-      next: () => {
-        this.saving = false;
-        this.successMessage =
-          'Your booking has been submitted successfully.';
+    this.bookingService
+      .createBooking(booking)
+      .pipe(
+        finalize(() => {
+          // Always stop the spinner when the request completes (success or error)
+          this.saving = false;
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.saving = false;
+          this.successMessage =
+            'Your booking has been submitted successfully.';
 
-        // Navigate to upcoming bookings after a short delay so the success message is visible
-        setTimeout(() => {
-          this.router.navigate(['/app/bookings/upcoming']);
-        }, 1500);
-      },
-      error: (error: any) => {
-        console.log('Booking error received:', error);
-        this.saving = false;
+          // Navigate to upcoming bookings after a short delay so the success message is visible
+          setTimeout(() => {
+            this.router.navigate([
+              '/app/bookings/upcoming',
+            ]);
+          }, 1500);
+        },
+        error: (error: any) => {
+          console.log('Booking error received:', error);
+          this.saving = false;
 
-        if (error?.status === 409) {
-          console.log('409 conflict detected, body:', error?.error);
-          this.clearMessages();
-          const body = error?.error;
+          if (error?.status === 409) {
+            console.log(
+              '409 conflict detected, body:',
+              error?.error,
+            );
+            this.clearMessages();
+            const body = error?.error;
 
-          // Check if we got structured conflict info from the backend
-          if (body && typeof body === 'object' && body.conflictType) {
-            this.conflictType = body.conflictType || '';
-            this.conflictRoomName = body.roomName || '';
-            this.conflictUserName = body.conflictingUserName || 'another user';
-            this.conflictStart = body.conflictingStart || '';
-            this.conflictEnd = body.conflictingEnd || '';
-            this.conflictAvailableFrom = body.availableFrom || '';
-            this.conflictCooldownMinutes = body.cooldownMinutes ?? null;
-            this.conflictMessage = body.message || 'This time slot is already booked.';
-            console.log('Setting showConflictModal = true');
-            this.showConflictModal = true;
-            console.log('showConflictModal is now:', this.showConflictModal);
-            this.cdr.detectChanges();
+            // Check if we got structured conflict info from the backend
+            if (
+              body &&
+              typeof body === 'object' &&
+              body.conflictType
+            ) {
+              this.conflictType = body.conflictType || '';
+              this.conflictRoomName = body.roomName || '';
+              this.conflictUserName =
+                body.conflictingUserName || 'another user';
+              this.conflictStart =
+                body.conflictingStart || '';
+              this.conflictEnd = body.conflictingEnd || '';
+              this.conflictAvailableFrom =
+                body.availableFrom || '';
+              this.conflictCooldownMinutes =
+                body.cooldownMinutes ?? null;
+              this.conflictMessage =
+                body.message ||
+                'This time slot is already booked.';
+              console.log(
+                'Setting showConflictModal = true',
+              );
+              this.showConflictModal = true;
+              console.log(
+                'showConflictModal is now:',
+                this.showConflictModal,
+              );
+              this.cdr.detectChanges();
+            } else {
+              // Fallback for plain text error
+              const message =
+                (typeof body === 'string'
+                  ? body
+                  : (body?.message ?? '')) || '';
+              this.conflictMessage =
+                message ||
+                'This time slot is already booked. Please choose a different time.';
+              // Scroll the alert into view so the user sees it
+              setTimeout(() => {
+                const el = document.querySelector(
+                  '.conflict-alert',
+                );
+                if (el)
+                  el.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                  });
+              }, 50);
+            }
+          } else if (error?.status === 403) {
+            this.clearMessages();
+            this.errorMessage =
+              'Request blocked. Please refresh the page and try again.';
+          } else if (error?.status === 0) {
+            this.clearMessages();
+            this.errorMessage =
+              'Cannot reach the server. Make sure the backend is running.';
           } else {
-            // Fallback for plain text error
+            this.clearMessages();
+            const body = error?.error;
             const message =
-              (typeof body === 'string' ? body : body?.message ?? '') || '';
-            this.conflictMessage =
+              (typeof body === 'string'
+                ? body
+                : (body?.message ?? '')) || '';
+            this.errorMessage =
               message ||
-              'This time slot is already booked. Please choose a different time.';
-            // Scroll the alert into view so the user sees it
-            setTimeout(() => {
-              const el = document.querySelector('.conflict-alert');
-              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 50);
+              'Unable to create the booking. Please try again.';
           }
-        } else if (error?.status === 403) {
-          this.clearMessages();
-          this.errorMessage =
-            'Request blocked. Please refresh the page and try again.';
-        } else if (error?.status === 0) {
-          this.clearMessages();
-          this.errorMessage =
-            'Cannot reach the server. Make sure the backend is running.';
-        } else {
-          this.clearMessages();
-          const body = error?.error;
-          const message =
-            (typeof body === 'string' ? body : body?.message ?? '') || '';
-          this.errorMessage =
-            message || 'Unable to create the booking. Please try again.';
-        }
-      },
-    });
+        },
+      });
   }
 
   goToUpcoming(): void {

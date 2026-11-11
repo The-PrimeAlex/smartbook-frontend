@@ -11,7 +11,6 @@ import { map } from 'rxjs/operators';
 import {
   LucideCheck,
   LucideChevronDown,
-  
   LucideMapPin,
   LucideMonitor,
   LucideUsers,
@@ -29,12 +28,7 @@ import {
 } from '../../../shared/models/room.model';
 import {
   IconComponent,
-  StatusBadgeComponent,
-  StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
-  FilterGroupComponent,
-  SearchBoxComponent,
   PageBannerComponent,
   type BadgeVariant,
 } from '../../../shared/ui';
@@ -53,14 +47,9 @@ interface RoomCardData {
   standalone: true,
   imports: [
     DecimalPipe,
-    
+
     IconComponent,
-    StatusBadgeComponent,
-    StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
-    FilterGroupComponent,
-    SearchBoxComponent,
     PageBannerComponent,
   ],
   templateUrl: './view-rooms.component.html',

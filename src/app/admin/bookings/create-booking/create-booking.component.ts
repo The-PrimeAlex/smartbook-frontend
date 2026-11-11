@@ -15,7 +15,6 @@ import {
   LucideChevronDown,
   LucideCircleHelp,
   LucideClock,
-  
   LucideFileText,
   LucideMonitor,
 } from '@lucide/angular';
@@ -45,7 +44,7 @@ interface BookingResponse {
   imports: [
     FormsModule,
     CurrencyPipe,
-    
+
     PageBannerComponent,
     IconComponent,
   ],
@@ -383,13 +382,21 @@ export class CreateBookingComponent implements OnInit {
             this.clearMessages();
             const body = error?.error;
             const message =
-              (typeof body === 'string' ? body : body?.message ?? '') || '';
+              (typeof body === 'string'
+                ? body
+                : (body?.message ?? '')) || '';
             this.conflictMessage =
               message ||
               'This time slot is already booked. Please choose a different time.';
             setTimeout(() => {
-              const el = document.querySelector('.conflict-alert');
-              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              const el = document.querySelector(
+                '.conflict-alert',
+              );
+              if (el)
+                el.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'center',
+                });
             }, 50);
           } else if (error.status === 0) {
             this.clearMessages();

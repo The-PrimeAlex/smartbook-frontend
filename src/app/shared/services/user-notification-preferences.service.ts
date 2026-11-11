@@ -13,32 +13,41 @@ export interface UserNotificationPreferences {
 @Injectable({ providedIn: 'root' })
 export class UserNotificationPreferencesService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/v1/notifications/me/preferences';
+  private readonly baseUrl =
+    '/api/v1/notifications/me/preferences';
 
   /**
    * Get the authenticated user's notification preferences.
    * Seeds defaults (all enabled) if no preferences exist yet.
    */
   getPreferences(): Observable<UserNotificationPreferences> {
-    return this.http.get<Record<string, boolean>>(this.baseUrl).pipe(
-      map((raw) => ({
-        booking_confirmation: raw['booking_confirmation'] ?? true,
-        send_reminders: raw['send_reminders'] ?? true,
-        noshow_notification: raw['noshow_notification'] ?? true,
-        overrun_notification: raw['overrun_notification'] ?? true,
-        invoice_email: raw['invoice_email'] ?? true,
-      }))
-    );
+    return this.http
+      .get<Record<string, boolean>>(this.baseUrl)
+      .pipe(
+        map((raw) => ({
+          booking_confirmation:
+            raw['booking_confirmation'] ?? true,
+          send_reminders: raw['send_reminders'] ?? true,
+          noshow_notification:
+            raw['noshow_notification'] ?? true,
+          overrun_notification:
+            raw['overrun_notification'] ?? true,
+          invoice_email: raw['invoice_email'] ?? true,
+        })),
+      );
   }
 
   /**
    * Update a single notification preference.
    */
-  updatePreference(key: string, enabled: boolean): Observable<void> {
+  updatePreference(
+    key: string,
+    enabled: boolean,
+  ): Observable<void> {
     return this.http.patch<void>(
       this.baseUrl,
       {},
-      { params: { key, enabled: String(enabled) } }
+      { params: { key, enabled: String(enabled) } },
     );
   }
 
@@ -46,8 +55,11 @@ export class UserNotificationPreferencesService {
    * Bulk update notification preferences.
    */
   bulkUpdatePreferences(
-    preferences: UserNotificationPreferences
+    preferences: UserNotificationPreferences,
   ): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/bulk`, preferences);
+    return this.http.patch<void>(
+      `${this.baseUrl}/bulk`,
+      preferences,
+    );
   }
 }

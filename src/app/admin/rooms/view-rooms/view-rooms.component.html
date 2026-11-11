@@ -5,7 +5,6 @@
     title="Meeting Rooms"
     description="Browse and manage all meeting rooms across your organization."
   ></app-page-banner>
-
   <!-- Overview Stats -->
   <div class="overview-grid">
     <div class="overview-card">
@@ -49,7 +48,6 @@
       <strong>{{ totalEquipment() }}</strong>
     </div>
   </div>
-
   <!-- Filters -->
   <div class="filter-panel">
     <div class="filter-options">
@@ -95,7 +93,6 @@
       }}</span
     >
   </div>
-
   <!-- Rooms grid -->
   @if (loading()) {
     <div class="state-panel">
@@ -174,7 +171,6 @@
               }}</span>
             </button>
           </div>
-
           <div class="room-card-footer">
             <span class="equipment-count">
               <app-icon
@@ -195,7 +191,6 @@
                   {{ room.description }}
                 </p>
               }
-
               <div class="details-grid">
                 <div class="detail-item">
                   <span class="detail-label">Capacity</span>
@@ -225,7 +220,6 @@
                   }}</span>
                 </div>
               </div>
-
               <div class="equipment-section">
                 <h4>
                   <app-icon

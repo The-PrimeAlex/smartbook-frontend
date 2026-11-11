@@ -14,7 +14,6 @@ import {
   LucideArrowLeft,
   LucideArrowRight,
   LucideCheckCircle,
-  
   LucideMail,
   LucideShieldCheck,
 } from '@lucide/angular';
@@ -24,12 +23,7 @@ import { IconComponent } from '../../shared/ui';
 @Component({
   selector: 'app-password-reset',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    
-    IconComponent,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })

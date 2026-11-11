@@ -7,7 +7,6 @@ import {
   LucideCircleAlert,
   LucideCircleX,
   LucideClock,
-  
   LucideFileText,
   LucideHome,
   LucideTriangleAlert,
@@ -36,7 +35,7 @@ import {
   standalone: true,
   imports: [
     RouterLink,
-    
+
     PageBannerComponent,
     StatCardComponent,
     FilterGroupComponent,

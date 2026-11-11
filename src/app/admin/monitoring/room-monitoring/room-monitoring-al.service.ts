@@ -54,7 +54,9 @@ export class RoomMonitoringAlService {
     );
   }
 
-  getRoomBookings(roomId: string): Observable<RoomBookingRecordAl[]> {
+  getRoomBookings(
+    roomId: string,
+  ): Observable<RoomBookingRecordAl[]> {
     return this.http.get<RoomBookingRecordAl[]>(
       `${this.apiUrl}/room/${roomId}/bookings`,
     );

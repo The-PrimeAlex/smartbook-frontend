@@ -9,7 +9,6 @@ import { finalize } from 'rxjs';
 import {
   LucideAlertTriangle,
   LucideCalendar,
-  
   LucideUser,
 } from '@lucide/angular';
 import {
@@ -21,9 +20,6 @@ import {
   StatusBadgeComponent,
   StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
-  FilterGroupComponent,
-  SearchBoxComponent,
   PageBannerComponent,
   type BadgeVariant,
 } from '../../../shared/ui';
@@ -40,14 +36,11 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    
+
     IconComponent,
     StatusBadgeComponent,
     StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
-    FilterGroupComponent,
-    SearchBoxComponent,
     PageBannerComponent,
   ],
   templateUrl: './damage-charges.component.html',
@@ -86,8 +79,18 @@ export class DamageChargesComponent implements OnInit {
     }, 0),
   );
   readonly totalDamagePaid = computed(() =>
-    this.damageBills().reduce((sum, b) => sum + (b.amountPaid || 0), 0),
+    this.damageBills().reduce(
+      (sum, b) => sum + (b.amountPaid || 0),
+      0,
+    ),
   );
+
+  // Calculate the incident-only total for a bill (not the full bill total)
+  getIncidentTotal(bill: AdminBill): number {
+    return bill.items
+      .filter((item) => item.itemType === 'INCIDENT')
+      .reduce((sum, item) => sum + item.amount, 0);
+  }
 
   constructor(
     private billingService: AdminBillingService,

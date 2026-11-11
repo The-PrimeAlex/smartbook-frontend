@@ -1,17 +1,14 @@
 :host {
   display: block;
 }
-
 .admin-dashboard {
   padding: var(--app-content-padding);
   max-width: 1400px;
   margin: 0 auto;
 }
-
 /* =========================
    Skeleton Loading
    ========================= */
-
 .skeleton-grid {
   display: grid;
   grid-template-columns: repeat(
@@ -21,7 +18,6 @@
   gap: 1.25rem;
   margin-top: 1.5rem;
 }
-
 .skeleton-card {
   height: 120px;
   border-radius: var(--radius-md);
@@ -33,49 +29,39 @@
 /* =========================
    Stats Row (uses shared StatCardComponent)
    ========================= */
-
 .stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   margin-top: 1.5rem;
 }
-
 @media (max-width: 1024px) {
   .stats-row {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 640px) {
   .stats-row {
     grid-template-columns: 1fr;
   }
 }
-
-/* =========================
-   Dashboard Sections
-   ========================= */
-
+/*Dashboard Sections*/
 .dashboard-section {
   margin-top: 2.5rem;
   animation: fadeUp 400ms ease both;
 }
-
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.25rem;
 }
-
 .section-header h2 {
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
 }
-
 .view-all-link {
   background: none;
   border: none;
@@ -87,21 +73,15 @@
   border-radius: var(--radius-sm);
   transition: background var(--transition-smooth);
 }
-
 .view-all-link:hover {
   background: rgba(242, 140, 40, 0.1);
 }
-
-/* =========================
-   Quick Links Grid
-   ========================= */
-
+/*Quick Links Grid*/
 .quick-links-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
-
 .quick-link-card {
   display: flex;
   flex-direction: column;
@@ -112,19 +92,16 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition:
-    transform var(--transition-smooth),
-    box-shadow var(--transition-smooth),
-    border-color var(--transition-smooth);
+  transition: transform var(--transition-smooth),
+  box-shadow var(--transition-smooth),
+  border-color var(--transition-smooth);
   animation: fadeUp 400ms ease both;
 }
-
 .quick-link-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
   border-color: var(--brand-accent);
 }
-
 .quick-link-icon {
   display: flex;
   align-items: center;
@@ -134,39 +111,30 @@
   border-radius: var(--radius-md);
   transition: transform var(--transition-smooth);
 }
-
 .quick-link-card:hover .quick-link-icon {
   transform: scale(1.1);
 }
-
 .quick-link-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
   text-align: center;
 }
-
-/* =========================
-   Dashboard Columns
-   ========================= */
-
+ /*Dashboard Columns*/
 .dashboard-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
-
 /* =========================
    Live Status Cards
    ========================= */
-
 .live-status-list,
 .bookings-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
-
 .live-status-card,
 .booking-card {
   display: flex;
@@ -178,25 +146,21 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   animation: fadeUp 400ms ease both;
-  transition:
-    transform var(--transition-smooth),
-    box-shadow var(--transition-smooth),
-    border-color var(--transition-smooth);
+  transition: transform var(--transition-smooth),
+  box-shadow var(--transition-smooth),
+  border-color var(--transition-smooth);
 }
-
 .live-status-card:hover,
 .booking-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
   border-color: var(--brand-accent);
 }
-
 .live-status-info,
 .booking-details {
   flex: 1;
   min-width: 0;
 }
-
 .live-status-header,
 .booking-header {
   display: flex;
@@ -205,14 +169,12 @@
   gap: 0.75rem;
   margin-bottom: 0.375rem;
 }
-
 .room-name,
 .booking-room {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
 }
-
 .booker-name,
 .booking-purpose {
   font-size: 0.8125rem;
@@ -220,18 +182,15 @@
   display: block;
   margin-bottom: 0.25rem;
 }
-
 .time-slot,
 .booking-countdown {
   font-size: 0.75rem;
   color: var(--brand-accent);
   font-weight: 500;
 }
-
 /* =========================
    Booking Time Block
    ========================= */
-
 .booking-time-block {
   display: flex;
   flex-direction: column;
@@ -243,23 +202,19 @@
   border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
-
 .booking-date {
   font-size: 0.6875rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
-
 .booking-time {
   font-size: 0.75rem;
   color: var(--brand-accent);
   font-weight: 600;
 }
-
 /* =========================
    Status Badges
    ========================= */
-
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -272,67 +227,56 @@
   letter-spacing: 0.025em;
   flex-shrink: 0;
 }
-
 .status-badge.status-pending {
   background: var(--warning-bg);
   color: var(--warning);
   border: 1px solid var(--warning-border);
 }
-
 .status-badge.status-confirmed {
   background: var(--info-bg);
   color: var(--info);
   border: 1px solid var(--info-border);
 }
-
 .status-badge.status-checked-in {
   background: var(--success-bg);
   color: var(--success);
   border: 1px solid var(--success-border);
 }
-
 .status-badge.status-completed {
   background: var(--neutral-100);
   color: var(--neutral-500);
   border: 1px solid var(--border-color);
 }
-
 .status-badge.status-cancelled {
   background: var(--danger-bg);
   color: var(--danger);
   border: 1px solid var(--danger-border);
 }
-
 .status-badge.status-no-show {
   background: var(--danger-bg);
   color: var(--danger);
   border: 1px solid var(--danger-border);
 }
-
 .status-badge.status-occupied {
   background: var(--success-bg);
   color: var(--success);
   border: 1px solid var(--success-border);
 }
-
 .status-badge.status-available {
   background: var(--info-bg);
   color: var(--info);
   border: 1px solid var(--info-border);
 }
-
 .status-badge.status-overrun {
   background: var(--danger-bg);
   color: var(--danger);
   border: 1px solid var(--danger-border);
 }
-
 .status-badge.status-maintenance {
   background: var(--warning-bg);
   color: var(--warning);
   border: 1px solid var(--warning-border);
 }
-
 /* =========================
    Status Breakdown Grid
    ========================= */
@@ -355,10 +299,9 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   animation: fadeUp 400ms ease both;
-  transition:
-    transform var(--transition-smooth),
-    box-shadow var(--transition-smooth),
-    border-color var(--transition-smooth);
+  transition: transform var(--transition-smooth),
+  box-shadow var(--transition-smooth),
+  border-color var(--transition-smooth);
 }
 
 .breakdown-card:hover,
@@ -441,9 +384,8 @@
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background var(--transition-smooth),
-    transform var(--transition-smooth);
+  transition: background var(--transition-smooth),
+  transform var(--transition-smooth);
 }
 
 .empty-action:hover {

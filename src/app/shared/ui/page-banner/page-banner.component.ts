@@ -31,7 +31,9 @@ import { LucideDynamicIcon } from '@lucide/angular';
           }
           <h1>{{ title() }}</h1>
           @if (description()) {
-            <p class="banner-subtitle">{{ description() }}</p>
+            <p class="banner-subtitle">
+              {{ description() }}
+            </p>
           }
         </div>
       </div>
@@ -59,7 +61,10 @@ import { LucideDynamicIcon } from '@lucide/angular';
       flex-wrap: wrap;
       gap: 20px;
       background: var(--banner-bg, #142b4a);
-      box-shadow: var(--banner-shadow, 0 8px 24px rgba(20, 33, 61, 0.1));
+      box-shadow: var(
+        --banner-shadow,
+        0 8px 24px rgba(20, 33, 61, 0.1)
+      );
       animation: bannerFadeIn 600ms ease both;
     }
 
@@ -146,8 +151,16 @@ import { LucideDynamicIcon } from '@lucide/angular';
         transparent 1.5px
       );
       background-size: 16px 16px;
-      mask-image: linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 80%);
-      -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 80%);
+      mask-image: linear-gradient(
+        to left,
+        rgba(0, 0, 0, 0.5) 0%,
+        transparent 80%
+      );
+      -webkit-mask-image: linear-gradient(
+        to left,
+        rgba(0, 0, 0, 0.5) 0%,
+        transparent 80%
+      );
     }
 
     /* Corner triangle accent — top-right corner */
@@ -169,11 +182,13 @@ import { LucideDynamicIcon } from '@lucide/angular';
     }
 
     /* Deco variant: shift decorations based on data-deco */
-    .app-page-banner[data-deco='b'] .banner-deco-lines::before {
+    .app-page-banner[data-deco='b']
+      .banner-deco-lines::before {
       right: 10%;
       opacity: 0.3;
     }
-    .app-page-banner[data-deco='b'] .banner-deco-lines::after {
+    .app-page-banner[data-deco='b']
+      .banner-deco-lines::after {
       right: 25%;
       opacity: 0.22;
     }
@@ -181,11 +196,13 @@ import { LucideDynamicIcon } from '@lucide/angular';
       opacity: 0.15;
     }
 
-    .app-page-banner[data-deco='c'] .banner-deco-lines::before {
+    .app-page-banner[data-deco='c']
+      .banner-deco-lines::before {
       right: 30%;
       opacity: 0.2;
     }
-    .app-page-banner[data-deco='c'] .banner-deco-lines::after {
+    .app-page-banner[data-deco='c']
+      .banner-deco-lines::after {
       right: 45%;
       opacity: 0.14;
     }
@@ -193,11 +210,13 @@ import { LucideDynamicIcon } from '@lucide/angular';
       opacity: 0.08;
     }
 
-    .app-page-banner[data-deco='d'] .banner-deco-lines::before {
+    .app-page-banner[data-deco='d']
+      .banner-deco-lines::before {
       right: 15%;
       opacity: 0.28;
     }
-    .app-page-banner[data-deco='d'] .banner-deco-lines::after {
+    .app-page-banner[data-deco='d']
+      .banner-deco-lines::after {
       right: 30%;
       opacity: 0.2;
     }
@@ -263,14 +282,21 @@ import { LucideDynamicIcon } from '@lucide/angular';
       width: 20px;
       height: 2px;
       border-radius: 99px;
-      background: linear-gradient(90deg, var(--brand-accent, #f28c28), #ffd27a);
+      background: linear-gradient(
+        90deg,
+        var(--brand-accent, #f28c28),
+        #ffd27a
+      );
       content: '';
     }
 
     .banner-subtitle {
       margin: 4px 0 0;
       font-size: 0.875rem;
-      color: var(--banner-subtitle-color, rgba(255, 255, 255, 0.72));
+      color: var(
+        --banner-subtitle-color,
+        rgba(255, 255, 255, 0.72)
+      );
       line-height: 1.5;
     }
 
@@ -299,7 +325,10 @@ import { LucideDynamicIcon } from '@lucide/angular';
       font-weight: 500;
       line-height: 1.4;
       white-space: nowrap;
-      transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+      transition:
+        border-color 150ms ease,
+        color 150ms ease,
+        background 150ms ease;
     }
 
     .banner-actions ::ng-deep button svg {
@@ -313,7 +342,10 @@ import { LucideDynamicIcon } from '@lucide/angular';
       background: rgba(255, 255, 255, 0.06);
     }
 
-    .banner-actions ::ng-deep button:hover:not(:disabled) svg {
+    .banner-actions
+      ::ng-deep
+      button:hover:not(:disabled)
+      svg {
       transform: rotate(180deg);
     }
 
@@ -332,8 +364,12 @@ import { LucideDynamicIcon } from '@lucide/angular';
     }
 
     @keyframes refreshSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .banner-actions ::ng-deep button:focus-visible {

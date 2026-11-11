@@ -8,7 +8,11 @@ import {
 } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
-import { LucideBan, LucideCalendar, LucideRefreshCw } from '@lucide/angular';
+import {
+  LucideBan,
+  LucideCalendar,
+  LucideRefreshCw,
+} from '@lucide/angular';
 
 import {
   Booking,

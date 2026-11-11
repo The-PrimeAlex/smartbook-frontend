@@ -14,7 +14,11 @@
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, var(--page-bg) 0%, var(--neutral-100) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--page-bg) 0%,
+    var(--neutral-100) 100%
+  );
 }
 
 /* ── Card ── */
@@ -54,7 +58,11 @@
   width: 96px;
   height: 96px;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--danger-bg) 0%, rgba(220, 38, 38, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--danger-bg) 0%,
+    rgba(220, 38, 38, 0.15) 100%
+  );
   border-radius: 50%;
   color: var(--danger);
 }
@@ -128,7 +136,11 @@
 /* ── Dark Theme ── */
 
 [data-theme='dark'] .forbidden-page {
-  background: linear-gradient(135deg, var(--neutral-900) 0%, var(--neutral-800) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--neutral-900) 0%,
+    var(--neutral-800) 100%
+  );
 }
 
 [data-theme='dark'] .forbidden-card {
@@ -138,7 +150,11 @@
 }
 
 [data-theme='dark'] .forbidden-icon-wrap {
-  background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.25) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(220, 38, 38, 0.15) 0%,
+    rgba(220, 38, 38, 0.25) 100%
+  );
 }
 
 [data-theme='dark'] .forbidden-title {
@@ -217,9 +233,15 @@
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

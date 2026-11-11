@@ -19,7 +19,9 @@
   font: inherit;
   font-size: 14px;
   cursor: pointer;
-  transition: border-color 200ms ease, box-shadow 200ms ease;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .date-picker-wrap input::placeholder {
@@ -111,9 +113,15 @@
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

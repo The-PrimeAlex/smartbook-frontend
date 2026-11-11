@@ -7,7 +7,6 @@ import {
 import { IconComponent } from '../../../shared/ui';
 import { FormsModule } from '@angular/forms';
 import {
-  
   LucideMoon,
   LucideSettings,
   LucideSun,
@@ -22,7 +21,7 @@ import { PageBannerComponent } from '../../../shared/ui';
   standalone: true,
   imports: [
     FormsModule,
-    
+
     PageBannerComponent,
     IconComponent,
   ],

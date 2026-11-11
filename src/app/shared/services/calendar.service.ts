@@ -71,4 +71,10 @@ export class CalendarService {
       {},
     );
   }
+
+  disconnectGoogleCalendar(): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.apiBaseUrl}/v1/calendar/integrations/google`,
+    );
+  }
 }

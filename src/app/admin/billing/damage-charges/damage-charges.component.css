@@ -1,13 +1,8 @@
-/* ========================================
-   Damage Charges - shadcn/ui Inspired Design
-======================================== */
-
 .page-container {
   padding: 24px;
   max-width: 1440px;
   margin: 0 auto;
 }
-
 /* ── Stats Bar ── */
 .stats-bar {
   display: grid;
@@ -15,26 +10,25 @@
   gap: 12px;
   margin-bottom: 24px;
 }
-
 @media (max-width: 768px) {
   .stats-bar {
     grid-template-columns: 1fr;
   }
 }
-
 /* ── Bills Grid ── */
 .bills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(380px, 1fr)
+  );
   gap: 8px;
 }
-
 @media (max-width: 768px) {
   .bills-grid {
     grid-template-columns: 1fr;
   }
 }
-
 /* ── Bill Card (shadcn Card) ── */
 .bill-card {
   background: var(--card);
@@ -43,11 +37,9 @@
   overflow: hidden;
   transition: border-color 150ms ease;
 }
-
 .bill-card:hover {
   border-color: var(--border-color-hover);
 }
-
 .bill-card-header {
   display: flex;
   justify-content: space-between;
@@ -56,21 +48,18 @@
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
 }
-
 .bill-header-left {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
 }
-
 .bill-title-block {
   display: flex;
   flex-direction: column;
   min-width: 0;
   gap: 2px;
 }
-
 .bill-room {
   font-size: 0.875rem;
   font-weight: 600;
@@ -80,21 +69,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .bill-invoice {
   font-size: 0.625rem;
   font-weight: 500;
   color: var(--muted-foreground);
-  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-family: var(
+    --font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace
+  );
   letter-spacing: 0.02em;
 }
-
 .bill-header-right {
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
-
 .bill-amount {
   font-size: 1rem;
   font-weight: 600;
@@ -103,7 +95,6 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
-
 /* ── Card Body ── */
 .bill-card-body {
   padding: 14px 16px;
@@ -111,13 +102,11 @@
   flex-direction: column;
   gap: 10px;
 }
-
 .bill-meta-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .bill-meta-item {
   display: inline-flex;
   align-items: center;
@@ -125,12 +114,10 @@
   font-size: 0.75rem;
   color: var(--muted-foreground);
 }
-
 .bill-meta-item app-icon {
   flex-shrink: 0;
   opacity: 0.5;
 }
-
 /* ── Bill Items ── */
 .bill-items {
   display: flex;
@@ -141,7 +128,6 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
-
 .item-row {
   display: flex;
   align-items: center;
@@ -151,19 +137,15 @@
   border-radius: var(--radius-xs);
   transition: background 150ms ease;
 }
-
 .item-row.item-incident {
   background: var(--danger-bg);
 }
-
 .item-row:hover {
   background: rgba(0, 0, 0, 0.04);
 }
-
 [data-theme='dark'] .item-row:hover {
   background: rgba(255, 255, 255, 0.06);
 }
-
 .item-type-badge {
   display: inline-flex;
   align-items: center;
@@ -177,13 +159,11 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-
 .incident-badge {
   background: var(--danger-bg);
   color: var(--danger);
   border: 1px solid var(--danger-border);
 }
-
 .item-desc {
   color: var(--muted-foreground);
   flex: 1;
@@ -192,14 +172,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .item-amount {
   font-weight: 600;
   color: var(--card-foreground);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-
 /* ── Bill Footer Summary ── */
 .bill-footer {
   display: grid;
@@ -208,7 +186,6 @@
   padding-top: 10px;
   border-top: 1px solid var(--border);
 }
-
 .bill-summary-item {
   display: flex;
   flex-direction: column;
@@ -220,15 +197,12 @@
   gap: 3px;
   transition: background 150ms ease;
 }
-
 .bill-summary-item:hover {
   background: var(--accent);
 }
-
 .bill-summary-item.bill-paid {
   background: var(--success-bg);
 }
-
 .bill-summary-label {
   font-size: 0.5625rem;
   color: var(--muted-foreground);
@@ -236,14 +210,12 @@
   letter-spacing: 0.05em;
   font-weight: 600;
 }
-
 .bill-summary-value {
   font-size: 0.75rem;
   color: var(--card-foreground);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-
 /* ── State Panel ── */
 .state-panel {
   display: flex;
@@ -258,12 +230,10 @@
   background: var(--card);
   min-height: 200px;
 }
-
 .state-panel svg {
   margin-bottom: 16px;
   opacity: 0.4;
 }
-
 .state-panel h3 {
   margin: 0 0 8px;
   color: var(--card-foreground);
@@ -276,7 +246,6 @@
   font-size: 0.8125rem;
   color: var(--muted-foreground);
 }
-
 /* ── Loading Spinner ── */
 .loading-spinner {
   width: 28px;
@@ -287,25 +256,23 @@
   animation: spin 600ms linear infinite;
   margin-bottom: 16px;
 }
-
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
-
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .page-container {
     padding: 16px;
   }
 }
-
 /* ── Mobile responsive ── */
 @media (max-width: 48rem) {
   :host {
     font-size: 0.9rem;
   }
 }
-
 @media (max-width: 30rem) {
   /* Compact padding */
   .page-content,
@@ -349,9 +316,15 @@
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

@@ -1,4 +1,9 @@
-import { effect, Injectable, inject, signal } from '@angular/core';
+import {
+  effect,
+  Injectable,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Observable, Subject, interval } from 'rxjs';
@@ -198,7 +203,11 @@ export class InactivityService {
       // When the user presses back after logout, prevent navigation and show warning
       if (this.state().loggedOut) {
         // Push state forward to cancel the back navigation
-        history.pushState({ logout: true }, '', window.location.pathname);
+        history.pushState(
+          { logout: true },
+          '',
+          window.location.pathname,
+        );
         // Show the back-nav warning modal
         this.state.update((s) => ({
           ...s,

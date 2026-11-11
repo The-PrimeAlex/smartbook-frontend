@@ -173,7 +173,9 @@
                     ></app-icon>
                     Incident
                   </span>
-                } @else if (item.itemType === 'CANCELLATION_FEE') {
+                } @else if (
+                  item.itemType === 'CANCELLATION_FEE'
+                ) {
                   <span
                     class="item-type-badge cancellation-badge"
                   >
@@ -309,9 +311,13 @@
             <div class="bill-summary">
               @if (selectedBill()!.booking) {
                 <p>
-                  <strong>{{ selectedBill()!.booking!.roomName }}</strong>
+                  <strong>{{
+                    selectedBill()!.booking!.roomName
+                  }}</strong>
                 </p>
-                <p>{{ selectedBill()!.booking!.purpose }}</p>
+                <p>
+                  {{ selectedBill()!.booking!.purpose }}
+                </p>
               } @else {
                 <p><strong>Incident Charge</strong></p>
               }

@@ -14,7 +14,6 @@
       description="Review reported incidents and decide whether to charge or waive"
     ></app-page-banner>
   }
-
   <!-- Message -->
   @if (message()) {
     <div class="alert alert-{{ message()?.type }}">
@@ -25,7 +24,6 @@
       <span>{{ message()?.text }}</span>
     </div>
   }
-
   @if (isDamagePage()) {
     <div class="stats-grid">
       <app-stat-card
@@ -104,7 +102,6 @@
       </app-stat-card>
     </div>
   }
-
   @if (!isDamagePage()) {
     <app-filter-group
       [filters]="filterOptions"
@@ -112,7 +109,6 @@
       (select)="onFilterSelect($event)"
     ></app-filter-group>
   }
-
   <!-- Loading -->
   @if (loading()) {
     <div class="loading-grid">
@@ -142,7 +138,6 @@
       }
     </div>
   }
-
   @if (!loading() && getFilteredIncidents().length === 0) {
     @if (isDamagePage()) {
       <app-empty-state
@@ -175,7 +170,6 @@
       </app-empty-state>
     }
   }
-
   <!-- Incident Cards -->
   @if (!loading() && getFilteredIncidents().length > 0) {
     <div class="incidents-grid">
@@ -186,7 +180,7 @@
       ) {
         <div
           class="incident-card"
-          [style.animation-delay]="(idx * 0.05) + 's'"
+          [style.animation-delay]="idx * 0.05 + 's'"
         >
           <!-- Card Header -->
           <div class="incident-card-header">
@@ -212,7 +206,6 @@
               }}
             </p>
           </div>
-
           <!-- Card Meta -->
           <div class="incident-card-meta">
             <div class="meta-item">
@@ -255,7 +248,6 @@
               </div>
             }
           </div>
-
           <!-- Card Footer (Actions) - Only show on All Incidents page -->
           @if (!isDamagePage() && canTakeAction(incident)) {
             <div class="incident-card-footer">
@@ -297,7 +289,6 @@
       }
     </div>
   }
-
   <!-- Side Panel -->
   <div
     class="side-panel-overlay {{
@@ -361,7 +352,6 @@
             }}</span>
           </div>
         </div>
-
         <!-- Tabs -->
         <div class="panel-tabs">
           <button
@@ -385,7 +375,6 @@
             Waive
           </button>
         </div>
-
         <!-- Charge Form -->
         @if (sidePanelMode() === 'charge') {
           <form
@@ -442,7 +431,6 @@
             </div>
           </form>
         }
-
         <!-- Waive Form -->
         @if (sidePanelMode() === 'waive') {
           <form

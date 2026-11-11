@@ -1,13 +1,8 @@
-/* ========================================
-   All Invoices - shadcn/ui Inspired Design
-======================================== */
-
 .page-container {
   padding: 24px;
   max-width: 1440px;
   margin: 0 auto;
 }
-
 /* ── Stats Bar ── */
 .stats-bar {
   display: grid;
@@ -15,26 +10,22 @@
   gap: 12px;
   margin-bottom: 24px;
 }
-
 .stat-value {
   font-size: 1.125rem;
   font-weight: 700;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-
 @media (max-width: 1200px) {
   .stats-bar {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
 @media (max-width: 768px) {
   .stats-bar {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 /* ── Filter Bar ── */
 .filter-bar {
   display: flex;
@@ -43,17 +34,40 @@
   align-items: center;
   margin-bottom: 24px;
 }
-
 .filter-buttons {
   flex: 1;
 }
-
 .search-box {
   min-width: 280px;
   flex: 0 0 280px;
 }
-
-/* shadcn Button variant=outline */
+/* Sort Bar */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  color: var(--muted-foreground);
+}
+.sort-select {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: border-color 150ms ease;
+  outline: none;
+}
+.sort-select:hover {
+  border-color: var(--border-color-hover);
+}
+.sort-select:focus {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 2px rgba(242, 140, 40, 0.15);
+}
+/* shading Button variant=outline */
 .filter-btn {
   padding: 6px 14px;
   border: 1px solid var(--border);
@@ -66,32 +80,30 @@
   transition: all 150ms ease;
   white-space: nowrap;
 }
-
 .filter-btn:hover {
   background: var(--accent);
   color: var(--accent-foreground);
 }
-
 .filter-btn.active {
   background: var(--primary);
   color: var(--primary-foreground);
   border-color: var(--primary);
 }
-
 /* ── Bills Grid ── */
 .bills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(380px, 1fr)
+  );
   gap: 8px;
 }
-
 @media (max-width: 768px) {
   .bills-grid {
     grid-template-columns: 1fr;
   }
 }
-
-/* ── Bill Card (shadcn Card) ── */
+/* ── Bill Card (shading Card) ── */
 .bill-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -99,11 +111,9 @@
   overflow: hidden;
   transition: border-color 150ms ease;
 }
-
 .bill-card:hover {
   border-color: var(--border-color-hover);
 }
-
 .bill-card-header {
   display: flex;
   justify-content: space-between;
@@ -112,21 +122,18 @@
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
 }
-
 .bill-header-left {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
 }
-
 .bill-title-block {
   display: flex;
   flex-direction: column;
   min-width: 0;
   gap: 2px;
 }
-
 .bill-room {
   font-size: 0.875rem;
   font-weight: 600;
@@ -136,21 +143,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .bill-invoice {
   font-size: 0.625rem;
   font-weight: 500;
   color: var(--muted-foreground);
-  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-family: var(
+    --font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace
+  );
   letter-spacing: 0.02em;
 }
-
 .bill-header-right {
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
-
 .bill-amount {
   font-size: 1rem;
   font-weight: 600;
@@ -159,7 +169,6 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
-
 /* ── Card Body ── */
 .bill-card-body {
   padding: 14px 16px;
@@ -167,13 +176,11 @@
   flex-direction: column;
   gap: 10px;
 }
-
 .bill-meta-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .bill-meta-item {
   display: inline-flex;
   align-items: center;
@@ -181,12 +188,10 @@
   font-size: 0.75rem;
   color: var(--muted-foreground);
 }
-
 .bill-meta-item app-icon {
   flex-shrink: 0;
   opacity: 0.5;
 }
-
 .bill-purpose {
   font-size: 0.75rem;
   color: var(--card-foreground);
@@ -196,7 +201,6 @@
   border-radius: var(--radius-sm);
   border-left: 2px solid var(--brand-accent);
 }
-
 /* ── Bill Items ── */
 .bill-items {
   display: flex;
@@ -207,7 +211,6 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
-
 .item-row {
   display: flex;
   align-items: center;
@@ -217,23 +220,18 @@
   border-radius: var(--radius-xs);
   transition: background 150ms ease;
 }
-
 .item-row:hover {
   background: rgba(0, 0, 0, 0.04);
 }
-
 [data-theme='dark'] .item-row:hover {
   background: rgba(255, 255, 255, 0.06);
 }
-
 .item-row.item-incident {
   background: var(--danger-bg);
 }
-
 .item-row.item-cancellation {
   background: var(--warning-bg);
 }
-
 .item-type-badge {
   display: inline-flex;
   align-items: center;
@@ -247,25 +245,21 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-
 .meeting-badge {
   background: var(--info-bg);
   color: var(--info);
   border: 1px solid var(--info-border);
 }
-
 .incident-badge {
   background: var(--danger-bg);
   color: var(--danger);
   border: 1px solid var(--danger-border);
 }
-
 .cancellation-badge {
   background: var(--warning-bg);
   color: var(--warning);
   border: 1px solid var(--warning-border);
 }
-
 .item-desc {
   color: var(--muted-foreground);
   flex: 1;
@@ -274,14 +268,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .item-amount {
   font-weight: 600;
   color: var(--card-foreground);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-
 /* ── Bill Footer Summary ── */
 .bill-footer {
   display: grid;
@@ -290,7 +282,6 @@
   padding-top: 10px;
   border-top: 1px solid var(--border);
 }
-
 .bill-summary-item {
   display: flex;
   flex-direction: column;
@@ -302,19 +293,15 @@
   gap: 3px;
   transition: background 150ms ease;
 }
-
 .bill-summary-item:hover {
   background: var(--accent);
 }
-
 .bill-summary-item.bill-paid {
   background: var(--success-bg);
 }
-
 .bill-summary-item.bill-due {
   background: var(--info-bg);
 }
-
 .bill-summary-label {
   font-size: 0.5625rem;
   color: var(--muted-foreground);
@@ -375,7 +362,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ── Responsive ── */
@@ -445,9 +434,17 @@
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+
+  h2 {
+    font-size: 1rem !important;
+  }
+
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

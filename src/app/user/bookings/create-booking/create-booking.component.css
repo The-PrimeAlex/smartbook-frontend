@@ -8,8 +8,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .booking-page {
@@ -130,7 +136,10 @@
   outline: none;
   font: inherit;
   font-size: 14px;
-  transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    background 200ms ease;
 }
 
 .input-wrap textarea {
@@ -192,7 +201,11 @@
   gap: 12px;
   margin-top: 12px;
   padding: 14px 16px;
-  background: linear-gradient(135deg, rgba(242, 140, 40, 0.04), rgba(242, 140, 40, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(242, 140, 40, 0.04),
+    rgba(242, 140, 40, 0.02)
+  );
   border: 1.5px solid rgba(242, 140, 40, 0.15);
   border-radius: 10px;
   transition: border-color 200ms ease;
@@ -203,7 +216,11 @@
 }
 
 [data-theme='dark'] .room-preview {
-  background: linear-gradient(135deg, rgba(242, 140, 40, 0.06), rgba(242, 140, 40, 0.03));
+  background: linear-gradient(
+    135deg,
+    rgba(242, 140, 40, 0.06),
+    rgba(242, 140, 40, 0.03)
+  );
   border-color: rgba(242, 140, 40, 0.2);
 }
 
@@ -342,7 +359,10 @@
   color-scheme: light;
 }
 
-[data-theme='dark'] .schedule-fields app-time-picker::ng-deep input {
+[data-theme='dark']
+  .schedule-fields
+  app-time-picker::ng-deep
+  input {
   color-scheme: dark;
 }
 
@@ -570,7 +590,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ── Sidebar ── */
@@ -837,8 +859,12 @@
 }
 
 @keyframes modalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .conflict-modal {
@@ -849,8 +875,11 @@
   background: var(--card, #fff);
   border: 1.5px solid var(--border-color, #e2e8f0);
   border-radius: 16px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
-  animation: modalSlideIn 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  animation: modalSlideIn 300ms
+    cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
@@ -922,7 +951,9 @@
   border-radius: 8px;
   color: var(--text-secondary, #a1a1aa);
   cursor: pointer;
-  transition: background 150ms ease, color 150ms ease;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
 }
 
 .conflict-modal-close:hover {
@@ -1203,9 +1234,15 @@
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

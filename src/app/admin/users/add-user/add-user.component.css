@@ -4,33 +4,28 @@
   color: var(--text-primary);
   font-family: Inter, 'Segoe UI', Arial, sans-serif;
 }
-
 * {
   box-sizing: border-box;
 }
-
 /* ========================================
    Page Container
 ======================================== */
-
 .add-user-page {
   min-height: 100%;
   background: var(--app-layout-bg);
   color: var(--text-primary);
   font-size: 15px;
 }
-
 /* ========================================
    Page Banner (uses global styles.css)
 ======================================== */
-
-/* The .page-banner with data-deco="a" is styled globally in styles.css.
+/* The .page-banner with data-deco="a" is styled
+    globally in styles.css.
    Component-specific enhancements below. */
 
 .add-user-page .page-banner {
   padding: 2.5rem 5%;
 }
-
 .add-user-page .banner-content {
   display: flex;
   align-items: center;
@@ -38,7 +33,6 @@
   max-width: 1200px;
   margin: 0 auto;
 }
-
 .add-user-page .banner-icon {
   width: 48px;
   height: 48px;
@@ -49,13 +43,11 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
 .add-user-page .banner-text {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
-
 .add-user-page .banner-eyebrow {
   color: var(--brand-accent);
   font-size: 0.7rem;
@@ -63,7 +55,6 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
-
 .add-user-page .banner-heading {
   color: #ffffff !important;
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -72,28 +63,23 @@
   line-height: 1.2;
   margin: 0;
 }
-
 .add-user-page .banner-text p {
   color: rgba(255, 255, 255, 0.75) !important;
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
 }
-
 /* ========================================
    Main Content Area
 ======================================== */
-
 .page-content {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;
 }
-
 /* ========================================
    Breadcrumb
 ======================================== */
-
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -103,7 +89,6 @@
   font-size: 0.85rem;
   animation: fadeUp 0.4s ease-out;
 }
-
 .breadcrumb a {
   color: var(--text-secondary);
   text-decoration: none;
@@ -112,11 +97,9 @@
   gap: 0.25rem;
   transition: color var(--transition-smooth);
 }
-
 .breadcrumb a:hover {
   color: var(--brand-accent);
 }
-
 .breadcrumb a svg {
   width: 14px;
   height: 14px;
@@ -126,31 +109,25 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
 .breadcrumb-separator {
   color: var(--neutral-400);
   user-select: none;
 }
-
 .breadcrumb-current {
   color: var(--text-primary);
   font-weight: 600;
 }
-
 /* ========================================
    Form Layout
 ======================================== */
-
 form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-
 /* ========================================
    Form Cards
 ======================================== */
-
 .form-card {
   padding: 1.75rem 2rem;
   border: 1px solid var(--border-color);
@@ -163,15 +140,12 @@ form {
     transform 0.3s ease;
   animation: fadeUp 0.5s ease-out both;
 }
-
 .form-card:hover {
   box-shadow: var(--shadow-md);
   border-color: var(--border-color-hover);
   transform: translateY(-1px);
 }
-
 /* Card Header */
-
 .card-header {
   display: flex;
   align-items: center;
@@ -180,7 +154,6 @@ form {
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--border-color);
 }
-
 .card-icon {
   display: grid;
   width: 44px;
@@ -195,13 +168,11 @@ form {
     color var(--transition-smooth),
     transform 0.3s ease;
 }
-
 .form-card:hover .card-icon {
   background: var(--brand-accent);
   color: #ffffff;
   transform: scale(1.05);
 }
-
 .card-icon svg {
   width: 22px;
   height: 22px;
@@ -211,7 +182,6 @@ form {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
 .card-title-group h2 {
   margin: 0;
   color: var(--text-primary);
@@ -219,35 +189,29 @@ form {
   font-weight: 700;
   letter-spacing: -0.25px;
 }
-
 .card-title-group p {
   margin: 0.25rem 0 0;
   color: var(--text-secondary);
   font-size: 0.85rem;
   line-height: 1.5;
 }
-
 /* ========================================
    Form Grid & Fields
 ======================================== */
-
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
 }
-
 .form-field {
   display: flex;
   flex-direction: column;
   min-width: 0;
   gap: 0.5rem;
 }
-
 .form-field-full {
   grid-column: 1 / -1;
 }
-
 .form-field label {
   display: flex;
   align-items: baseline;
@@ -257,25 +221,20 @@ form {
   font-weight: 600;
   line-height: 1.4;
 }
-
 .label-text {
   font-weight: 600;
 }
-
 .required {
   color: var(--danger);
   font-weight: 800;
   font-size: 0.85rem;
 }
-
 .optional {
   color: var(--text-muted);
   font-size: 0.75rem;
   font-weight: 500;
 }
-
 /* Input Fields */
-
 .form-field input,
 .select-wrapper select {
   width: 100%;
@@ -294,38 +253,31 @@ form {
     box-shadow var(--transition-smooth),
     background-color var(--transition-smooth);
 }
-
 .form-field input::placeholder,
 .select-wrapper select::placeholder {
   color: var(--text-muted);
   opacity: 1;
 }
-
 .form-field input:hover,
 .select-wrapper select:hover {
   border-color: var(--border-color-hover);
 }
-
 .form-field input:focus,
 .select-wrapper select:focus {
   border-color: var(--brand-accent);
   box-shadow: 0 0 0 3px rgba(242, 140, 40, 0.15);
 }
-
 /* Error State */
-
 .form-field input.invalid,
 .phone-control.invalid {
   border-color: var(--danger) !important;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
 }
-
 .form-field input.invalid:focus,
 .phone-control.invalid:focus {
   border-color: var(--danger) !important;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.22) !important;
 }
-
 .field-error {
   color: var(--danger) !important;
   display: block;
@@ -333,7 +285,6 @@ form {
   font-size: 0.75rem;
   line-height: 1.4;
 }
-
 .field-hint {
   margin: 0;
   color: var(--text-secondary);
@@ -341,15 +292,12 @@ form {
   line-height: 1.5;
   font-style: italic;
 }
-
 /* ========================================
    Email Input with Icon
 ======================================== */
-
 .input-with-icon {
   position: relative;
 }
-
 .input-icon {
   position: absolute;
   top: 50%;
@@ -1022,9 +970,15 @@ form {
   }
 
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
 
   /* Full-width buttons */
   .action-buttons,

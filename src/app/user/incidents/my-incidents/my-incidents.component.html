@@ -54,7 +54,7 @@
       @for (i of [1, 2, 3]; track i; let idx = $index) {
         <div
           class="skeleton-card"
-          [style.animation-delay]="(idx * 0.1) + 's'"
+          [style.animation-delay]="idx * 0.1 + 's'"
         >
           <div class="skeleton-header">
             <div class="skeleton-line skeleton-type"></div>
@@ -109,7 +109,7 @@
       ) {
         <div
           class="incident-card"
-          [style.animation-delay]="(idx * 0.05) + 's'"
+          [style.animation-delay]="idx * 0.05 + 's'"
         >
           <div class="card-header">
             <div class="card-header-left">

@@ -1,3 +1,7 @@
+/**
+ * Application configuration for local development.
+ * API calls use relative paths (/api/v1) proxied to localhost:8080.
+ */
 import { ApplicationConfig } from '@angular/core';
 import {
   provideHttpClient,

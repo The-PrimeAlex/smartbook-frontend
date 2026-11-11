@@ -10,7 +10,6 @@ import {
   RegistrationRequest,
 } from './registration-requests.service';
 import {
-  
   LucideMail,
   LucideClock,
   LucideCheckCircle,
@@ -26,9 +25,7 @@ import {
   StatusBadgeComponent,
   StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
   FilterGroupComponent,
-  SearchBoxComponent,
   PageBannerComponent,
   type BadgeVariant,
   type FilterOption,
@@ -44,14 +41,12 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    
+
     IconComponent,
     StatusBadgeComponent,
     StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
     FilterGroupComponent,
-    SearchBoxComponent,
     PageBannerComponent,
   ],
   templateUrl: './registration-requests.component.html',

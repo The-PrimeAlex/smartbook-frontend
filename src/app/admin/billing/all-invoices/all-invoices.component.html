@@ -3,36 +3,69 @@
     [icon]="LucideFileText"
     eyebrow="Billing"
     title="All Invoices"
-    description="View and manage all invoices across all users — meeting charges, incident fees, and more."
+    description="View and manage all invoices across
+      all users — meeting charges, incident fees, and more."
   ></app-page-banner>
-
   <section class="stats-bar">
-    <app-stat-card [icon]="LucideFileText" [iconBg]="'rgba(59,130,246,0.12)'" [iconColor]="'var(--info,#3b82f6)'" delay="0s">
+    <app-stat-card
+      [icon]="LucideFileText"
+      [iconBg]="'rgba(59,130,246,0.12)'"
+      [iconColor]="'var(--info,#3b82f6)'"
+      delay="0s"
+    >
       <span stat-value>{{ totalBills() }}</span>
       <span stat-label>Invoices</span>
     </app-stat-card>
-    <app-stat-card [icon]="LucideFileText" [iconBg]="'rgba(245,158,11,0.12)'" [iconColor]="'var(--warning,#f59e0b)'" delay="0.05s">
+    <app-stat-card
+      [icon]="LucideFileText"
+      [iconBg]="'rgba(245,158,11,0.12)'"
+      [iconColor]="'var(--warning,#f59e0b)'"
+      delay="0.05s"
+    >
       <span stat-value>{{ unpaidCount() }}</span>
       <span stat-label>Unpaid</span>
     </app-stat-card>
-    <app-stat-card [icon]="LucideFileText" [iconBg]="'rgba(34,197,94,0.12)'" [iconColor]="'var(--success,#22c55e)'" delay="0.1s">
+    <app-stat-card
+      [icon]="LucideFileText"
+      [iconBg]="'rgba(34,197,94,0.12)'"
+      [iconColor]="'var(--success,#22c55e)'"
+      delay="0.1s"
+    >
       <span stat-value>{{ paidCount() }}</span>
       <span stat-label>Paid</span>
     </app-stat-card>
-    <app-stat-card [icon]="LucideFileText" [iconBg]="'rgba(242,140,40,0.12)'" [iconColor]="'var(--brand-accent,#f28c28)'" delay="0.15s">
+    <app-stat-card
+      [icon]="LucideFileText"
+      [iconBg]="'rgba(242,140,40,0.12)'"
+      [iconColor]="'var(--brand-accent,#f28c28)'"
+      delay="0.15s"
+    >
       <span stat-value>{{ partialCount() }}</span>
       <span stat-label>Partial</span>
     </app-stat-card>
-    <app-stat-card [icon]="LucideFileText" [iconBg]="'rgba(139,92,246,0.12)'" [iconColor]="'var(--purple,#8b5cf6)'" delay="0.2s">
-      <span stat-value>{{ totalRevenue() | currency:'KSH ':'symbol-narrow' }}</span>
+    <app-stat-card
+      [icon]="LucideFileText"
+      [iconBg]="'rgba(139,92,246,0.12)'"
+      [iconColor]="'var(--purple,#8b5cf6)'"
+      delay="0.2s"
+    >
+      <span stat-value>{{
+        totalRevenue() | currency: 'KSH ' : 'symbol-narrow'
+      }}</span>
       <span stat-label>Revenue</span>
     </app-stat-card>
-    <app-stat-card [icon]="LucideFileText" [iconBg]="'rgba(20,184,166,0.12)'" [iconColor]="'var(--teal,#14b8a6)'" delay="0.25s">
-      <span stat-value>{{ totalPaid() | currency:'KSH ':'symbol-narrow' }}</span>
+    <app-stat-card
+      [icon]="LucideFileText"
+      [iconBg]="'rgba(20,184,166,0.12)'"
+      [iconColor]="'var(--teal,#14b8a6)'"
+      delay="0.25s"
+    >
+      <span stat-value>{{
+        totalPaid() | currency: 'KSH ' : 'symbol-narrow'
+      }}</span>
       <span stat-label>Collected</span>
     </app-stat-card>
   </section>
-
   <div class="filter-bar">
     <app-search-box
       [placeholder]="'Search by room, user, or purpose...'"
@@ -44,8 +77,19 @@
       [activeFilter]="selectedFilter()"
       (select)="setFilter($event)"
     ></app-filter-group>
+    <div class="sort-bar">
+      <app-icon [icon]="LucideArrowUpDown" [size]="14"></app-icon>
+      <select
+        class="sort-select"
+        [value]="sortBy()"
+        (change)="setSort($any($event.target).value)"
+      >
+        @for (opt of sortOptions; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
   </div>
-
   <!-- Bills Section -->
   <section class="bills-section">
     @if (loading() && bills().length === 0) {
@@ -75,16 +119,21 @@
         ) {
           <article
             class="bill-card"
-            [style.animation-delay]="(i * 0.05) + 's'"
+            [style.animation-delay]="i * 0.05 + 's'"
           >
             <!-- Card Header -->
             <div class="bill-card-header">
               <div class="bill-header-left">
                 <div class="bill-title-block">
                   <h3 class="bill-room">
-                    {{ bill.booking?.roomName || 'Incident Charge' }}
+                    {{
+                      bill.booking?.roomName ||
+                        'Incident Charge'
+                    }}
                   </h3>
-                  <span class="bill-invoice">{{ bill.billId }}</span>
+                  <span class="bill-invoice">{{
+                    bill.billId
+                  }}</span>
                 </div>
                 <app-status-badge
                   [label]="getStatusLabel(bill.billStatus)"
@@ -95,29 +144,40 @@
               </div>
               <div class="bill-header-right">
                 <span class="bill-amount">
-                  {{ bill.totalAmount | currency:'KSH ':'symbol-narrow' }}
+                  {{
+                    bill.totalAmount
+                      | currency: 'KSH ' : 'symbol-narrow'
+                  }}
                 </span>
               </div>
             </div>
-
             <!-- Card Body -->
             <div class="bill-card-body">
               @if (bill.booking) {
                 <div class="bill-meta-row">
                   <span class="bill-meta-item">
-                    <app-icon [icon]="LucideUser" [size]="14"></app-icon>
+                    <app-icon
+                      [icon]="LucideUser"
+                      [size]="14"
+                    ></app-icon>
                     {{ bill.booking.userName }}
                   </span>
                   <span class="bill-meta-item">
-                    <app-icon [icon]="LucideCalendar" [size]="14"></app-icon>
-                    {{ formatDateTime(bill.booking.startTime) }}
+                    <app-icon
+                      [icon]="LucideCalendar"
+                      [size]="14"
+                    ></app-icon>
+                    {{
+                      formatDateTime(bill.booking.startTime)
+                    }}
                   </span>
                 </div>
                 @if (bill.booking.purpose) {
-                  <div class="bill-purpose">{{ bill.booking.purpose }}</div>
+                  <div class="bill-purpose">
+                    {{ bill.booking.purpose }}
+                  </div>
                 }
               }
-
               <!-- Bill Items -->
               @if (bill.items.length > 0) {
                 <div class="bill-items">
@@ -165,29 +225,45 @@
                   }
                 </div>
               }
-
               <!-- Bill Summary Footer -->
               <div class="bill-footer">
                 <div class="bill-summary-item">
-                  <span class="bill-summary-label">Subtotal</span>
+                  <span class="bill-summary-label"
+                    >Subtotal</span
+                  >
                   <span class="bill-summary-value">{{
-                    formatCurrency(bill.subtotal, bill.currency)
+                    formatCurrency(
+                      bill.subtotal,
+                      bill.currency
+                    )
                   }}</span>
                 </div>
                 <div class="bill-summary-item">
-                  <span class="bill-summary-label">Tax</span>
+                  <span class="bill-summary-label"
+                    >Tax</span
+                  >
                   <span class="bill-summary-value">{{
-                    formatCurrency(bill.taxAmount, bill.currency)
+                    formatCurrency(
+                      bill.taxAmount,
+                      bill.currency
+                    )
                   }}</span>
                 </div>
                 <div class="bill-summary-item bill-paid">
-                  <span class="bill-summary-label">Paid</span>
+                  <span class="bill-summary-label"
+                    >Paid</span
+                  >
                   <span class="bill-summary-value">{{
-                    formatCurrency(bill.amountPaid, bill.currency)
+                    formatCurrency(
+                      bill.amountPaid,
+                      bill.currency
+                    )
                   }}</span>
                 </div>
                 <div class="bill-summary-item bill-due">
-                  <span class="bill-summary-label">Due</span>
+                  <span class="bill-summary-label"
+                    >Due</span
+                  >
                   <span class="bill-summary-value">{{
                     formatDate(bill.dueAt)
                   }}</span>

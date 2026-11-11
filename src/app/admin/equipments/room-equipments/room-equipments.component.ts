@@ -10,7 +10,6 @@ import {
 import {
   LucideCheck,
   LucideChevronDown,
-  
   LucideMonitor,
   LucidePlus,
   LucideRefreshCw,
@@ -31,11 +30,7 @@ import { RoomEquipmentService } from '../../../shared/services/room-equipments.s
 import { finalize, forkJoin, tap } from 'rxjs';
 import {
   IconComponent,
-  StatusBadgeComponent,
-  StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
-  FilterGroupComponent,
   SearchBoxComponent,
   PageBannerComponent,
 } from '../../../shared/ui';
@@ -53,13 +48,9 @@ export interface RoomCardData {
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    
+
     IconComponent,
-    StatusBadgeComponent,
-    StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
-    FilterGroupComponent,
     SearchBoxComponent,
     PageBannerComponent,
   ],

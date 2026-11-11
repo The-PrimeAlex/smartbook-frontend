@@ -8,10 +8,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import {
-  
-  LucideLock,
-} from '@lucide/angular';
+import { LucideLock } from '@lucide/angular';
 import { AuthService } from '../../../core/auth/auth.service';
 import { PageBannerComponent } from '../../../shared/ui';
 
@@ -38,7 +35,7 @@ function passwordsMatch(
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    
+
     PageBannerComponent,
     IconComponent,
   ],

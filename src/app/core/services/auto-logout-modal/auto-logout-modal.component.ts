@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import {
   LucideArrowLeft,
   LucideCircleAlert,
-  
   LucideLogOut,
   LucideX,
 } from '@lucide/angular';
@@ -14,7 +13,7 @@ import { IconComponent } from '../../../shared/ui';
 @Component({
   selector: 'app-auto-logout-modal',
   standalone: true,
-  imports: [CommonModule,  IconComponent],
+  imports: [CommonModule, IconComponent],
   templateUrl: './auto-logout-modal.component.html',
   styleUrl: './auto-logout-modal.component.css',
 })

@@ -11,7 +11,6 @@ import {
   LucideCheck,
   LucideCheckCircle2,
   LucideClock,
-  
   LucideFileText,
   LucideLock,
   LucideMail,
@@ -28,7 +27,7 @@ import { PageBannerComponent } from '../../../shared/ui';
   standalone: true,
   imports: [
     CommonModule,
-    
+
     PageBannerComponent,
     IconComponent,
   ],

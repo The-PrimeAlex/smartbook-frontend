@@ -14,19 +14,16 @@
       Refresh
     </button>
   </app-page-banner>
-
   @if (errorMessage) {
     <div class="alert alert-error" role="alert">
       {{ errorMessage }}
     </div>
   }
-
   @if (successMessage) {
     <div class="alert alert-success" role="status">
       {{ successMessage }}
     </div>
   }
-
   <!-- Summary Bar -->
   <div class="summary-bar">
     <div class="summary-item">
@@ -53,14 +50,12 @@
         totalOutOfService
       }}</strong>
     </div>
-
     <div class="summary-filters">
       <app-search-box
         placeholder="Search rooms..."
         [value]="searchTerm"
         (change)="searchTerm = $event"
       ></app-search-box>
-
       <select
         class="filter-select"
         [(ngModel)]="filterStatus"
@@ -75,7 +70,6 @@
       </select>
     </div>
   </div>
-
   <!-- Room Cards Grid -->
   @if (loadingRooms) {
     <div class="loading-grid">
@@ -144,7 +138,6 @@
                 </div>
               </div>
             </div>
-
             <div class="card-header-right">
               <span
                 class="equipment-count-badge"
@@ -169,7 +162,6 @@
               </span>
             </div>
           </div>
-
           <!-- Card Body (Equipment List) - Smooth expand/collapse -->
           <div
             class="card-body-wrapper"
@@ -228,7 +220,6 @@
                           }
                         </div>
                       </div>
-
                       <div class="equipment-actions">
                         <div class="status-group">
                           <span class="status-label"
@@ -276,7 +267,6 @@
                             }
                           </select>
                         </div>
-
                         <button
                           type="button"
                           class="action-btn remove-btn"
@@ -301,7 +291,6 @@
                   }
                 </div>
               }
-
               <!-- Add Equipment Button -->
               <button
                 type="button"
@@ -342,7 +331,6 @@
                           >
                         }
                       </label>
-
                       <label class="form-field">
                         <span>Asset code *</span>
                         <input
@@ -361,7 +349,6 @@
                           >
                         }
                       </label>
-
                       <label class="form-field full-width">
                         <span>Description</span>
                         <textarea
@@ -370,7 +357,6 @@
                           placeholder="Describe this equipment"
                         ></textarea>
                       </label>
-
                       <label class="form-field">
                         <span>Status</span>
                         <select formControlName="status">
@@ -387,7 +373,6 @@
                         </select>
                       </label>
                     </div>
-
                     <div class="form-actions">
                       <button
                         type="button"

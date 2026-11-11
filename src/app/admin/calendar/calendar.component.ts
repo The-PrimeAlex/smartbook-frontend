@@ -83,6 +83,10 @@ export class CalendarComponent implements OnInit {
   readonly googleSyncMessage = signal('');
   readonly googleSyncError = signal('');
 
+  readonly googleDisconnecting = signal(false);
+  readonly googleDisconnectMessage = signal('');
+  readonly googleDisconnectError = signal('');
+
   readonly roomTypes: RoomType[] = [
     'All Rooms',
     'Boardroom',
@@ -387,6 +391,34 @@ export class CalendarComponent implements OnInit {
             getErrorMessage(
               error,
               'Could not sync SmartBook bookings to Google Calendar.',
+            ),
+          );
+        },
+      });
+  }
+
+  disconnectGoogleCalendar(): void {
+    this.googleDisconnecting.set(true);
+    this.googleDisconnectError.set('');
+    this.googleDisconnectMessage.set('');
+
+    this.calendarService
+      .disconnectGoogleCalendar()
+      .pipe(finalize(() => this.googleDisconnecting.set(false)))
+      .subscribe({
+        next: (response) => {
+          this.googleDisconnectMessage.set(
+            response?.message ?? 'Google Calendar disconnected.',
+          );
+          this.googleEvents.set([]);
+          this.googleEventsError.set('');
+          setTimeout(() => this.googleDisconnectMessage.set(''), 5000);
+        },
+        error: (error: unknown) => {
+          this.googleDisconnectError.set(
+            getErrorMessage(
+              error,
+              'Could not disconnect Google Calendar.',
             ),
           );
         },

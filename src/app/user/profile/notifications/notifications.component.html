@@ -74,7 +74,9 @@
             <div class="notif-control">
               <button
                 class="toggle-switch"
-                [class.active]="isPreferenceEnabled(pref.key)"
+                [class.active]="
+                  isPreferenceEnabled(pref.key)
+                "
                 (click)="togglePreference(pref.key)"
                 [attr.aria-label]="'Toggle ' + pref.label"
               >

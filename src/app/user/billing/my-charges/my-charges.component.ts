@@ -9,7 +9,6 @@ import {
   LucideClock,
   LucideCreditCard,
   LucideDollarSign,
-  
   LucideFileText,
   LucideLoader,
   LucideSmartphone,
@@ -29,9 +28,7 @@ import {
   StatusBadgeComponent,
   StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
   FilterGroupComponent,
-  SearchBoxComponent,
   PageBannerComponent,
   type FilterOption,
   type BadgeVariant,
@@ -50,14 +47,12 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-    
+
     IconComponent,
     StatusBadgeComponent,
     StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
     FilterGroupComponent,
-    SearchBoxComponent,
     PageBannerComponent,
   ],
   templateUrl: './my-charges.component.html',

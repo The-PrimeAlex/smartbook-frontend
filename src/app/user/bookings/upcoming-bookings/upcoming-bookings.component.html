@@ -10,7 +10,10 @@
       [disabled]="loading()"
       (click)="loadBookings()"
     >
-      <app-icon [icon]="LucideRefreshCw" [size]="14"></app-icon>
+      <app-icon
+        [icon]="LucideRefreshCw"
+        [size]="14"
+      ></app-icon>
       {{ loading() ? 'Refreshing...' : 'Refresh' }}
     </button>
   </app-page-banner>

@@ -7,7 +7,6 @@ import {
   ActivatedRoute,
 } from '@angular/router';
 import {
-  
   LucideAlertTriangle,
   LucideCalendar,
   LucideCheckCircle2,
@@ -29,9 +28,7 @@ import {
   StatusBadgeComponent,
   StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
   FilterGroupComponent,
-  SearchBoxComponent,
   PageBannerComponent,
   type BadgeVariant,
   type FilterOption,
@@ -49,14 +46,12 @@ import {
   imports: [
     FormsModule,
     RouterLink,
-    
+
     IconComponent,
     StatusBadgeComponent,
     StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
     FilterGroupComponent,
-    SearchBoxComponent,
     PageBannerComponent,
   ],
   templateUrl: './admin-incidents.component.html',

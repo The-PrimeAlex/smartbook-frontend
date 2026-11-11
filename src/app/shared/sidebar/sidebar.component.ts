@@ -20,7 +20,6 @@ import {
   LucideCalendarDays,
   LucideChartNoAxesCombined,
   LucideDoorOpen,
-  
   LucideHistory,
   LucideHouse,
   LucideLogOut,
@@ -47,7 +46,7 @@ import { USER_MENU } from './user-menu';
   imports: [
     RouterLink,
     RouterLinkActive,
-    
+
     ConfirmLogoutModalComponent,
     IconComponent,
   ],

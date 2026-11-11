@@ -12,7 +12,6 @@ import {
   LucideCalendar,
   LucideCheckCircle,
   LucideClock,
-  
   LucideFileText,
   LucideHome,
   LucideLoader,
@@ -49,7 +48,7 @@ const INCIDENT_TYPES = [
   imports: [
     FormsModule,
     DatePipe,
-    
+
     PageBannerComponent,
     EmptyStateComponent,
     StatusBadgeComponent,

@@ -9,7 +9,6 @@ import { finalize } from 'rxjs';
 import {
   LucideAlertTriangle,
   LucideClock,
-  
   LucideUser,
 } from '@lucide/angular';
 import {
@@ -18,12 +17,8 @@ import {
 } from '../admin-billing.service';
 import {
   IconComponent,
-  StatusBadgeComponent,
   StatCardComponent,
   EmptyStateComponent,
-  FormFieldComponent,
-  FilterGroupComponent,
-  SearchBoxComponent,
   PageBannerComponent,
 } from '../../../shared/ui';
 import { formatDateTime } from '../../../shared/directives';
@@ -33,14 +28,10 @@ import { formatDateTime } from '../../../shared/directives';
   standalone: true,
   imports: [
     CommonModule,
-    
+
     IconComponent,
-    StatusBadgeComponent,
     StatCardComponent,
     EmptyStateComponent,
-    FormFieldComponent,
-    FilterGroupComponent,
-    SearchBoxComponent,
     PageBannerComponent,
   ],
   templateUrl: './usage-charges.component.html',

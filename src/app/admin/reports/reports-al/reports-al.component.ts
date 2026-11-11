@@ -24,7 +24,6 @@ import {
 } from './reports-al.service';
 import {
   IconComponent,
-  StatusBadgeComponent,
   EmptyStateComponent,
   PageBannerComponent,
 } from '../../../shared/ui';
@@ -52,7 +51,6 @@ interface RoomRanking {
     DatePipe,
     DecimalPipe,
     IconComponent,
-    StatusBadgeComponent,
     EmptyStateComponent,
     PageBannerComponent,
   ],
@@ -92,7 +90,9 @@ export class ReportsAlComponent implements OnInit {
   readonly occupancyRankings = signal<RoomRanking[]>([]);
 
   // Booking stats
-  readonly bookingStatusBreakdown = signal<StatusCount[]>([]);
+  readonly bookingStatusBreakdown = signal<StatusCount[]>(
+    [],
+  );
   readonly bookingAvgDuration = signal(0);
   readonly bookingAvgOverrun = signal(0);
   readonly bookingOverrunCount = signal(0);
@@ -192,9 +192,11 @@ export class ReportsAlComponent implements OnInit {
     for (const r of records) {
       rooms++;
       if (r.totalBookings) bookings += r.totalBookings;
-      if (r.checkedInBookings) checkedIn += r.checkedInBookings;
+      if (r.checkedInBookings)
+        checkedIn += r.checkedInBookings;
       if (r.noShowBookings) noShows += r.noShowBookings;
-      if (r.totalHoursBooked) hoursBooked += r.totalHoursBooked;
+      if (r.totalHoursBooked)
+        hoursBooked += r.totalHoursBooked;
       if (r.totalHoursUsed) hoursUsed += r.totalHoursUsed;
     }
     this.totalRooms.set(rooms);
@@ -205,14 +207,21 @@ export class ReportsAlComponent implements OnInit {
     this.totalHoursUsed.set(hoursUsed);
 
     // Build room rankings by bookings
-    const maxBookings = Math.max(1, ...records.map(r => r.totalBookings || 0));
+    const maxBookings = Math.max(
+      1,
+      ...records.map((r) => r.totalBookings || 0),
+    );
     const rankings: RoomRanking[] = records
-      .filter(r => r.totalBookings && r.totalBookings > 0)
-      .sort((a, b) => (b.totalBookings || 0) - (a.totalBookings || 0))
-      .map(r => ({
+      .filter((r) => r.totalBookings && r.totalBookings > 0)
+      .sort(
+        (a, b) =>
+          (b.totalBookings || 0) - (a.totalBookings || 0),
+      )
+      .map((r) => ({
         roomName: r.roomName || 'Unknown',
         value: r.totalBookings || 0,
-        percentage: ((r.totalBookings || 0) / maxBookings) * 100,
+        percentage:
+          ((r.totalBookings || 0) / maxBookings) * 100,
       }));
     this.occupancyRankings.set(rankings);
   }
@@ -249,18 +258,23 @@ export class ReportsAlComponent implements OnInit {
     }
 
     // Build status breakdown with colors and icons
-    const statusConfig: Record<string, { color: string }> = {
-      'PENDING': { color: '#f59e0b' },
-      'CONFIRMED': { color: '#3b82f6' },
-      'CHECKED_IN': { color: '#8b5cf6' },
-      'COMPLETED': { color: '#10b981' },
-      'CANCELLED': { color: '#6b7280' },
-      'NO_SHOW': { color: '#ef4444' },
-    };
+    const statusConfig: Record<string, { color: string }> =
+      {
+        PENDING: { color: '#f59e0b' },
+        CONFIRMED: { color: '#3b82f6' },
+        CHECKED_IN: { color: '#8b5cf6' },
+        COMPLETED: { color: '#10b981' },
+        CANCELLED: { color: '#6b7280' },
+        NO_SHOW: { color: '#ef4444' },
+      };
 
-    const breakdown: StatusCount[] = Object.entries(statusMap)
+    const breakdown: StatusCount[] = Object.entries(
+      statusMap,
+    )
       .map(([label, count]) => {
-        const config = statusConfig[label] || { color: '#6b7280' };
+        const config = statusConfig[label] || {
+          color: '#6b7280',
+        };
         return {
           label,
           count,
@@ -272,8 +286,12 @@ export class ReportsAlComponent implements OnInit {
       .sort((a, b) => b.count - a.count);
 
     this.bookingStatusBreakdown.set(breakdown);
-    this.bookingAvgDuration.set(durationCount > 0 ? totalDuration / durationCount : 0);
-    this.bookingAvgOverrun.set(overrunCount > 0 ? totalOverrun / overrunCount : 0);
+    this.bookingAvgDuration.set(
+      durationCount > 0 ? totalDuration / durationCount : 0,
+    );
+    this.bookingAvgOverrun.set(
+      overrunCount > 0 ? totalOverrun / overrunCount : 0,
+    );
     this.bookingOverrunCount.set(overrunCount);
   }
 
@@ -303,10 +321,17 @@ export class ReportsAlComponent implements OnInit {
         incidentRevenue += r.incidentFee;
       if (r.taxAmount) taxRevenue += r.taxAmount;
       if (r.billStatus === 'PAID') paidCount++;
-      if (r.billStatus && r.billStatus !== 'PAID' && r.billStatus !== 'DRAFT' && r.billStatus !== 'VOID') unpaidCount++;
+      if (
+        r.billStatus &&
+        r.billStatus !== 'PAID' &&
+        r.billStatus !== 'DRAFT' &&
+        r.billStatus !== 'VOID'
+      )
+        unpaidCount++;
       if (r.billStatus === 'OVERDUE') overdueCount++;
       if (r.roomName && r.totalAmount) {
-        roomRevenueMap[r.roomName] = (roomRevenueMap[r.roomName] || 0) + r.totalAmount;
+        roomRevenueMap[r.roomName] =
+          (roomRevenueMap[r.roomName] || 0) + r.totalAmount;
       }
     }
 
@@ -316,13 +341,20 @@ export class ReportsAlComponent implements OnInit {
     this.totalNoShowRevenue.set(noShowRevenue);
     this.totalIncidentRevenue.set(incidentRevenue);
     this.totalTaxRevenue.set(taxRevenue);
-    this.avgTicketSize.set(records.length > 0 ? revenue / records.length : 0);
+    this.avgTicketSize.set(
+      records.length > 0 ? revenue / records.length : 0,
+    );
     this.unpaidCount.set(unpaidCount);
     this.overdueCount.set(overdueCount);
 
     // Build revenue by room rankings
-    const maxRevenue = Math.max(1, ...Object.values(roomRevenueMap));
-    const revRankings: RoomRanking[] = Object.entries(roomRevenueMap)
+    const maxRevenue = Math.max(
+      1,
+      ...Object.values(roomRevenueMap),
+    );
+    const revRankings: RoomRanking[] = Object.entries(
+      roomRevenueMap,
+    )
       .sort(([, a], [, b]) => b - a)
       .map(([roomName, value]) => ({
         roomName,
@@ -378,11 +410,13 @@ export class ReportsAlComponent implements OnInit {
   }
 
   toggleRevenueSources(): void {
-    this.revenueSourcesExpanded.update(v => !v);
+    this.revenueSourcesExpanded.update((v) => !v);
   }
 
   getRevenueWithBills(): RevenueReportAl[] {
-    return this.revenueRecords().filter(r => (r.totalAmount || 0) > 0);
+    return this.revenueRecords().filter(
+      (r) => (r.totalAmount || 0) > 0,
+    );
   }
 
   statusBadgeClass(status: string | null): string {
@@ -435,7 +469,9 @@ export class ReportsAlComponent implements OnInit {
 
   getCheckInRate(): number {
     if (this.totalBookings() === 0) return 0;
-    return (this.totalCheckedIn() / this.totalBookings()) * 100;
+    return (
+      (this.totalCheckedIn() / this.totalBookings()) * 100
+    );
   }
 
   formatMinutes(minutes: number): string {

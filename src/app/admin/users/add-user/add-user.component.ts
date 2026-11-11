@@ -21,7 +21,6 @@ import {
   LucideChevronDown,
   LucideChevronLeft,
   LucideChevronRight,
-  
   LucideHome,
   LucideMail,
   LucideSearch,
@@ -50,7 +49,7 @@ interface CountryOption {
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
-    
+
     PageBannerComponent,
     IconComponent,
   ],

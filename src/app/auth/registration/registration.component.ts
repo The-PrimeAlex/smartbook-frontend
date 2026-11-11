@@ -24,7 +24,6 @@ import {
   LucideArrowRight,
   LucideBuilding,
   LucideChevronDown,
-  
   LucideSearch,
   LucideShieldCheck,
   LucideUserRound,
@@ -43,7 +42,7 @@ interface CountryOption {
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    
+
     RequestResultModalComponent,
     IconComponent,
   ],

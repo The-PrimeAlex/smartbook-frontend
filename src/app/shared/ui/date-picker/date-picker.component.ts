@@ -1,5 +1,15 @@
-import { Component, forwardRef, Input, OnInit, OnDestroy, ElementRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import flatpickr from 'flatpickr';
 
 @Component({
@@ -15,7 +25,9 @@ import flatpickr from 'flatpickr';
     },
   ],
 })
-export class DatePickerComponent implements OnInit, OnDestroy {
+export class DatePickerComponent
+  implements OnInit, OnDestroy
+{
   @Input() min: string = '';
   @Input() max: string = '';
   @Input() placeholder: string = 'Select date';
@@ -27,24 +39,27 @@ export class DatePickerComponent implements OnInit, OnDestroy {
   constructor(private el: ElementRef) {}
 
   ngOnInit() {
-    this.fpInstance = flatpickr(this.el.nativeElement.querySelector('input'), {
-      mode: 'single',
-      dateFormat: 'Y-m-d',
-      minDate: this.min || undefined,
-      maxDate: this.max || undefined,
-      disableMobile: true,
-      animate: true,
-      onChange: ([date], dateStr) => {
-        this._value = dateStr;
-        this.onChangeCallback(dateStr);
+    this.fpInstance = flatpickr(
+      this.el.nativeElement.querySelector('input'),
+      {
+        mode: 'single',
+        dateFormat: 'Y-m-d',
+        minDate: this.min || undefined,
+        maxDate: this.max || undefined,
+        disableMobile: true,
+        animate: true,
+        onChange: ([date], dateStr) => {
+          this._value = dateStr;
+          this.onChangeCallback(dateStr);
+        },
+        onReady: () => {
+          // Apply min date after initialization
+          if (this.min) {
+            this.fpInstance.set('minDate', this.min);
+          }
+        },
       },
-      onReady: () => {
-        // Apply min date after initialization
-        if (this.min) {
-          this.fpInstance.set('minDate', this.min);
-        }
-      },
-    });
+    );
 
     // Escape key to close calendar
     document.addEventListener('keydown', this.onKeyDown);
@@ -58,7 +73,11 @@ export class DatePickerComponent implements OnInit, OnDestroy {
   }
 
   private onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && this.fpInstance && this.fpInstance.isOpen) {
+    if (
+      e.key === 'Escape' &&
+      this.fpInstance &&
+      this.fpInstance.isOpen
+    ) {
       this.fpInstance.close();
     }
   };

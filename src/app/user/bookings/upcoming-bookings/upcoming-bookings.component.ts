@@ -78,7 +78,8 @@ export class UpcomingBookingsComponent implements OnInit {
 
   // Cancel booking modal
   readonly showCancelModal = signal(false);
-  readonly cancelModalData = signal<CancelBookingModalData | null>(null);
+  readonly cancelModalData =
+    signal<CancelBookingModalData | null>(null);
 
   readonly upcomingBookings = computed(() =>
     this.bookings().filter((b) =>
@@ -232,14 +233,19 @@ export class UpcomingBookingsComponent implements OnInit {
     // Use the admin-configured cancellation settings from the booking
     const now = new Date();
     const startTime = new Date(booking.startTime);
-    const freeCancellationHours = booking.cancelHoursBeforeFree ?? 2;
+    const freeCancellationHours =
+      booking.cancelHoursBeforeFree ?? 2;
     const cancelFee = booking.cancelFee ?? 0;
     const freeCancellationEnd = new Date(
-      startTime.getTime() - freeCancellationHours * 60 * 60 * 1000,
+      startTime.getTime() -
+        freeCancellationHours * 60 * 60 * 1000,
     );
-    const hasFee = now > freeCancellationEnd && cancelFee > 0;
+    const hasFee =
+      now > freeCancellationEnd && cancelFee > 0;
 
-    const feeAmount = hasFee ? `KSh ${cancelFee.toLocaleString('en-GB', { minimumFractionDigits: 2 })}` : '';
+    const feeAmount = hasFee
+      ? `KSh ${cancelFee.toLocaleString('en-GB', { minimumFractionDigits: 2 })}`
+      : '';
 
     this.cancelModalData.set({
       roomName: booking.roomName,

@@ -22,7 +22,6 @@ import {
   LucideArrowLeft,
   LucideArrowRight,
   LucideCheckCircle,
-  
   LucideEye,
   LucideEyeOff,
   LucideLockKeyhole,
@@ -52,12 +51,7 @@ function passwordsMatchValidator(
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    
-    IconComponent,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
   templateUrl: './password-reset.component.html',
   styleUrl: './password-reset.component.css',
 })
@@ -87,7 +81,7 @@ export class ResetPasswordComponent {
           '',
           [
             Validators.required,
-            Validators.minLength(8),
+            Validators.minLength(12),
             Validators.pattern(/[a-z]/),
             Validators.pattern(/[A-Z]/),
             Validators.pattern(/[0-9]/),
@@ -152,7 +146,7 @@ export class ResetPasswordComponent {
   }
 
   get passwordLengthValid(): boolean {
-    return this.newPasswordControl.value.length >= 8;
+    return this.newPasswordControl.value.length >= 12;
   }
 
   get passwordHasLowercase(): boolean {

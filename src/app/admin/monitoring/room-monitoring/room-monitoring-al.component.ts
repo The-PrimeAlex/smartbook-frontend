@@ -39,20 +39,24 @@ import {
 } from '../../../shared/ui';
 
 type TabMode = 'live' | 'no-shows' | 'overruns';
-type StatusFilter = 'all' | 'available' | 'occupied' | 'reserved' | 'overrun' | 'maintenance';
+type StatusFilter =
+  | 'all'
+  | 'available'
+  | 'occupied'
+  | 'reserved'
+  | 'overrun'
+  | 'maintenance';
 
 @Component({
   selector: 'app-room-monitoring',
   standalone: true,
-  imports: [
-    DatePipe,
-    IconComponent,
-    PageBannerComponent,
-  ],
+  imports: [DatePipe, IconComponent, PageBannerComponent],
   templateUrl: './room-monitoring-al.component.html',
   styleUrl: './room-monitoring-al.component.css',
 })
-export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
+export class RoomMonitoringAlComponent
+  implements OnInit, OnDestroy
+{
   private readonly monitoringService = inject(
     RoomMonitoringAlService,
   );
@@ -94,7 +98,9 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
   // Live monitoring state
   readonly lastUpdated = signal<Date | null>(null);
   readonly autoRefreshInterval = 30000; // 30 seconds
-  private autoRefreshTimer: ReturnType<typeof setInterval> | null = null;
+  private autoRefreshTimer: ReturnType<
+    typeof setInterval
+  > | null = null;
 
   // Search and filter
   readonly searchQuery = signal('');
@@ -108,10 +114,15 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
     const filter = this.statusFilter();
 
     if (query) {
-      result = result.filter((r) =>
-        (r.roomName ?? '').toLowerCase().includes(query) ||
-        (r.purpose ?? '').toLowerCase().includes(query) ||
-        (r.bookerName ?? '').toLowerCase().includes(query),
+      result = result.filter(
+        (r) =>
+          (r.roomName ?? '')
+            .toLowerCase()
+            .includes(query) ||
+          (r.purpose ?? '').toLowerCase().includes(query) ||
+          (r.bookerName ?? '')
+            .toLowerCase()
+            .includes(query),
       );
     }
 
@@ -119,12 +130,25 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
       result = result.filter((r) => {
         const status = (r.liveStatus ?? '').toLowerCase();
         switch (filter) {
-          case 'available': return status === 'available';
-          case 'occupied': return status === 'occupied';
-          case 'reserved': return status === 'reserved' || status === 'confirmed' || status === 'pending';
-          case 'overrun': return status === 'overrun';
-          case 'maintenance': return status === 'maintenance' || status === 'retired';
-          default: return true;
+          case 'available':
+            return status === 'available';
+          case 'occupied':
+            return status === 'occupied';
+          case 'reserved':
+            return (
+              status === 'reserved' ||
+              status === 'confirmed' ||
+              status === 'pending'
+            );
+          case 'overrun':
+            return status === 'overrun';
+          case 'maintenance':
+            return (
+              status === 'maintenance' ||
+              status === 'retired'
+            );
+          default:
+            return true;
         }
       });
     }
@@ -133,7 +157,8 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
   });
 
   // Room detail panel state
-  readonly selectedRoom = signal<RoomMonitoringRecordAl | null>(null);
+  readonly selectedRoom =
+    signal<RoomMonitoringRecordAl | null>(null);
   readonly roomBookings = signal<RoomBookingRecordAl[]>([]);
   readonly roomBookingsLoading = signal(false);
 
@@ -148,7 +173,7 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
     }
     this.activeTab.set(initialTab);
     this.loadTab(initialTab);
-    
+
     // Start auto-refresh for live tab
     if (initialTab === 'live') {
       this.startAutoRefresh();
@@ -160,10 +185,10 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
     if (this.activeTab() === 'live') {
       this.stopAutoRefresh();
     }
-    
+
     this.activeTab.set(tab);
     this.loadTab(tab);
-    
+
     // Start auto-refresh when entering live tab
     if (tab === 'live') {
       this.startAutoRefresh();
@@ -222,8 +247,15 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
       if (status === 'AVAILABLE') available++;
       else if (status === 'OCCUPIED') occupied++;
       else if (status === 'OVERRUN') attention++;
-      else if (status === 'MAINTENANCE') { maintenance++; attention++; }
-      else if (status === 'RESERVED' || status === 'PENDING' || status === 'CONFIRMED') reserved++;
+      else if (status === 'MAINTENANCE') {
+        maintenance++;
+        attention++;
+      } else if (
+        status === 'RESERVED' ||
+        status === 'PENDING' ||
+        status === 'CONFIRMED'
+      )
+        reserved++;
     }
 
     this.totalRooms.set(records.length);
@@ -236,7 +268,7 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
 
   // Filter helpers
   toggleFilters(): void {
-    this.showFilters.update(v => !v);
+    this.showFilters.update((v) => !v);
   }
 
   clearFilters(): void {
@@ -287,18 +319,24 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
    * Calculate time remaining for an active booking.
    * Returns positive minutes remaining, or negative if overrunning.
    */
-  getTimeRemaining(record: RoomMonitoringRecordAl): number | null {
+  getTimeRemaining(
+    record: RoomMonitoringRecordAl,
+  ): number | null {
     if (!record.startTime || !record.endTime) return null;
     const now = new Date();
     const end = new Date(record.endTime);
-    const diff = Math.round((end.getTime() - now.getTime()) / 60000);
+    const diff = Math.round(
+      (end.getTime() - now.getTime()) / 60000,
+    );
     return diff;
   }
 
   /**
    * Format time remaining as a human-readable string.
    */
-  formatTimeRemaining(record: RoomMonitoringRecordAl): string {
+  formatTimeRemaining(
+    record: RoomMonitoringRecordAl,
+  ): string {
     const mins = this.getTimeRemaining(record);
     if (mins === null) return '';
     if (mins > 0) {
@@ -319,7 +357,9 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
   /**
    * Get CSS class for time remaining indicator.
    */
-  getTimeRemainingClass(record: RoomMonitoringRecordAl): string {
+  getTimeRemainingClass(
+    record: RoomMonitoringRecordAl,
+  ): string {
     const mins = this.getTimeRemaining(record);
     if (mins === null) return '';
     if (mins > 15) return 'time-ok';
@@ -333,17 +373,28 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
   formatStatus(status: string | null): string {
     if (!status) return '—';
     switch (status) {
-      case 'AVAILABLE': return 'Available';
-      case 'OCCUPIED': return 'Occupied';
-      case 'OVERRUN': return 'Overrun';
-      case 'MAINTENANCE': return 'Maintenance';
-      case 'RETIRED': return 'Retired';
-      case 'NO_SHOW': return 'No-Show';
-      case 'POTENTIAL_NO_SHOW': return 'Potential No-Show';
-      case 'RESERVED': return 'Reserved';
-      case 'PENDING': return 'Pending';
-      case 'CONFIRMED': return 'Confirmed';
-      default: return status;
+      case 'AVAILABLE':
+        return 'Available';
+      case 'OCCUPIED':
+        return 'Occupied';
+      case 'OVERRUN':
+        return 'Overrun';
+      case 'MAINTENANCE':
+        return 'Maintenance';
+      case 'RETIRED':
+        return 'Retired';
+      case 'NO_SHOW':
+        return 'No-Show';
+      case 'POTENTIAL_NO_SHOW':
+        return 'Potential No-Show';
+      case 'RESERVED':
+        return 'Reserved';
+      case 'PENDING':
+        return 'Pending';
+      case 'CONFIRMED':
+        return 'Confirmed';
+      default:
+        return status;
     }
   }
 
@@ -353,12 +404,18 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
   getRoomCardClass(record: RoomMonitoringRecordAl): string {
     const status = record.liveStatus ?? '';
     switch (status) {
-      case 'OVERRUN': return 'room-card-overrun';
-      case 'MAINTENANCE': return 'room-card-maintenance';
-      case 'OCCUPIED': return 'room-card-occupied';
-      case 'RESERVED': return 'room-card-reserved';
-      case 'AVAILABLE': return 'room-card-available';
-      default: return '';
+      case 'OVERRUN':
+        return 'room-card-overrun';
+      case 'MAINTENANCE':
+        return 'room-card-maintenance';
+      case 'OCCUPIED':
+        return 'room-card-occupied';
+      case 'RESERVED':
+        return 'room-card-reserved';
+      case 'AVAILABLE':
+        return 'room-card-available';
+      default:
+        return '';
     }
   }
 
@@ -411,7 +468,10 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy(): void {
-    document.removeEventListener('keydown', this.escapeListener);
+    document.removeEventListener(
+      'keydown',
+      this.escapeListener,
+    );
     this.stopAutoRefresh();
   }
 
@@ -420,23 +480,31 @@ export class RoomMonitoringAlComponent implements OnInit, OnDestroy {
     this.selectedRoom.set(record);
     this.roomBookingsLoading.set(true);
     this.roomBookings.set([]);
-    document.addEventListener('keydown', this.escapeListener);
+    document.addEventListener(
+      'keydown',
+      this.escapeListener,
+    );
 
-    this.monitoringService.getRoomBookings(record.roomId).subscribe({
-      next: (bookings) => {
-        this.roomBookings.set(bookings ?? []);
-        this.roomBookingsLoading.set(false);
-      },
-      error: () => {
-        this.roomBookings.set([]);
-        this.roomBookingsLoading.set(false);
-      },
-    });
+    this.monitoringService
+      .getRoomBookings(record.roomId)
+      .subscribe({
+        next: (bookings) => {
+          this.roomBookings.set(bookings ?? []);
+          this.roomBookingsLoading.set(false);
+        },
+        error: () => {
+          this.roomBookings.set([]);
+          this.roomBookingsLoading.set(false);
+        },
+      });
   }
 
   closeRoomDetail(): void {
     this.selectedRoom.set(null);
     this.roomBookings.set([]);
-    document.removeEventListener('keydown', this.escapeListener);
+    document.removeEventListener(
+      'keydown',
+      this.escapeListener,
+    );
   }
 }

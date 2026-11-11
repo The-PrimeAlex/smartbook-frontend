@@ -3,16 +3,14 @@
   max-width: 1400px;
   margin: 0 auto;
 }
-
-/* Stats Bar — uses global .stats-bar, .stat-card, .stat-label, .stat-value */
-
+/* Stats Bar — uses global .stats-bar,
+  .stat-card, .stat-label, .stat-value */
 .filter-bar {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   margin-bottom: 2rem;
 }
-
 .filter-btn {
   padding: 6px 16px;
   border: 1px solid var(--border-color);
@@ -24,18 +22,15 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .filter-btn:hover {
   border-color: var(--brand-accent);
   color: var(--brand-accent);
 }
-
 .filter-btn.active {
   background: var(--brand-primary);
   color: #ffffff;
   border-color: var(--brand-primary);
 }
-
 .payments-grid {
   display: grid;
   grid-template-columns: repeat(
@@ -44,7 +39,6 @@
   );
   gap: 1.5rem;
 }
-
 .payment-card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -54,13 +48,11 @@
   animation: fadeUp 0.4s ease-out both;
   transition: all 0.25s ease;
 }
-
 .payment-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--card-shadow-hover);
   border-color: var(--brand-accent);
 }
-
 .payment-card-header {
   display: flex;
   justify-content: space-between;
@@ -68,13 +60,11 @@
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
 }
-
 .payment-header-left {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -86,14 +76,12 @@
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
-
 .status-badge::before {
   content: '';
   width: 6px;
   height: 6px;
   border-radius: 50%;
 }
-
 .status-success {
   background: rgba(34, 197, 94, 0.1);
   color: var(--success);
@@ -102,7 +90,6 @@
 .status-success::before {
   background: var(--success);
 }
-
 .status-pending {
   background: rgba(245, 158, 11, 0.1);
   color: var(--warning);
@@ -111,7 +98,6 @@
 .status-pending::before {
   background: var(--warning);
 }
-
 .status-failed {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
@@ -129,7 +115,6 @@
 .status-refunded::before {
   background: var(--neutral-500);
 }
-
 .method-badge {
   display: inline-flex;
   align-items: center;
@@ -141,34 +126,29 @@
   color: var(--info);
   border: 1px solid rgba(59, 130, 246, 0.2);
 }
-
 .payment-amount {
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--brand-accent);
 }
-
 .payment-card-body {
   padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-
 .payment-info-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.25rem 0;
 }
-
 .payment-label {
   font-size: 0.75rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-
 .payment-value {
   font-size: 0.8125rem;
   color: var(--text-primary);
@@ -179,7 +159,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .state-panel {
   display: flex;
   flex-direction: column;
@@ -189,23 +168,19 @@
   text-align: center;
   color: var(--text-secondary);
 }
-
 .state-panel svg {
   margin-bottom: 1rem;
   opacity: 0.4;
 }
-
 .state-panel h3 {
   margin: 0 0 0.5rem;
   color: var(--text-primary);
   font-size: 1.125rem;
 }
-
 .state-panel p {
   margin: 0;
   font-size: 0.875rem;
 }
-
 .loading-spinner {
   width: 32px;
   height: 32px;
@@ -215,7 +190,6 @@
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
 }
-
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -226,13 +200,11 @@
     transform: translateY(0);
   }
 }
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
 @media (max-width: 768px) {
   .page-container {
     padding: 1rem;
@@ -244,14 +216,12 @@
     grid-template-columns: 1fr;
   }
 }
-
 /* ── Mobile responsive ── */
 @media (max-width: 48rem) {
   :host {
     font-size: 0.9rem;
   }
 }
-
 @media (max-width: 30rem) {
   /* Compact padding */
   .page-content,
@@ -260,7 +230,6 @@
   .dashboard-content {
     padding: 12px !important;
   }
-
   /* Stack grids */
   .stats-row,
   .stats-grid,
@@ -278,7 +247,6 @@
     grid-template-columns: 1fr !important;
     flex-direction: column !important;
   }
-
   /* Compact cards */
   .card,
   .card-row,
@@ -293,12 +261,16 @@
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
-
   /* Compact typography */
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1rem !important; }
-  h3 { font-size: 0.875rem !important; }
-
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  h2 {
+    font-size: 1rem !important;
+  }
+  h3 {
+    font-size: 0.875rem !important;
+  }
   /* Full-width buttons */
   .action-buttons,
   .card-actions,
@@ -306,25 +278,21 @@
     flex-direction: column !important;
     width: 100% !important;
   }
-
   .action-buttons .btn,
   .card-actions .btn,
   .btn-group .btn {
     width: 100% !important;
   }
-
   /* Compact badges */
   .badge {
     padding: 2px 6px !important;
     font-size: 0.625rem !important;
   }
-
   /* Compact metric chips */
   .metric-chip {
     padding: 2px 6px !important;
     min-width: auto !important;
   }
-
   /* Scrollable filter bar */
   .filter-bar {
     flex-wrap: nowrap !important;
@@ -333,29 +301,23 @@
     scrollbar-width: none;
     padding-bottom: 4px;
   }
-
   .filter-bar::-webkit-scrollbar {
     display: none;
   }
-
   /* Compact section headings */
   .section-header {
     margin-bottom: 0.75rem !important;
   }
-
   .section-header h2 {
     font-size: 1rem !important;
   }
-
   /* Compact form fields */
   .form-field {
     margin-bottom: 12px !important;
   }
-
   .form-field label {
     font-size: 0.75rem !important;
   }
-
   /* Hide decorative elements */
   .deco-circle,
   .banner-deco,
@@ -364,19 +326,16 @@
   .deco-triangle {
     display: none !important;
   }
-
   /* Compact tables */
   .table-wrapper {
     font-size: 0.75rem !important;
   }
-
   /* Modal full-screen */
   .modal-overlay,
   .detail-overlay,
   .conflict-overlay {
     padding: 8px !important;
   }
-
   .modal-content,
   .detail-panel,
   .conflict-modal {
@@ -384,7 +343,6 @@
     border-radius: var(--radius-md) !important;
   }
 }
-
 @media (max-width: 22.5rem) {
   /* Ultra-compact */
   .card-row {
