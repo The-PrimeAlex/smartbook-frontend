@@ -1,6 +1,6 @@
 /**
  * Application configuration for local development.
- * API calls use relative paths (/api/v1) proxied to localhost:8080.
+ * API calls use relative paths (/api/v1) proxied to the Azure backend.
  */
 import { ApplicationConfig } from '@angular/core';
 import {
