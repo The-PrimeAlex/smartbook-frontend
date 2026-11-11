@@ -11,8 +11,9 @@ export async function onRequest(context) {
   const backendUrl = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
   // Reconstruct the full path after /api (e.g. /api/v1/auth/login → /api/v1/auth/login)
-  const path = context.params.path || [];
-  const apiPath = '/' + (Array.isArray(path) ? path.join('/') : path);
+  // context.params.catchall is an array of path segments: ["v1", "auth", "login"]
+  const catchall = context.params.catchall || [];
+  const apiPath = '/' + (Array.isArray(catchall) ? catchall.join('/') : catchall);
 
   const targetUrl = backendUrl + apiPath;
 
