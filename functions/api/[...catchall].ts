@@ -2,28 +2,22 @@
  * Cloudflare Pages Function to proxy /api/* requests to the Azure backend.
  *
  * This is the production equivalent of proxy.conf.json used in local development.
- * It forwards all HTTP methods, headers, cookies, and request bodies to the
- * Azure App Service backend, and returns the response back to the browser.
- *
- * File name: .js (Cloudflare Pages catch-all route syntax)
+ * File: functions/api/[...catchall].ts
  * Matches: /api/v1/auth/login, /api/v1/rooms, /api/v1/auth/csrf, etc.
  */
 
-export async function onRequest(context) {
-  // The Azure backend URL — matches proxy.conf.json target
+export const onRequest: PagesFunction<Env> = async (context) => {
   const backendUrl = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
-  // Reconstruct the full path after /api (e.g. /api/v1/auth/login → /api/v1/auth/login)
-  // context.params.catchall is an array of path segments: ["v1", "auth", "login"]
-  const catchall = context.params.catchall || [];
-  const apiPath = '/' + (Array.isArray(catchall) ? catchall.join('/') : catchall);
+  // Extract the full path from the request URL (e.g., /api/v1/auth/login)
+  const url = new URL(context.request.url);
+  const apiPath = url.pathname;
 
-  const targetUrl = backendUrl + apiPath;
+  // Forward query parameters
+  const targetUrl = backendUrl + apiPath + url.search;
 
   // Build headers to forward, preserving cookies and CSRF tokens
   const headers = new Headers(context.request.headers);
-
-  // Remove Cloudflare-specific headers that might interfere
   headers.delete('host');
   headers.set('host', new URL(targetUrl).host);
 
@@ -38,8 +32,6 @@ export async function onRequest(context) {
 
   // Clone the response and add CORS-safe headers
   const responseHeaders = new Headers(response.headers);
-
-  // Ensure cookies are visible to the browser (for CSRF and refresh tokens)
   responseHeaders.set('Access-Control-Allow-Origin', context.request.headers.get('origin') || '');
   responseHeaders.set('Access-Control-Allow-Credentials', 'true');
   responseHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
@@ -59,4 +51,8 @@ export async function onRequest(context) {
     statusText: response.statusText,
     headers: responseHeaders,
   });
+};
+
+interface Env {
+  // Add any env vars here if needed in the future
 }
