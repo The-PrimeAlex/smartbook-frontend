@@ -1,8 +1,9 @@
 /**
  * Cloudflare Pages Function to proxy /api/* requests to the Azure backend.
  *
- * This function matches /api and all subpaths (e.g., /api/v1/auth/login).
- * It reads the full request path from the URL and forwards it to the Azure backend.
+ * Routing is controlled by functions/_routes.json which includes "/api/*".
+ * This function forwards all HTTP methods, headers, cookies, and request bodies
+ * to the Azure App Service backend, and returns the response back to the browser.
  */
 
 export async function onRequest(context) {
@@ -10,9 +11,7 @@ export async function onRequest(context) {
 
   // Extract the full path from the request URL (e.g., /api/v1/auth/login)
   const url = new URL(context.request.url);
-  const apiPath = url.pathname; // e.g., /api/v1/auth/login
-
-  // Forward query parameters
+  const apiPath = url.pathname;
   const targetUrl = backendUrl + apiPath + url.search;
 
   // Build headers to forward, preserving cookies and CSRF tokens
