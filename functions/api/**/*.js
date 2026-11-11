@@ -4,6 +4,9 @@
  * This is the production equivalent of proxy.conf.json used in local development.
  * It forwards all HTTP methods, headers, cookies, and request bodies to the
  * Azure App Service backend, and returns the response back to the browser.
+ *
+ * File name: **.js (Cloudflare Pages catch-all route syntax)
+ * Matches: /api/v1/auth/login, /api/v1/rooms, etc.
  */
 
 export async function onRequest(context) {
