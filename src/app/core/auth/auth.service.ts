@@ -38,6 +38,9 @@ export class AuthService {
   private refreshInFlight$: Observable<AuthResponse> | null =
     null;
 
+  /** CSRF token stored in memory for cross-origin requests. */
+  private csrfToken = signal<string | null>(null);
+
   // Visual & Reactive Anchors
   readonly currentUser = this.currentUserState.asReadonly();
   readonly isAuthenticated = computed(
@@ -168,27 +171,46 @@ export class AuthService {
   }
 
   /**
-   * Optimized CSRF checker. Only hits the network if the browser
-   * does not already possess the XSRF token cookie.
+   * Returns the stored CSRF token for cross-origin requests.
    */
+  getCsrfToken(): string | null {
+    return this.csrfToken();
+  }
 
+  /**
+   * Fetches and stores the CSRF token.
+   * For same-origin (local dev), the cookie is available in document.cookie.
+   * For cross-origin (production), the token is stored in memory.
+   */
   public ensureCsrfToken(): Observable<void> {
-    const hasCsrfCookie = document.cookie
-      .split(';')
-      .some((cookie) =>
-        cookie.trim().startsWith('XSRF-TOKEN='),
-      );
+    // For same-origin, check if cookie already exists
+    if (!environment.production) {
+      const hasCsrfCookie = document.cookie
+        .split(';')
+        .some((cookie) =>
+          cookie.trim().startsWith('XSRF-TOKEN='),
+        );
+      if (hasCsrfCookie) {
+        return of(void 0);
+      }
+    }
 
-    if (hasCsrfCookie) {
+    // For cross-origin, check if we already have a stored token
+    if (environment.production && this.csrfToken() !== null) {
       return of(void 0);
     }
 
     return this.http
-      .get(`${environment.apiUrl}/auth/csrf`, {
-        responseType: 'text',
+      .get<{ token: string }>(`${environment.apiUrl}/auth/csrf`, {
         withCredentials: true,
       })
-      .pipe(map(() => void 0));
+      .pipe(
+        tap((response) => {
+          // Store the token in memory for cross-origin use
+          this.csrfToken.set(response.token);
+        }),
+        map(() => void 0),
+      );
   }
 
   private applyAuthResponse(response: AuthResponse): void {

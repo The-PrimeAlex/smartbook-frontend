@@ -24,9 +24,17 @@ const MUTATING_METHODS = new Set([
 ]);
 
 /**
- * Read the XSRF-TOKEN cookie value from the browser.
+ * Read the CSRF token value.
+ * For cross-origin requests (production), reads from AuthService memory store.
+ * For same-origin requests (local dev), reads from document.cookie.
  */
-function readCsrfCookie(): string | null {
+function readCsrfToken(authService: AuthService): string | null {
+  // Try memory store first (works for cross-origin)
+  const storedToken = authService.getCsrfToken();
+  if (storedToken) {
+    return storedToken;
+  }
+  // Fallback to cookie (works for same-origin local dev)
   if (typeof document === 'undefined') {
     return null;
   }
@@ -68,7 +76,7 @@ export const authInterceptor: HttpInterceptorFn = (
   // Attach the CSRF token header on mutating requests so the backend
   // Spring Security CSRF filter accepts the request.
   if (MUTATING_METHODS.has(request.method.toLowerCase())) {
-    const csrfToken = readCsrfCookie();
+    const csrfToken = readCsrfToken(authService);
     if (csrfToken) {
       headers['X-XSRF-TOKEN'] = csrfToken;
     }
@@ -122,7 +130,7 @@ export const authInterceptor: HttpInterceptorFn = (
               request.method.toLowerCase(),
             )
           ) {
-            const csrfToken = readCsrfCookie();
+            const csrfToken = readCsrfToken(authService);
             if (csrfToken) {
               retryHeaders['X-XSRF-TOKEN'] = csrfToken;
             }
