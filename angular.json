@@ -24,7 +24,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/smartbook",
+              "base": "dist/cloudflare",
               "browser": "."
             },
             "browser": "src/main.ts",
