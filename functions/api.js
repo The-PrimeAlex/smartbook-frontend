@@ -1,9 +1,10 @@
 /**
  * Cloudflare Pages Function to proxy /api/* requests to the Azure backend.
  *
- * Routing is controlled by functions/_routes.json which includes "/api/*".
- * This function forwards all HTTP methods, headers, cookies, and request bodies
- * to the Azure App Service backend, and returns the response back to the browser.
+ * File: functions/api.js
+ * Matches: /api and all subpaths (e.g., /api/v1/auth/login, /api/v1/auth/csrf)
+ *
+ * Cloudflare Pages automatically matches /api and /api/* to this function.
  */
 
 export async function onRequest(context) {
@@ -19,18 +20,20 @@ export async function onRequest(context) {
     const headers = new Headers(context.request.headers);
     headers.delete('host');
     headers.set('host', new URL(targetUrl).host);
-    headers.delete('content-length'); // Let fetch recalculate
+    headers.delete('content-length');
 
     // Handle preflight OPTIONS requests early
     if (context.request.method === 'OPTIONS') {
-      const corsHeaders = {
-        'Access-Control-Allow-Origin': context.request.headers.get('origin') || '',
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': '*',
-        'Access-Control-Max-Age': '86400',
-      };
-      return new Response(null, { status: 204, headers: corsHeaders });
+      return new Response(null, {
+        status: 204,
+        headers: {
+          'Access-Control-Allow-Origin': context.request.headers.get('origin') || '',
+          'Access-Control-Allow-Credentials': 'true',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Max-Age': '86400',
+        },
+      });
     }
 
     // Build fetch options - only include body for methods that have one
@@ -43,7 +46,6 @@ export async function onRequest(context) {
       try {
         fetchOptions.body = await context.request.arrayBuffer();
       } catch (e) {
-        // If we can't read the body, proceed without it
         console.error('Failed to read request body:', e);
       }
     }
