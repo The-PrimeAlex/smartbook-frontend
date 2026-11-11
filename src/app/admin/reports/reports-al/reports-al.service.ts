@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+
 
 export interface OccupancyReportAl {
   roomId: string | null;
@@ -55,7 +57,7 @@ export interface RevenueReportAl {
 @Injectable({ providedIn: 'root' })
 export class ReportsAlService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/v1/admin/reports';
+  private readonly apiUrl = `${environment.apiUrl}/admin/reports`;
 
   getOccupancyReports(): Observable<OccupancyReportAl[]> {
     return this.http.get<OccupancyReportAl[]>(

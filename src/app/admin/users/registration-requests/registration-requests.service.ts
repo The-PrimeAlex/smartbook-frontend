@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
+
 
 export interface RegistrationRequest {
   requestId: string;
@@ -20,7 +22,7 @@ export interface RegistrationRequest {
 export class RegistrationRequestsService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl =
-    '/api/v1/registration-requests/admin';
+    `${environment.apiUrl}/registration-requests/admin`;
 
   getRequests(
     status?: string,

@@ -8,13 +8,15 @@ import {
   MeetingRoom,
   RoomDetails,
 } from '../models/room.model';
+import { environment } from '../../../environments/environment';
+
 
 export type CreateRoomRequest = Omit<MeetingRoom, 'roomId'>;
 
 @Injectable({ providedIn: 'root' })
 export class RoomService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/v1/rooms';
+  private readonly apiUrl = `${environment.apiUrl}/rooms`;
 
   getRooms(): Observable<MeetingRoom[]> {
     return this.http

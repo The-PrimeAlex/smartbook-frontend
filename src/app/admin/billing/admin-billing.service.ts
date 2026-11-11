@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
 
 export interface AdminBill {
   billId: string;
@@ -73,7 +75,7 @@ export interface AdminUsageRecord {
 
 @Injectable({ providedIn: 'root' })
 export class AdminBillingService {
-  private readonly baseUrl = '/api/v1/admin';
+  private readonly baseUrl = `${environment.apiUrl}/admin`;
 
   constructor(private http: HttpClient) {}
 

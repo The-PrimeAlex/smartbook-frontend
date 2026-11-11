@@ -24,6 +24,7 @@ import {
   LoginRequest,
   ChangePasswordRequest,
 } from './auth.models';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -66,7 +67,7 @@ export class AuthService {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<AuthResponse>(
-          '/api/v1/auth/login',
+          `${environment.apiUrl}/auth/login`,
           {
             email: credentials.email,
             password: credentials.password,
@@ -118,7 +119,7 @@ export class AuthService {
       this.refreshInFlight$ = this.ensureCsrfToken().pipe(
         switchMap(() =>
           this.http.post<AuthResponse>(
-            '/api/v1/auth/refresh',
+            `${environment.apiUrl}/auth/refresh`,
             {},
             this.httpOptions,
           ),
@@ -137,7 +138,7 @@ export class AuthService {
   logout(): Observable<void> {
     return this.http
       .post<void>(
-        '/api/v1/auth/logout',
+        `${environment.apiUrl}/auth/logout`,
         {},
         this.httpOptions,
       )
@@ -153,7 +154,7 @@ export class AuthService {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<void>(
-          '/api/v1/auth/change-password',
+          `${environment.apiUrl}/auth/change-password`,
           request,
           this.httpOptions,
         ),
@@ -183,7 +184,7 @@ export class AuthService {
     }
 
     return this.http
-      .get('/api/v1/auth/csrf', {
+      .get(`${environment.apiUrl}/auth/csrf`, {
         responseType: 'text',
         withCredentials: true,
       })

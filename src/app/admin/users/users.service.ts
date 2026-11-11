@@ -3,6 +3,8 @@ import { createLogger } from '../../shared/services/logger.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { CreateUserRequest } from './add-user/add-user.model';
+import { environment } from '../../../environments/environment';
+
 
 export interface OrganizationProfile {
   name: string;
@@ -100,7 +102,7 @@ export class UsersService {
   loadUsers() {
     this.loading.set(true);
     this.http
-      .get<BackendUser[]>('/api/v1/users/')
+      .get<BackendUser[]>(`${environment.apiUrl}/users/`)
       .pipe(
         tap(() => this.loading.set(false)),
         catchError((err) => {
@@ -119,7 +121,7 @@ export class UsersService {
   ): Observable<{ message: string }> {
     return this.http
       .patch<{ message: string }>(
-        `/api/v1/users/${userId}/deactivate`,
+        `${environment.apiUrl}/users/${userId}/deactivate`,
         {},
       )
       .pipe(
@@ -141,20 +143,20 @@ export class UsersService {
 
   getMyProfile(): Observable<MyProfile> {
     return this.http.get<MyProfile>(
-      '/api/v1/users/me/profile',
+      `${environment.apiUrl}/users/me/profile`,
     );
   }
 
   updateProfile(profile: MyProfile): Observable<void> {
     return this.http.put<void>(
-      '/api/v1/users/me/profile',
+      `${environment.apiUrl}/users/me/profile`,
       profile,
     );
   }
 
   addUser(user: CreateUserRequest) {
     return this.http
-      .post<{ message: string }>('/api/v1/users', user)
+      .post<{ message: string }>(`${environment.apiUrl}/users`, user)
       .pipe(tap(() => this.loadUsers()));
   }
 }

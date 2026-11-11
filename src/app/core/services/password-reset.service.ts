@@ -8,6 +8,8 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
 
 export interface PasswordResetRequest {
   email: string;
@@ -24,7 +26,7 @@ export interface ResetPasswordRequest {
 export class PasswordResetService {
   private readonly http = inject(HttpClient);
 
-  private readonly authEndpoint = '/api/v1/auth';
+  private readonly authEndpoint = `${environment.apiUrl}/auth`;
   private readonly httpOptions = { withCredentials: true };
 
   requestPasswordReset(

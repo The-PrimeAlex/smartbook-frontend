@@ -8,6 +8,8 @@ import {
   CreateBookingRequest,
   UpdateBookingStatusRequest,
 } from '../models/booking.model';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,7 @@ import {
 export class BookingService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = '/api/v1';
+  private readonly apiUrl = environment.apiUrl;
   private readonly adminBookingsUrl = `${this.apiUrl}/admin/bookings`;
   private readonly userBookingsUrl = `${this.apiUrl}/bookings`;
 
@@ -118,7 +120,7 @@ export class BookingService {
     }
 
     return this.http
-      .get('/api/v1/auth/csrf', {
+      .get(`${environment.apiUrl}/auth/csrf`, {
         responseType: 'text',
         withCredentials: true,
       })

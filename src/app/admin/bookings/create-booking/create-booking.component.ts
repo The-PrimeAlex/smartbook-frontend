@@ -23,6 +23,8 @@ import {
   PageBannerComponent,
   IconComponent,
 } from '../../../shared/ui';
+import { environment } from '../../../../environments/environment';
+
 
 interface Room {
   roomId: string;
@@ -140,7 +142,7 @@ export class CreateBookingComponent implements OnInit {
     this.errorMessage = '';
 
     this.http
-      .get<Room[] | { content: Room[] }>('/api/v1/rooms')
+      .get<Room[] | { content: Room[] }>(`${environment.apiUrl}/rooms`)
       .pipe(finalize(() => (this.loadingRooms = false)))
       .subscribe({
         next: (response) => {
@@ -344,11 +346,11 @@ export class CreateBookingComponent implements OnInit {
     this.saving = true;
 
     this.http
-      .get<unknown>('/api/v1/auth/csrf')
+      .get<unknown>(`${environment.apiUrl}/auth/csrf`)
       .pipe(
         switchMap(() =>
           this.http.post<BookingResponse>(
-            '/api/v1/bookings',
+            `${environment.apiUrl}/bookings`,
             booking,
           ),
         ),

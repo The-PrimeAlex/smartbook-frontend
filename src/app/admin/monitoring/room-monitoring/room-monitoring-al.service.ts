@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+
 
 export interface RoomMonitoringRecordAl {
   roomId: string | null;
@@ -32,7 +34,7 @@ export interface RoomBookingRecordAl {
 @Injectable({ providedIn: 'root' })
 export class RoomMonitoringAlService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/v1/admin/monitoring';
+  private readonly apiUrl = `${environment.apiUrl}/admin/monitoring`;
 
   getLiveRoomStatus(): Observable<
     RoomMonitoringRecordAl[]

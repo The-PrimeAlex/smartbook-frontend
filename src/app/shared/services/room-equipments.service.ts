@@ -5,6 +5,8 @@ import {
 } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
 import { RoomEquipment } from '../models/room.model';
+import { environment } from '../../../environments/environment';
+
 
 interface CsrfTokenResponse {
   token: string;
@@ -14,11 +16,11 @@ interface CsrfTokenResponse {
 @Injectable({ providedIn: 'root' })
 export class RoomEquipmentService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/v1/rooms';
+  private readonly apiUrl = `${environment.apiUrl}/rooms`;
 
   private loadCsrfToken(): Observable<CsrfTokenResponse> {
     return this.http.get<CsrfTokenResponse>(
-      '/api/v1/auth/csrf',
+      `${environment.apiUrl}/auth/csrf`,
       {
         withCredentials: true,
       },

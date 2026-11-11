@@ -4,6 +4,8 @@ import {
 } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
 
 export interface IncidentType {
   value: 'EQUIPMENT_DAMAGE' | 'ROOM_DAMAGE' | 'OTHER';
@@ -43,8 +45,8 @@ export interface IncidentResponse {
 @Injectable({ providedIn: 'root' })
 export class IncidentsService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/v1/incidents/me';
-  private readonly adminUrl = '/api/v1/incidents';
+  private readonly baseUrl = `${environment.apiUrl}/incidents/me`;
+  private readonly adminUrl = `${environment.apiUrl}/incidents`;
 
   createIncident(
     request: CreateIncidentRequest,

@@ -5,12 +5,15 @@ import {
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { environment } from '../../../environments/environment';
+
+const API_PREFIX = environment.apiUrl.replace(/\/api\/v1$/, '');
 
 const AUTH_ENDPOINTS = [
-  '/api/v1/auth/login',
-  '/api/v1/auth/refresh',
-  '/api/v1/auth/logout',
-  '/api/v1/auth/csrf',
+  `${environment.apiUrl}/auth/login`,
+  `${environment.apiUrl}/auth/refresh`,
+  `${environment.apiUrl}/auth/logout`,
+  `${environment.apiUrl}/auth/csrf`,
 ];
 
 const MUTATING_METHODS = new Set([
@@ -43,8 +46,8 @@ export const authInterceptor: HttpInterceptorFn = (
 ) => {
   const authService = inject(AuthService);
 
-  // Only intercept requests using the relative API route.
-  if (!request.url.startsWith('/api/')) {
+  // Only intercept requests using the API route.
+  if (!request.url.startsWith(API_PREFIX)) {
     return next(request);
   }
 

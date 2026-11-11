@@ -4,13 +4,15 @@ import { Observable, of, switchMap } from 'rxjs';
 import { map, mergeMap } from 'rxjs';
 
 import { Notification } from '../models/notification.model';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/v1/notifications/me';
+  private readonly apiUrl = `${environment.apiUrl}/notifications/me`;
 
   getNotifications(
     unreadOnly = false,
@@ -67,7 +69,7 @@ export class NotificationService {
     }
 
     return this.http
-      .get('/api/v1/auth/csrf', {
+      .get(`${environment.apiUrl}/auth/csrf`, {
         responseType: 'text',
         withCredentials: true,
       })
