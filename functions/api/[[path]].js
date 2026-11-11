@@ -1,10 +1,11 @@
 /**
  * Cloudflare Pages Function to proxy /api/* requests to the Azure backend.
  *
- * File: functions/api.js
- * Matches: /api and all subpaths (e.g., /api/v1/auth/login, /api/v1/auth/csrf)
+ * File: functions/api/[[path]].js
+ * Matches: /api/v1/auth/login, /api/v1/rooms, /api/v1/auth/csrf, etc.
  *
- * Cloudflare Pages automatically matches /api and /api/* to this function.
+ * Cloudflare Pages uses [[path]] syntax for catch-all routes.
+ * The _routes.json in the build output ensures /api/* is routed to functions.
  */
 
 export async function onRequest(context) {
