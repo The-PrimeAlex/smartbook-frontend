@@ -1,17 +1,16 @@
 /**
  * Cloudflare Pages Function to proxy /api/* requests to the Azure backend.
  *
- * This is the production equivalent of proxy.conf.json used in local development.
- * File: functions/api/[...catchall].ts
- * Matches: /api/v1/auth/login, /api/v1/rooms, /api/v1/auth/csrf, etc.
+ * This function matches /api and all subpaths (e.g., /api/v1/auth/login).
+ * It reads the full request path from the URL and forwards it to the Azure backend.
  */
 
-export const onRequest: PagesFunction<Env> = async (context) => {
+export async function onRequest(context) {
   const backendUrl = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
   // Extract the full path from the request URL (e.g., /api/v1/auth/login)
   const url = new URL(context.request.url);
-  const apiPath = url.pathname;
+  const apiPath = url.pathname; // e.g., /api/v1/auth/login
 
   // Forward query parameters
   const targetUrl = backendUrl + apiPath + url.search;
@@ -51,8 +50,4 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     statusText: response.statusText,
     headers: responseHeaders,
   });
-};
-
-interface Env {
-  // Add any env vars here if needed in the future
 }
