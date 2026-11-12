@@ -441,8 +441,20 @@ export class CreateBookingComponent implements OnInit {
             }
           } else if (error?.status === 403) {
             this.clearMessages();
-            this.errorMessage =
-              'Request blocked. Please refresh the page and try again.';
+            const body = error?.error;
+            // Check if this is a password change required error
+            if (
+              (typeof body === 'object' &&
+                body !== null &&
+                (body as Record<string, string>)['error'] ===
+                  'password_change_required')
+            ) {
+              this.errorMessage =
+                'You need to change your password before making bookings. Redirecting...';
+            } else {
+              this.errorMessage =
+                'Request blocked due to a security check. Please refresh the page and try again.';
+            }
           } else if (error?.status === 0) {
             this.clearMessages();
             this.errorMessage =

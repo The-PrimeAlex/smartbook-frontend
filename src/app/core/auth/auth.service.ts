@@ -25,6 +25,7 @@ import {
   ChangePasswordRequest,
 } from './auth.models';
 import { environment } from '../../../environments/environment';
+import { resetPasswordChangeRedirected } from '../http/auth.interceptor';
 
 const LS_ACCESS_TOKEN = 'smartbook_access_token';
 const LS_USER = 'smartbook_user';
@@ -87,6 +88,9 @@ export class AuthService {
         sessionStorage.removeItem(
           'smartbook-session-expired',
         );
+        // Reset the password change redirect guard so the interceptor
+        // can catch password_change_required again if needed
+        resetPasswordChangeRedirected();
       }),
       map((response) => response.user),
       catchError((error) => {

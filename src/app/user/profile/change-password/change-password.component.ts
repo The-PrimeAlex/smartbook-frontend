@@ -11,6 +11,8 @@ import {
 import { LucideLock } from '@lucide/angular';
 import { AuthService } from '../../../core/auth/auth.service';
 import { PageBannerComponent } from '../../../shared/ui';
+import { resetPasswordChangeRedirected } from '../../../core/http/auth.interceptor';
+import { switchMap } from 'rxjs';
 
 function passwordsMatch(
   control: AbstractControl,
@@ -84,8 +86,15 @@ export class ChangePasswordComponent {
 
     this.authService
       .changePassword({ currentPassword, newPassword })
+      .pipe(
+        // Refresh the user profile and access token after the flag is cleared
+        switchMap(() => this.authService.refreshAccessToken()),
+      )
       .subscribe({
         next: () => {
+          // Reset the interceptor guard so future 403 password_change_required
+          // errors can be caught again if needed in a later session
+          resetPasswordChangeRedirected();
           this.loading.set(false);
           this.passwordForm.reset();
 

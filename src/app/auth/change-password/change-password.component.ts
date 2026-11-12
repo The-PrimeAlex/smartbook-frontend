@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { finalize, switchMap } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
+import { resetPasswordChangeRedirected } from '../../core/http/auth.interceptor';
 
 @Component({
   selector: 'app-change-password',
@@ -88,6 +89,9 @@ export class ChangePasswordComponent {
       )
       .subscribe({
         next: () => {
+          // Reset the interceptor guard so future 403 password_change_required
+          // errors can be caught again if needed in a later session
+          resetPasswordChangeRedirected();
           this.successMessage.set(
             'Password changed successfully.',
           );

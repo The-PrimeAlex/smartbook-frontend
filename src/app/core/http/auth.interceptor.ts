@@ -3,9 +3,16 @@ import {
   HttpInterceptorFn,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../environments/environment';
+
+/**
+ * Guard to prevent infinite redirect loops when the user must change their password.
+ * Once we've redirected, suppress further password_change_required interceptions.
+ */
+let passwordChangeRedirected = false;
 
 const API_PREFIX = environment.apiUrl.replace(/\/api\/v1$/, '');
 
@@ -14,6 +21,7 @@ const AUTH_ENDPOINTS = [
   `${environment.apiUrl}/auth/refresh`,
   `${environment.apiUrl}/auth/logout`,
   `${environment.apiUrl}/auth/csrf`,
+  `${environment.apiUrl}/auth/change-password`,
 ];
 
 const MUTATING_METHODS = new Set([
@@ -53,6 +61,7 @@ export const authInterceptor: HttpInterceptorFn = (
   next,
 ) => {
   const authService = inject(AuthService);
+  const router = inject(Router);
 
   // Only intercept requests using the API route.
   if (!request.url.startsWith(API_PREFIX)) {
@@ -89,6 +98,44 @@ export const authInterceptor: HttpInterceptorFn = (
 
   return next(authenticatedRequest).pipe(
     catchError((error: unknown) => {
+      // Handle 403 password_change_required — redirect user to change password
+      if (
+        error instanceof HttpErrorResponse &&
+        error.status === 403 &&
+        !passwordChangeRedirected &&
+        !isAuthEndpoint
+      ) {
+        const body = error.error;
+        const isPasswordChangeRequired =
+          (typeof body === 'string' &&
+            body.includes('password_change_required')) ||
+          (typeof body === 'object' &&
+            body !== null &&
+            (body as Record<string, string>)['error'] ===
+              'password_change_required');
+
+        if (isPasswordChangeRequired) {
+          passwordChangeRedirected = true;
+          authService.clearLocalAuth();
+          // Use setTimeout to avoid "expression changed" errors during change detection
+          setTimeout(() => {
+            void router.navigate(['/change-password'], {
+              replaceUrl: true,
+            });
+          });
+          return throwError(() => error);
+        }
+
+        // Handle other 403 errors (CSRF, access denied) - log for debugging
+        console.warn(
+          '403 Forbidden on',
+          request.method,
+          request.url,
+          'body:',
+          body,
+        );
+      }
+
       if (
         !(error instanceof HttpErrorResponse) ||
         error.status !== 401 ||
@@ -107,6 +154,8 @@ export const authInterceptor: HttpInterceptorFn = (
             refreshError.status === 401
           ) {
             authService.clearLocalAuth();
+            // Reset the password change flag so it can intercept again after re-login
+            passwordChangeRedirected = false;
           }
 
           return throwError(() => refreshError);
@@ -147,3 +196,12 @@ export const authInterceptor: HttpInterceptorFn = (
     }),
   );
 };
+
+/**
+ * Reset the password change redirect guard.
+ * Call this after a successful login or password change so the interceptor
+ * can catch password_change_required again on a future session if needed.
+ */
+export function resetPasswordChangeRedirected(): void {
+  passwordChangeRedirected = false;
+}
