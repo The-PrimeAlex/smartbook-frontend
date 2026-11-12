@@ -425,7 +425,7 @@
 
 @media (max-width: 768px) {
   .admin-dashboard {
-    padding: 1rem;
+    padding: 16px 12px;
   }
 
   .stats-row {
@@ -448,6 +448,10 @@
 }
 
 @media (max-width: 480px) {
+  .admin-dashboard {
+    padding: 12px 8px;
+  }
+
   .quick-links-grid {
     grid-template-columns: 1fr 1fr;
   }

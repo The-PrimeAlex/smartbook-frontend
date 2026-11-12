@@ -675,8 +675,68 @@ button.menu-item {
     display: none;
   }
 
-  .brand {
-    padding: 0 8px 12px;
+  /* On mobile, sidebar is NEVER collapsed — always show full menu with labels */
+  .sidebar.collapsed {
+    /* Reset collapsed state on mobile */
+  }
+
+  .sidebar.collapsed .brand {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    padding: 0 8px 12px !important;
+  }
+
+  .sidebar.collapsed .brand-link {
+    justify-content: flex-start !important;
+  }
+
+  .sidebar.collapsed .brand-copy {
+    display: flex !important;
+  }
+
+  .sidebar.collapsed .navigation {
+    overflow: visible !important;
+  }
+
+  .sidebar.collapsed .menu-item {
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+  }
+
+  .sidebar.collapsed .menu-item .menu-label {
+    display: inline !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .sidebar.collapsed .submenu {
+    display: flex !important;
+  }
+
+  .sidebar.collapsed .submenu-wrapper.submenu-open {
+    max-height: 500px !important;
+    opacity: 1 !important;
+  }
+
+  .sidebar.collapsed .sidebar-footer {
+    align-items: flex-start !important;
+  }
+
+  .sidebar.collapsed .account-summary {
+    justify-content: flex-start !important;
+    padding: 2px !important;
+  }
+
+  .sidebar.collapsed .account-details {
+    display: flex !important;
+  }
+
+  .sidebar.collapsed .logout-button {
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
   }
 
   .navigation {
@@ -689,6 +749,16 @@ button.menu-item {
     min-height: 48px;
     padding: 12px 16px;
     font-size: 14px;
+  }
+
+  .menu-item .menu-label {
+    display: inline !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .submenu {
+    display: flex !important;
   }
 
   .submenu-item {
@@ -714,6 +784,31 @@ button.menu-item {
 
   .account-email {
     font-size: 11px;
+  }
+
+  .sidebar-footer {
+    padding: 14px 16px 16px !important;
+  }
+
+  .section-label {
+    font-size: 10px !important;
+    padding: 0 16px !important;
+  }
+
+  .brand {
+    padding: 0 16px 16px !important;
+  }
+
+  .brand-name {
+    font-size: 18px !important;
+  }
+
+  .brand-subtitle {
+    font-size: 11px !important;
+  }
+
+  .collapse-button {
+    display: none !important;
   }
 }
 
