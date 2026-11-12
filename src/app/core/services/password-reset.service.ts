@@ -1,15 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  Observable,
-  catchError,
-  map,
-  of,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
+import { AuthService } from '../auth/auth.service';
 
 export interface PasswordResetRequest {
   email: string;
@@ -25,6 +18,7 @@ export interface ResetPasswordRequest {
 })
 export class PasswordResetService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   private readonly authEndpoint = `${environment.apiUrl}/auth`;
   private readonly httpOptions = { withCredentials: true };
@@ -32,7 +26,7 @@ export class PasswordResetService {
   requestPasswordReset(
     request: PasswordResetRequest,
   ): Observable<void> {
-    return this.ensureCsrfToken().pipe(
+    return this.authService.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<void>(
           `${this.authEndpoint}/forgot-password`,
@@ -46,7 +40,7 @@ export class PasswordResetService {
   resetPassword(
     request: ResetPasswordRequest,
   ): Observable<void> {
-    return this.ensureCsrfToken().pipe(
+    return this.authService.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<void>(
           `${this.authEndpoint}/reset-password`,
@@ -55,27 +49,5 @@ export class PasswordResetService {
         ),
       ),
     );
-  }
-
-  private ensureCsrfToken(): Observable<void> {
-    const hasCsrfCookie = document.cookie
-      .split(';')
-      .some((cookie) =>
-        cookie.trim().startsWith('XSRF-TOKEN='),
-      );
-
-    if (hasCsrfCookie) {
-      return of(void 0);
-    }
-
-    return this.http
-      .get(`${this.authEndpoint}/csrf`, {
-        ...this.httpOptions,
-        responseType: 'text',
-      })
-      .pipe(
-        map(() => void 0),
-        catchError((error) => throwError(() => error)),
-      );
   }
 }
