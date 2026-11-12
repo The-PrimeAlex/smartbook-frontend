@@ -36,18 +36,8 @@ app-sidebar {
 
 @media (max-width: 30rem) {
   app-sidebar {
-    /* Sidebar is fixed position on mobile; removed from flex layout */
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    bottom: 0 !important;
-    z-index: 1000 !important;
+    /* Remove sidebar from flex layout on mobile; the sidebar component handles its own fixed positioning */
     flex: 0 0 auto !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    overflow: hidden !important;
-    /* The sidebar component's own :host handles the actual slide-in animation */
   }
 
   .app-layout {
