@@ -205,6 +205,10 @@ export class AuthService {
    * Fetches and stores the CSRF token.
    * For same-origin (local dev), the cookie is available in document.cookie.
    * For cross-origin (production), the token is stored in memory.
+   *
+   * In production (cross-origin), the backend rotates the CSRF token on every request,
+   * so we must always fetch a fresh token before mutating requests to ensure it matches
+   * the current cookie value.
    */
   public ensureCsrfToken(): Observable<void> {
     // For same-origin, check if cookie already exists
@@ -219,11 +223,9 @@ export class AuthService {
       }
     }
 
-    // For cross-origin, check if we already have a stored token
-    if (environment.production && this.csrfToken() !== null) {
-      return of(void 0);
-    }
-
+    // For cross-origin (production), always fetch a fresh token because
+    // the backend rotates the CSRF token on every request.
+    // A cached token becomes stale after any subsequent GET request.
     return this.http
       .get<{ token: string }>(`${environment.apiUrl}/auth/csrf`, {
         withCredentials: true,
