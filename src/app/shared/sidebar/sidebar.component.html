@@ -1,7 +1,7 @@
 <!-- Mobile overlay backdrop -->
-<div class="sidebar-overlay" (click)="mobileOpen.set(false)"></div>
+<div class="sidebar-overlay" [class.mobile-open]="mobileOpen()" (click)="mobileOpen.set(false)"></div>
 
-<aside class="sidebar" [class.collapsed]="collapsed() && !mobileOpen()">
+<aside class="sidebar" [class.collapsed]="collapsed() && !mobileOpen()" [class.mobile-open]="mobileOpen()">
   <!-- Brand and collapse control -->
   <div class="brand">
     <a class="brand-link" routerLink="/dashboard" (click)="openSidebarOnClick()">
@@ -79,7 +79,7 @@
               <div
                 class="submenu-wrapper"
                 [class.submenu-open]="
-                  isExpanded(item.label) && !collapsed()
+                  isExpanded(item.label) && (!collapsed() || mobileOpen())
                 "
               >
                 <div class="submenu">

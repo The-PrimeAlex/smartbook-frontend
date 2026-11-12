@@ -630,65 +630,90 @@ button.menu-item {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Mobile Sidebar — Complete Rewrite
-   Goal: Look like desktop sidebar but as a slide-in overlay.
-   - Fixed host overlay sliding from left
-   - Sidebar inner element matches desktop appearance
-   - Single scroll container on .sidebar
-   - All labels always visible (no collapsed mode on mobile)
-   - Touch-friendly targets
+   Mobile Sidebar — Overlay slide-in drawer
+   Strategy: Hide :host from layout flow. The .sidebar inner
+   element becomes the fixed overlay that slides in/out.
+   This avoids Angular host-element style conflicts with
+   the parent main-layout component.
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 30rem) {
 
-  /* ── Host: fixed overlay covering the screen ── */
+  /* ── Host: invisible wrapper, no layout impact ── */
   :host {
+    display: contents;
+  }
+
+  /* ── Overlay backdrop ── */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+  }
+
+  .sidebar-overlay.mobile-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── Sidebar: the fixed slide-in panel ── */
+  .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     z-index: 1000;
     width: 300px;
+    max-width: 85vw;
+    /* Slide in/out animation */
     transform: translateX(-100%);
     transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    backface-visibility: hidden;
-  }
-
-  :host.mobile-open {
-    transform: translateX(0);
-  }
-
-  /* ── Sidebar inner: match desktop floating card appearance ── */
-  .sidebar {
-    width: 100%;
-    height: 100%;
+    /* Reset all desktop floating-card styles */
     margin: 0;
-    padding: 16px 12px 12px;
+    padding: 0;
     border: none;
     border-radius: 0;
     box-shadow: none;
-    /* Keep the desktop gradient background */
-    background: linear-gradient(180deg, #0a1628 0%, #0f1f35 40%, #16202e 100%);
-    /* Single scroll container for the entire sidebar */
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 100dvh;
+    /* Solid dark background — no gradient blur */
+    background: #0a1628;
+    color: #e2e8f0;
+    /* Single scroll container */
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    display: flex;
-    flex-direction: column;
+    /* GPU layer for crisp rendering */
+    will-change: transform;
+    transform-style: preserve-3d;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
   }
 
   .sidebar:hover {
-    transform: none;
+    transform: translateX(0);
     box-shadow: none;
   }
 
-  /* Hide the orange accent glow on mobile */
   .sidebar::before {
     display: none;
   }
 
   /* ── Brand section ── */
   .brand {
-    padding: 0 4px 16px;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .brand-link {
+    gap: 12px;
   }
 
   .brand-name {
@@ -704,25 +729,23 @@ button.menu-item {
     display: none;
   }
 
-  /* ── Navigation: fill available space, do NOT scroll itself ── */
+  /* ── Navigation ── */
   .navigation {
-    margin: 16px -2px 12px;
-    padding: 0 2px;
+    margin: 0;
+    padding: 8px 0;
     overflow: visible;
-    flex: 1 1 auto;
-    min-height: 0;
   }
 
   /* ── Section labels ── */
   .section-label {
-    padding: 0 10px;
-    font-size: 9px;
+    padding: 0 16px;
+    font-size: 10px;
   }
 
   /* ── Menu items: touch-friendly ── */
   .menu-item {
     min-height: 48px;
-    padding: 12px 12px;
+    padding: 12px 16px;
     font-size: 14px;
   }
 
@@ -733,16 +756,27 @@ button.menu-item {
     white-space: nowrap;
   }
 
-  /* ── Submenu items: touch-friendly ── */
+  /* ── Submenu wrapper: always allow expansion on mobile ── */
+  .submenu-wrapper {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 300ms ease;
+  }
+
+  .submenu-wrapper.submenu-open {
+    max-height: 500px;
+  }
+
+  /* ── Submenu items ── */
   .submenu-item {
     min-height: 44px;
-    padding: 10px 10px;
+    padding: 10px 16px;
     font-size: 13px;
   }
 
   /* ── Footer: account + logout ── */
   .sidebar-footer {
-    padding-top: 14px;
+    padding: 12px 16px 16px;
   }
 
   .account-avatar {
@@ -752,11 +786,11 @@ button.menu-item {
   }
 
   .account-name {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .account-email {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .account-role {
@@ -765,16 +799,12 @@ button.menu-item {
 
   .logout-button {
     min-height: 48px;
-    padding: 12px 12px;
-    font-size: 13px;
+    padding: 12px 16px;
+    font-size: 14px;
   }
 
   /* ═══════════════════════════════════════════════════════════
-     Reset collapsed state on mobile.
-     The HTML uses [class.collapsed]="collapsed() && !mobileOpen()"
-     so when mobileOpen is true, .collapsed should NOT be on .sidebar.
-     However, if collapsed is somehow still applied, these rules
-     ensure everything displays fully anyway.
+     Reset collapsed state on mobile — all labels always visible
      ═══════════════════════════════════════════════════════════ */
 
   .sidebar.collapsed .brand {
@@ -828,23 +858,7 @@ button.menu-item {
   }
 }
 
-/* Mobile overlay backdrop */
+/* Desktop: overlay is hidden (only used on mobile) */
 .sidebar-overlay {
   display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 999;
-  background: rgba(0, 0, 0, 0.6);
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-
-@media (max-width: 30rem) {
-  :host.mobile-open .sidebar-overlay {
-    display: block;
-    opacity: 1;
-  }
 }

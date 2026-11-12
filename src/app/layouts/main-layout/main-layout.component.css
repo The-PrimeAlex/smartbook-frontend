@@ -35,12 +35,8 @@ app-sidebar {
 }
 
 @media (max-width: 30rem) {
-  /* Remove sidebar from flex layout on mobile.
-     The sidebar component's :host handles fixed overlay positioning, size, and slide-in animation. */
-  app-sidebar {
-    flex: 0 0 0 !important;
-    min-width: 0 !important;
-  }
+  /* Sidebar uses display: contents on :host, so it's already removed from flex flow.
+     The inner .sidebar and .sidebar-overlay are fixed-position overlays. */
 
   .app-layout {
     flex-direction: column !important;
