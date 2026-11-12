@@ -5,48 +5,67 @@
     title="My Charges"
     description="View your invoices and make payments"
   ></app-page-banner>
-  <div class="stats-grid">
-    <app-stat-card
-      [icon]="LucideFileText"
-      [iconBg]="'rgba(59,130,246,0.12)'"
-      [iconColor]="'var(--info,#3b82f6)'"
-      delay="0s"
+  <section class="stats-section">
+    <button
+      type="button"
+      class="stats-toggle"
+      (click)="toggleStatsCollapsed()"
+      [attr.aria-expanded]="!statsCollapsed()"
+      aria-label="Toggle statistics"
     >
-      <span stat-value>{{ bills().length }}</span>
-      <span stat-label>Total Invoices</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideClock"
-      [iconBg]="'rgba(245,158,11,0.12)'"
-      [iconColor]="'var(--warning,#f59e0b)'"
-      delay="0.05s"
-    >
-      <span stat-value>{{ unpaidCount }}</span>
-      <span stat-label>Unpaid</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideDollarSign"
-      [iconBg]="'rgba(242,140,40,0.12)'"
-      [iconColor]="'var(--brand-accent,#f28c28)'"
-      delay="0.1s"
-    >
-      <span stat-value>{{
-        totalOutstanding | number: '1.2-2'
-      }}</span>
-      <span stat-label>Outstanding</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideCheckCircle"
-      [iconBg]="'rgba(34,197,94,0.12)'"
-      [iconColor]="'var(--success,#22c55e)'"
-      delay="0.15s"
-    >
-      <span stat-value>{{
-        totalPaid | number: '1.2-2'
-      }}</span>
-      <span stat-label>Total Paid</span>
-    </app-stat-card>
-  </div>
+      <span class="stats-toggle-title">Billing Summary</span>
+      <app-icon
+        [icon]="LucideChevronDown"
+        [size]="20"
+        class="stats-toggle-chevron"
+        [class.rotated]="!statsCollapsed()"
+      ></app-icon>
+    </button>
+    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+      <div class="stats-grid">
+        <app-stat-card
+          [icon]="LucideFileText"
+          [iconBg]="'rgba(59,130,246,0.12)'"
+          [iconColor]="'var(--info,#3b82f6)'"
+          delay="0s"
+        >
+          <span stat-value>{{ bills().length }}</span>
+          <span stat-label>Total Invoices</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideClock"
+          [iconBg]="'rgba(245,158,11,0.12)'"
+          [iconColor]="'var(--warning,#f59e0b)'"
+          delay="0.05s"
+        >
+          <span stat-value>{{ unpaidCount }}</span>
+          <span stat-label>Unpaid</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideDollarSign"
+          [iconBg]="'rgba(242,140,40,0.12)'"
+          [iconColor]="'var(--brand-accent,#f28c28)'"
+          delay="0.1s"
+        >
+          <span stat-value>{{
+            totalOutstanding | number: '1.2-2'
+          }}</span>
+          <span stat-label>Outstanding</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideCheckCircle"
+          [iconBg]="'rgba(34,197,94,0.12)'"
+          [iconColor]="'var(--success,#22c55e)'"
+          delay="0.15s"
+        >
+          <span stat-value>{{
+            totalPaid | number: '1.2-2'
+          }}</span>
+          <span stat-label>Total Paid</span>
+        </app-stat-card>
+      </div>
+    </div>
+  </section>
   <div class="filter-bar">
     <app-filter-group
       [filters]="filterOptions"

@@ -5,12 +5,13 @@ import {
   signal,
 } from '@angular/core';
 import { finalize } from 'rxjs';
-import { LucideCreditCard } from '@lucide/angular';
+import { LucideChevronDown, LucideCreditCard } from '@lucide/angular';
 import {
   AdminBillingService,
   AdminPaymentRecord,
 } from '../admin-billing.service';
 import {
+  IconComponent,
   StatusBadgeComponent,
   StatCardComponent,
   EmptyStateComponent,
@@ -30,6 +31,7 @@ import {
   selector: 'app-payment-records',
   standalone: true,
   imports: [
+    IconComponent,
     StatusBadgeComponent,
     StatCardComponent,
     EmptyStateComponent,
@@ -40,10 +42,16 @@ import {
   styleUrl: './payment-records.component.css',
 })
 export class PaymentRecordsComponent implements OnInit {
+  readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCreditCard = LucideCreditCard;
   readonly payments = signal<AdminPaymentRecord[]>([]);
   readonly loading = signal(true);
   readonly selectedFilter = signal<string>('ALL');
+  readonly statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   readonly filteredPayments = computed(() => {
     const filter = this.selectedFilter();

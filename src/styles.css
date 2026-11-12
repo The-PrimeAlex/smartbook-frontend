@@ -3567,7 +3567,7 @@ input[type='time']::-moz-focus-inner {
   .admin-dashboard,
   .content-wrapper,
   .dashboard-content {
-    padding: 12px 8px !important;
+    padding: 14px 14px !important;
     width: 100% !important;
     max-width: 100% !important;
   }
@@ -3575,7 +3575,7 @@ input[type='time']::-moz-focus-inner {
   /* ── Stat cards: compact but readable on mobile ── */
   .stat-card,
   .finance-mini-card {
-    padding: 14px 16px !important;
+    padding: 12px 14px !important;
     min-height: auto !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -3584,12 +3584,12 @@ input[type='time']::-moz-focus-inner {
   .stat-card .stat-value,
   .stat-value,
   .stat-number {
-    font-size: 1.5rem !important;
+    font-size: 1.25rem !important;
   }
 
   .stat-card .stat-label,
   .stat-label {
-    font-size: 0.8125rem !important;
+    font-size: 0.75rem !important;
   }
 
   /* ── Breakdown and overview cards ── */

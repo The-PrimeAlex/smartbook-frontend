@@ -15,45 +15,64 @@
       }
     </div>
   } @else {
-    <section class="stats-row">
-      <app-stat-card
-        [icon]="LucideCalendar"
-        [iconBg]="'linear-gradient(135deg, #fc8311, #e07a0f)'"
-        [iconColor]="'#ffffff'"
-        delay="0ms"
+    <section class="stats-section">
+      <button
+        type="button"
+        class="stats-toggle"
+        (click)="toggleStatsCollapsed()"
+        [attr.aria-expanded]="!statsCollapsed()"
+        aria-label="Toggle statistics"
       >
-        <span stat-value>{{ upcomingCount() }}</span>
-        <span stat-label>Upcoming Meetings</span>
-      </app-stat-card>
-      <app-stat-card
-        [icon]="LucideCreditCard"
-        [iconBg]="'linear-gradient(135deg, #142b4a, #0d1e35)'"
-        [iconColor]="'#ffffff'"
-        delay="50ms"
-      >
-        <span stat-value>{{
-          formatCurrency(totalOutstanding())
-        }}</span>
-        <span stat-label>Outstanding Bills</span>
-      </app-stat-card>
-      <app-stat-card
-        [icon]="LucideBell"
-        [iconBg]="'linear-gradient(135deg, #3b82f6, #2563eb)'"
-        [iconColor]="'#ffffff'"
-        delay="100ms"
-      >
-        <span stat-value>{{ unreadCount() }}</span>
-        <span stat-label>Unread Notifications</span>
-      </app-stat-card>
-      <app-stat-card
-        [icon]="LucideFileText"
-        [iconBg]="'linear-gradient(135deg, #22c55e, #16a34a)'"
-        [iconColor]="'#ffffff'"
-        delay="150ms"
-      >
-        <span stat-value>{{ totalBookings() }}</span>
-        <span stat-label>Total Bookings</span>
-      </app-stat-card>
+        <span class="stats-toggle-title">Overview</span>
+        <app-icon
+          [icon]="LucideChevronDown"
+          [size]="20"
+          class="stats-toggle-chevron"
+          [class.rotated]="!statsCollapsed()"
+        ></app-icon>
+      </button>
+      <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+        <div class="stats-row">
+          <app-stat-card
+            [icon]="LucideCalendar"
+            [iconBg]="'linear-gradient(135deg, #fc8311, #e07a0f)'"
+            [iconColor]="'#ffffff'"
+            delay="0ms"
+          >
+            <span stat-value>{{ upcomingCount() }}</span>
+            <span stat-label>Upcoming Meetings</span>
+          </app-stat-card>
+          <app-stat-card
+            [icon]="LucideCreditCard"
+            [iconBg]="'linear-gradient(135deg, #142b4a, #0d1e35)'"
+            [iconColor]="'#ffffff'"
+            delay="50ms"
+          >
+            <span stat-value>{{
+              formatCurrency(totalOutstanding())
+            }}</span>
+            <span stat-label>Outstanding Bills</span>
+          </app-stat-card>
+          <app-stat-card
+            [icon]="LucideBell"
+            [iconBg]="'linear-gradient(135deg, #3b82f6, #2563eb)'"
+            [iconColor]="'#ffffff'"
+            delay="100ms"
+          >
+            <span stat-value>{{ unreadCount() }}</span>
+            <span stat-label>Unread Notifications</span>
+          </app-stat-card>
+          <app-stat-card
+            [icon]="LucideFileText"
+            [iconBg]="'linear-gradient(135deg, #22c55e, #16a34a)'"
+            [iconColor]="'#ffffff'"
+            delay="150ms"
+          >
+            <span stat-value>{{ totalBookings() }}</span>
+            <span stat-label>Total Bookings</span>
+          </app-stat-card>
+        </div>
+      </div>
     </section>
     <!-- Quick Links -->
     <section class="dashboard-section">

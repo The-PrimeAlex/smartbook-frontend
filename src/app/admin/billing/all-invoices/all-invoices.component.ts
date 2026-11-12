@@ -5,6 +5,7 @@ import { finalize } from 'rxjs';
 import {
   LucideAlertTriangle,
   LucideCalendar,
+  LucideChevronDown,
   LucideFileText,
   LucideSearch,
   LucideUser,
@@ -52,6 +53,7 @@ import {
 export class AllInvoicesComponent implements OnInit {
   readonly LucideAlertTriangle = LucideAlertTriangle;
   readonly LucideCalendar = LucideCalendar;
+  readonly LucideChevronDown = LucideChevronDown;
   readonly LucideFileText = LucideFileText;
   readonly LucideSearch = LucideSearch;
   readonly LucideUser = LucideUser;
@@ -62,6 +64,11 @@ export class AllInvoicesComponent implements OnInit {
   readonly selectedFilter = signal<string>('ALL');
   readonly searchTerm = signal('');
   readonly sortBy = signal<string>('date-desc'); // date-desc, date-asc, amount-desc, amount-asc, status
+  readonly statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   readonly filteredBills = computed(() => {
     const filter = this.selectedFilter();

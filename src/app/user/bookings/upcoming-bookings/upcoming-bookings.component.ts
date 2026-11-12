@@ -11,6 +11,7 @@ import { finalize } from 'rxjs';
 import {
   LucideCalendar,
   LucideCheckCircle,
+  LucideChevronDown,
   LucideClock,
   LucideEye,
   LucideRefreshCw,
@@ -64,9 +65,16 @@ const UPCOMING_STATUSES: readonly BookingStatus[] = [
 export class UpcomingBookingsComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCheckCircle = LucideCheckCircle;
+  readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideEye = LucideEye;
   readonly LucideRefreshCw = LucideRefreshCw;
+
+  readonly statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   private readonly bookingService = inject(BookingService);
 

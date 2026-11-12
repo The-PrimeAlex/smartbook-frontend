@@ -9,6 +9,7 @@ import { finalize } from 'rxjs';
 import {
   LucideAlertTriangle,
   LucideCalendar,
+  LucideChevronDown,
   LucideUser,
 } from '@lucide/angular';
 import {
@@ -49,10 +50,16 @@ import {
 export class DamageChargesComponent implements OnInit {
   readonly LucideAlertTriangle = LucideAlertTriangle;
   readonly LucideCalendar = LucideCalendar;
+  readonly LucideChevronDown = LucideChevronDown;
   readonly LucideUser = LucideUser;
 
   readonly bills = signal<AdminBill[]>([]);
   readonly loading = signal(true);
+  readonly statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   // Filter bills that have at least one INCIDENT item
   readonly damageBills = computed(() =>

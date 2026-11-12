@@ -314,3 +314,66 @@
     padding: 16px;
   }
 }
+
+/* ── Collapsible Stats Section ── */
+
+.stats-section {
+  margin-bottom: 16px;
+}
+
+.stats-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.stats-toggle:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent-color);
+}
+
+.stats-toggle:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.stats-toggle-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stats-toggle-chevron {
+  transition: transform 0.3s ease;
+  color: var(--text-secondary);
+}
+
+.stats-toggle-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.stats-row-wrapper {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  max-height: 800px;
+  opacity: 1;
+}
+
+.stats-row-wrapper.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.stats-bar {
+  padding-top: 8px;
+}

@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs';
 import {
   LucideAlertTriangle,
+  LucideChevronDown,
   LucideClock,
   LucideUser,
 } from '@lucide/angular';
@@ -39,11 +40,17 @@ import { formatDateTime } from '../../../shared/directives';
 })
 export class UsageChargesComponent implements OnInit {
   readonly LucideAlertTriangle = LucideAlertTriangle;
+  readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideUser = LucideUser;
 
   readonly usage = signal<AdminUsageRecord[]>([]);
   readonly loading = signal(true);
+  readonly statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   readonly totalUsage = computed(() => this.usage().length);
   readonly totalDuration = computed(() =>

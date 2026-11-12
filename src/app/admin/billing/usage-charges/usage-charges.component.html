@@ -5,47 +5,66 @@
     title="Usage Charges"
     description="Track meeting usage — check-in times, durations, overruns, and auto-closed sessions."
   ></app-page-banner>
-  <section class="stats-bar">
-    <app-stat-card
-      [icon]="LucideClock"
-      [iconBg]="'rgba(59,130,246,0.12)'"
-      [iconColor]="'var(--info,#3b82f6)'"
-      delay="0s"
+  <section class="stats-section">
+    <button
+      type="button"
+      class="stats-toggle"
+      (click)="toggleStatsCollapsed()"
+      [attr.aria-expanded]="!statsCollapsed()"
+      aria-label="Toggle statistics"
     >
-      <span stat-value>{{ totalUsage() }}</span>
-      <span stat-label>Sessions</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideClock"
-      [iconBg]="'rgba(245,158,11,0.12)'"
-      [iconColor]="'var(--warning,#f59e0b)'"
-      delay="0.05s"
-    >
-      <span stat-value>{{
-        formatDuration(totalDuration())
-      }}</span>
-      <span stat-label>Duration</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideClock"
-      [iconBg]="'rgba(239,68,68,0.12)'"
-      [iconColor]="'var(--error,#ef4444)'"
-      delay="0.1s"
-    >
-      <span stat-value>{{
-        formatDuration(totalOverrun())
-      }}</span>
-      <span stat-label>Overrun</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideClock"
-      [iconBg]="'rgba(139,92,246,0.12)'"
-      [iconColor]="'var(--purple,#8b5cf6)'"
-      delay="0.15s"
-    >
-      <span stat-value>{{ autoClosedCount() }}</span>
-      <span stat-label>Auto-Closed</span>
-    </app-stat-card>
+      <span class="stats-toggle-title">Usage Summary</span>
+      <app-icon
+        [icon]="LucideChevronDown"
+        [size]="20"
+        class="stats-toggle-chevron"
+        [class.rotated]="!statsCollapsed()"
+      ></app-icon>
+    </button>
+    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+      <div class="stats-bar">
+        <app-stat-card
+          [icon]="LucideClock"
+          [iconBg]="'rgba(59,130,246,0.12)'"
+          [iconColor]="'var(--info,#3b82f6)'"
+          delay="0s"
+        >
+          <span stat-value>{{ totalUsage() }}</span>
+          <span stat-label>Sessions</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideClock"
+          [iconBg]="'rgba(245,158,11,0.12)'"
+          [iconColor]="'var(--warning,#f59e0b)'"
+          delay="0.05s"
+        >
+          <span stat-value>{{
+            formatDuration(totalDuration())
+          }}</span>
+          <span stat-label>Duration</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideClock"
+          [iconBg]="'rgba(239,68,68,0.12)'"
+          [iconColor]="'var(--error,#ef4444)'"
+          delay="0.1s"
+        >
+          <span stat-value>{{
+            formatDuration(totalOverrun())
+          }}</span>
+          <span stat-label>Overrun</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideClock"
+          [iconBg]="'rgba(139,92,246,0.12)'"
+          [iconColor]="'var(--purple,#8b5cf6)'"
+          delay="0.15s"
+        >
+          <span stat-value>{{ autoClosedCount() }}</span>
+          <span stat-label>Auto-Closed</span>
+        </app-stat-card>
+      </div>
+    </div>
   </section>
 
   <section class="usage-section">

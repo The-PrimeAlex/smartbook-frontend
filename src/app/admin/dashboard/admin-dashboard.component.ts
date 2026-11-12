@@ -27,6 +27,7 @@ import {
   LucidePlus,
   LucideActivity,
   LucideTriangleAlert,
+  LucideChevronDown,
 } from '@lucide/angular';
 
 import { AuthService } from '../../core/auth/auth.service';
@@ -115,6 +116,7 @@ export class AdminDashboard implements OnInit {
   protected readonly LucideShieldCheck = LucideShieldCheck;
   protected readonly LucidePlus = LucidePlus;
   protected readonly LucideActivity = LucideActivity;
+  protected readonly LucideChevronDown = LucideChevronDown;
 
   readonly currentUser = this.authService.currentUser;
 
@@ -137,6 +139,11 @@ export class AdminDashboard implements OnInit {
   readonly revenueReports = signal<RevenueReportAl[]>([]);
   readonly incidents = signal<any[]>([]);
   readonly loading = signal(true);
+  readonly statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   // Computed stats
   readonly totalRooms = computed(() => this.rooms().length);

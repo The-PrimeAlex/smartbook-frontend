@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import {
   LucideCalendar,
   LucideCheckCircle,
+  LucideChevronDown,
   LucideCircleAlert,
   LucideClock,
   LucideCreditCard,
@@ -63,9 +64,15 @@ export class MyChargesComponent implements OnInit {
   bills = signal<Bill[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
+  statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCheckCircle = LucideCheckCircle;
+  readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCircleAlert = LucideCircleAlert;
   readonly LucideClock = LucideClock;
   readonly LucideCreditCard = LucideCreditCard;

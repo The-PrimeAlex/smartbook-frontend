@@ -25,6 +25,7 @@ import {
   LucideSearch,
   LucideSettings,
   LucideX,
+  LucideChevronDown,
 } from '@lucide/angular';
 
 import { AuthService } from '../../core/auth/auth.service';
@@ -86,6 +87,7 @@ export class Dashboard implements OnInit {
   protected readonly LucideSearch = LucideSearch;
   protected readonly LucideSettings = LucideSettings;
   protected readonly LucideX = LucideX;
+  protected readonly LucideChevronDown = LucideChevronDown;
 
   readonly currentUser = this.authService.currentUser;
 
@@ -116,6 +118,11 @@ export class Dashboard implements OnInit {
   readonly bills = signal<Bill[]>([]);
   readonly notifications = signal<Notification[]>([]);
   readonly loading = signal(true);
+  readonly statsCollapsed = signal(false);
+
+  toggleStatsCollapsed(): void {
+    this.statsCollapsed.update((v) => !v);
+  }
 
   // Computed stats
   readonly upcomingBookings = computed(() => {

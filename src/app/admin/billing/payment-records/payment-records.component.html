@@ -7,59 +7,78 @@
     , card, bank transfer, and cash payments."
   ></app-page-banner>
 
-  <section class="stats-bar">
-    <app-stat-card
-      [icon]="LucideCreditCard"
-      [iconBg]="'rgba(59,130,246,0.12)'"
-      [iconColor]="'var(--info,#3b82f6)'"
-      delay="0s"
+  <section class="stats-section">
+    <button
+      type="button"
+      class="stats-toggle"
+      (click)="toggleStatsCollapsed()"
+      [attr.aria-expanded]="!statsCollapsed()"
+      aria-label="Toggle statistics"
     >
-      <span stat-value>{{ totalPayments() }}</span>
-      <span stat-label>Total Payments</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideCreditCard"
-      [iconBg]="'rgba(34,197,94,0.12)'"
-      [iconColor]="'var(--success,#22c55e)'"
-      delay="0.05s"
-    >
-      <span stat-value>{{ successCount() }}</span>
-      <span stat-label>Successful</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideCreditCard"
-      [iconBg]="'rgba(245,158,11,0.12)'"
-      [iconColor]="'var(--warning,#f59e0b)'"
-      delay="0.1s"
-    >
-      <span stat-value>{{ pendingCount() }}</span>
-      <span stat-label>Pending</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideCreditCard"
-      [iconBg]="'rgba(239,68,68,0.12)'"
-      [iconColor]="'var(--error,#ef4444)'"
-      delay="0.15s"
-    >
-      <span stat-value>{{ failedCount() }}</span>
-      <span stat-label>Failed</span>
-    </app-stat-card>
-    <app-stat-card
-      [icon]="LucideCreditCard"
-      [iconBg]="'rgba(20,184,166,0.12)'"
-      [iconColor]="'var(--teal,#14b8a6)'"
-      delay="0.2s"
-    >
-      <span stat-value
-        >KES
-        {{
-          totalAmount().toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-          })
-        }}</span
-      >
-      <span stat-label>Total Collected</span>
-    </app-stat-card>
+      <span class="stats-toggle-title">Payment Summary</span>
+      <app-icon
+        [icon]="LucideChevronDown"
+        [size]="20"
+        class="stats-toggle-chevron"
+        [class.rotated]="!statsCollapsed()"
+      ></app-icon>
+    </button>
+    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+      <div class="stats-bar">
+        <app-stat-card
+          [icon]="LucideCreditCard"
+          [iconBg]="'rgba(59,130,246,0.12)'"
+          [iconColor]="'var(--info,#3b82f6)'"
+          delay="0s"
+        >
+          <span stat-value>{{ totalPayments() }}</span>
+          <span stat-label>Total Payments</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideCreditCard"
+          [iconBg]="'rgba(34,197,94,0.12)'"
+          [iconColor]="'var(--success,#22c55e)'"
+          delay="0.05s"
+        >
+          <span stat-value>{{ successCount() }}</span>
+          <span stat-label>Successful</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideCreditCard"
+          [iconBg]="'rgba(245,158,11,0.12)'"
+          [iconColor]="'var(--warning,#f59e0b)'"
+          delay="0.1s"
+        >
+          <span stat-value>{{ pendingCount() }}</span>
+          <span stat-label>Pending</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideCreditCard"
+          [iconBg]="'rgba(239,68,68,0.12)'"
+          [iconColor]="'var(--error,#ef4444)'"
+          delay="0.15s"
+        >
+          <span stat-value>{{ failedCount() }}</span>
+          <span stat-label>Failed</span>
+        </app-stat-card>
+        <app-stat-card
+          [icon]="LucideCreditCard"
+          [iconBg]="'rgba(20,184,166,0.12)'"
+          [iconColor]="'var(--teal,#14b8a6)'"
+          delay="0.2s"
+        >
+          <span stat-value
+            >KES
+            {{
+              totalAmount().toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+              })
+            }}</span
+          >
+          <span stat-label>Total Collected</span>
+        </app-stat-card>
+      </div>
+    </div>
   </section>
 
   <div class="filter-bar">

@@ -90,6 +90,22 @@ import { LucideDynamicIcon } from '@lucide/angular';
     [data-theme='dark'] .stat-card {
       background: var(--card-bg);
     }
+    @media (max-width: 30rem) {
+      .stat-card {
+        padding: 12px 14px !important;
+        gap: 0.25rem !important;
+      }
+      .stat-icon {
+        width: 32px !important;
+        height: 32px !important;
+      }
+      .stat-value {
+        font-size: 1.25rem !important;
+      }
+      .stat-label {
+        font-size: 0.75rem !important;
+      }
+    }
   `,
 })
 export class StatCardComponent {
