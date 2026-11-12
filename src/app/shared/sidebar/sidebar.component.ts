@@ -6,6 +6,7 @@ import {
   effect,
   inject,
   signal,
+  untracked,
 } from '@angular/core';
 import { IconComponent } from '../ui';
 import {
@@ -125,11 +126,12 @@ export class SidebarComponent {
   confirmModal!: ConfirmLogoutModalComponent;
 
   @HostBinding('class.mobile-open')
-  get mobileOpen(): boolean {
-    return !this.collapsed() && this.isMobile();
+  get mobileOpenClass(): boolean {
+    return this.mobileOpen();
   }
 
   readonly collapsed = signal(false);
+  readonly mobileOpen = signal(false);
   readonly expandedMenus = signal<Record<string, boolean>>(
     {},
   );
@@ -152,21 +154,27 @@ export class SidebarComponent {
     this.isAdmin() ? 'Administrator' : 'Meeting Management',
   );
 
-  private isMobile(): boolean {
-    return window.matchMedia('(max-width: 30rem)').matches;
-  }
+  private isMobile = signal(false);
 
   constructor() {
-    // Auto-collapse sidebar on mobile
-    if (this.isMobile()) {
-      this.collapsed.set(true);
-    }
+    // Check mobile state
+    this.isMobile.set(window.matchMedia('(max-width: 30rem)').matches);
+
+    // Listen for window resize to detect mobile/desktop transitions
+    const mql = window.matchMedia('(max-width: 30rem)');
+    mql.addEventListener('change', (e) => {
+      this.isMobile.set(e.matches);
+      if (!e.matches) {
+        // Switching to desktop: close mobile drawer
+        this.mobileOpen.set(false);
+      }
+    });
 
     // Watch for auth state changes and close sidebar on mobile when user logs in
     effect(() => {
       const user = this.currentUser();
       if (user && this.isMobile()) {
-        this.collapsed.set(true);
+        this.mobileOpen.set(false);
       }
     });
 
@@ -176,7 +184,13 @@ export class SidebarComponent {
       .pipe(
         filter((event) => event instanceof NavigationEnd),
       )
-      .subscribe(() => this.expandActiveParent());
+      .subscribe(() => {
+        // Close mobile sidebar on navigation
+        if (this.isMobile()) {
+          this.mobileOpen.set(false);
+        }
+        this.expandActiveParent();
+      });
   }
 
   readonly fullName = computed(() => {
@@ -203,16 +217,44 @@ export class SidebarComponent {
   );
 
   toggleSidebar(): void {
-    this.collapsed.update((value) => !value);
+    if (this.isMobile()) {
+      // On mobile, toggle the slide-in/out drawer
+      this.mobileOpen.update((val) => !val);
+    } else {
+      // On desktop, toggle the collapsed state
+      this.collapsed.update((value) => !value);
+    }
+  }
+
+  /** Exposed for the main-layout hamburger button to open the mobile drawer */
+  toggleMobileOpen(): void {
+    this.mobileOpen.update((val) => !val);
+  }
+
+  /** Exposed for the main-layout to close the mobile drawer */
+  closeMobile(): void {
+    this.mobileOpen.set(false);
   }
 
   openSidebarOnClick(): void {
-    if (this.collapsed()) {
+    if (this.isMobile()) {
+      // Close mobile sidebar after clicking a menu item
+      this.mobileOpen.set(false);
+    } else if (this.collapsed()) {
       this.collapsed.set(false);
     }
   }
 
   toggleMenu(label: string): void {
+    if (this.isMobile()) {
+      // On mobile, expand the submenu but keep the sidebar open
+      this.expandedMenus.update((menus) => ({
+        ...menus,
+        [label]: !menus[label],
+      }));
+      return;
+    }
+
     if (this.collapsed()) {
       this.collapsed.set(false);
 

@@ -1,7 +1,17 @@
 <div class="app-layout">
-  <app-sidebar />
+  <app-sidebar #sidebar />
 
   <main class="app-content">
+    <!-- Mobile hamburger menu button -->
+    <button
+      type="button"
+      class="mobile-menu-button"
+      (click)="toggleSidebar()"
+      aria-label="Open menu"
+    >
+      <app-icon [icon]="LucideMenu" [size]="24"></app-icon>
+    </button>
+
     <router-outlet />
   </main>
 </div>

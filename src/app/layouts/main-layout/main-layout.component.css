@@ -29,6 +29,11 @@ app-sidebar {
   background: var(--app-layout-bg);
 }
 
+/* Mobile hamburger menu button */
+.mobile-menu-button {
+  display: none;
+}
+
 /* ── Mobile responsive ── */
 @media (max-width: 48rem) {
   .app-content {
@@ -39,5 +44,40 @@ app-sidebar {
 @media (max-width: 30rem) {
   .app-content {
     padding: 0;
+    position: relative;
+  }
+
+  .mobile-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 998;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    background: var(--sidebar-bg-gradient, #0a1628);
+    color: #e2e8f0;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: background 180ms ease;
+  }
+
+  .mobile-menu-button:hover {
+    background: rgba(242, 140, 40, 0.2);
+  }
+
+  .mobile-menu-button:focus-visible {
+    outline: 2px solid var(--brand-accent, #f28c28);
+    outline-offset: 2px;
+  }
+
+  /* Add padding to content so router outlet doesn't overlap the hamburger */
+  .app-content > :not(.mobile-menu-button) {
+    padding-top: 64px;
   }
 }

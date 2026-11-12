@@ -1,17 +1,18 @@
-<aside class="sidebar" [class.collapsed]="collapsed()">
+<!-- Mobile overlay backdrop -->
+<div class="sidebar-overlay" (click)="mobileOpen.set(false)"></div>
+
+<aside class="sidebar" [class.collapsed]="collapsed() && !mobileOpen()">
   <!-- Brand and collapse control -->
   <div class="brand">
-    <a class="brand-link" routerLink="/dashboard">
+    <a class="brand-link" routerLink="/dashboard" (click)="openSidebarOnClick()">
       <span class="brand-mark">B</span>
 
-      @if (!collapsed()) {
-        <span class="brand-copy">
-          <span class="brand-name">BookSmart</span>
-          <span class="brand-subtitle">{{
-            subtitle()
-          }}</span>
-        </span>
-      }
+      <span class="brand-copy">
+        <span class="brand-name">BookSmart</span>
+        <span class="brand-subtitle">{{
+          subtitle()
+        }}</span>
+      </span>
     </a>
 
     <button
@@ -33,9 +34,7 @@
   <nav class="navigation" aria-label="Main navigation">
     @for (section of menu(); track section.label) {
       <div class="menu-section">
-        @if (!collapsed()) {
-          <p class="section-label">{{ section.label }}</p>
-        }
+        <p class="section-label">{{ section.label }}</p>
 
         @for (item of section.items; track item.label) {
           <div class="menu-entry">
@@ -62,20 +61,18 @@
                   ></app-icon>
                 }
 
-                @if (!collapsed()) {
-                  <span class="menu-label">{{
-                    item.label
-                  }}</span>
+                <span class="menu-label">{{
+                  item.label
+                }}</span>
 
-                  <span
-                    class="chevron"
-                    [class.chevron-open]="
-                      isExpanded(item.label)
-                    "
-                  >
-                    ›
-                  </span>
-                }
+                <span
+                  class="chevron"
+                  [class.chevron-open]="
+                    isExpanded(item.label)
+                  "
+                >
+                  ›
+                </span>
               </button>
 
               <!-- Submenu -->
@@ -97,6 +94,7 @@
                       [routerLinkActiveOptions]="{
                         exact: true,
                       }"
+                      (click)="openSidebarOnClick()"
                     >
                       @if (iconMap[child.icon]) {
                         <app-icon
@@ -131,11 +129,9 @@
                   ></app-icon>
                 }
 
-                @if (!collapsed()) {
-                  <span class="menu-label">{{
-                    item.label
-                  }}</span>
-                }
+                <span class="menu-label">{{
+                  item.label
+                }}</span>
               </a>
             }
           </div>
@@ -149,17 +145,15 @@
     <div class="account-summary">
       <span class="account-avatar">{{ initials() }}</span>
 
-      @if (!collapsed()) {
-        <div class="account-details">
-          <strong class="account-name">{{
-            fullName()
-          }}</strong>
-          <span class="account-email">{{ email() }}</span>
-          <small class="account-role">{{
-            subtitle()
-          }}</small>
-        </div>
-      }
+      <div class="account-details">
+        <strong class="account-name">{{
+          fullName()
+        }}</strong>
+        <span class="account-email">{{ email() }}</span>
+        <small class="account-role">{{
+          subtitle()
+        }}</small>
+      </div>
     </div>
 
     <button
@@ -176,11 +170,7 @@
         ></app-icon>
       </span>
 
-      @if (!collapsed()) {
-        <span class="menu-label">Sign out</span>
-      } @else {
-        <span class="visually-hidden">Sign out</span>
-      }
+      <span class="menu-label">Sign out</span>
     </button>
   </footer>
 </aside>
