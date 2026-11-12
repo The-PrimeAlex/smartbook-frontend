@@ -35,14 +35,11 @@ app-sidebar {
 }
 
 @media (max-width: 30rem) {
-  /* Completely remove sidebar from document flow on mobile.
-     The sidebar component's :host handles its own fixed overlay positioning. */
+  /* Remove sidebar from flex layout on mobile.
+     The sidebar component's :host handles fixed overlay positioning, size, and slide-in animation. */
   app-sidebar {
-    position: absolute !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
+    flex: 0 0 0 !important;
+    min-width: 0 !important;
   }
 
   .app-layout {

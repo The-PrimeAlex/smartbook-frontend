@@ -32,9 +32,7 @@ export class ThemeService {
 
   /** Initialize theme on service creation */
   constructor() {
-    const theme =
-      this.storedTheme ??
-      (this.systemPrefersDark ? 'dark' : 'light');
+    const theme = this.storedTheme ?? 'light';
     this.applyTheme(theme);
 
     // Listen for system preference changes
