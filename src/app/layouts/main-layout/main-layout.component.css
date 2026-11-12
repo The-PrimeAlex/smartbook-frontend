@@ -42,9 +42,24 @@ app-sidebar {
 }
 
 @media (max-width: 30rem) {
+  app-sidebar {
+    /* Remove sidebar from flex layout on mobile so it doesn't reserve space */
+    position: fixed;
+    flex: 0 0 0;
+    width: 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .app-layout {
+    flex-direction: column;
+  }
+
   .app-content {
     padding: 0;
     position: relative;
+    flex: 1;
+    min-width: 0;
   }
 
   .mobile-menu-button {
