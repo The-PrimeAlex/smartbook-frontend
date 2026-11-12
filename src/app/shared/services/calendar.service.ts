@@ -34,12 +34,11 @@ export interface BookingSyncResult {
 export class CalendarService {
   private readonly http = inject(HttpClient);
 
-  // BookingController uses @RequestMapping("/api/v1").
-  private readonly apiBaseUrl = '/api';
+  private readonly apiBaseUrl = environment.apiUrl;
 
   getMyBookings(): Observable<unknown> {
     return this.http.get<unknown>(
-      `${this.apiBaseUrl}/v1/bookings/me`,
+      `${this.apiBaseUrl}/bookings/me`,
     );
   }
 
@@ -52,7 +51,7 @@ export class CalendarService {
       .set('to', to);
 
     return this.http.get<GoogleCalendarEventDto[]>(
-      `${this.apiBaseUrl}/v1/calendar/events`,
+      `${this.apiBaseUrl}/calendar/events`,
       {
         params,
       },
@@ -63,20 +62,20 @@ export class CalendarService {
     authorizationUrl: string;
   }> {
     return this.http.get<{ authorizationUrl: string }>(
-      `${this.apiBaseUrl}/v1/calendar/integrations/google/connect`,
+      `${this.apiBaseUrl}/calendar/integrations/google/connect`,
     );
   }
 
   syncBookings(): Observable<BookingSyncResult> {
     return this.http.post<BookingSyncResult>(
-      `${this.apiBaseUrl}/v1/calendar/sync-bookings`,
+      `${this.apiBaseUrl}/calendar/sync-bookings`,
       {},
     );
   }
 
   disconnectGoogleCalendar(): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(
-      `${this.apiBaseUrl}/v1/calendar/integrations/google`,
+      `${this.apiBaseUrl}/calendar/integrations/google`,
     );
   }
 }
