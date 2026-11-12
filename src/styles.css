@@ -3567,7 +3567,7 @@ input[type='time']::-moz-focus-inner {
   .admin-dashboard,
   .content-wrapper,
   .dashboard-content {
-    padding: 16px !important;
+    padding: 12px 8px !important;
     width: 100% !important;
     max-width: 100% !important;
   }
@@ -3577,6 +3577,8 @@ input[type='time']::-moz-focus-inner {
   .finance-mini-card {
     padding: 14px 16px !important;
     min-height: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   .stat-card .stat-value,
@@ -3628,7 +3630,7 @@ input[type='time']::-moz-focus-inner {
     font-size: 0.8125rem !important;
   }
 
-  /* Full-width cards with proper spacing */
+  /* Cards fill container naturally on mobile */
   .card,
   .card-row,
   .bill-card,
@@ -3641,7 +3643,7 @@ input[type='time']::-moz-focus-inner {
     border-radius: var(--radius-lg) !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
-    width: 100% !important;
+    max-width: 100% !important;
     box-sizing: border-box !important;
   }
 

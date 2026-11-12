@@ -64,19 +64,11 @@ app-sidebar {
     min-height: 0 !important;
   }
 
-  /* Content inside app-content gets proper padding */
+  /* Content inside app-content — let global styles.css handle padding */
   .app-content > :not(.mobile-menu-button) {
-    padding: 12px !important;
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-  }
-
-  /* Exception: don't add padding to full-width elements that manage their own */
-  .app-content > .page-content,
-  .app-content > .dashboard,
-  .app-content > .admin-dashboard {
-    padding: 12px !important;
   }
 
   .mobile-menu-button {
