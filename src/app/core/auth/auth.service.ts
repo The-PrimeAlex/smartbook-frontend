@@ -109,7 +109,17 @@ export class AuthService {
     }
     // Restore from localStorage first (survives page refresh)
     if (this.restoreFromLocalStorage()) {
-      return of(true);
+      // After restoring from localStorage, fetch a fresh CSRF token for cross-origin requests
+      // The in-memory CSRF token is lost on page refresh, so we need to get a new one
+      return this.ensureCsrfToken().pipe(
+        map(() => true),
+        catchError(() => {
+          // If CSRF fetch fails, the session might still be valid for GET requests
+          // but POST requests will fail - clear the session to force re-login
+          this.clearLocalAuth();
+          return of(false);
+        }),
+      );
     }
     if (this.isAuthenticated()) return of(true);
 
