@@ -664,6 +664,8 @@ button.menu-item {
     -webkit-overflow-scrolling: touch;
     /* Ensure crisp rendering on mobile */
     transform: translateZ(0);
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .sidebar:hover {
@@ -741,8 +743,11 @@ button.menu-item {
 
   .navigation {
     /* On mobile, the sidebar itself scrolls, not the navigation */
+    overflow: visible !important;
     overflow-y: visible !important;
     overflow-x: visible !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
   }
 
   .menu-item {

@@ -509,7 +509,7 @@
 
 @media (max-width: 768px) {
   .dashboard {
-    padding: 16px 12px;
+    padding: 16px 12px !important;
   }
 
   .stats-row {
@@ -542,7 +542,7 @@
 
 @media (max-width: 480px) {
   .dashboard {
-    padding: 12px 8px;
+    padding: 12px 8px !important;
   }
 
   .stats-row {

@@ -46,7 +46,7 @@ app-sidebar {
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
-    overflow: visible !important;
+    overflow: hidden !important;
     /* The sidebar component's own :host handles the actual slide-in animation */
   }
 
