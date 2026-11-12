@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { AuthService } from '../../../core/auth/auth.service';
 
 
 export interface RegistrationRequest {
@@ -21,6 +22,7 @@ export interface RegistrationRequest {
 @Injectable({ providedIn: 'root' })
 export class RegistrationRequestsService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly baseUrl =
     `${environment.apiUrl}/registration-requests/admin`;
 
@@ -37,18 +39,26 @@ export class RegistrationRequestsService {
   approveRequest(
     requestId: string,
   ): Observable<{ message: string }> {
-    return this.http.patch<{ message: string }>(
-      `${this.baseUrl}/${requestId}/approve`,
-      {},
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http.patch<{ message: string }>(
+          `${this.baseUrl}/${requestId}/approve`,
+          {},
+        ),
+      ),
     );
   }
 
   rejectRequest(
     requestId: string,
   ): Observable<{ message: string }> {
-    return this.http.patch<{ message: string }>(
-      `${this.baseUrl}/${requestId}/reject`,
-      {},
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http.patch<{ message: string }>(
+          `${this.baseUrl}/${requestId}/reject`,
+          {},
+        ),
+      ),
     );
   }
 }

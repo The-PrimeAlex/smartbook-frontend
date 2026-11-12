@@ -317,13 +317,22 @@ export class RegistrationRequestComponent {
           this.loading = false;
           this.submitted = false;
           if (err.status === 409) {
-            this.modalType = 'pending';
-            this.modalTitle =
-              'Registration Request Pending';
-            this.modalMessage =
-              err.error?.error ||
-              "You already have a pending registration request for this email. An administrator is reviewing it, and you'll receive an email with your login details once it's approved.";
-            this.showModal = true;
+            const serverError = err.error?.error;
+            if (serverError === 'email_already_registered') {
+              this.modalType = 'pending';
+              this.modalTitle = 'Account Already Exists';
+              this.modalMessage =
+                'An account is already registered with this email address. Please log in to access your account, or use the forgot password option if you need to reset your password.';
+              this.showModal = true;
+            } else {
+              this.modalType = 'pending';
+              this.modalTitle =
+                'Registration Request Pending';
+              this.modalMessage =
+                serverError ||
+                "You already have a pending registration request for this email. An administrator is reviewing it, and you'll receive an email with your login details once it's approved.";
+              this.showModal = true;
+            }
             // Defer form reset so the modal has time to render first
             setTimeout(() => {
               this.registrationForm.reset({
