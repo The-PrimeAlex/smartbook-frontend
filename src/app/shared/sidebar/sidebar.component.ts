@@ -1,7 +1,9 @@
 import {
   Component,
+  HostBinding,
   ViewChild,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -122,6 +124,11 @@ export class SidebarComponent {
   @ViewChild(ConfirmLogoutModalComponent)
   confirmModal!: ConfirmLogoutModalComponent;
 
+  @HostBinding('class.mobile-open')
+  get mobileOpen(): boolean {
+    return !this.collapsed() && this.isMobile();
+  }
+
   readonly collapsed = signal(false);
   readonly expandedMenus = signal<Record<string, boolean>>(
     {},
@@ -145,7 +152,24 @@ export class SidebarComponent {
     this.isAdmin() ? 'Administrator' : 'Meeting Management',
   );
 
+  private isMobile(): boolean {
+    return window.matchMedia('(max-width: 30rem)').matches;
+  }
+
   constructor() {
+    // Auto-collapse sidebar on mobile
+    if (this.isMobile()) {
+      this.collapsed.set(true);
+    }
+
+    // Watch for auth state changes and close sidebar on mobile when user logs in
+    effect(() => {
+      const user = this.currentUser();
+      if (user && this.isMobile()) {
+        this.collapsed.set(true);
+      }
+    });
+
     this.expandActiveParent();
 
     this.router.events

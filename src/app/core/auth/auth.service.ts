@@ -26,6 +26,9 @@ import {
 } from './auth.models';
 import { environment } from '../../../environments/environment';
 
+const LS_ACCESS_TOKEN = 'smartbook_access_token';
+const LS_USER = 'smartbook_user';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -93,7 +96,7 @@ export class AuthService {
     );
   }
 
-  /** Main entry guard method checking local cache first */
+  /** Main entry guard method checking localStorage first */
   restoreSession(): Observable<boolean> {
     // If the session was expired by auto-logout, don't restore
     if (
@@ -103,6 +106,10 @@ export class AuthService {
     ) {
       this.clearLocalAuth();
       return of(false);
+    }
+    // Restore from localStorage first (survives page refresh)
+    if (this.restoreFromLocalStorage()) {
+      return of(true);
     }
     if (this.isAuthenticated()) return of(true);
 
@@ -168,6 +175,9 @@ export class AuthService {
   clearLocalAuth(): void {
     this.accessTokenState.set(null);
     this.currentUserState.set(null);
+    this.csrfToken.set(null);
+    localStorage.removeItem(LS_ACCESS_TOKEN);
+    localStorage.removeItem(LS_USER);
   }
 
   /**
@@ -216,5 +226,25 @@ export class AuthService {
   private applyAuthResponse(response: AuthResponse): void {
     this.accessTokenState.set(response.accessToken);
     this.currentUserState.set(response.user);
+    // Persist to localStorage so page refresh restores the session
+    localStorage.setItem(LS_ACCESS_TOKEN, response.accessToken);
+    localStorage.setItem(LS_USER, JSON.stringify(response.user));
+  }
+
+  /** Restore session from localStorage on page load */
+  private restoreFromLocalStorage(): boolean {
+    const token = localStorage.getItem(LS_ACCESS_TOKEN);
+    const userJson = localStorage.getItem(LS_USER);
+    if (token && userJson) {
+      try {
+        const user = JSON.parse(userJson) as CurrentUser;
+        this.accessTokenState.set(token);
+        this.currentUserState.set(user);
+        return true;
+      } catch {
+        this.clearLocalAuth();
+      }
+    }
+    return false;
   }
 }
