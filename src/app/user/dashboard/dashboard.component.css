@@ -560,157 +560,170 @@
 }
 
 @media (max-width: 30rem) {
-  /* Compact padding */
-  .page-content,
-  .main-content,
-  .content-wrapper,
-  .dashboard-content {
-    padding: 12px !important;
+  /* Dashboard container - no padding, content wrapper handles it */
+  .dashboard {
+    padding: 0 !important;
   }
 
-  /* Stack grids */
-  .stats-row,
-  .stats-grid,
-  .overview-cards,
-  .quick-links-grid,
-  .status-breakdown-grid,
-  .room-overview-grid,
-  .finance-grid,
-  .revenue-sources-grid,
-  .payment-status-grid,
-  .two-col-grid,
-  .three-col-grid,
-  .four-col-grid,
+  /* Stats row - single column, tight gap */
+  .stats-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+
+  /* Quick links - 2 columns, compact */
+  .quick-links-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .quick-link-card {
+    padding: 10px 6px !important;
+    gap: 4px !important;
+  }
+
+  .quick-link-icon {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .quick-link-label {
+    font-size: 0.6875rem !important;
+  }
+
+  /* Dashboard columns - single column */
   .dashboard-columns {
     grid-template-columns: 1fr !important;
-    flex-direction: column !important;
+    gap: 8px !important;
   }
 
-  /* Compact cards */
-  .card,
-  .card-row,
-  .bill-card,
-  .usage-card,
-  .damage-card,
-  .booking-card,
-  .room-card,
-  .quick-link-card,
-  .stat-card {
-    padding: 12px !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+  /* Dashboard section spacing */
+  .dashboard-section {
+    margin-top: 12px !important;
   }
 
-  /* Compact typography */
-  h1 {
-    font-size: 1.25rem !important;
+  .section-header {
+    margin-bottom: 8px !important;
   }
-  h2 {
-    font-size: 1rem !important;
-  }
-  h3 {
+
+  .section-header h2 {
     font-size: 0.875rem !important;
   }
 
-  /* Full-width buttons */
-  .action-buttons,
-  .card-actions,
-  .btn-group {
+  .view-all-link {
+    font-size: 0.75rem !important;
+  }
+
+  /* Meeting cards compact */
+  .meeting-card {
+    padding: 10px 12px !important;
+    gap: 8px !important;
     flex-direction: column !important;
-    width: 100% !important;
   }
 
-  .action-buttons .btn,
-  .card-actions .btn,
-  .btn-group .btn {
-    width: 100% !important;
+  .meeting-time-block {
+    min-width: auto !important;
+    align-self: flex-start !important;
+    padding: 4px 8px !important;
+    flex-direction: row !important;
+    gap: 6px !important;
+    width: auto !important;
   }
 
-  /* Compact badges */
-  .badge {
+  .meeting-room {
+    font-size: 0.8125rem !important;
+  }
+
+  .meeting-purpose {
+    font-size: 0.75rem !important;
+  }
+
+  .meeting-countdown {
+    font-size: 0.6875rem !important;
+  }
+
+  /* Bill cards compact */
+  .bill-card {
+    padding: 10px 12px !important;
+  }
+
+  .bill-room {
+    font-size: 0.8125rem !important;
+  }
+
+  .bill-purpose {
+    font-size: 0.75rem !important;
+  }
+
+  .bill-amount {
+    font-size: 0.875rem !important;
+  }
+
+  /* Notification rows compact */
+  .notification-row {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+  }
+
+  .notification-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .notification-title {
+    font-size: 0.8125rem !important;
+  }
+
+  .notification-message {
+    font-size: 0.75rem !important;
+  }
+
+  .notification-time {
+    font-size: 0.6875rem !important;
+  }
+
+  /* Status badges compact */
+  .status-badge {
     padding: 2px 6px !important;
     font-size: 0.625rem !important;
   }
 
-  /* Compact metric chips */
-  .metric-chip {
-    padding: 2px 6px !important;
-    min-width: auto !important;
+  /* Skeleton compact */
+  .skeleton-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
   }
 
-  /* Scrollable filter bar */
-  .filter-bar {
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 4px;
+  .skeleton-card {
+    height: 60px !important;
   }
 
-  .filter-bar::-webkit-scrollbar {
-    display: none;
+  /* Empty state compact */
+  .empty-state {
+    padding: 16px 12px !important;
   }
 
-  /* Compact section headings */
-  .section-header {
-    margin-bottom: 0.75rem !important;
+  .empty-state h3 {
+    font-size: 0.875rem !important;
   }
 
-  .section-header h2 {
-    font-size: 1rem !important;
-  }
-
-  /* Compact form fields */
-  .form-field {
-    margin-bottom: 12px !important;
-  }
-
-  .form-field label {
+  .empty-state p {
     font-size: 0.75rem !important;
-  }
-
-  /* Hide decorative elements */
-  .deco-circle,
-  .banner-deco,
-  .deco-lines,
-  .deco-dots,
-  .deco-triangle {
-    display: none !important;
-  }
-
-  /* Compact tables */
-  .table-wrapper {
-    font-size: 0.75rem !important;
-  }
-
-  /* Modal full-screen */
-  .modal-overlay,
-  .detail-overlay,
-  .conflict-overlay {
-    padding: 8px !important;
-  }
-
-  .modal-content,
-  .detail-panel,
-  .conflict-modal {
-    max-height: 95vh !important;
-    border-radius: var(--radius-md) !important;
   }
 }
 
 @media (max-width: 22.5rem) {
-  /* Ultra-compact */
-  .card-row {
-    padding: 10px !important;
-    gap: 4px !important;
+  .quick-links-grid {
+    grid-template-columns: 1fr !important;
   }
 
-  .meta-item {
-    font-size: 0.6875rem !important;
+  .stats-row {
+    gap: 6px !important;
   }
 
-  .revenue-total-amount,
-  .total-amount {
-    font-size: 1rem !important;
+  .section-header h2 {
+    font-size: 0.8125rem !important;
   }
 }
