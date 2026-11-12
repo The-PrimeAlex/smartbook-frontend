@@ -684,13 +684,10 @@ button.menu-item {
     /* Solid dark background — no gradient blur */
     background: #0a1628;
     color: #e2e8f0;
-    /* Flex column layout: brand + nav (grows) + footer (pushed to bottom) */
+    /* Flex column layout: brand (fixed top) + nav (scrollable) + footer (fixed bottom) */
     display: flex;
     flex-direction: column;
-    /* Single scroll container */
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     /* GPU layer for crisp rendering */
     will-change: transform;
     transform-style: preserve-3d;
@@ -709,8 +706,9 @@ button.menu-item {
     display: none;
   }
 
-  /* ── Brand section ── */
+  /* ── Brand section: stuck to top, never scrolls ── */
   .brand {
+    flex-shrink: 0;
     padding: 16px 16px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
@@ -732,13 +730,15 @@ button.menu-item {
     display: none;
   }
 
-  /* ── Navigation: grows to fill space, pushing footer to bottom ── */
+  /* ── Navigation: scrollable middle section ── */
   .navigation {
-    margin: 0;
-    padding: 8px 0;
-    overflow: visible;
     flex: 1 1 auto;
     min-height: 0;
+    margin: 0;
+    padding: 8px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* ── Section labels ── */
@@ -779,9 +779,11 @@ button.menu-item {
     font-size: 13px;
   }
 
-  /* ── Footer: account + logout ── */
+  /* ── Footer: stuck to bottom, never scrolls ── */
   .sidebar-footer {
+    flex-shrink: 0;
     padding: 12px 16px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .account-avatar {
