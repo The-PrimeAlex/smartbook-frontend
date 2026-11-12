@@ -35,9 +35,14 @@ app-sidebar {
 }
 
 @media (max-width: 30rem) {
+  /* Completely remove sidebar from document flow on mobile.
+     The sidebar component's :host handles its own fixed overlay positioning. */
   app-sidebar {
-    /* Remove sidebar from flex layout on mobile; the sidebar component handles its own fixed positioning */
-    flex: 0 0 auto !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
   }
 
   .app-layout {
@@ -61,23 +66,24 @@ app-sidebar {
     box-sizing: border-box !important;
   }
 
+  /* Mobile hamburger button — fixed at top-left, above content but below sidebar */
   .mobile-menu-button {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     position: fixed !important;
-    top: 8px !important;
-    left: 8px !important;
+    top: 12px !important;
+    left: 12px !important;
     z-index: 998 !important;
-    width: 44px !important;
-    height: 44px !important;
+    width: 48px !important;
+    height: 48px !important;
     padding: 0 !important;
     border: none !important;
-    border-radius: 10px !important;
-    background: var(--sidebar-bg-gradient, #0a1628) !important;
+    border-radius: 12px !important;
+    background: #0a1628 !important;
     color: #e2e8f0 !important;
     cursor: pointer !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
     transition: background 180ms ease !important;
   }
 
