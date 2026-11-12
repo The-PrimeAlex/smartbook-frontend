@@ -175,7 +175,7 @@ export class AddUserComponent {
         Validators.required,
       ],
       status: [
-        'PENDING' as UserStatus,
+        'ACTIVE' as UserStatus,
         Validators.required,
       ],
       companyName: [''],
