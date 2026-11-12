@@ -174,15 +174,16 @@ export class AuthService {
 
   changePassword(
     request: ChangePasswordRequest,
-  ): Observable<void> {
+  ): Observable<AuthResponse> {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
-        this.http.post<void>(
+        this.http.post<AuthResponse>(
           `${environment.apiUrl}/auth/change-password`,
           request,
           this.httpOptions,
         ),
       ),
+      tap((response) => this.applyAuthResponse(response)),
     );
   }
 

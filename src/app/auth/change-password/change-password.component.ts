@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { finalize, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 import { resetPasswordChangeRedirected } from '../../core/http/auth.interceptor';
 
@@ -81,16 +81,12 @@ export class ChangePasswordComponent {
     this.authService
       .changePassword({ currentPassword, newPassword })
       .pipe(
-        // Refresh the user profile and access token after the flag is cleared.
-        switchMap(() =>
-          this.authService.refreshAccessToken(),
-        ),
         finalize(() => this.loading.set(false)),
       )
       .subscribe({
-        next: () => {
-          // Reset the interceptor guard so future 403 password_change_required
-          // errors can be caught again if needed in a later session
+        next: (response) => {
+          // The backend returns a new access token with mustChangePassword = false.
+          // The auth service already applied the response (stored token + user).
           resetPasswordChangeRedirected();
           this.successMessage.set(
             'Password changed successfully.',
