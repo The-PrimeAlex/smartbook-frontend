@@ -158,6 +158,34 @@ export const authInterceptor: HttpInterceptorFn = (
             passwordChangeRedirected = false;
           }
 
+          // If refresh returns 403 password_change_required, redirect to change password
+          if (
+            refreshError instanceof HttpErrorResponse &&
+            refreshError.status === 403 &&
+            !passwordChangeRedirected
+          ) {
+            const body = refreshError.error;
+            const isPasswordChangeRequired =
+              (typeof body === 'string' &&
+                body.includes('password_change_required')) ||
+              (typeof body === 'object' &&
+                body !== null &&
+                ((body as Record<string, string>)['code'] ===
+                  'password_change_required' ||
+                  (body as Record<string, string>)['error'] ===
+                    'password_change_required'));
+
+            if (isPasswordChangeRequired) {
+              passwordChangeRedirected = true;
+              authService.clearLocalAuth();
+              setTimeout(() => {
+                void router.navigate(['/change-password'], {
+                  replaceUrl: true,
+                });
+              });
+            }
+          }
+
           return throwError(() => refreshError);
         }),
 
