@@ -1,4 +1,8 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import {
   LucideCheckCircle2,
   LucideClock,
@@ -11,11 +15,14 @@ export type ModalType = 'success' | 'pending';
   selector: 'app-request-result-modal',
   standalone: true,
   imports: [IconComponent],
-  templateUrl: './request-result-modal.component.html',
-  styleUrl: './request-result-modal.component.css',
+  templateUrl:
+    './request-result-modal.component.html',
+  styleUrl:
+    './request-result-modal.component.css',
 })
 export class RequestResultModalComponent {
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideClock = LucideClock;
 
   readonly type = input.required<ModalType>();

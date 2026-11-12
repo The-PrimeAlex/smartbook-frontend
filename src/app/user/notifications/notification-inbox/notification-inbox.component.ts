@@ -36,7 +36,8 @@ import {
     EmptyStateComponent,
     IconComponent,
   ],
-  templateUrl: './notification-inbox.component.html',
+  templateUrl:
+    './notification-inbox.component.html',
   styleUrl: './notification-inbox.component.css',
 })
 export class NotificationInboxComponent implements OnInit {
@@ -49,16 +50,21 @@ export class NotificationInboxComponent implements OnInit {
   readonly LucideCheckCheck = LucideCheckCheck;
   readonly LucideCircle = LucideCircle;
   readonly LucideClock = LucideClock;
-  readonly LucideTriangleAlert = LucideTriangleAlert;
+  readonly LucideTriangleAlert =
+    LucideTriangleAlert;
 
   readonly filterOptions: FilterOption[] = [
     { value: 'all', label: 'All' },
     { value: 'unread', label: 'Unread' },
   ];
 
-  readonly notifications = signal<Notification[]>([]);
+  readonly notifications = signal<Notification[]>(
+    [],
+  );
   readonly loading = signal(true);
-  readonly filter = signal<'all' | 'unread'>('all');
+  readonly filter = signal<'all' | 'unread'>(
+    'all',
+  );
   readonly markingAll = signal(false);
 
   ngOnInit(): void {
@@ -94,7 +100,8 @@ export class NotificationInboxComponent implements OnInit {
                 ? {
                     ...n,
                     isRead: true,
-                    readAt: new Date().toISOString(),
+                    readAt:
+                      new Date().toISOString(),
                   }
                 : n,
             ),
@@ -105,21 +112,23 @@ export class NotificationInboxComponent implements OnInit {
 
   markAllRead(): void {
     this.markingAll.set(true);
-    this.notificationService.markAllAsRead().subscribe({
-      next: () => {
-        this.notifications.set(
-          this.notifications().map((n) => ({
-            ...n,
-            isRead: true,
-            readAt: new Date().toISOString(),
-          })),
-        );
-        this.markingAll.set(false);
-      },
-      error: () => {
-        this.markingAll.set(false);
-      },
-    });
+    this.notificationService
+      .markAllAsRead()
+      .subscribe({
+        next: () => {
+          this.notifications.set(
+            this.notifications().map((n) => ({
+              ...n,
+              isRead: true,
+              readAt: new Date().toISOString(),
+            })),
+          );
+          this.markingAll.set(false);
+        },
+        error: () => {
+          this.markingAll.set(false);
+        },
+      });
   }
 
   onFilterChange(): void {
@@ -127,8 +136,9 @@ export class NotificationInboxComponent implements OnInit {
   }
 
   get unreadCount(): number {
-    return this.notifications().filter((n) => !n.isRead)
-      .length;
+    return this.notifications().filter(
+      (n) => !n.isRead,
+    ).length;
   }
 
   get total(): number {
@@ -170,12 +180,17 @@ export class NotificationInboxComponent implements OnInit {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
+    const diffHours = Math.floor(
+      diffMs / 3600000,
+    );
+    const diffDays = Math.floor(
+      diffMs / 86400000,
+    );
 
     if (diffMins < 1) return 'Just now';
     if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffHours < 24)
+      return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
     return date.toLocaleDateString();
   }

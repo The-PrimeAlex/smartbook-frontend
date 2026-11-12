@@ -1,6 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable, map, of, switchMap } from 'rxjs';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
+import {
+  Observable,
+  map,
+  of,
+  switchMap,
+} from 'rxjs';
 
 import {
   Booking,
@@ -9,7 +17,6 @@ import {
   UpdateBookingStatusRequest,
 } from '../models/booking.model';
 import { environment } from '../../../environments/environment';
-
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +29,9 @@ export class BookingService {
   private readonly userBookingsUrl = `${this.apiUrl}/bookings`;
 
   getAllBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.adminBookingsUrl);
+    return this.http.get<Booking[]>(
+      this.adminBookingsUrl,
+    );
   }
 
   getPendingBookings(): Observable<Booking[]> {
@@ -47,13 +56,17 @@ export class BookingService {
    * Get bookings for a specific room within a date range (default: today to +7 days).
    * Used by the Find a Room page to display a schedule timeline.
    */
-  getRoomSchedule(roomId: string): Observable<Booking[]> {
+  getRoomSchedule(
+    roomId: string,
+  ): Observable<Booking[]> {
     return this.http.get<Booking[]>(
       `${this.userBookingsUrl}/room/${encodeURIComponent(roomId)}/schedule`,
     );
   }
 
-  getBooking(bookingId: string): Observable<Booking> {
+  getBooking(
+    bookingId: string,
+  ): Observable<Booking> {
     return this.http.get<Booking>(
       `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}`,
     );
@@ -127,7 +140,9 @@ export class BookingService {
       .pipe(map(() => void 0));
   }
 
-  checkoutBooking(bookingId: string): Observable<Booking> {
+  checkoutBooking(
+    bookingId: string,
+  ): Observable<Booking> {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.patch<Booking>(

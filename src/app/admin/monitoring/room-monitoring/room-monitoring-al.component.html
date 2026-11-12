@@ -6,7 +6,10 @@
     description="Track live room status, no-shows, and session overruns in real time."
   ></app-page-banner>
   <!-- Tab navigation -->
-  <nav class="tab-nav" aria-label="Monitoring sections">
+  <nav
+    class="tab-nav"
+    aria-label="Monitoring sections"
+  >
     <button
       type="button"
       class="tab-button"
@@ -19,7 +22,10 @@
         [strokeWidth]="2"
       ></app-icon>
       Live Room Status
-      <span class="live-dot" aria-hidden="true"></span>
+      <span
+        class="live-dot"
+        aria-hidden="true"
+      ></span>
     </button>
     <button
       type="button"
@@ -84,11 +90,15 @@
           <span class="overview-value">{{
             totalRooms()
           }}</span>
-          <span class="overview-label">Total Rooms</span>
+          <span class="overview-label"
+            >Total Rooms</span
+          >
         </div>
       </div>
       <div class="overview-card">
-        <div class="overview-icon overview-occupied">
+        <div
+          class="overview-icon overview-occupied"
+        >
           <app-icon
             [icon]="LucideUser"
             [size]="20"
@@ -99,11 +109,15 @@
           <span class="overview-value">{{
             occupiedCount()
           }}</span>
-          <span class="overview-label">Occupied</span>
+          <span class="overview-label"
+            >Occupied</span
+          >
         </div>
       </div>
       <div class="overview-card">
-        <div class="overview-icon overview-available">
+        <div
+          class="overview-icon overview-available"
+        >
           <app-icon
             [icon]="LucideCheckCircle2"
             [size]="20"
@@ -114,11 +128,15 @@
           <span class="overview-value">{{
             availableCount()
           }}</span>
-          <span class="overview-label">Available</span>
+          <span class="overview-label"
+            >Available</span
+          >
         </div>
       </div>
       <div class="overview-card">
-        <div class="overview-icon overview-reserved">
+        <div
+          class="overview-icon overview-reserved"
+        >
           <app-icon
             [icon]="LucideCalendarDays"
             [size]="20"
@@ -129,11 +147,15 @@
           <span class="overview-value">{{
             reservedCount()
           }}</span>
-          <span class="overview-label">Reserved</span>
+          <span class="overview-label"
+            >Reserved</span
+          >
         </div>
       </div>
       <div class="overview-card">
-        <div class="overview-icon overview-maintenance">
+        <div
+          class="overview-icon overview-maintenance"
+        >
           <app-icon
             [icon]="LucideWrench"
             [size]="20"
@@ -144,11 +166,17 @@
           <span class="overview-value">{{
             maintenanceCount()
           }}</span>
-          <span class="overview-label">Maintenance</span>
+          <span class="overview-label"
+            >Maintenance</span
+          >
         </div>
       </div>
-      <div class="overview-card overview-attention">
-        <div class="overview-icon overview-attention-icon">
+      <div
+        class="overview-card overview-attention"
+      >
+        <div
+          class="overview-icon overview-attention-icon"
+        >
           <app-icon
             [icon]="LucideAlertTriangle"
             [size]="20"
@@ -167,10 +195,14 @@
       <!-- Last updated -->
       <div class="overview-card overview-updated">
         <div class="overview-content">
-          <span class="overview-label">Last updated</span>
+          <span class="overview-label"
+            >Last updated</span
+          >
           <span class="overview-time">
             @if (lastUpdated()) {
-              {{ lastUpdated() | date: 'HH:mm:ss' }}
+              {{
+                lastUpdated() | date: 'HH:mm:ss'
+              }}
             } @else {
               —
             }
@@ -190,15 +222,24 @@
             [size]="18"
             [strokeWidth]="2"
           ></app-icon>
-          <span class="alerts-title">Active Alerts</span>
+          <span class="alerts-title"
+            >Active Alerts</span
+          >
           <span class="alerts-count">{{
             attentionCount()
           }}</span>
         </div>
         <div class="alerts-list">
-          @for (record of records(); track record.roomId) {
-            @if (record.liveStatus === 'OVERRUN') {
-              <div class="alert-item alert-overrun">
+          @for (
+            record of records();
+            track record.roomId
+          ) {
+            @if (
+              record.liveStatus === 'OVERRUN'
+            ) {
+              <div
+                class="alert-item alert-overrun"
+              >
                 <span class="alert-icon">
                   <app-icon
                     [icon]="LucideClock"
@@ -207,9 +248,13 @@
                   ></app-icon>
                 </span>
                 <span class="alert-text">
-                  <strong>{{ record.roomName }}</strong> is
-                  overrunning —
-                  {{ formatTimeRemaining(record) }}
+                  <strong>{{
+                    record.roomName
+                  }}</strong>
+                  is overrunning —
+                  {{
+                    formatTimeRemaining(record)
+                  }}
                 </span>
                 <button
                   type="button"
@@ -225,8 +270,12 @@
                 </button>
               </div>
             }
-            @if (record.liveStatus === 'MAINTENANCE') {
-              <div class="alert-item alert-maintenance">
+            @if (
+              record.liveStatus === 'MAINTENANCE'
+            ) {
+              <div
+                class="alert-item alert-maintenance"
+              >
                 <span class="alert-icon">
                   <app-icon
                     [icon]="LucideWrench"
@@ -235,8 +284,10 @@
                   ></app-icon>
                 </span>
                 <span class="alert-text">
-                  <strong>{{ record.roomName }}</strong> is
-                  under maintenance
+                  <strong>{{
+                    record.roomName
+                  }}</strong>
+                  is under maintenance
                 </span>
               </div>
             }
@@ -261,7 +312,9 @@
           placeholder="Search rooms, meetings, or bookers…"
           [value]="searchQuery()"
           (input)="
-            onSearchChange($any($event.target).value)
+            onSearchChange(
+              $any($event.target).value
+            )
           "
         />
         @if (searchQuery()) {
@@ -304,7 +357,9 @@
         <button
           type="button"
           class="filter-pill"
-          [class.active]="statusFilter() === 'all'"
+          [class.active]="
+            statusFilter() === 'all'
+          "
           (click)="selectStatusFilter('all')"
         >
           All
@@ -312,15 +367,21 @@
         <button
           type="button"
           class="filter-pill filter-available"
-          [class.active]="statusFilter() === 'available'"
-          (click)="selectStatusFilter('available')"
+          [class.active]="
+            statusFilter() === 'available'
+          "
+          (click)="
+            selectStatusFilter('available')
+          "
         >
           Available
         </button>
         <button
           type="button"
           class="filter-pill filter-occupied"
-          [class.active]="statusFilter() === 'occupied'"
+          [class.active]="
+            statusFilter() === 'occupied'
+          "
           (click)="selectStatusFilter('occupied')"
         >
           Occupied
@@ -328,7 +389,9 @@
         <button
           type="button"
           class="filter-pill filter-reserved"
-          [class.active]="statusFilter() === 'reserved'"
+          [class.active]="
+            statusFilter() === 'reserved'
+          "
           (click)="selectStatusFilter('reserved')"
         >
           Reserved
@@ -336,7 +399,9 @@
         <button
           type="button"
           class="filter-pill filter-overrun"
-          [class.active]="statusFilter() === 'overrun'"
+          [class.active]="
+            statusFilter() === 'overrun'
+          "
           (click)="selectStatusFilter('overrun')"
         >
           Overrun
@@ -344,8 +409,12 @@
         <button
           type="button"
           class="filter-pill filter-maintenance"
-          [class.active]="statusFilter() === 'maintenance'"
-          (click)="selectStatusFilter('maintenance')"
+          [class.active]="
+            statusFilter() === 'maintenance'
+          "
+          (click)="
+            selectStatusFilter('maintenance')
+          "
         >
           Maintenance
         </button>
@@ -358,7 +427,9 @@
     >
       <div class="section-heading">
         <div>
-          <span class="section-eyebrow">LIVE STATUS</span>
+          <span class="section-eyebrow"
+            >LIVE STATUS</span
+          >
           <h2 id="data-title">Room Occupancy</h2>
         </div>
         <span class="results-count">
@@ -373,11 +444,19 @@
             aria-hidden="true"
           ></span>
           <strong>Loading data…</strong>
-          <p>Fetching the latest monitoring information.</p>
+          <p>
+            Fetching the latest monitoring
+            information.
+          </p>
         </div>
       } @else if (errorMessage()) {
-        <div class="state-panel state-error" role="alert">
-          <strong>We couldn't load the data</strong>
+        <div
+          class="state-panel state-error"
+          role="alert"
+        >
+          <strong
+            >We couldn't load the data</strong
+          >
           <p>{{ errorMessage() }}</p>
           <button
             type="button"
@@ -406,10 +485,16 @@
                   <span
                     class="status-badge"
                     [class]="
-                      statusBadgeClass(record.liveStatus)
+                      statusBadgeClass(
+                        record.liveStatus
+                      )
                     "
                   >
-                    {{ formatStatus(record.liveStatus) }}
+                    {{
+                      formatStatus(
+                        record.liveStatus
+                      )
+                    }}
                   </span>
                 </div>
                 <div class="room-card-meta">
@@ -434,16 +519,19 @@
               @if (record.purpose) {
                 <div class="room-card-body">
                   <div class="meeting-info">
-                    <span class="meeting-purpose">{{
-                      record.purpose
-                    }}</span>
+                    <span
+                      class="meeting-purpose"
+                      >{{ record.purpose }}</span
+                    >
                     <span class="meeting-booker">
                       <app-icon
                         [icon]="LucideUser"
                         [size]="12"
                         [strokeWidth]="2"
                       ></app-icon>
-                      {{ record.bookerName ?? '—' }}
+                      {{
+                        record.bookerName ?? '—'
+                      }}
                     </span>
                   </div>
                   @if (record.startTime) {
@@ -454,22 +542,31 @@
                         [strokeWidth]="2"
                       ></app-icon>
                       <span>{{
-                        record.startTime | date: 'shortDate'
+                        record.startTime
+                          | date: 'shortDate'
                       }}</span>
-                      <span class="time-sep">·</span>
+                      <span class="time-sep"
+                        >·</span
+                      >
                       <span>{{
-                        record.startTime | date: 'shortTime'
+                        record.startTime
+                          | date: 'shortTime'
                       }}</span>
-                      <span class="time-sep">—</span>
+                      <span class="time-sep"
+                        >—</span
+                      >
                       <span>{{
-                        record.endTime | date: 'shortTime'
+                        record.endTime
+                          | date: 'shortTime'
                       }}</span>
                     </div>
                   }
                   @if (record.checkInTime) {
                     <div class="meeting-checkin">
                       <app-icon
-                        [icon]="LucideCheckCircle2"
+                        [icon]="
+                          LucideCheckCircle2
+                        "
                         [size]="12"
                         [strokeWidth]="2"
                       ></app-icon>
@@ -481,13 +578,17 @@
                     </div>
                   }
                   @if (
-                    record.liveStatus === 'OCCUPIED' ||
-                    record.liveStatus === 'OVERRUN'
+                    record.liveStatus ===
+                      'OCCUPIED' ||
+                    record.liveStatus ===
+                      'OVERRUN'
                   ) {
                     <div
                       class="time-indicator"
                       [class]="
-                        getTimeRemainingClass(record)
+                        getTimeRemainingClass(
+                          record
+                        )
                       "
                     >
                       <app-icon
@@ -495,12 +596,18 @@
                         [size]="14"
                         [strokeWidth]="2"
                       ></app-icon>
-                      {{ formatTimeRemaining(record) }}
+                      {{
+                        formatTimeRemaining(
+                          record
+                        )
+                      }}
                     </div>
                   }
                 </div>
               } @else {
-                <div class="room-card-body room-empty">
+                <div
+                  class="room-card-body room-empty"
+                >
                   <span class="empty-text"
                     >No active booking</span
                   >
@@ -525,7 +632,9 @@
                   <button
                     type="button"
                     class="action-btn"
-                    (click)="contactBooker(record)"
+                    (click)="
+                      contactBooker(record)
+                    "
                     aria-label="Contact booker"
                   >
                     <app-icon
@@ -542,12 +651,15 @@
         </div>
       } @else {
         <div class="empty-state">
-          <span class="empty-icon" aria-hidden="true"
+          <span
+            class="empty-icon"
+            aria-hidden="true"
             >⌕</span
           >
           <h3>No rooms match your filters</h3>
           <p>
-            Try adjusting your search or filter criteria.
+            Try adjusting your search or filter
+            criteria.
           </p>
           <button
             type="button"
@@ -570,13 +682,17 @@
     >
       <div class="section-heading">
         <div>
-          <span class="section-eyebrow">NO-SHOWS</span>
+          <span class="section-eyebrow"
+            >NO-SHOWS</span
+          >
           <h2 id="data-title">Missed Bookings</h2>
         </div>
         <span class="results-count">
           {{ records().length }}
           {{
-            records().length === 1 ? 'record' : 'records'
+            records().length === 1
+              ? 'record'
+              : 'records'
           }}
         </span>
       </div>
@@ -589,8 +705,13 @@
           <strong>Loading data…</strong>
         </div>
       } @else if (errorMessage()) {
-        <div class="state-panel state-error" role="alert">
-          <strong>We couldn't load the data</strong>
+        <div
+          class="state-panel state-error"
+          role="alert"
+        >
+          <strong
+            >We couldn't load the data</strong
+          >
           <p>{{ errorMessage() }}</p>
           <button
             type="button"
@@ -604,7 +725,8 @@
         <div class="card-list">
           @for (
             record of records();
-            track record.bookingId ?? record.roomId
+            track record.bookingId ??
+              record.roomId
           ) {
             <article class="card-row">
               <div class="card-row-header">
@@ -615,10 +737,16 @@
                   <span
                     class="status-badge"
                     [class]="
-                      statusBadgeClass(record.liveStatus)
+                      statusBadgeClass(
+                        record.liveStatus
+                      )
                     "
                   >
-                    {{ formatStatus(record.liveStatus) }}
+                    {{
+                      formatStatus(
+                        record.liveStatus
+                      )
+                    }}
                   </span>
                 </div>
                 <span class="card-row-purpose">{{
@@ -641,12 +769,21 @@
                       [size]="14"
                       [strokeWidth]="2"
                     ></app-icon>
-                    {{ record.startTime | date: 'short' }} —
-                    {{ record.endTime | date: 'shortTime' }}
+                    {{
+                      record.startTime
+                        | date: 'short'
+                    }}
+                    —
+                    {{
+                      record.endTime
+                        | date: 'shortTime'
+                    }}
                   </span>
                 }
                 @if (record.noShowDetectedAt) {
-                  <span class="meta-item meta-warning">
+                  <span
+                    class="meta-item meta-warning"
+                  >
                     <app-icon
                       [icon]="LucideXCircle"
                       [size]="14"
@@ -665,7 +802,9 @@
         </div>
       } @else {
         <div class="empty-state">
-          <span class="empty-icon" aria-hidden="true"
+          <span
+            class="empty-icon"
+            aria-hidden="true"
             >⌕</span
           >
           <h3>No no-shows recorded</h3>
@@ -685,13 +824,19 @@
     >
       <div class="section-heading">
         <div>
-          <span class="section-eyebrow">OVERRUNS</span>
-          <h2 id="data-title">Extended Sessions</h2>
+          <span class="section-eyebrow"
+            >OVERRUNS</span
+          >
+          <h2 id="data-title">
+            Extended Sessions
+          </h2>
         </div>
         <span class="results-count">
           {{ records().length }}
           {{
-            records().length === 1 ? 'record' : 'records'
+            records().length === 1
+              ? 'record'
+              : 'records'
           }}
         </span>
       </div>
@@ -705,8 +850,13 @@
           <strong>Loading data…</strong>
         </div>
       } @else if (errorMessage()) {
-        <div class="state-panel state-error" role="alert">
-          <strong>We couldn't load the data</strong>
+        <div
+          class="state-panel state-error"
+          role="alert"
+        >
+          <strong
+            >We couldn't load the data</strong
+          >
           <p>{{ errorMessage() }}</p>
           <button
             type="button"
@@ -720,7 +870,8 @@
         <div class="card-list">
           @for (
             record of records();
-            track record.bookingId ?? record.roomId
+            track record.bookingId ??
+              record.roomId
           ) {
             <article class="card-row">
               <div class="card-row-header">
@@ -757,8 +908,15 @@
                       [size]="14"
                       [strokeWidth]="2"
                     ></app-icon>
-                    {{ record.startTime | date: 'short' }} —
-                    {{ record.endTime | date: 'shortTime' }}
+                    {{
+                      record.startTime
+                        | date: 'short'
+                    }}
+                    —
+                    {{
+                      record.endTime
+                        | date: 'shortTime'
+                    }}
                   </span>
                 }
                 @if (record.checkInTime) {
@@ -770,18 +928,22 @@
                     ></app-icon>
                     Checked in
                     {{
-                      record.checkInTime | date: 'shortTime'
+                      record.checkInTime
+                        | date: 'shortTime'
                     }}
                   </span>
                 }
                 @if (record.overrunMinutes) {
-                  <span class="meta-item meta-warning">
+                  <span
+                    class="meta-item meta-warning"
+                  >
                     <app-icon
                       [icon]="LucideClock"
                       [size]="14"
                       [strokeWidth]="2"
                     ></app-icon>
-                    {{ record.overrunMinutes }} min overrun
+                    {{ record.overrunMinutes }}
+                    min overrun
                   </span>
                 }
               </div>
@@ -790,12 +952,15 @@
         </div>
       } @else {
         <div class="empty-state">
-          <span class="empty-icon" aria-hidden="true"
+          <span
+            class="empty-icon"
+            aria-hidden="true"
             >⌕</span
           >
           <h3>No overruns right now</h3>
           <p>
-            All sessions are within their scheduled time.
+            All sessions are within their
+            scheduled time.
           </p>
         </div>
       }
@@ -806,7 +971,10 @@
   <!-- ROOM DETAIL PANEL OVERLAY -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   @if (selectedRoom()) {
-    <div class="detail-overlay" (click)="closeRoomDetail()">
+    <div
+      class="detail-overlay"
+      (click)="closeRoomDetail()"
+    >
       <div
         class="detail-panel"
         (click)="$event.stopPropagation()"
@@ -814,19 +982,23 @@
         <div class="detail-header">
           <div>
             <h3 class="detail-title">
-              {{ selectedRoom()?.roomName ?? 'Room' }}
+              {{
+                selectedRoom()?.roomName ?? 'Room'
+              }}
             </h3>
             <span
               class="status-badge"
               [class]="
                 statusBadgeClass(
-                  selectedRoom()?.liveStatus ?? null
+                  selectedRoom()?.liveStatus ??
+                    null
                 )
               "
             >
               {{
                 formatStatus(
-                  selectedRoom()?.liveStatus ?? null
+                  selectedRoom()?.liveStatus ??
+                    null
                 )
               }}
             </span>
@@ -847,22 +1019,29 @@
 
         <div class="detail-body">
           @if (roomBookingsLoading()) {
-            <div class="state-panel" role="status">
+            <div
+              class="state-panel"
+              role="status"
+            >
               <span
                 class="loading-spinner"
                 aria-hidden="true"
               ></span>
               <strong>Loading bookings…</strong>
             </div>
-          } @else if (roomBookings().length === 0) {
+          } @else if (
+            roomBookings().length === 0
+          ) {
             <div class="empty-state">
-              <span class="empty-icon" aria-hidden="true"
+              <span
+                class="empty-icon"
+                aria-hidden="true"
                 >⌕</span
               >
               <h3>No bookings found</h3>
               <p>
-                This room has no upcoming or recent
-                bookings.
+                This room has no upcoming or
+                recent bookings.
               </p>
             </div>
           } @else {
@@ -873,19 +1052,29 @@
               ) {
                 <div class="timeline-item">
                   <div class="timeline-time">
-                    <span class="timeline-start">{{
-                      booking.startTime | date: 'shortTime'
-                    }}</span>
-                    <span class="timeline-sep">—</span>
+                    <span
+                      class="timeline-start"
+                      >{{
+                        booking.startTime
+                          | date: 'shortTime'
+                      }}</span
+                    >
+                    <span class="timeline-sep"
+                      >—</span
+                    >
                     <span class="timeline-end">{{
-                      booking.endTime | date: 'shortTime'
+                      booking.endTime
+                        | date: 'shortTime'
                     }}</span>
                   </div>
                   <div class="timeline-content">
                     <div class="timeline-header">
-                      <span class="timeline-purpose">{{
-                        booking.purpose ?? '—'
-                      }}</span>
+                      <span
+                        class="timeline-purpose"
+                        >{{
+                          booking.purpose ?? '—'
+                        }}</span
+                      >
                       <span
                         class="status-badge"
                         [class]="
@@ -894,19 +1083,29 @@
                           )
                         "
                       >
-                        {{ booking.bookingStatus ?? '—' }}
+                        {{
+                          booking.bookingStatus ??
+                            '—'
+                        }}
                       </span>
                     </div>
                     <div class="timeline-meta">
-                      <span class="timeline-meta-item">
+                      <span
+                        class="timeline-meta-item"
+                      >
                         <app-icon
                           [icon]="LucideUser"
                           [size]="12"
                           [strokeWidth]="2"
                         ></app-icon>
-                        {{ booking.bookerName ?? '—' }}
+                        {{
+                          booking.bookerName ??
+                            '—'
+                        }}
                       </span>
-                      <span class="timeline-meta-item">
+                      <span
+                        class="timeline-meta-item"
+                      >
                         <app-icon
                           [icon]="LucideClock"
                           [size]="12"
@@ -918,9 +1117,13 @@
                         }}
                       </span>
                       @if (booking.checkInTime) {
-                        <span class="timeline-meta-item">
+                        <span
+                          class="timeline-meta-item"
+                        >
                           <app-icon
-                            [icon]="LucideCheckCircle2"
+                            [icon]="
+                              LucideCheckCircle2
+                            "
                             [size]="12"
                             [strokeWidth]="2"
                           ></app-icon>

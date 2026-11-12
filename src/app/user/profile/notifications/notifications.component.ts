@@ -42,7 +42,8 @@ export class NotificationsComponent implements OnInit {
   );
 
   readonly LucideBell = LucideBell;
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideFileBox = LucideFileBox;
   readonly LucideXCircle = LucideXCircle;
 
@@ -100,16 +101,18 @@ export class NotificationsComponent implements OnInit {
   load(): void {
     this.loading.set(true);
     this.error.set('');
-    this.preferencesService.getPreferences().subscribe({
-      next: (prefs) => {
-        this.preferences.set(prefs);
-        this.loading.set(false);
-      },
-      error: (e: Error) => {
-        this.error.set(e.message);
-        this.loading.set(false);
-      },
-    });
+    this.preferencesService
+      .getPreferences()
+      .subscribe({
+        next: (prefs) => {
+          this.preferences.set(prefs);
+          this.loading.set(false);
+        },
+        error: (e: Error) => {
+          this.error.set(e.message);
+          this.loading.set(false);
+        },
+      });
   }
 
   save(): void {
@@ -121,7 +124,10 @@ export class NotificationsComponent implements OnInit {
         next: () => {
           this.saved.set(true);
           this.saving.set(false);
-          setTimeout(() => this.saved.set(false), 3000);
+          setTimeout(
+            () => this.saved.set(false),
+            3000,
+          );
         },
         error: (e: Error) => {
           this.error.set(e.message);

@@ -1,4 +1,8 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   LucideOctagonAlert,
@@ -19,14 +23,18 @@ export interface CancelBookingModalData {
   selector: 'app-cancel-booking-modal',
   standalone: true,
   imports: [FormsModule, IconComponent],
-  templateUrl: './cancel-booking-modal.component.html',
-  styleUrl: './cancel-booking-modal.component.css',
+  templateUrl:
+    './cancel-booking-modal.component.html',
+  styleUrl:
+    './cancel-booking-modal.component.css',
 })
 export class CancelBookingModalComponent {
-  readonly LucideOctagonAlert = LucideOctagonAlert;
+  readonly LucideOctagonAlert =
+    LucideOctagonAlert;
   readonly LucideInfo = LucideInfo;
 
-  readonly data = input.required<CancelBookingModalData>();
+  readonly data =
+    input.required<CancelBookingModalData>();
   readonly cancel = output<void>();
   readonly confirm = output<string>(); // cancellation reason
 

@@ -20,7 +20,9 @@ import flatpickr from 'flatpickr';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DatePickerComponent),
+      useExisting: forwardRef(
+        () => DatePickerComponent,
+      ),
       multi: true,
     },
   ],
@@ -40,7 +42,9 @@ export class DatePickerComponent
 
   ngOnInit() {
     this.fpInstance = flatpickr(
-      this.el.nativeElement.querySelector('input'),
+      this.el.nativeElement.querySelector(
+        'input',
+      ),
       {
         mode: 'single',
         dateFormat: 'Y-m-d',
@@ -55,21 +59,30 @@ export class DatePickerComponent
         onReady: () => {
           // Apply min date after initialization
           if (this.min) {
-            this.fpInstance.set('minDate', this.min);
+            this.fpInstance.set(
+              'minDate',
+              this.min,
+            );
           }
         },
       },
     );
 
     // Escape key to close calendar
-    document.addEventListener('keydown', this.onKeyDown);
+    document.addEventListener(
+      'keydown',
+      this.onKeyDown,
+    );
   }
 
   ngOnDestroy() {
     if (this.fpInstance) {
       this.fpInstance.destroy();
     }
-    document.removeEventListener('keydown', this.onKeyDown);
+    document.removeEventListener(
+      'keydown',
+      this.onKeyDown,
+    );
   }
 
   private onKeyDown = (e: KeyboardEvent) => {

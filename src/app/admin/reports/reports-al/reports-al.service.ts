@@ -1,8 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-
 
 export interface OccupancyReportAl {
   roomId: string | null;
@@ -59,19 +61,25 @@ export class ReportsAlService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/admin/reports`;
 
-  getOccupancyReports(): Observable<OccupancyReportAl[]> {
+  getOccupancyReports(): Observable<
+    OccupancyReportAl[]
+  > {
     return this.http.get<OccupancyReportAl[]>(
       `${this.apiUrl}/occupancy`,
     );
   }
 
-  getBookingReports(): Observable<BookingReportAl[]> {
+  getBookingReports(): Observable<
+    BookingReportAl[]
+  > {
     return this.http.get<BookingReportAl[]>(
       `${this.apiUrl}/bookings`,
     );
   }
 
-  getRevenueReports(): Observable<RevenueReportAl[]> {
+  getRevenueReports(): Observable<
+    RevenueReportAl[]
+  > {
     return this.http.get<RevenueReportAl[]>(
       `${this.apiUrl}/revenue`,
     );

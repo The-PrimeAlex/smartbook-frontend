@@ -13,7 +13,9 @@ describe('MainLayoutComponent', () => {
       imports: [MainLayoutComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MainLayoutComponent);
+    fixture = TestBed.createComponent(
+      MainLayoutComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

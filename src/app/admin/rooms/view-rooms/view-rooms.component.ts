@@ -56,7 +56,8 @@ interface RoomCardData {
   styleUrl: './view-rooms.component.css',
 })
 export class ViewRoomsComponent implements OnInit {
-  private readonly roomService = inject(RoomService);
+  private readonly roomService =
+    inject(RoomService);
 
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
@@ -66,7 +67,9 @@ export class ViewRoomsComponent implements OnInit {
   readonly LucideWrench = LucideWrench;
   readonly LucideX = LucideX;
 
-  readonly selectedType = signal<RoomType | 'ALL'>('ALL');
+  readonly selectedType = signal<
+    RoomType | 'ALL'
+  >('ALL');
   readonly rooms = signal<MeetingRoom[]>([]);
   readonly roomCards = signal<RoomCardData[]>([]);
 
@@ -76,7 +79,8 @@ export class ViewRoomsComponent implements OnInit {
   readonly filteredRooms = computed(() => {
     const type = this.selectedType();
     return this.rooms().filter(
-      (room) => type === 'ALL' || room.roomType === type,
+      (room) =>
+        type === 'ALL' || room.roomType === type,
     );
   });
 
@@ -100,7 +104,8 @@ export class ViewRoomsComponent implements OnInit {
     this.rooms()
       .filter((room) => room.status === 'ACTIVE')
       .reduce(
-        (total, room) => total + (room.capacity ?? 0),
+        (total, room) =>
+          total + (room.capacity ?? 0),
         0,
       ),
   );
@@ -127,21 +132,24 @@ export class ViewRoomsComponent implements OnInit {
 
         // Eagerly load all room equipment details in parallel
         if (roomList.length > 0) {
-          const detailsRequests = roomList.map((room) =>
-            this.roomService
-              .getRoomDetails(room.roomId)
-              .pipe(
-                map((details) => ({
-                  roomId: room.roomId,
-                  equipment: details.equipment ?? [],
-                })),
-                catchError(() =>
-                  of({
+          const detailsRequests = roomList.map(
+            (room) =>
+              this.roomService
+                .getRoomDetails(room.roomId)
+                .pipe(
+                  map((details) => ({
                     roomId: room.roomId,
-                    equipment: [] as RoomEquipment[],
-                  }),
+                    equipment:
+                      details.equipment ?? [],
+                  })),
+                  catchError(() =>
+                    of({
+                      roomId: room.roomId,
+                      equipment:
+                        [] as RoomEquipment[],
+                    }),
+                  ),
                 ),
-              ),
           );
 
           forkJoin(detailsRequests).subscribe({
@@ -161,7 +169,9 @@ export class ViewRoomsComponent implements OnInit {
                 roomList.map((room) => ({
                   room,
                   equipment:
-                    equipmentMap.get(room.roomId) ?? [],
+                    equipmentMap.get(
+                      room.roomId,
+                    ) ?? [],
                   expanded: false,
                   detailsLoading: false,
                   detailsLoaded: true,
@@ -175,7 +185,8 @@ export class ViewRoomsComponent implements OnInit {
               this.roomCards.set(
                 roomList.map((room) => ({
                   room,
-                  equipment: [] as RoomEquipment[],
+                  equipment:
+                    [] as RoomEquipment[],
                   expanded: false,
                   detailsLoading: false,
                   detailsLoaded: true,
@@ -217,7 +228,10 @@ export class ViewRoomsComponent implements OnInit {
 
     const card = cards[index];
     const newCards = [...cards];
-    newCards[index] = { ...card, expanded: !card.expanded };
+    newCards[index] = {
+      ...card,
+      expanded: !card.expanded,
+    };
     this.roomCards.set(newCards);
   }
 
@@ -287,7 +301,9 @@ export class ViewRoomsComponent implements OnInit {
     }
   }
 
-  getEquipStatusClass(status: RoomEquipmentStatus): string {
+  getEquipStatusClass(
+    status: RoomEquipmentStatus,
+  ): string {
     const base = 'status-badge';
     switch (status) {
       case 'ACTIVE':

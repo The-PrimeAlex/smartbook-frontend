@@ -7,7 +7,10 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs';
 import {
@@ -30,7 +33,6 @@ import {
 } from '@lucide/angular';
 import { environment } from '../../../environments/environment';
 
-
 interface CountryOption {
   countryCode: CountryCode;
   countryName: string;
@@ -52,11 +54,15 @@ interface CountryOption {
   styleUrl: './registration.component.css',
 })
 export class RegistrationRequestComponent {
-  private readonly log = createLogger('Registration');
-  private readonly formBuilder = inject(FormBuilder);
+  private readonly log = createLogger(
+    'Registration',
+  );
+  private readonly formBuilder =
+    inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
+  private readonly authService =
+    inject(AuthService);
 
   readonly LucideArrowLeft = LucideArrowLeft;
   readonly LucideArrowRight = LucideArrowRight;
@@ -83,7 +89,10 @@ export class RegistrationRequestComponent {
     this.formBuilder.nonNullable.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+      ],
       countryIsoCode: [
         'KE' as CountryCode,
         Validators.required,
@@ -103,8 +112,9 @@ export class RegistrationRequestComponent {
               return null;
             }
             const selectedCountry =
-              this.registrationForm?.get('countryIsoCode')
-                ?.value ?? 'KE';
+              this.registrationForm?.get(
+                'countryIsoCode',
+              )?.value ?? 'KE';
             try {
               return isValidPhoneNumber(
                 phoneNumber,
@@ -138,13 +148,16 @@ export class RegistrationRequestComponent {
       });
   }
 
-  get selectedCountry(): CountryOption | undefined {
-    const selectedCountryCode = this.registrationForm.get(
-      'countryIsoCode',
-    )?.value;
+  get selectedCountry():
+    CountryOption | undefined {
+    const selectedCountryCode =
+      this.registrationForm.get(
+        'countryIsoCode',
+      )?.value;
     return this.countries.find(
       (country) =>
-        country.countryCode === selectedCountryCode,
+        country.countryCode ===
+        selectedCountryCode,
     );
   }
 
@@ -155,10 +168,8 @@ export class RegistrationRequestComponent {
     if (!searchTerm) {
       return this.countries;
     }
-    const normalizedSearchTerm = searchTerm.replace(
-      /\s/g,
-      '',
-    );
+    const normalizedSearchTerm =
+      searchTerm.replace(/\s/g, '');
     return this.countries.filter(
       (country) =>
         country.countryName
@@ -167,12 +178,15 @@ export class RegistrationRequestComponent {
         country.countryCode
           .toLowerCase()
           .includes(searchTerm) ||
-        country.callingCode.includes(normalizedSearchTerm),
+        country.callingCode.includes(
+          normalizedSearchTerm,
+        ),
     );
   }
 
   toggleCountryDropdown(): void {
-    this.countryDropdownOpen = !this.countryDropdownOpen;
+    this.countryDropdownOpen =
+      !this.countryDropdownOpen;
     if (this.countryDropdownOpen) {
       this.countrySearch = '';
     }
@@ -193,7 +207,9 @@ export class RegistrationRequestComponent {
     this.countrySearch = searchTerm;
   }
 
-  onCountrySearchKeydown(event: KeyboardEvent): void {
+  onCountrySearchKeydown(
+    event: KeyboardEvent,
+  ): void {
     if (event.key === 'Escape') {
       this.countryDropdownOpen = false;
       this.countrySearch = '';
@@ -209,10 +225,8 @@ export class RegistrationRequestComponent {
   }
 
   onPhoneInput(phoneNumber: string): void {
-    const digitsOnlyPhoneNumber = phoneNumber.replace(
-      /\D/g,
-      '',
-    );
+    const digitsOnlyPhoneNumber =
+      phoneNumber.replace(/\D/g, '');
     if (phoneNumber !== digitsOnlyPhoneNumber) {
       this.registrationForm
         .get('phoneNumber')
@@ -223,14 +237,18 @@ export class RegistrationRequestComponent {
   }
 
   private buildCountries(): CountryOption[] {
-    const countryNames = new Intl.DisplayNames(['en'], {
-      type: 'region',
-    });
+    const countryNames = new Intl.DisplayNames(
+      ['en'],
+      {
+        type: 'region',
+      },
+    );
     return getCountries()
       .map((countryCode): CountryOption => ({
         countryCode,
         countryName:
-          countryNames.of(countryCode) ?? countryCode,
+          countryNames.of(countryCode) ??
+          countryCode,
         callingCode: `+${getCountryCallingCode(countryCode)}`,
         flag: this.getCountryFlag(countryCode),
       }))
@@ -241,7 +259,9 @@ export class RegistrationRequestComponent {
       );
   }
 
-  private getCountryFlag(countryCode: string): string {
+  private getCountryFlag(
+    countryCode: string,
+  ): string {
     return countryCode
       .toUpperCase()
       .replace(/[A-Z]/g, (character) =>
@@ -262,7 +282,8 @@ export class RegistrationRequestComponent {
 
     this.loading = true;
 
-    const formValue = this.registrationForm.getRawValue();
+    const formValue =
+      this.registrationForm.getRawValue();
     const body = {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
@@ -318,9 +339,13 @@ export class RegistrationRequestComponent {
           this.submitted = false;
           if (err.status === 409) {
             const serverError = err.error?.error;
-            if (serverError === 'email_already_registered') {
+            if (
+              serverError ===
+              'email_already_registered'
+            ) {
               this.modalType = 'pending';
-              this.modalTitle = 'Account Already Exists';
+              this.modalTitle =
+                'Account Already Exists';
               this.modalMessage =
                 'An account is already registered with this email address. Please log in to access your account, or use the forgot password option if you need to reset your password.';
               this.showModal = true;

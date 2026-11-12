@@ -6,7 +6,9 @@
     description="Configure audit logging retention and view all modified system settings."
   ></app-page-banner>
   @if (error()) {
-    <div class="notice notice-error">{{ error() }}</div>
+    <div class="notice notice-error">
+      {{ error() }}
+    </div>
   }
   @if (saved()) {
     <div class="notice notice-success">
@@ -14,13 +16,20 @@
     </div>
   }
   @if (loading()) {
-    <div class="loading-panel">Loading settings...</div>
+    <div class="loading-panel">
+      Loading settings...
+    </div>
   } @else {
     <div class="settings-panel">
       <div class="settings-section">
-        <h2 class="section-title">Audit Configuration</h2>
+        <h2 class="section-title">
+          Audit Configuration
+        </h2>
         <div class="settings-grid">
-          @for (setting of settings(); track setting.key) {
+          @for (
+            setting of settings();
+            track setting.key
+          ) {
             <div class="setting-card">
               <label class="setting-label">{{
                 setting.label
@@ -28,7 +37,9 @@
               <p class="setting-description">
                 {{ setting.description }}
               </p>
-              @if (setting.valueType === 'number') {
+              @if (
+                setting.valueType === 'number'
+              ) {
                 <input
                   type="number"
                   class="setting-input"
@@ -40,23 +51,29 @@
                     )
                   "
                 />
-              } @else if (setting.valueType === 'boolean') {
+              } @else if (
+                setting.valueType === 'boolean'
+              ) {
                 <label class="toggle-switch">
                   <input
                     type="checkbox"
                     [checked]="
-                      getValue(setting.key) === 'true'
+                      getValue(setting.key) ===
+                      'true'
                     "
                     (change)="
                       setValue(
                         setting.key,
-                        $any($event).target.checked
+                        $any($event).target
+                          .checked
                           ? 'true'
                           : 'false'
                       )
                     "
                   />
-                  <span class="toggle-slider"></span>
+                  <span
+                    class="toggle-slider"
+                  ></span>
                 </label>
               }
             </div>
@@ -70,7 +87,8 @@
           [disabled]="saving()"
         >
           @if (saving()) {
-            <span class="spinner"></span> Saving...
+            <span class="spinner"></span>
+            Saving...
           } @else {
             Save Changes
           }
@@ -108,23 +126,32 @@
               ) {
                 <tr>
                   <td>
-                    <strong>{{ item.label }}</strong>
+                    <strong>{{
+                      item.label
+                    }}</strong>
                   </td>
                   <td>
-                    <span class="category-badge">{{
-                      item.category
-                    }}</span>
+                    <span
+                      class="category-badge"
+                      >{{ item.category }}</span
+                    >
                   </td>
                   <td>
-                    <code>{{ item.defaultValue }}</code>
-                  </td>
-                  <td>
-                    <code class="modified-value">{{
-                      item.value
+                    <code>{{
+                      item.defaultValue
                     }}</code>
                   </td>
                   <td>
-                    {{ item.updatedAt | date: 'medium' }}
+                    <code
+                      class="modified-value"
+                      >{{ item.value }}</code
+                    >
+                  </td>
+                  <td>
+                    {{
+                      item.updatedAt
+                        | date: 'medium'
+                    }}
                   </td>
                 </tr>
               }

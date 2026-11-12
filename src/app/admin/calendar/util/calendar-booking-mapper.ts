@@ -11,7 +11,8 @@ import {
   timeKey,
 } from './calendar-date-utils';
 
-type BookingStatus = 'Confirmed' | 'Pending' | 'Cancelled';
+type BookingStatus =
+  'Confirmed' | 'Pending' | 'Cancelled';
 type RoomType =
   | 'All Rooms'
   | 'Boardroom'
@@ -46,8 +47,14 @@ export function extractBookingArray(
         typeof item === 'object' && item !== null,
     );
   }
-  if (typeof response === 'object' && response !== null) {
-    const obj = response as Record<string, unknown>;
+  if (
+    typeof response === 'object' &&
+    response !== null
+  ) {
+    const obj = response as Record<
+      string,
+      unknown
+    >;
     for (const key of [
       'bookings',
       'content',
@@ -58,7 +65,8 @@ export function extractBookingArray(
       if (Array.isArray(value)) {
         return value.filter(
           (item): item is RawBooking =>
-            typeof item === 'object' && item !== null,
+            typeof item === 'object' &&
+            item !== null,
         );
       }
     }
@@ -88,7 +96,9 @@ export function mapSmartBookBooking(
     return null;
   }
 
-  const roomObject = asObject(firstValue(raw, ['room']));
+  const roomObject = asObject(
+    firstValue(raw, ['room']),
+  );
   const room =
     firstString(raw, ['roomName', 'room_name']) ??
     firstString(roomObject, [
@@ -107,7 +117,11 @@ export function mapSmartBookBooking(
     ]) ?? 'Room reservation';
 
   const customerObject = asObject(
-    firstValue(raw, ['user', 'customer', 'bookedBy']),
+    firstValue(raw, [
+      'user',
+      'customer',
+      'bookedBy',
+    ]),
   );
   const customerName =
     firstString(raw, [
@@ -129,12 +143,17 @@ export function mapSmartBookBooking(
       'userId',
       'bookedById',
     ]) ??
-    firstString(customerObject, ['userId', 'id']) ??
+    firstString(customerObject, [
+      'userId',
+      'id',
+    ]) ??
     '';
 
   const statusValue =
-    firstString(raw, ['bookingStatus', 'status']) ??
-    'PENDING';
+    firstString(raw, [
+      'bookingStatus',
+      'status',
+    ]) ?? 'PENDING';
   const id =
     firstString(raw, ['bookingId', 'id']) ??
     `booking-${index}`;
@@ -159,11 +178,17 @@ export function mapGoogleEvent(
 ): CalendarBooking | null {
   const start = parseDate(event.start);
   const end = parseDate(event.end);
-  if (!start || !end || event.status === 'cancelled') {
+  if (
+    !start ||
+    !end ||
+    event.status === 'cancelled'
+  ) {
     return null;
   }
-  const room = event.location?.trim() || 'Google Calendar';
-  const title = event.summary?.trim() || 'Calendar event';
+  const room =
+    event.location?.trim() || 'Google Calendar';
+  const title =
+    event.summary?.trim() || 'Calendar event';
 
   return {
     id: event.id,
@@ -173,8 +198,12 @@ export function mapGoogleEvent(
     room,
     roomType: inferRoomType(room),
     date: dateKey(start),
-    startTime: event.allDay ? '00:00' : timeKey(start),
-    endTime: event.allDay ? '23:59' : timeKey(end),
+    startTime: event.allDay
+      ? '00:00'
+      : timeKey(start),
+    endTime: event.allDay
+      ? '23:59'
+      : timeKey(end),
     status: 'Confirmed',
     source: 'GOOGLE',
     eventUrl: event.htmlLink,
@@ -198,7 +227,10 @@ export function getErrorMessage(
   error: unknown,
   fallback: string,
 ): string {
-  if (typeof error === 'object' && error !== null) {
+  if (
+    typeof error === 'object' &&
+    error !== null
+  ) {
     const candidate = error as {
       error?: { message?: unknown } | string;
       message?: unknown;
@@ -222,9 +254,14 @@ export function getErrorMessage(
 
 // --- Private helpers ---
 
-function mapBookingStatus(value: string): BookingStatus {
+function mapBookingStatus(
+  value: string,
+): BookingStatus {
   const status = value.trim().toUpperCase();
-  if (status === 'CANCELLED' || status === 'NO_SHOW') {
+  if (
+    status === 'CANCELLED' ||
+    status === 'NO_SHOW'
+  ) {
     return 'Cancelled';
   }
   if (status === 'PENDING') {
@@ -291,7 +328,8 @@ function firstString(
 }
 
 function asObject(value: unknown): RawBooking {
-  return typeof value === 'object' && value !== null
+  return typeof value === 'object' &&
+    value !== null
     ? (value as RawBooking)
     : {};
 }

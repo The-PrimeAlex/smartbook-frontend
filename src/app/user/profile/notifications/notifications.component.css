@@ -170,11 +170,15 @@
   background: var(--brand-accent);
 }
 
-.toggle-switch input:checked + .toggle-slider::before {
+.toggle-switch
+  input:checked
+  + .toggle-slider::before {
   transform: translateX(22px);
 }
 
-.toggle-switch input:focus-visible + .toggle-slider {
+.toggle-switch
+  input:focus-visible
+  + .toggle-slider {
   box-shadow: 0 0 0 3px rgba(242, 140, 40, 0.2);
 }
 

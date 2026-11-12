@@ -1,4 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { createLogger } from '../../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import {
@@ -58,7 +62,9 @@ export interface RoomCardData {
   styleUrl: './room-equipments.component.css',
 })
 export class RoomEquipmentComponent implements OnInit {
-  private readonly log = createLogger('RoomEquipments');
+  private readonly log = createLogger(
+    'RoomEquipments',
+  );
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideMonitor = LucideMonitor;
@@ -70,8 +76,10 @@ export class RoomEquipmentComponent implements OnInit {
   readonly LucideX = LucideX;
 
   private readonly fb = inject(FormBuilder);
-  private readonly authService = inject(AuthService);
-  private readonly roomService = inject(RoomService);
+  private readonly authService =
+    inject(AuthService);
+  private readonly roomService =
+    inject(RoomService);
   private readonly equipmentService = inject(
     RoomEquipmentService,
   );
@@ -94,21 +102,31 @@ export class RoomEquipmentComponent implements OnInit {
     'RETIRED',
   ];
 
-  readonly equipmentForm = this.fb.nonNullable.group({
-    equipmentName: [
-      '',
-      [Validators.required, Validators.maxLength(100)],
-    ],
-    assetCode: [
-      '',
-      [Validators.required, Validators.maxLength(50)],
-    ],
-    description: ['', [Validators.maxLength(500)]],
-    status: [
-      'ACTIVE' as RoomEquipmentStatus,
-      Validators.required,
-    ],
-  });
+  readonly equipmentForm =
+    this.fb.nonNullable.group({
+      equipmentName: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(100),
+        ],
+      ],
+      assetCode: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(50),
+        ],
+      ],
+      description: [
+        '',
+        [Validators.maxLength(500)],
+      ],
+      status: [
+        'ACTIVE' as RoomEquipmentStatus,
+        Validators.required,
+      ],
+    });
 
   ngOnInit(): void {
     this.authService
@@ -116,7 +134,10 @@ export class RoomEquipmentComponent implements OnInit {
       .pipe(tap(() => this.loadAllRooms()))
       .subscribe({
         error: (err) =>
-          this.log.error('Session restore failed:', err),
+          this.log.error(
+            'Session restore failed:',
+            err,
+          ),
       });
   }
 
@@ -124,14 +145,18 @@ export class RoomEquipmentComponent implements OnInit {
     let result = this.roomCards;
 
     // Apply search filter
-    const query = this.searchTerm.trim().toLowerCase();
+    const query = this.searchTerm
+      .trim()
+      .toLowerCase();
     if (query) {
       result = result.filter(
         (card) =>
           card.room.roomName
             .toLowerCase()
             .includes(query) ||
-          card.room.roomType.toLowerCase().includes(query),
+          card.room.roomType
+            .toLowerCase()
+            .includes(query),
       );
     }
 
@@ -182,50 +207,68 @@ export class RoomEquipmentComponent implements OnInit {
 
     this.roomService
       .getRooms()
-      .pipe(finalize(() => (this.loadingRooms = false)))
+      .pipe(
+        finalize(
+          () => (this.loadingRooms = false),
+        ),
+      )
       .subscribe({
         next: (rooms) => {
           const roomList = rooms ?? [];
-          this.roomCards = roomList.map((room) => ({
-            room,
-            equipment: [] as RoomEquipment[],
-            loading: true,
-          }));
+          this.roomCards = roomList.map(
+            (room) => ({
+              room,
+              equipment: [] as RoomEquipment[],
+              loading: true,
+            }),
+          );
 
           // Eagerly load equipment for all rooms in parallel
           if (roomList.length > 0) {
-            const equipmentRequests = roomList.map((room) =>
-              this.roomService.getRoomDetails(room.roomId),
-            );
+            const equipmentRequests =
+              roomList.map((room) =>
+                this.roomService.getRoomDetails(
+                  room.roomId,
+                ),
+              );
 
-            forkJoin(equipmentRequests).subscribe({
-              next: (detailsList) => {
-                detailsList.forEach((details, index) => {
-                  const card = this.roomCards[index];
-                  if (card) {
-                    card.equipment =
-                      details.equipment ?? [];
-                    card.loading = false;
-                  }
-                });
+            forkJoin(equipmentRequests).subscribe(
+              {
+                next: (detailsList) => {
+                  detailsList.forEach(
+                    (details, index) => {
+                      const card =
+                        this.roomCards[index];
+                      if (card) {
+                        card.equipment =
+                          details.equipment ?? [];
+                        card.loading = false;
+                      }
+                    },
+                  );
+                },
+                error: (error) => {
+                  this.log.error(
+                    'Failed to load some room equipment:',
+                    error,
+                  );
+                  this.roomCards.forEach(
+                    (card) =>
+                      (card.loading = false),
+                  );
+                },
               },
-              error: (error) => {
-                this.log.error(
-                  'Failed to load some room equipment:',
-                  error,
-                );
-                this.roomCards.forEach(
-                  (card) => (card.loading = false),
-                );
-              },
-            });
+            );
           }
         },
         error: (error) => {
           this.errorMessage =
             error.message ||
             'Could not load rooms. Please try again.';
-          this.log.error('Failed to load rooms:', error);
+          this.log.error(
+            'Failed to load rooms:',
+            error,
+          );
         },
       });
   }
@@ -238,24 +281,29 @@ export class RoomEquipmentComponent implements OnInit {
 
     card.loading = true;
 
-    this.roomService.getRoomDetails(roomId).subscribe({
-      next: (details) => {
-        card.equipment = details.equipment ?? [];
-        card.loading = false;
-      },
-      error: (error) => {
-        this.log.error(
-          `Failed to load equipment for room ${roomId}:`,
-          error,
-        );
-        card.loading = false;
-      },
-    });
+    this.roomService
+      .getRoomDetails(roomId)
+      .subscribe({
+        next: (details) => {
+          card.equipment =
+            details.equipment ?? [];
+          card.loading = false;
+        },
+        error: (error) => {
+          this.log.error(
+            `Failed to load equipment for room ${roomId}:`,
+            error,
+          );
+          card.loading = false;
+        },
+      });
   }
 
   toggleExpand(roomId: string): void {
     this.expandingRoomId =
-      this.expandingRoomId === roomId ? null : roomId;
+      this.expandingRoomId === roomId
+        ? null
+        : roomId;
   }
 
   toggleAddForm(roomId: string): void {
@@ -273,7 +321,9 @@ export class RoomEquipmentComponent implements OnInit {
     }
   }
 
-  getCard(roomId: string): RoomCardData | undefined {
+  getCard(
+    roomId: string,
+  ): RoomCardData | undefined {
     return this.roomCards.find(
       (c) => c.room.roomId === roomId,
     );
@@ -285,10 +335,12 @@ export class RoomEquipmentComponent implements OnInit {
       return;
     }
 
-    const formValue = this.equipmentForm.getRawValue();
+    const formValue =
+      this.equipmentForm.getRawValue();
 
     const equipment: RoomEquipment = {
-      equipmentName: formValue.equipmentName.trim(),
+      equipmentName:
+        formValue.equipmentName.trim(),
       assetCode: formValue.assetCode.trim(),
       description: formValue.description.trim(),
       status: formValue.status,
@@ -336,7 +388,8 @@ export class RoomEquipmentComponent implements OnInit {
     }
 
     const previousStatus = equipment.status;
-    const status = newStatus as RoomEquipmentStatus;
+    const status =
+      newStatus as RoomEquipmentStatus;
 
     if (status === previousStatus) return;
 
@@ -344,10 +397,15 @@ export class RoomEquipmentComponent implements OnInit {
     this.successMessage = '';
 
     this.equipmentService
-      .updateStatus(roomId, equipment.assetCode, status)
+      .updateStatus(
+        roomId,
+        equipment.assetCode,
+        status,
+      )
       .subscribe({
         next: () => {
-          this.successMessage = 'Equipment status updated.';
+          this.successMessage =
+            'Equipment status updated.';
           this.loadRoomEquipment(roomId);
         },
         error: (error) => {
@@ -378,7 +436,10 @@ export class RoomEquipmentComponent implements OnInit {
     this.successMessage = '';
 
     this.equipmentService
-      .removeEquipment(roomId, equipment.assetCode)
+      .removeEquipment(
+        roomId,
+        equipment.assetCode,
+      )
       .subscribe({
         next: () => {
           this.successMessage =

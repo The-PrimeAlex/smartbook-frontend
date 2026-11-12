@@ -1,4 +1,7 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+} from '@angular/common';
 import {
   Component,
   computed,
@@ -56,12 +59,15 @@ type BookingFilter = 'ALL' | BookingStatus;
   styleUrl: './view-bookings.component.css',
 })
 export class ViewBookingsComponent implements OnInit {
-  private readonly bookingService = inject(BookingService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
 
   readonly LucideBan = LucideBan;
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCheckCircle = LucideCheckCircle;
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideClock = LucideClock;
   readonly LucideRefreshCw = LucideRefreshCw;
   readonly LucideUser = LucideUser;
@@ -71,8 +77,11 @@ export class ViewBookingsComponent implements OnInit {
   readonly loading = signal(false);
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
-  readonly processingBookingIds = signal<string[]>([]);
-  readonly selectedFilter = signal<BookingFilter>('ALL');
+  readonly processingBookingIds = signal<
+    string[]
+  >([]);
+  readonly selectedFilter =
+    signal<BookingFilter>('ALL');
 
   readonly filters: {
     label: string;
@@ -94,7 +103,8 @@ export class ViewBookingsComponent implements OnInit {
     return filter === 'ALL'
       ? allBookings
       : allBookings.filter(
-          (booking) => booking.bookingStatus === filter,
+          (booking) =>
+            booking.bookingStatus === filter,
         );
   });
 
@@ -105,7 +115,8 @@ export class ViewBookingsComponent implements OnInit {
   readonly pendingCount = computed(
     () =>
       this.bookings().filter(
-        (booking) => booking.bookingStatus === 'PENDING',
+        (booking) =>
+          booking.bookingStatus === 'PENDING',
       ).length,
   );
 
@@ -121,21 +132,24 @@ export class ViewBookingsComponent implements OnInit {
   readonly completedCount = computed(
     () =>
       this.bookings().filter(
-        (booking) => booking.bookingStatus === 'COMPLETED',
+        (booking) =>
+          booking.bookingStatus === 'COMPLETED',
       ).length,
   );
 
   readonly noShowCount = computed(
     () =>
       this.bookings().filter(
-        (booking) => booking.bookingStatus === 'NO_SHOW',
+        (booking) =>
+          booking.bookingStatus === 'NO_SHOW',
       ).length,
   );
 
   readonly cancelledCount = computed(
     () =>
       this.bookings().filter(
-        (booking) => booking.bookingStatus === 'CANCELLED',
+        (booking) =>
+          booking.bookingStatus === 'CANCELLED',
       ).length,
   );
 
@@ -149,9 +163,12 @@ export class ViewBookingsComponent implements OnInit {
 
     this.bookingService
       .getAllBookings()
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
-        next: (bookings) => this.bookings.set(bookings),
+        next: (bookings) =>
+          this.bookings.set(bookings),
         error: (error: unknown) => {
           this.errorMessage.set(
             this.getErrorMessage(
@@ -168,7 +185,9 @@ export class ViewBookingsComponent implements OnInit {
   }
 
   isProcessing(bookingId: string): boolean {
-    return this.processingBookingIds().includes(bookingId);
+    return this.processingBookingIds().includes(
+      bookingId,
+    );
   }
 
   canConfirm(booking: Booking): boolean {
@@ -337,7 +356,10 @@ export class ViewBookingsComponent implements OnInit {
     this.clearMessages();
 
     this.bookingService
-      .updateBookingStatus(booking.bookingId, request)
+      .updateBookingStatus(
+        booking.bookingId,
+        request,
+      )
       .pipe(
         finalize(() =>
           this.stopProcessing(booking.bookingId),
@@ -359,23 +381,32 @@ export class ViewBookingsComponent implements OnInit {
       });
   }
 
-  private replaceBooking(updatedBooking: Booking): void {
+  private replaceBooking(
+    updatedBooking: Booking,
+  ): void {
     this.bookings.update((currentBookings) =>
       currentBookings.map((booking) =>
-        booking.bookingId === updatedBooking.bookingId
+        booking.bookingId ===
+        updatedBooking.bookingId
           ? updatedBooking
           : booking,
       ),
     );
   }
 
-  private startProcessing(bookingId: string): void {
+  private startProcessing(
+    bookingId: string,
+  ): void {
     this.processingBookingIds.update((ids) =>
-      ids.includes(bookingId) ? ids : [...ids, bookingId],
+      ids.includes(bookingId)
+        ? ids
+        : [...ids, bookingId],
     );
   }
 
-  private stopProcessing(bookingId: string): void {
+  private stopProcessing(
+    bookingId: string,
+  ): void {
     this.processingBookingIds.update((ids) =>
       ids.filter((id) => id !== bookingId),
     );

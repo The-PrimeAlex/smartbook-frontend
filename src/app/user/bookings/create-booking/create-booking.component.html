@@ -7,7 +7,10 @@
   ></app-page-banner>
 
   <div class="booking-layout">
-    <form class="booking-form" (ngSubmit)="submitBooking()">
+    <form
+      class="booking-form"
+      (ngSubmit)="submitBooking()"
+    >
       <!-- Meeting Details Section -->
       <section class="form-section">
         <div class="section-header">
@@ -19,13 +22,18 @@
           </div>
           <div class="section-title-wrap">
             <h2>Meeting Details</h2>
-            <p>Select a room and describe your meeting.</p>
+            <p>
+              Select a room and describe your
+              meeting.
+            </p>
           </div>
         </div>
 
         <div class="fields-grid">
           <div class="field">
-            <label for="meetingTitle">Meeting Title</label>
+            <label for="meetingTitle"
+              >Meeting Title</label
+            >
             <div class="input-wrap">
               <input
                 id="meetingTitle"
@@ -56,7 +64,9 @@
           </div>
 
           <div class="field">
-            <label for="roomId">Select Room</label>
+            <label for="roomId"
+              >Select Room</label
+            >
             <div class="select-wrap">
               <select
                 id="roomId"
@@ -64,7 +74,8 @@
                 [(ngModel)]="roomId"
                 required
                 [disabled]="
-                  loadingRooms || rooms.length === 0
+                  loadingRooms ||
+                  rooms.length === 0
                 "
               >
                 <option value="" disabled>
@@ -75,7 +86,10 @@
                   }
                 </option>
 
-                @for (room of rooms; track room.roomId) {
+                @for (
+                  room of rooms;
+                  track room.roomId
+                ) {
                   <option [value]="room.roomId">
                     {{ room.roomName }} ·
                     {{ room.capacity }} seats
@@ -97,12 +111,14 @@
                   ></app-icon>
                 </div>
                 <div class="room-preview-info">
-                  <span class="room-preview-name">{{
-                    room.roomName
-                  }}</span>
+                  <span
+                    class="room-preview-name"
+                    >{{ room.roomName }}</span
+                  >
                   <span class="room-preview-meta"
                     >{{ room.roomType }} ·
-                    {{ room.capacity }} seats</span
+                    {{ room.capacity }}
+                    seats</span
                   >
                 </div>
                 @if (room.hourlyRate != null) {
@@ -114,7 +130,9 @@
                           : 'symbol'
                           : '1.2-2'
                     }}</span>
-                    <span class="rate-period">/hr</span>
+                    <span class="rate-period"
+                      >/hr</span
+                    >
                   </div>
                 }
               </div>
@@ -134,7 +152,10 @@
           </div>
           <div class="section-title-wrap">
             <h2>Schedule</h2>
-            <p>Choose when your meeting starts and ends.</p>
+            <p>
+              Choose when your meeting starts and
+              ends.
+            </p>
           </div>
         </div>
 
@@ -154,23 +175,31 @@
             </div>
             <div class="schedule-fields">
               <div class="field compact">
-                <label for="startDate">Date</label>
+                <label for="startDate"
+                  >Date</label
+                >
                 <app-date-picker
                   id="startDate"
                   name="startDate"
                   [(ngModel)]="startDate"
                   [min]="today"
                   placeholder="Select start date"
-                  (ngModelChange)="onStartDateChange()"
+                  (ngModelChange)="
+                    onStartDateChange()
+                  "
                 ></app-date-picker>
               </div>
               <div class="field compact">
-                <label for="startTime">Time</label>
+                <label for="startTime"
+                  >Time</label
+                >
                 <app-time-picker
                   id="startTime"
                   name="startTime"
                   [(ngModel)]="startTime"
-                  (ngModelChange)="onStartTimeChange()"
+                  (ngModelChange)="
+                    onStartTimeChange()
+                  "
                   placeholder="Select start time"
                 ></app-time-picker>
               </div>
@@ -188,7 +217,9 @@
           <!-- End Time -->
           <div class="schedule-block">
             <div class="schedule-block-header">
-              <span class="schedule-block-badge end-badge">
+              <span
+                class="schedule-block-badge end-badge"
+              >
                 <app-icon
                   [icon]="LucideClock"
                   [size]="12"
@@ -205,7 +236,9 @@
                   [(ngModel)]="endDate"
                   [min]="startDate || today"
                   placeholder="Select end date"
-                  (ngModelChange)="onEndDateChange()"
+                  (ngModelChange)="
+                    onEndDateChange()
+                  "
                 ></app-date-picker>
               </div>
               <div class="field compact">
@@ -214,7 +247,9 @@
                   id="endTime"
                   name="endTime"
                   [(ngModel)]="endTime"
-                  (ngModelChange)="onEndTimeChange()"
+                  (ngModelChange)="
+                    onEndTimeChange()
+                  "
                   placeholder="Select end time"
                 ></app-time-picker>
               </div>
@@ -231,7 +266,9 @@
                 [size]="14"
               ></app-icon>
             </div>
-            <span class="duration-label">Duration</span>
+            <span class="duration-label"
+              >Duration</span
+            >
             <span class="duration-value">{{
               durationLabel
             }}</span>
@@ -243,32 +280,43 @@
 
         <!-- Validation Messages -->
         @if (invalidDateRange) {
-          <div class="validation-message" role="alert">
+          <div
+            class="validation-message"
+            role="alert"
+          >
             <app-icon
               [icon]="LucideAlertCircle"
               [size]="16"
             ></app-icon>
             <div>
-              <strong>Check your meeting times</strong>
+              <strong
+                >Check your meeting times</strong
+              >
               <p>
-                The end date and time must be later than the
-                start date and time.
+                The end date and time must be
+                later than the start date and
+                time.
               </p>
             </div>
           </div>
         }
 
         @if (startIsInPast && !invalidDateRange) {
-          <div class="validation-message" role="alert">
+          <div
+            class="validation-message"
+            role="alert"
+          >
             <app-icon
               [icon]="LucideAlertCircle"
               [size]="16"
             ></app-icon>
             <div>
-              <strong>Choose a future time</strong>
+              <strong
+                >Choose a future time</strong
+              >
               <p>
-                The meeting start date and time must be in
-                the future.
+                The meeting start date and time
+                must be in the future.
               </p>
             </div>
           </div>
@@ -277,7 +325,10 @@
 
       <!-- Alerts -->
       @if (successMessage) {
-        <div class="form-alert success-alert" role="status">
+        <div
+          class="form-alert success-alert"
+          role="status"
+        >
           <app-icon
             [icon]="LucideCheckCircle"
             [size]="16"
@@ -287,7 +338,10 @@
       }
 
       @if (conflictMessage) {
-        <div class="form-alert conflict-alert" role="alert">
+        <div
+          class="form-alert conflict-alert"
+          role="alert"
+        >
           <app-icon
             [icon]="LucideAlertTriangle"
             [size]="16"
@@ -296,15 +350,18 @@
             <strong>Room Already Booked</strong>
             <p>{{ conflictMessage }}</p>
             <p class="alert-hint">
-              Check room availability and try a different
-              time or room.
+              Check room availability and try a
+              different time or room.
             </p>
           </div>
         </div>
       }
 
       @if (errorMessage) {
-        <div class="form-alert error-alert" role="alert">
+        <div
+          class="form-alert error-alert"
+          role="alert"
+        >
           <app-icon
             [icon]="LucideXCircle"
             [size]="16"
@@ -316,8 +373,8 @@
       <!-- Form Actions -->
       <div class="form-actions">
         <span class="required-note"
-          ><span class="required-dot">*</span> Required
-          fields</span
+          ><span class="required-dot">*</span>
+          Required fields</span
         >
         <button
           type="submit"
@@ -362,40 +419,54 @@
 
         <div class="summary-details">
           <div class="summary-row">
-            <span class="summary-label">Meeting</span>
+            <span class="summary-label"
+              >Meeting</span
+            >
             <span class="summary-value">{{
               meetingTitle || '—'
             }}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Room</span>
+            <span class="summary-label"
+              >Room</span
+            >
             <span class="summary-value">{{
               selectedRoom?.roomName || '—'
             }}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Starts</span>
+            <span class="summary-label"
+              >Starts</span
+            >
             <span class="summary-value">
               {{
                 startDate
-                  ? startDate + ' at ' + (startTime || '—')
+                  ? startDate +
+                    ' at ' +
+                    (startTime || '—')
                   : '—'
               }}
             </span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Ends</span>
+            <span class="summary-label"
+              >Ends</span
+            >
             <span class="summary-value">
               {{
                 endDate
-                  ? endDate + ' at ' + (endTime || '—')
+                  ? endDate +
+                    ' at ' +
+                    (endTime || '—')
                   : '—'
               }}
             </span>
           </div>
           @if (durationMinutes > 0) {
             <div class="summary-row duration-row">
-              <span class="summary-label">Duration</span>
+              <span class="summary-label"
+                >Duration</span
+              >
               <span class="summary-value">{{
                 durationLabel
               }}</span>
@@ -403,10 +474,15 @@
           }
           @if (estimatedTotal > 0) {
             <div class="summary-row total-row">
-              <span class="summary-label">Est. Total</span>
-              <span class="summary-value total-amount">{{
-                estimatedTotalFormatted
-              }}</span>
+              <span class="summary-label"
+                >Est. Total</span
+              >
+              <span
+                class="summary-value total-amount"
+                >{{
+                  estimatedTotalFormatted
+                }}</span
+              >
             </div>
           }
         </div>
@@ -432,8 +508,8 @@
               [size]="14"
             ></app-icon>
             <span
-              >Select the room that fits your meeting
-              size</span
+              >Select the room that fits your
+              meeting size</span
             >
           </li>
           <li>
@@ -441,14 +517,20 @@
               [icon]="LucideCheck"
               [size]="14"
             ></app-icon>
-            <span>Start time must be in the future</span>
+            <span
+              >Start time must be in the
+              future</span
+            >
           </li>
           <li>
             <app-icon
               [icon]="LucideCheck"
               [size]="14"
             ></app-icon>
-            <span>End time must be after start time</span>
+            <span
+              >End time must be after start
+              time</span
+            >
           </li>
         </ul>
       </div>
@@ -472,21 +554,29 @@
               [icon]="LucideClock"
               [size]="14"
             ></app-icon>
-            <span>Min 30 min, max 8 hours per booking</span>
+            <span
+              >Min 30 min, max 8 hours per
+              booking</span
+            >
           </li>
           <li>
             <app-icon
               [icon]="LucideCalendar"
               [size]="14"
             ></app-icon>
-            <span>Book up to 30 days in advance</span>
+            <span
+              >Book up to 30 days in advance</span
+            >
           </li>
           <li>
             <app-icon
               [icon]="LucideTimer"
               [size]="14"
             ></app-icon>
-            <span>15 min buffer between bookings</span>
+            <span
+              >15 min buffer between
+              bookings</span
+            >
           </li>
           <li>
             <app-icon
@@ -494,7 +584,8 @@
               [size]="14"
             ></app-icon>
             <span
-              >60 min cooldown after active bookings</span
+              >60 min cooldown after active
+              bookings</span
             >
           </li>
           <li>
@@ -503,8 +594,8 @@
               [size]="14"
             ></app-icon>
             <span
-              >Cancellation fee applies within 1 hour of
-              start</span
+              >Cancellation fee applies within 1
+              hour of start</span
             >
           </li>
           <li>
@@ -565,9 +656,10 @@
               <span class="conflict-detail-label"
                 >Room</span
               >
-              <span class="conflict-detail-value">{{
-                conflictRoomName
-              }}</span>
+              <span
+                class="conflict-detail-value"
+                >{{ conflictRoomName }}</span
+              >
             </div>
           }
 
@@ -583,9 +675,10 @@
               <span class="conflict-detail-label"
                 >Booked by</span
               >
-              <span class="conflict-detail-value">{{
-                conflictUserName
-              }}</span>
+              <span
+                class="conflict-detail-value"
+                >{{ conflictUserName }}</span
+              >
             </div>
           }
 
@@ -610,29 +703,42 @@
             conflictCooldownMinutes
           ) {
             <div class="conflict-cooldown-block">
-              <div class="conflict-cooldown-header">
+              <div
+                class="conflict-cooldown-header"
+              >
                 <app-icon
                   [icon]="LucideClock"
                   [size]="18"
                 ></app-icon>
-                <span class="conflict-cooldown-title"
+                <span
+                  class="conflict-cooldown-title"
                   >Cooldown Period</span
                 >
               </div>
-              <div class="conflict-cooldown-details">
-                <div class="conflict-cooldown-row">
-                  <span class="conflict-cooldown-label"
+              <div
+                class="conflict-cooldown-details"
+              >
+                <div
+                  class="conflict-cooldown-row"
+                >
+                  <span
+                    class="conflict-cooldown-label"
                     >Current booking ends</span
                   >
-                  <span class="conflict-cooldown-value">{{
-                    conflictEnd
-                  }}</span>
+                  <span
+                    class="conflict-cooldown-value"
+                    >{{ conflictEnd }}</span
+                  >
                 </div>
-                <div class="conflict-cooldown-row">
-                  <span class="conflict-cooldown-label"
+                <div
+                  class="conflict-cooldown-row"
+                >
+                  <span
+                    class="conflict-cooldown-label"
                     >Cooldown duration</span
                   >
-                  <span class="conflict-cooldown-value"
+                  <span
+                    class="conflict-cooldown-value"
                     >{{
                       conflictCooldownMinutes
                     }}
@@ -642,12 +748,16 @@
                 <div
                   class="conflict-cooldown-row available"
                 >
-                  <span class="conflict-cooldown-label"
+                  <span
+                    class="conflict-cooldown-label"
                     >Room available from</span
                   >
-                  <span class="conflict-cooldown-value">{{
-                    conflictAvailableFrom
-                  }}</span>
+                  <span
+                    class="conflict-cooldown-value"
+                    >{{
+                      conflictAvailableFrom
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -658,12 +768,16 @@
                 [size]="18"
               ></app-icon>
               <div>
-                <span class="conflict-available-label"
+                <span
+                  class="conflict-available-label"
                   >Room available from</span
                 >
-                <span class="conflict-available-time">{{
-                  conflictAvailableFrom
-                }}</span>
+                <span
+                  class="conflict-available-time"
+                  >{{
+                    conflictAvailableFrom
+                  }}</span
+                >
               </div>
             </div>
           }
@@ -675,8 +789,8 @@
 
         <div class="conflict-modal-footer">
           <p class="conflict-suggestion">
-            Try selecting a different time slot or choose
-            another available room.
+            Try selecting a different time slot or
+            choose another available room.
           </p>
           <button
             type="button"

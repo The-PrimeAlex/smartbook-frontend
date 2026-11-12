@@ -7,11 +7,17 @@ export function getErrorMessage(
 ): string {
   if (error instanceof HttpErrorResponse) {
     const message = error.error?.message;
-    if (typeof message === 'string' && message.trim()) {
+    if (
+      typeof message === 'string' &&
+      message.trim()
+    ) {
       return message;
     }
     const errorText = error.error?.error;
-    if (typeof errorText === 'string' && errorText.trim()) {
+    if (
+      typeof errorText === 'string' &&
+      errorText.trim()
+    ) {
       return errorText;
     }
   }

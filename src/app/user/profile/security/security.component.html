@@ -17,7 +17,10 @@
       </div>
       <div>
         <h2>Account security status</h2>
-        <p>Overview of your current security settings.</p>
+        <p>
+          Overview of your current security
+          settings.
+        </p>
       </div>
     </div>
 
@@ -30,7 +33,9 @@
           ></app-icon>
         </div>
         <div class="status-info">
-          <span class="status-label">Account Status</span>
+          <span class="status-label"
+            >Account Status</span
+          >
           <span class="status-value">Active</span>
         </div>
       </div>
@@ -43,7 +48,9 @@
           ></app-icon>
         </div>
         <div class="status-info">
-          <span class="status-label">Password</span>
+          <span class="status-label"
+            >Password</span
+          >
           <span class="status-value">Set</span>
         </div>
       </div>
@@ -56,7 +63,9 @@
           ></app-icon>
         </div>
         <div class="status-info">
-          <span class="status-label">Login Email</span>
+          <span class="status-label"
+            >Login Email</span
+          >
           <span class="status-value">{{
             userEmail() || '—'
           }}</span>
@@ -71,8 +80,12 @@
           ></app-icon>
         </div>
         <div class="status-info">
-          <span class="status-label">Auto Logout</span>
-          <span class="status-value">10 minutes</span>
+          <span class="status-label"
+            >Auto Logout</span
+          >
+          <span class="status-value"
+            >10 minutes</span
+          >
         </div>
       </div>
     </div>
@@ -90,7 +103,8 @@
       <div>
         <h2>Password policy</h2>
         <p>
-          Requirements for your SmartBook account password.
+          Requirements for your SmartBook account
+          password.
         </p>
       </div>
     </div>
@@ -105,7 +119,8 @@
           ></app-icon>
         </span>
         <span class="policy-text"
-          >Minimum <strong>12 characters</strong> in
+          >Minimum
+          <strong>12 characters</strong> in
           length</span
         >
       </div>
@@ -134,7 +149,8 @@
         </span>
         <span class="policy-text"
           >Maximum
-          <strong>128 characters</strong> allowed</span
+          <strong>128 characters</strong>
+          allowed</span
         >
       </div>
 
@@ -147,8 +163,8 @@
           ></app-icon>
         </span>
         <span class="policy-text"
-          >Use a mix of letters, numbers, and symbols for
-          stronger security</span
+          >Use a mix of letters, numbers, and
+          symbols for stronger security</span
         >
       </div>
     </div>
@@ -157,7 +173,10 @@
   <!-- Session Security Card -->
   <div class="session-card">
     <div class="section-heading">
-      <div class="session-icon" aria-hidden="true">
+      <div
+        class="session-icon"
+        aria-hidden="true"
+      >
         <app-icon
           [icon]="LucideClock"
           [size]="24"
@@ -182,8 +201,8 @@
             >Inactivity timeout</span
           >
           <span class="session-info-value"
-            >You will be automatically logged out after 10
-            minutes of inactivity</span
+            >You will be automatically logged out
+            after 10 minutes of inactivity</span
           >
         </div>
       </div>
@@ -200,8 +219,8 @@
             >Warning before logout</span
           >
           <span class="session-info-value"
-            >You will receive a 60-second warning before
-            being logged out</span
+            >You will receive a 60-second warning
+            before being logged out</span
           >
         </div>
       </div>
@@ -218,8 +237,8 @@
             >Secure tokens</span
           >
           <span class="session-info-value"
-            >Your session uses encrypted JWT tokens with
-            automatic refresh</span
+            >Your session uses encrypted JWT
+            tokens with automatic refresh</span
           >
         </div>
       </div>
@@ -229,8 +248,14 @@
   <!-- Quick Actions Card -->
   <div class="actions-card">
     <div class="section-heading">
-      <div class="actions-icon" aria-hidden="true">
-        <app-icon [icon]="LucideZap" [size]="24"></app-icon>
+      <div
+        class="actions-icon"
+        aria-hidden="true"
+      >
+        <app-icon
+          [icon]="LucideZap"
+          [size]="24"
+        ></app-icon>
       </div>
       <div>
         <h2>Quick actions</h2>

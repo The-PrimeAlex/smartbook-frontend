@@ -1,8 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-
 
 export interface RoomMonitoringRecordAl {
   roomId: string | null;
@@ -39,21 +41,25 @@ export class RoomMonitoringAlService {
   getLiveRoomStatus(): Observable<
     RoomMonitoringRecordAl[]
   > {
-    return this.http.get<RoomMonitoringRecordAl[]>(
-      `${this.apiUrl}/live`,
-    );
+    return this.http.get<
+      RoomMonitoringRecordAl[]
+    >(`${this.apiUrl}/live`);
   }
 
-  getNoShows(): Observable<RoomMonitoringRecordAl[]> {
-    return this.http.get<RoomMonitoringRecordAl[]>(
-      `${this.apiUrl}/no-shows`,
-    );
+  getNoShows(): Observable<
+    RoomMonitoringRecordAl[]
+  > {
+    return this.http.get<
+      RoomMonitoringRecordAl[]
+    >(`${this.apiUrl}/no-shows`);
   }
 
-  getOverruns(): Observable<RoomMonitoringRecordAl[]> {
-    return this.http.get<RoomMonitoringRecordAl[]>(
-      `${this.apiUrl}/overruns`,
-    );
+  getOverruns(): Observable<
+    RoomMonitoringRecordAl[]
+  > {
+    return this.http.get<
+      RoomMonitoringRecordAl[]
+    >(`${this.apiUrl}/overruns`);
   }
 
   getRoomBookings(

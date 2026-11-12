@@ -231,7 +231,8 @@
   align-items: center;
   gap: 5px;
 }
-.usage-charge-row.has-overrun .usage-charge-label {
+.usage-charge-row.has-overrun
+  .usage-charge-label {
   color: var(--warning);
 }
 .usage-charge-value {
@@ -334,7 +335,9 @@
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .stats-toggle:hover {
@@ -364,7 +367,9 @@
 
 .stats-row-wrapper {
   overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.25s ease;
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease;
   max-height: 800px;
   opacity: 1;
 }

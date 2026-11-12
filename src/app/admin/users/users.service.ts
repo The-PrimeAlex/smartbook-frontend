@@ -1,10 +1,18 @@
-import { Injectable, inject, signal } from '@angular/core';
+import {
+  Injectable,
+  inject,
+  signal,
+} from '@angular/core';
 import { createLogger } from '../../shared/services/logger.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, of, tap } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  of,
+  tap,
+} from 'rxjs';
 import { CreateUserRequest } from './add-user/add-user.model';
 import { environment } from '../../../environments/environment';
-
 
 export interface OrganizationProfile {
   name: string;
@@ -34,7 +42,8 @@ export interface SmartBookUser {
   registrationContactEmail?: string;
 }
 
-export type UserFilter = 'ALL' | 'ADMINS' | AccountStatus;
+export type UserFilter =
+  'ALL' | 'ADMINS' | AccountStatus;
 
 export type UserRole = 'ADMIN' | 'USER';
 export type AccountStatus =
@@ -57,14 +66,18 @@ interface BackendUser {
   } | null;
 }
 
-function mapBackendUser(u: BackendUser): SmartBookUser {
-  const statusMap: Record<string, AccountStatus> = {
-    ACTIVE: 'ACTIVE',
-    INACTIVE: 'DISABLED',
-    SUSPENDED: 'DISABLED',
-    PENDING: 'PENDING',
-  };
-  const status = statusMap[u.status] ?? 'DISABLED';
+function mapBackendUser(
+  u: BackendUser,
+): SmartBookUser {
+  const statusMap: Record<string, AccountStatus> =
+    {
+      ACTIVE: 'ACTIVE',
+      INACTIVE: 'DISABLED',
+      SUSPENDED: 'DISABLED',
+      PENDING: 'PENDING',
+    };
+  const status =
+    statusMap[u.status] ?? 'DISABLED';
   const roles: UserRole[] = u.roles.map(
     (r) => r.replace('ROLE_', '') as UserRole,
   );
@@ -78,8 +91,10 @@ function mapBackendUser(u: BackendUser): SmartBookUser {
     createdAt: u.createdAt,
     roles,
     companyName: u.tenant?.companyName,
-    registrationNumber: u.tenant?.registrationNumber,
-    registrationContactEmail: u.tenant?.contactEmail,
+    registrationNumber:
+      u.tenant?.registrationNumber,
+    registrationContactEmail:
+      u.tenant?.contactEmail,
   };
 }
 
@@ -87,12 +102,15 @@ function mapBackendUser(u: BackendUser): SmartBookUser {
   providedIn: 'root',
 })
 export class UsersService {
-  private readonly log = createLogger('UsersService');
+  private readonly log = createLogger(
+    'UsersService',
+  );
   private http = inject(HttpClient);
   private users = signal<SmartBookUser[]>([]);
   private loading = signal(false);
 
-  readonly readOnlyUsers = this.users.asReadonly();
+  readonly readOnlyUsers =
+    this.users.asReadonly();
   readonly isLoading = this.loading.asReadonly();
 
   constructor() {
@@ -102,11 +120,16 @@ export class UsersService {
   loadUsers() {
     this.loading.set(true);
     this.http
-      .get<BackendUser[]>(`${environment.apiUrl}/users/`)
+      .get<BackendUser[]>(
+        `${environment.apiUrl}/users/`,
+      )
       .pipe(
         tap(() => this.loading.set(false)),
         catchError((err) => {
-          this.log.error('Failed to fetch users:', err);
+          this.log.error(
+            'Failed to fetch users:',
+            err,
+          );
           this.loading.set(false);
           return of([]);
         }),
@@ -132,7 +155,8 @@ export class UsersService {
               u.id === userId
                 ? {
                     ...u,
-                    status: 'DISABLED' as AccountStatus,
+                    status:
+                      'DISABLED' as AccountStatus,
                   }
                 : u,
             ),
@@ -147,7 +171,9 @@ export class UsersService {
     );
   }
 
-  updateProfile(profile: MyProfile): Observable<void> {
+  updateProfile(
+    profile: MyProfile,
+  ): Observable<void> {
     return this.http.put<void>(
       `${environment.apiUrl}/users/me/profile`,
       profile,
@@ -156,7 +182,10 @@ export class UsersService {
 
   addUser(user: CreateUserRequest) {
     return this.http
-      .post<{ message: string }>(`${environment.apiUrl}/users`, user)
+      .post<{ message: string }>(
+        `${environment.apiUrl}/users`,
+        user,
+      )
       .pipe(tap(() => this.loadUsers()));
   }
 }

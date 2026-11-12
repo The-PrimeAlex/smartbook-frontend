@@ -39,7 +39,8 @@ import { formatDateTime } from '../../../shared/directives';
   styleUrl: './usage-charges.component.css',
 })
 export class UsageChargesComponent implements OnInit {
-  readonly LucideAlertTriangle = LucideAlertTriangle;
+  readonly LucideAlertTriangle =
+    LucideAlertTriangle;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideUser = LucideUser;
@@ -52,10 +53,13 @@ export class UsageChargesComponent implements OnInit {
     this.statsCollapsed.update((v) => !v);
   }
 
-  readonly totalUsage = computed(() => this.usage().length);
+  readonly totalUsage = computed(
+    () => this.usage().length,
+  );
   readonly totalDuration = computed(() =>
     this.usage().reduce(
-      (sum, u) => sum + (u.actualDurationMinutes || 0),
+      (sum, u) =>
+        sum + (u.actualDurationMinutes || 0),
       0,
     ),
   );
@@ -66,7 +70,9 @@ export class UsageChargesComponent implements OnInit {
     ),
   );
   readonly autoClosedCount = computed(
-    () => this.usage().filter((u) => u.autoClosed).length,
+    () =>
+      this.usage().filter((u) => u.autoClosed)
+        .length,
   );
 
   constructor(
@@ -81,7 +87,9 @@ export class UsageChargesComponent implements OnInit {
     this.loading.set(true);
     this.billingService
       .getAllUsage()
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
         next: (data) => this.usage.set(data),
         error: () => this.loading.set(false),

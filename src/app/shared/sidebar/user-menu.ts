@@ -7,7 +7,7 @@ export const USER_MENU: MenuSection[] = [
       {
         label: 'Dashboard',
         icon: 'dashboard',
-        route: '/app/dashboard',
+        route: '/dashboard',
       },
       {
         label: 'Find a Room',

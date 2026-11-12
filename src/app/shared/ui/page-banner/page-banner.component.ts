@@ -27,7 +27,9 @@ import { LucideDynamicIcon } from '@lucide/angular';
         }
         <div class="banner-heading-text">
           @if (eyebrow()) {
-            <span class="eyebrow">{{ eyebrow() }}</span>
+            <span class="eyebrow">{{
+              eyebrow()
+            }}</span>
           }
           <h1>{{ title() }}</h1>
           @if (description()) {
@@ -192,7 +194,8 @@ import { LucideDynamicIcon } from '@lucide/angular';
       right: 25%;
       opacity: 0.22;
     }
-    .app-page-banner[data-deco='b'] .banner-deco-corner {
+    .app-page-banner[data-deco='b']
+      .banner-deco-corner {
       opacity: 0.15;
     }
 
@@ -206,7 +209,8 @@ import { LucideDynamicIcon } from '@lucide/angular';
       right: 45%;
       opacity: 0.14;
     }
-    .app-page-banner[data-deco='c'] .banner-deco-corner {
+    .app-page-banner[data-deco='c']
+      .banner-deco-corner {
       opacity: 0.08;
     }
 
@@ -220,7 +224,8 @@ import { LucideDynamicIcon } from '@lucide/angular';
       right: 30%;
       opacity: 0.2;
     }
-    .app-page-banner[data-deco='d'] .banner-deco-corner {
+    .app-page-banner[data-deco='d']
+      .banner-deco-corner {
       opacity: 0.13;
     }
 
@@ -336,7 +341,9 @@ import { LucideDynamicIcon } from '@lucide/angular';
       transition: transform 500ms ease;
     }
 
-    .banner-actions ::ng-deep button:hover:not(:disabled) {
+    .banner-actions
+      ::ng-deep
+      button:hover:not(:disabled) {
       border-color: rgba(255, 255, 255, 0.3);
       color: #fff;
       background: rgba(255, 255, 255, 0.06);
@@ -349,7 +356,9 @@ import { LucideDynamicIcon } from '@lucide/angular';
       transform: rotate(180deg);
     }
 
-    .banner-actions ::ng-deep button:active:not(:disabled) {
+    .banner-actions
+      ::ng-deep
+      button:active:not(:disabled) {
       background: rgba(255, 255, 255, 0.1);
     }
 
@@ -359,7 +368,10 @@ import { LucideDynamicIcon } from '@lucide/angular';
       opacity: 0.5;
     }
 
-    .banner-actions ::ng-deep button:disabled svg {
+    .banner-actions
+      ::ng-deep
+      button:disabled
+      svg {
       animation: refreshSpin 0.8s linear infinite;
     }
 
@@ -372,8 +384,11 @@ import { LucideDynamicIcon } from '@lucide/angular';
       }
     }
 
-    .banner-actions ::ng-deep button:focus-visible {
-      outline: 2px solid var(--brand-accent, #f28c28);
+    .banner-actions
+      ::ng-deep
+      button:focus-visible {
+      outline: 2px solid
+        var(--brand-accent, #f28c28);
       outline-offset: 2px;
     }
 

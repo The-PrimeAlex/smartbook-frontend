@@ -7,7 +7,9 @@
   ></app-page-banner>
 
   @if (error()) {
-    <div class="notice notice-error">{{ error() }}</div>
+    <div class="notice notice-error">
+      {{ error() }}
+    </div>
   }
   @if (saved()) {
     <div class="notice notice-success">
@@ -16,7 +18,9 @@
   }
 
   @if (loading()) {
-    <div class="loading-panel">Loading rooms...</div>
+    <div class="loading-panel">
+      Loading rooms...
+    </div>
   } @else {
     <div class="config-layout">
       <!-- Left Panel: Room List -->
@@ -39,7 +43,9 @@
             title="No Rooms Found"
             message="No rooms have been created yet. Go to View Rooms to add your first room."
           ></app-empty-state>
-        } @else if (filteredRooms().length === 0) {
+        } @else if (
+          filteredRooms().length === 0
+        ) {
           <app-empty-state
             [icon]="LucideSearch"
             title="No Matching Rooms"
@@ -52,11 +58,19 @@
         } @else {
           <div class="room-list">
             <div class="list-header">
-              <span class="col-name">Room Name</span>
+              <span class="col-name"
+                >Room Name</span
+              >
               <span class="col-type">Type</span>
-              <span class="col-capacity">Capacity</span>
-              <span class="col-rate">Hourly Rate</span>
-              <span class="col-status">Status</span>
+              <span class="col-capacity"
+                >Capacity</span
+              >
+              <span class="col-rate"
+                >Hourly Rate</span
+              >
+              <span class="col-status"
+                >Status</span
+              >
             </div>
             <div class="list-body">
               @for (
@@ -67,27 +81,37 @@
                 <div
                   class="list-row"
                   [class.selected]="
-                    selectedRoom()?.roomId === room.roomId
+                    selectedRoom()?.roomId ===
+                    room.roomId
                   "
                   (click)="selectRoom(room)"
-                  [style.animation-delay]="i * 50 + 'ms'"
+                  [style.animation-delay]="
+                    i * 50 + 'ms'
+                  "
                 >
                   <span class="col-name">
-                    <span class="row-icon">🏢</span>
+                    <span class="row-icon"
+                      >🏢</span
+                    >
                     <span class="name-text">
                       <span class="name">{{
                         room.roomName
                       }}</span>
                       @if (room.description) {
-                        <span class="description">{{
-                          room.description
-                        }}</span>
+                        <span
+                          class="description"
+                          >{{
+                            room.description
+                          }}</span
+                        >
                       }
                     </span>
                   </span>
                   <span class="col-type">
                     <span class="type-badge">{{
-                      formatRoomType(room.roomType)
+                      formatRoomType(
+                        room.roomType
+                      )
                     }}</span>
                   </span>
                   <span class="col-capacity">
@@ -96,7 +120,9 @@
                   </span>
                   <span class="col-rate">
                     KES
-                    {{ room.hourlyRate.toLocaleString() }}
+                    {{
+                      room.hourlyRate.toLocaleString()
+                    }}
                   </span>
                   <span class="col-status">
                     <span
@@ -104,8 +130,12 @@
                         room.status.toLowerCase()
                       }}"
                     >
-                      <span class="status-dot"></span>
-                      {{ formatStatus(room.status) }}
+                      <span
+                        class="status-dot"
+                      ></span>
+                      {{
+                        formatStatus(room.status)
+                      }}
                     </span>
                   </span>
                 </div>
@@ -124,7 +154,9 @@
                 <span class="section-eyebrow"
                   >EDIT ROOM</span
                 >
-                <h2>{{ selectedRoom()!.roomName }}</h2>
+                <h2>
+                  {{ selectedRoom()!.roomName }}
+                </h2>
               </div>
               @if (!editing()) {
                 <button
@@ -144,24 +176,34 @@
                     >Room Type</span
                   >
                   <span class="detail-value">{{
-                    formatRoomType(selectedRoom()!.roomType)
+                    formatRoomType(
+                      selectedRoom()!.roomType
+                    )
                   }}</span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">Status</span>
+                  <span class="detail-label"
+                    >Status</span
+                  >
                   <span
                     class="status-badge status-{{
                       selectedRoom()!.status.toLowerCase()
                     }}"
                   >
-                    <span class="status-dot"></span>
+                    <span
+                      class="status-dot"
+                    ></span>
                     {{
-                      formatStatus(selectedRoom()!.status)
+                      formatStatus(
+                        selectedRoom()!.status
+                      )
                     }}
                   </span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">Capacity</span>
+                  <span class="detail-label"
+                    >Capacity</span
+                  >
                   <span class="detail-value"
                     >👥
                     {{ selectedRoom()!.capacity }}
@@ -179,8 +221,12 @@
                     }}</span
                   >
                 </div>
-                @if (selectedRoom()!.description) {
-                  <div class="detail-item full-width">
+                @if (
+                  selectedRoom()!.description
+                ) {
+                  <div
+                    class="detail-item full-width"
+                  >
                     <span class="detail-label"
                       >Description</span
                     >
@@ -193,7 +239,9 @@
             } @else {
               <!-- Edit Mode: Form fields -->
               <div class="form-grid">
-                <div class="form-group full-width">
+                <div
+                  class="form-group full-width"
+                >
                   <label class="form-label"
                     >Room Name</label
                   >
@@ -213,7 +261,10 @@
                     class="form-select"
                     [(ngModel)]="draft().roomType"
                   >
-                    @for (type of roomTypes; track type) {
+                    @for (
+                      type of roomTypes;
+                      track type
+                    ) {
                       <option [value]="type">
                         {{ formatRoomType(type) }}
                       </option>
@@ -222,7 +273,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">Status</label>
+                  <label class="form-label"
+                    >Status</label
+                  >
                   <select
                     class="form-select"
                     [(ngModel)]="draft().status"
@@ -239,7 +292,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">Capacity</label>
+                  <label class="form-label"
+                    >Capacity</label
+                  >
                   <input
                     class="form-input"
                     type="number"
@@ -256,18 +311,24 @@
                     class="form-input"
                     type="number"
                     min="0"
-                    [(ngModel)]="draft().hourlyRate"
+                    [(ngModel)]="
+                      draft().hourlyRate
+                    "
                   />
                 </div>
 
-                <div class="form-group full-width">
+                <div
+                  class="form-group full-width"
+                >
                   <label class="form-label"
                     >Description</label
                   >
                   <textarea
                     class="form-textarea"
                     rows="3"
-                    [(ngModel)]="draft().description"
+                    [(ngModel)]="
+                      draft().description
+                    "
                     placeholder="Room description..."
                   ></textarea>
                 </div>
@@ -285,7 +346,9 @@
                     [disabled]="saving()"
                   >
                     @if (saving()) {
-                      <span class="spinner"></span>
+                      <span
+                        class="spinner"
+                      ></span>
                       Saving...
                     } @else {
                       Save Changes
@@ -300,8 +363,9 @@
             <p class="placeholder-icon">👈</p>
             <h3>Select a Room</h3>
             <p>
-              Click on a room from the list to view its
-              details and configure its settings.
+              Click on a room from the list to
+              view its details and configure its
+              settings.
             </p>
           </div>
         }

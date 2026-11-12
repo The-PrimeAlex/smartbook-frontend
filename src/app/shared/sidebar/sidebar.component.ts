@@ -106,7 +106,8 @@ export class SidebarComponent {
     'live-room-status': LucideMonitor,
     'all-incidents': LucideReceipt,
     'all-invoices': LucideReceipt,
-    'occupancy-reports': LucideChartNoAxesCombined,
+    'occupancy-reports':
+      LucideChartNoAxesCombined,
     'general-settings': LucideSettings,
     'room-configuration': LucideSettings,
     'booking-rules': LucideCalendarCheck,
@@ -119,7 +120,8 @@ export class SidebarComponent {
   protected readonly LucidHouse = LucideHouse;
   protected readonly LucidLogOut = LucideLogOut;
 
-  private readonly authService = inject(AuthService);
+  private readonly authService =
+    inject(AuthService);
   private readonly router = inject(Router);
 
   @ViewChild(ConfirmLogoutModalComponent)
@@ -132,11 +134,12 @@ export class SidebarComponent {
 
   readonly collapsed = signal(false);
   readonly mobileOpen = signal(false);
-  readonly expandedMenus = signal<Record<string, boolean>>(
-    {},
-  );
+  readonly expandedMenus = signal<
+    Record<string, boolean>
+  >({});
 
-  readonly currentUser = this.authService.currentUser;
+  readonly currentUser =
+    this.authService.currentUser;
 
   readonly isAdmin = computed(() =>
     this.authService.hasRole('ADMIN'),
@@ -151,17 +154,24 @@ export class SidebarComponent {
   );
 
   readonly subtitle = computed(() =>
-    this.isAdmin() ? 'Administrator' : 'Meeting Management',
+    this.isAdmin()
+      ? 'Administrator'
+      : 'Meeting Management',
   );
 
   private isMobile = signal(false);
 
   constructor() {
     // Check mobile state
-    this.isMobile.set(window.matchMedia('(max-width: 30rem)').matches);
+    this.isMobile.set(
+      window.matchMedia('(max-width: 30rem)')
+        .matches,
+    );
 
     // Listen for window resize to detect mobile/desktop transitions
-    const mql = window.matchMedia('(max-width: 30rem)');
+    const mql = window.matchMedia(
+      '(max-width: 30rem)',
+    );
     mql.addEventListener('change', (e) => {
       this.isMobile.set(e.matches);
       if (!e.matches) {
@@ -182,7 +192,10 @@ export class SidebarComponent {
 
     this.router.events
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
+        filter(
+          (event) =>
+            event instanceof NavigationEnd,
+        ),
       )
       .subscribe(() => {
         // Close mobile sidebar on navigation
@@ -296,7 +309,9 @@ export class SidebarComponent {
                   currentUrl.startsWith(
                     `${child.route}/`,
                   ) ||
-                  currentUrl.startsWith(`${child.route}?`)),
+                  currentUrl.startsWith(
+                    `${child.route}?`,
+                  )),
             )
           ) {
             updated[item.label] = true;
@@ -314,8 +329,10 @@ export class SidebarComponent {
 
   performSignOut(): void {
     this.authService.logout().subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: () => this.router.navigate(['/login']),
+      next: () =>
+        this.router.navigate(['/login']),
+      error: () =>
+        this.router.navigate(['/login']),
     });
   }
 }

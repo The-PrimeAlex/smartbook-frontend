@@ -50,8 +50,13 @@ type StatusFilter =
 @Component({
   selector: 'app-room-monitoring',
   standalone: true,
-  imports: [DatePipe, IconComponent, PageBannerComponent],
-  templateUrl: './room-monitoring-al.component.html',
+  imports: [
+    DatePipe,
+    IconComponent,
+    PageBannerComponent,
+  ],
+  templateUrl:
+    './room-monitoring-al.component.html',
   styleUrl: './room-monitoring-al.component.css',
 })
 export class RoomMonitoringAlComponent
@@ -63,10 +68,14 @@ export class RoomMonitoringAlComponent
   private readonly route = inject(ActivatedRoute);
 
   readonly LucideActivity = LucideActivity;
-  readonly LucideAlertTriangle = LucideAlertTriangle;
-  readonly LucideArrowUpRight = LucideArrowUpRight;
-  readonly LucideCalendarDays = LucideCalendarDays;
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideAlertTriangle =
+    LucideAlertTriangle;
+  readonly LucideArrowUpRight =
+    LucideArrowUpRight;
+  readonly LucideCalendarDays =
+    LucideCalendarDays;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideFilter = LucideFilter;
@@ -82,7 +91,9 @@ export class RoomMonitoringAlComponent
   readonly LucideXCircle = LucideXCircle;
 
   readonly activeTab = signal<TabMode>('live');
-  readonly records = signal<RoomMonitoringRecordAl[]>([]);
+  readonly records = signal<
+    RoomMonitoringRecordAl[]
+  >([]);
   readonly loading = signal(false);
   readonly errorMessage = signal('');
 
@@ -96,7 +107,9 @@ export class RoomMonitoringAlComponent
   readonly overrunCount = signal(0);
 
   // Live monitoring state
-  readonly lastUpdated = signal<Date | null>(null);
+  readonly lastUpdated = signal<Date | null>(
+    null,
+  );
   readonly autoRefreshInterval = 30000; // 30 seconds
   private autoRefreshTimer: ReturnType<
     typeof setInterval
@@ -104,13 +117,16 @@ export class RoomMonitoringAlComponent
 
   // Search and filter
   readonly searchQuery = signal('');
-  readonly statusFilter = signal<StatusFilter>('all');
+  readonly statusFilter =
+    signal<StatusFilter>('all');
   readonly showFilters = signal(false);
 
   // Filtered records for live tab
   readonly filteredRecords = computed(() => {
     let result = this.records();
-    const query = this.searchQuery().toLowerCase().trim();
+    const query = this.searchQuery()
+      .toLowerCase()
+      .trim();
     const filter = this.statusFilter();
 
     if (query) {
@@ -119,7 +135,9 @@ export class RoomMonitoringAlComponent
           (r.roomName ?? '')
             .toLowerCase()
             .includes(query) ||
-          (r.purpose ?? '').toLowerCase().includes(query) ||
+          (r.purpose ?? '')
+            .toLowerCase()
+            .includes(query) ||
           (r.bookerName ?? '')
             .toLowerCase()
             .includes(query),
@@ -128,7 +146,9 @@ export class RoomMonitoringAlComponent
 
     if (filter !== 'all') {
       result = result.filter((r) => {
-        const status = (r.liveStatus ?? '').toLowerCase();
+        const status = (
+          r.liveStatus ?? ''
+        ).toLowerCase();
         switch (filter) {
           case 'available':
             return status === 'available';
@@ -159,7 +179,9 @@ export class RoomMonitoringAlComponent
   // Room detail panel state
   readonly selectedRoom =
     signal<RoomMonitoringRecordAl | null>(null);
-  readonly roomBookings = signal<RoomBookingRecordAl[]>([]);
+  readonly roomBookings = signal<
+    RoomBookingRecordAl[]
+  >([]);
   readonly roomBookingsLoading = signal(false);
 
   ngOnInit(): void {
@@ -207,10 +229,12 @@ export class RoomMonitoringAlComponent
           this.monitoringService.getLiveRoomStatus();
         break;
       case 'no-shows':
-        observable = this.monitoringService.getNoShows();
+        observable =
+          this.monitoringService.getNoShows();
         break;
       case 'overruns':
-        observable = this.monitoringService.getOverruns();
+        observable =
+          this.monitoringService.getOverruns();
         break;
     }
 
@@ -285,13 +309,19 @@ export class RoomMonitoringAlComponent
   }
 
   // Action helpers
-  viewBookings(record: RoomMonitoringRecordAl): void {
+  viewBookings(
+    record: RoomMonitoringRecordAl,
+  ): void {
     this.openRoomDetail(record);
   }
 
-  contactBooker(record: RoomMonitoringRecordAl): void {
+  contactBooker(
+    record: RoomMonitoringRecordAl,
+  ): void {
     // In a real app, this would open a contact dialog or mailto link
-    alert(`Contact: ${record.bookerName ?? 'Unknown'}`);
+    alert(
+      `Contact: ${record.bookerName ?? 'Unknown'}`,
+    );
   }
 
   refresh(): void {
@@ -322,7 +352,8 @@ export class RoomMonitoringAlComponent
   getTimeRemaining(
     record: RoomMonitoringRecordAl,
   ): number | null {
-    if (!record.startTime || !record.endTime) return null;
+    if (!record.startTime || !record.endTime)
+      return null;
     const now = new Date();
     const end = new Date(record.endTime);
     const diff = Math.round(
@@ -401,7 +432,9 @@ export class RoomMonitoringAlComponent
   /**
    * Get CSS class for room card based on status
    */
-  getRoomCardClass(record: RoomMonitoringRecordAl): string {
+  getRoomCardClass(
+    record: RoomMonitoringRecordAl,
+  ): string {
     const status = record.liveStatus ?? '';
     switch (status) {
       case 'OVERRUN':
@@ -419,7 +452,9 @@ export class RoomMonitoringAlComponent
     }
   }
 
-  bookingStatusBadgeClass(status: string | null): string {
+  bookingStatusBadgeClass(
+    status: string | null,
+  ): string {
     switch (status) {
       case 'PENDING':
         return 'badge-pending';
@@ -438,7 +473,9 @@ export class RoomMonitoringAlComponent
     }
   }
 
-  statusBadgeClass(status: string | null): string {
+  statusBadgeClass(
+    status: string | null,
+  ): string {
     switch (status) {
       case 'AVAILABLE':
         return 'badge-available';
@@ -461,8 +498,13 @@ export class RoomMonitoringAlComponent
     }
   }
 
-  private escapeListener = (event: KeyboardEvent): void => {
-    if (event.key === 'Escape' && this.selectedRoom()) {
+  private escapeListener = (
+    event: KeyboardEvent,
+  ): void => {
+    if (
+      event.key === 'Escape' &&
+      this.selectedRoom()
+    ) {
       this.closeRoomDetail();
     }
   };
@@ -475,7 +517,9 @@ export class RoomMonitoringAlComponent
     this.stopAutoRefresh();
   }
 
-  openRoomDetail(record: RoomMonitoringRecordAl): void {
+  openRoomDetail(
+    record: RoomMonitoringRecordAl,
+  ): void {
     if (!record.roomId) return;
     this.selectedRoom.set(record);
     this.roomBookingsLoading.set(true);

@@ -13,7 +13,9 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title">Usage Summary</span>
+      <span class="stats-toggle-title"
+        >Usage Summary</span
+      >
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -21,7 +23,10 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+    <div
+      class="stats-row-wrapper"
+      [class.collapsed]="statsCollapsed()"
+    >
       <div class="stats-bar">
         <app-stat-card
           [icon]="LucideClock"
@@ -29,7 +34,9 @@
           [iconColor]="'var(--info,#3b82f6)'"
           delay="0s"
         >
-          <span stat-value>{{ totalUsage() }}</span>
+          <span stat-value>{{
+            totalUsage()
+          }}</span>
           <span stat-label>Sessions</span>
         </app-stat-card>
         <app-stat-card
@@ -60,7 +67,9 @@
           [iconColor]="'var(--purple,#8b5cf6)'"
           delay="0.15s"
         >
-          <span stat-value>{{ autoClosedCount() }}</span>
+          <span stat-value>{{
+            autoClosedCount()
+          }}</span>
           <span stat-label>Auto-Closed</span>
         </app-stat-card>
       </div>
@@ -91,9 +100,12 @@
         ) {
           <article
             class="usage-card"
-            [style.animation-delay]="i * 0.05 + 's'"
+            [style.animation-delay]="
+              i * 0.05 + 's'
+            "
             [class.has-overrun]="
-              item.overrunMinutes && item.overrunMinutes > 0
+              item.overrunMinutes &&
+              item.overrunMinutes > 0
             "
           >
             <div class="usage-card-header">
@@ -108,12 +120,19 @@
                 }
               </div>
               <div class="usage-header-right">
-                <span class="usage-total-amount">{{
-                  item.totalCharge
-                    | currency: 'KSH ' : 'symbol-narrow'
-                }}</span>
+                <span
+                  class="usage-total-amount"
+                  >{{
+                    item.totalCharge
+                      | currency
+                        : 'KSH '
+                        : 'symbol-narrow'
+                  }}</span
+                >
                 <span class="usage-duration">{{
-                  formatDuration(item.actualDurationMinutes)
+                  formatDuration(
+                    item.actualDurationMinutes
+                  )
                 }}</span>
               </div>
             </div>
@@ -137,17 +156,27 @@
                   <span class="usage-time-label"
                     >Check In</span
                   >
-                  <span class="usage-time-value">{{
-                    formatDateTime(item.checkInTime)
-                  }}</span>
+                  <span
+                    class="usage-time-value"
+                    >{{
+                      formatDateTime(
+                        item.checkInTime
+                      )
+                    }}</span
+                  >
                 </div>
                 <div class="usage-time-block">
                   <span class="usage-time-label"
                     >Check Out</span
                   >
-                  <span class="usage-time-value">{{
-                    formatDateTime(item.checkOutTime)
-                  }}</span>
+                  <span
+                    class="usage-time-value"
+                    >{{
+                      formatDateTime(
+                        item.checkOutTime
+                      )
+                    }}</span
+                  >
                 </div>
               </div>
               <!-- Charge Breakdown -->
@@ -156,29 +185,47 @@
                   <span class="usage-charge-label"
                     >Room Charge</span
                   >
-                  <span class="usage-charge-value">{{
-                    item.roomCharge
-                      | currency: 'KSH ' : 'symbol-narrow'
-                  }}</span>
+                  <span
+                    class="usage-charge-value"
+                    >{{
+                      item.roomCharge
+                        | currency
+                          : 'KSH '
+                          : 'symbol-narrow'
+                    }}</span
+                  >
                 </div>
                 @if (
                   item.overrunCharge &&
                   item.overrunCharge > 0
                 ) {
-                  <div class="usage-charge-row has-overrun">
-                    <span class="usage-charge-label">
+                  <div
+                    class="usage-charge-row has-overrun"
+                  >
+                    <span
+                      class="usage-charge-label"
+                    >
                       <app-icon
-                        [icon]="LucideAlertTriangle"
+                        [icon]="
+                          LucideAlertTriangle
+                        "
                         [size]="12"
                       ></app-icon>
                       Overrun ({{
-                        formatDuration(item.overrunMinutes)
+                        formatDuration(
+                          item.overrunMinutes
+                        )
                       }})
                     </span>
-                    <span class="usage-charge-value">{{
-                      item.overrunCharge
-                        | currency: 'KSH ' : 'symbol-narrow'
-                    }}</span>
+                    <span
+                      class="usage-charge-value"
+                      >{{
+                        item.overrunCharge
+                          | currency
+                            : 'KSH '
+                            : 'symbol-narrow'
+                      }}</span
+                    >
                   </div>
                 }
               </div>
@@ -193,7 +240,9 @@
                   <span
                     >Overrun:
                     {{
-                      formatDuration(item.overrunMinutes)
+                      formatDuration(
+                        item.overrunMinutes
+                      )
                     }}</span
                   >
                 </div>

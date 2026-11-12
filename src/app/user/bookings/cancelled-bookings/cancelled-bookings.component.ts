@@ -1,4 +1,7 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+} from '@angular/common';
 import {
   Component,
   computed,
@@ -45,11 +48,14 @@ import {
     StatusBadgeComponent,
     IconComponent,
   ],
-  templateUrl: './cancelled-bookings.component.html',
+  templateUrl:
+    './cancelled-bookings.component.html',
   styleUrl: './cancelled-bookings.component.css',
 })
 export class CancelledBookingsComponent implements OnInit {
-  private readonly bookingService = inject(BookingService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
 
   readonly bookings = signal<Booking[]>([]);
   readonly loading = signal(false);
@@ -75,9 +81,12 @@ export class CancelledBookingsComponent implements OnInit {
 
     this.bookingService
       .getMyBookings()
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
-        next: (bookings) => this.bookings.set(bookings),
+        next: (bookings) =>
+          this.bookings.set(bookings),
         error: (error: unknown) => {
           this.errorMessage.set(
             this.getErrorMessage(

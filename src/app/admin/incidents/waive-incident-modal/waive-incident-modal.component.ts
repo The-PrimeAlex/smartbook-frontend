@@ -15,9 +15,15 @@ import { IconComponent } from '../../../shared/ui';
 @Component({
   selector: 'app-waive-incident-modal',
   standalone: true,
-  imports: [FormsModule, LucideDynamicIcon, IconComponent],
-  templateUrl: './waive-incident-modal.component.html',
-  styleUrl: './waive-incident-modal.component.css',
+  imports: [
+    FormsModule,
+    LucideDynamicIcon,
+    IconComponent,
+  ],
+  templateUrl:
+    './waive-incident-modal.component.html',
+  styleUrl:
+    './waive-incident-modal.component.css',
 })
 export class WaiveIncidentModalComponent {
   readonly LucideLoader = LucideLoader;

@@ -6,7 +6,10 @@ import {
   inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
 import { finalize } from 'rxjs';
 import {
   LucideAlertCircle,
@@ -56,23 +59,31 @@ import {
   styleUrl: './create-booking.component.css',
 })
 export class CreateBookingComponent implements OnInit {
-  private readonly bookingService = inject(BookingService);
-  private readonly roomService = inject(RoomService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
+  private readonly roomService =
+    inject(RoomService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly cdr = inject(
+    ChangeDetectorRef,
+  );
 
   readonly LucideAlertCircle = LucideAlertCircle;
-  readonly LucideAlertTriangle = LucideAlertTriangle;
+  readonly LucideAlertTriangle =
+    LucideAlertTriangle;
   readonly LucideArrowDown = LucideArrowDown;
   readonly LucideArrowRight = LucideArrowRight;
   readonly LucideCalendar = LucideCalendar;
-  readonly LucideCalendarCheck = LucideCalendarCheck;
+  readonly LucideCalendarCheck =
+    LucideCalendarCheck;
   readonly LucideCheck = LucideCheck;
   readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCircleHelp = LucideCircleHelp;
-  readonly LucideClipboardList = LucideClipboardList;
+  readonly LucideClipboardList =
+    LucideClipboardList;
   readonly LucideClock = LucideClock;
   readonly LucideFileText = LucideFileText;
   readonly LucideLightbulb = LucideLightbulb;
@@ -131,20 +142,23 @@ export class CreateBookingComponent implements OnInit {
 
   private formatDate(date: Date): string {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(
+    const month = String(
+      date.getMonth() + 1,
+    ).padStart(2, '0');
+    const day = String(date.getDate()).padStart(
       2,
       '0',
     );
-    const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
 
   private formatTime(date: Date): string {
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(
-      2,
-      '0',
-    );
+    const hours = String(
+      date.getHours(),
+    ).padStart(2, '0');
+    const minutes = String(
+      date.getMinutes(),
+    ).padStart(2, '0');
     return `${hours}:${minutes}`;
   }
 
@@ -159,9 +173,16 @@ export class CreateBookingComponent implements OnInit {
     time: string,
     hoursToAdd: number,
   ): string {
-    const [hours, minutes] = time.split(':').map(Number);
+    const [hours, minutes] = time
+      .split(':')
+      .map(Number);
     const date = new Date();
-    date.setHours(hours + hoursToAdd, minutes, 0, 0);
+    date.setHours(
+      hours + hoursToAdd,
+      minutes,
+      0,
+      0,
+    );
     return this.formatTime(date);
   }
 
@@ -171,7 +192,11 @@ export class CreateBookingComponent implements OnInit {
 
     this.roomService
       .getRooms()
-      .pipe(finalize(() => (this.loadingRooms = false)))
+      .pipe(
+        finalize(
+          () => (this.loadingRooms = false),
+        ),
+      )
       .subscribe({
         next: (rooms) => {
           this.rooms = rooms.filter(
@@ -215,7 +240,9 @@ export class CreateBookingComponent implements OnInit {
   ): Date | null {
     if (!date || !time) return null;
     const result = new Date(`${date}T${time}:00`);
-    return Number.isNaN(result.getTime()) ? null : result;
+    return Number.isNaN(result.getTime())
+      ? null
+      : result;
   }
 
   get startDateTime(): Date | null {
@@ -236,13 +263,17 @@ export class CreateBookingComponent implements OnInit {
     const start = this.startDateTime;
     const end = this.endDateTime;
     return (
-      !!start && !!end && end.getTime() <= start.getTime()
+      !!start &&
+      !!end &&
+      end.getTime() <= start.getTime()
     );
   }
 
   get startIsInPast(): boolean {
     const start = this.startDateTime;
-    return !!start && start.getTime() <= Date.now();
+    return (
+      !!start && start.getTime() <= Date.now()
+    );
   }
 
   get durationMinutes(): number {
@@ -273,7 +304,8 @@ export class CreateBookingComponent implements OnInit {
 
   get estimatedTotal(): number {
     const rate = this.selectedRoom?.hourlyRate;
-    if (!rate || this.durationMinutes <= 0) return 0;
+    if (!rate || this.durationMinutes <= 0)
+      return 0;
     return rate * (this.durationMinutes / 60);
   }
 
@@ -298,12 +330,14 @@ export class CreateBookingComponent implements OnInit {
 
     // Validate first before clearing messages
     if (!this.roomId) {
-      this.errorMessage = 'Please select a meeting room.';
+      this.errorMessage =
+        'Please select a meeting room.';
       return;
     }
 
     if (!this.meetingTitle.trim()) {
-      this.errorMessage = 'Please enter a meeting title.';
+      this.errorMessage =
+        'Please enter a meeting title.';
       return;
     }
 
@@ -378,7 +412,10 @@ export class CreateBookingComponent implements OnInit {
           }, 1500);
         },
         error: (error: any) => {
-          console.log('Booking error received:', error);
+          console.log(
+            'Booking error received:',
+            error,
+          );
           this.saving = false;
 
           if (error?.status === 409) {
@@ -395,13 +432,17 @@ export class CreateBookingComponent implements OnInit {
               typeof body === 'object' &&
               body.conflictType
             ) {
-              this.conflictType = body.conflictType || '';
-              this.conflictRoomName = body.roomName || '';
+              this.conflictType =
+                body.conflictType || '';
+              this.conflictRoomName =
+                body.roomName || '';
               this.conflictUserName =
-                body.conflictingUserName || 'another user';
+                body.conflictingUserName ||
+                'another user';
               this.conflictStart =
                 body.conflictingStart || '';
-              this.conflictEnd = body.conflictingEnd || '';
+              this.conflictEnd =
+                body.conflictingEnd || '';
               this.conflictAvailableFrom =
                 body.availableFrom || '';
               this.conflictCooldownMinutes =
@@ -444,10 +485,11 @@ export class CreateBookingComponent implements OnInit {
             const body = error?.error;
             // Check if this is a password change required error
             if (
-              (typeof body === 'object' &&
-                body !== null &&
-                (body as Record<string, string>)['error'] ===
-                  'password_change_required')
+              typeof body === 'object' &&
+              body !== null &&
+              (body as Record<string, string>)[
+                'error'
+              ] === 'password_change_required'
             ) {
               this.errorMessage =
                 'You need to change your password before making bookings. Redirecting...';
@@ -475,7 +517,9 @@ export class CreateBookingComponent implements OnInit {
   }
 
   goToUpcoming(): void {
-    this.router.navigate(['/app/bookings/upcoming']);
+    this.router.navigate([
+      '/app/bookings/upcoming',
+    ]);
   }
 
   closeConflictModal(): void {

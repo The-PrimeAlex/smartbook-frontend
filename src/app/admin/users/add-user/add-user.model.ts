@@ -12,4 +12,5 @@ export interface CreateUserRequest {
   companyEmail: string;
 }
 export type UserRole = 'ADMIN' | 'USER';
-export type UserStatus = 'ACTIVE' | 'DISABLED' | 'PENDING';
+export type UserStatus =
+  'ACTIVE' | 'DISABLED' | 'PENDING';

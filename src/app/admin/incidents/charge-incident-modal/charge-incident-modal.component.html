@@ -18,7 +18,10 @@
       <p>Charge the user for this incident</p>
     </div>
 
-    <form #chargeForm="ngForm" (ngSubmit)="onSubmit()">
+    <form
+      #chargeForm="ngForm"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="modal-body">
         <div class="form-field">
           <label>Charge Amount (KES)</label>
@@ -56,7 +59,9 @@
           type="submit"
           class="btn-primary btn-charge-action"
           [disabled]="
-            loading || !chargeAmount || chargeForm.invalid
+            loading ||
+            !chargeAmount ||
+            chargeForm.invalid
           "
         >
           @if (loading) {

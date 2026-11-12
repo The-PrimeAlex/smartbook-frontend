@@ -1,14 +1,23 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoggerService {
-  error(message: string, ...args: unknown[]): void {
+  error(
+    message: string,
+    ...args: unknown[]
+  ): void {
     console.error(message, ...args);
   }
 
-  warn(message: string, ...args: unknown[]): void {
+  warn(
+    message: string,
+    ...args: unknown[]
+  ): void {
     console.warn(message, ...args);
   }
 
@@ -25,11 +34,23 @@ export class LoggerService {
 export function createLogger(namespace: string) {
   const logger = inject(LoggerService);
   return {
-    error: (message: string, ...args: unknown[]) =>
-      logger.error(`[${namespace}] ${message}`, ...args),
+    error: (
+      message: string,
+      ...args: unknown[]
+    ) =>
+      logger.error(
+        `[${namespace}] ${message}`,
+        ...args,
+      ),
     warn: (message: string, ...args: unknown[]) =>
-      logger.warn(`[${namespace}] ${message}`, ...args),
+      logger.warn(
+        `[${namespace}] ${message}`,
+        ...args,
+      ),
     log: (message: string, ...args: unknown[]) =>
-      logger.log(`[${namespace}] ${message}`, ...args),
+      logger.log(
+        `[${namespace}] ${message}`,
+        ...args,
+      ),
   };
 }

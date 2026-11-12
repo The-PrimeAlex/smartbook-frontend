@@ -7,7 +7,10 @@
   ></app-page-banner>
 
   <div class="booking-layout">
-    <form class="booking-form" (ngSubmit)="submitBooking()">
+    <form
+      class="booking-form"
+      (ngSubmit)="submitBooking()"
+    >
       <section class="form-section">
         <div class="section-heading">
           <div class="section-icon">
@@ -77,7 +80,10 @@
                 }
               </option>
 
-              @for (room of rooms; track room.roomId) {
+              @for (
+                room of rooms;
+                track room.roomId
+              ) {
                 <option [value]="room.roomId">
                   {{ room.roomName }} ·
                   {{ room.capacity }} seats
@@ -101,7 +107,9 @@
               </div>
 
               <div class="room-summary-details">
-                <strong>{{ room.roomName }}</strong>
+                <strong>{{
+                  room.roomName
+                }}</strong>
                 <span
                   >{{ room.roomType }} ·
                   {{ room.capacity }} seats</span
@@ -125,7 +133,9 @@
         </div>
       </section>
 
-      <section class="form-section schedule-section">
+      <section
+        class="form-section schedule-section"
+      >
         <div class="section-heading">
           <div class="section-icon">
             <app-icon
@@ -136,15 +146,22 @@
 
           <div>
             <h2>Date and time</h2>
-            <p>Choose when your meeting starts and ends.</p>
+            <p>
+              Choose when your meeting starts and
+              ends.
+            </p>
           </div>
         </div>
 
         <div class="schedule-card">
           <div class="schedule-card-header">
             <div>
-              <span class="step-label">01 / START</span>
-              <h3>Start date and time <span>*</span></h3>
+              <span class="step-label"
+                >01 / START</span
+              >
+              <h3>
+                Start date and time <span>*</span>
+              </h3>
             </div>
 
             <div class="schedule-icon start-icon">
@@ -157,27 +174,35 @@
 
           <div class="date-time-grid">
             <div class="field">
-              <label for="startDate">Meeting date</label>
+              <label for="startDate"
+                >Meeting date</label
+              >
               <input
                 id="startDate"
                 name="startDate"
                 type="date"
                 [(ngModel)]="startDate"
                 [min]="today"
-                (ngModelChange)="onStartDateChange()"
+                (ngModelChange)="
+                  onStartDateChange()
+                "
                 required
               />
             </div>
 
             <div class="field">
-              <label for="startTime">Start time</label>
+              <label for="startTime"
+                >Start time</label
+              >
               <input
                 id="startTime"
                 name="startTime"
                 type="time"
                 step="1800"
                 [(ngModel)]="startTime"
-                (ngModelChange)="onStartTimeChange()"
+                (ngModelChange)="
+                  onStartTimeChange()
+                "
                 required
               />
             </div>
@@ -185,12 +210,15 @@
 
           <p class="field-hint">
             <span class="hint-dot"></span>
-            Choose a future date and your preferred start
-            time.
+            Choose a future date and your
+            preferred start time.
           </p>
         </div>
 
-        <div class="schedule-connector" aria-hidden="true">
+        <div
+          class="schedule-connector"
+          aria-hidden="true"
+        >
           <span></span>
           <div>
             <app-icon
@@ -204,8 +232,12 @@
         <div class="schedule-card">
           <div class="schedule-card-header">
             <div>
-              <span class="step-label">02 / END</span>
-              <h3>End date and time <span>*</span></h3>
+              <span class="step-label"
+                >02 / END</span
+              >
+              <h3>
+                End date and time <span>*</span>
+              </h3>
             </div>
 
             <div class="schedule-icon end-icon">
@@ -218,27 +250,35 @@
 
           <div class="date-time-grid">
             <div class="field">
-              <label for="endDate">End date</label>
+              <label for="endDate"
+                >End date</label
+              >
               <input
                 id="endDate"
                 name="endDate"
                 type="date"
                 [(ngModel)]="endDate"
                 [min]="startDate || today"
-                (ngModelChange)="onEndDateChange()"
+                (ngModelChange)="
+                  onEndDateChange()
+                "
                 required
               />
             </div>
 
             <div class="field">
-              <label for="endTime">End time</label>
+              <label for="endTime"
+                >End time</label
+              >
               <input
                 id="endTime"
                 name="endTime"
                 type="time"
                 step="1800"
                 [(ngModel)]="endTime"
-                (ngModelChange)="onEndTimeChange()"
+                (ngModelChange)="
+                  onEndTimeChange()
+                "
                 required
               />
             </div>
@@ -246,30 +286,41 @@
 
           <p class="field-hint">
             <span class="hint-dot"></span>
-            For meetings spanning midnight, choose the
-            following date.
+            For meetings spanning midnight, choose
+            the following date.
           </p>
         </div>
 
         @if (invalidDateRange) {
-          <div class="validation-message" role="alert">
+          <div
+            class="validation-message"
+            role="alert"
+          >
             <div>
-              <strong>Check your meeting times</strong>
+              <strong
+                >Check your meeting times</strong
+              >
               <p>
-                The end date and time must be later than the
-                start date and time.
+                The end date and time must be
+                later than the start date and
+                time.
               </p>
             </div>
           </div>
         }
 
         @if (startIsInPast && !invalidDateRange) {
-          <div class="validation-message" role="alert">
+          <div
+            class="validation-message"
+            role="alert"
+          >
             <div>
-              <strong>Choose a future time</strong>
+              <strong
+                >Choose a future time</strong
+              >
               <p>
-                The meeting start date and time must be in
-                the future.
+                The meeting start date and time
+                must be in the future.
               </p>
             </div>
           </div>
@@ -297,28 +348,38 @@
       </section>
 
       @if (successMessage) {
-        <div class="form-alert success-alert" role="status">
+        <div
+          class="form-alert success-alert"
+          role="status"
+        >
           <span class="alert-symbol">✓</span>
           {{ successMessage }}
         </div>
       }
 
       @if (conflictMessage) {
-        <div class="form-alert conflict-alert" role="alert">
+        <div
+          class="form-alert conflict-alert"
+          role="alert"
+        >
           <span class="alert-symbol">⚠</span>
           <div class="alert-content">
             <strong>Room Already Booked</strong>
             <p>{{ conflictMessage }}</p>
             <p class="alert-hint">
-              Check room availability for overlapping
-              bookings and try a different time or room.
+              Check room availability for
+              overlapping bookings and try a
+              different time or room.
             </p>
           </div>
         </div>
       }
 
       @if (errorMessage) {
-        <div class="form-alert error-alert" role="alert">
+        <div
+          class="form-alert error-alert"
+          role="alert"
+        >
           <span class="alert-symbol">!</span>
           {{ errorMessage }}
         </div>
@@ -351,7 +412,9 @@
     <aside class="booking-sidebar">
       <div class="preview-card">
         <div class="preview-top">
-          <span class="preview-label">BOOKING SUMMARY</span>
+          <span class="preview-label"
+            >BOOKING SUMMARY</span
+          >
 
           <div class="preview-icon">
             <app-icon
@@ -378,7 +441,8 @@
         <div class="preview-item">
           <span>Selected room</span>
           <strong>{{
-            selectedRoom?.roomName || 'No room selected'
+            selectedRoom?.roomName ||
+              'No room selected'
           }}</strong>
         </div>
 
@@ -417,13 +481,17 @@
         <h3>Before you book</h3>
 
         <ul>
-          <li>Choose the room that suits your meeting.</li>
           <li>
-            Make sure your start time is in the future.
+            Choose the room that suits your
+            meeting.
           </li>
           <li>
-            Check that the end time is later than the start
-            time.
+            Make sure your start time is in the
+            future.
+          </li>
+          <li>
+            Check that the end time is later than
+            the start time.
           </li>
         </ul>
       </div>

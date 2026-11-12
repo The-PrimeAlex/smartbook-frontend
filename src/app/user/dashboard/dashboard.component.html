@@ -23,7 +23,9 @@
         [attr.aria-expanded]="!statsCollapsed()"
         aria-label="Toggle statistics"
       >
-        <span class="stats-toggle-title">Overview</span>
+        <span class="stats-toggle-title"
+          >Overview</span
+        >
         <app-icon
           [icon]="LucideChevronDown"
           [size]="20"
@@ -31,7 +33,10 @@
           [class.rotated]="!statsCollapsed()"
         ></app-icon>
       </button>
-      <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+      <div
+        class="stats-row-wrapper"
+        [class.collapsed]="statsCollapsed()"
+      >
         <div class="stats-row">
           <app-stat-card
             [icon]="LucideCalendar"
@@ -39,8 +44,12 @@
             [iconColor]="'#ffffff'"
             delay="0ms"
           >
-            <span stat-value>{{ upcomingCount() }}</span>
-            <span stat-label>Upcoming Meetings</span>
+            <span stat-value>{{
+              upcomingCount()
+            }}</span>
+            <span stat-label
+              >Upcoming Meetings</span
+            >
           </app-stat-card>
           <app-stat-card
             [icon]="LucideCreditCard"
@@ -51,7 +60,9 @@
             <span stat-value>{{
               formatCurrency(totalOutstanding())
             }}</span>
-            <span stat-label>Outstanding Bills</span>
+            <span stat-label
+              >Outstanding Bills</span
+            >
           </app-stat-card>
           <app-stat-card
             [icon]="LucideBell"
@@ -59,8 +70,12 @@
             [iconColor]="'#ffffff'"
             delay="100ms"
           >
-            <span stat-value>{{ unreadCount() }}</span>
-            <span stat-label>Unread Notifications</span>
+            <span stat-value>{{
+              unreadCount()
+            }}</span>
+            <span stat-label
+              >Unread Notifications</span
+            >
           </app-stat-card>
           <app-stat-card
             [icon]="LucideFileText"
@@ -68,7 +83,9 @@
             [iconColor]="'#ffffff'"
             delay="150ms"
           >
-            <span stat-value>{{ totalBookings() }}</span>
+            <span stat-value>{{
+              totalBookings()
+            }}</span>
             <span stat-label>Total Bookings</span>
           </app-stat-card>
         </div>
@@ -87,12 +104,16 @@
         ) {
           <button
             class="quick-link-card"
-            [style.animation-delay]="i * 50 + 'ms'"
+            [style.animation-delay]="
+              i * 50 + 'ms'
+            "
             (click)="navigateTo(link.route)"
           >
             <div
               class="quick-link-icon"
-              [style.background]="link.color + '15'"
+              [style.background]="
+                link.color + '15'
+              "
               [style.color]="link.color"
             >
               <app-icon
@@ -115,7 +136,9 @@
           <h2>Upcoming Meetings</h2>
           <button
             class="view-all-link"
-            (click)="navigateTo('/app/bookings/upcoming')"
+            (click)="
+              navigateTo('/app/bookings/upcoming')
+            "
           >
             View all
           </button>
@@ -129,14 +152,18 @@
             ) {
               <div
                 class="meeting-card"
-                [style.animation-delay]="i * 50 + 'ms'"
+                [style.animation-delay]="
+                  i * 50 + 'ms'
+                "
               >
                 <div class="meeting-time-block">
                   <span class="meeting-date">{{
                     formatDate(booking.startTime)
                   }}</span>
                   <span class="meeting-time">{{
-                    formatDateTime(booking.startTime)
+                    formatDateTime(
+                      booking.startTime
+                    )
                   }}</span>
                 </div>
                 <div class="meeting-details">
@@ -161,9 +188,12 @@
                   <span class="meeting-purpose">{{
                     booking.purpose
                   }}</span>
-                  <span class="meeting-countdown">{{
-                    timeUntil(booking.startTime)
-                  }}</span>
+                  <span
+                    class="meeting-countdown"
+                    >{{
+                      timeUntil(booking.startTime)
+                    }}</span
+                  >
                 </div>
               </div>
             }
@@ -203,20 +233,27 @@
             ) {
               <div
                 class="bill-card"
-                [style.animation-delay]="i * 50 + 'ms'"
+                [style.animation-delay]="
+                  i * 50 + 'ms'
+                "
               >
                 <div class="bill-info">
                   <div class="bill-header">
                     <span class="bill-room">{{
-                      bill.booking?.roomName || 'Booking'
+                      bill.booking?.roomName ||
+                        'Booking'
                     }}</span>
                     <span
                       class="status-badge {{
-                        getBillStatusClass(bill.billStatus)
+                        getBillStatusClass(
+                          bill.billStatus
+                        )
                       }}"
                     >
                       {{
-                        getBillStatusLabel(bill.billStatus)
+                        getBillStatusLabel(
+                          bill.billStatus
+                        )
                       }}
                     </span>
                   </div>
@@ -232,7 +269,9 @@
                     }}</span>
                     <span class="bill-due"
                       >Due
-                      {{ formatDate(bill.dueAt) }}</span
+                      {{
+                        formatDate(bill.dueAt)
+                      }}</span
                     >
                   </div>
                 </div>
@@ -254,7 +293,9 @@
         <h2>Recent Notifications</h2>
         <button
           class="view-all-link"
-          (click)="navigateTo('/app/notifications')"
+          (click)="
+            navigateTo('/app/notifications')
+          "
         >
           View all
         </button>
@@ -270,22 +311,30 @@
               class="notification-row {{
                 notif.isRead ? '' : 'unread'
               }}"
-              [style.animation-delay]="i * 40 + 'ms'"
+              [style.animation-delay]="
+                i * 40 + 'ms'
+              "
             >
               <div
                 class="notification-icon {{
-                  getNotificationIconClass(notif.eventType)
+                  getNotificationIconClass(
+                    notif.eventType
+                  )
                 }}"
               >
-                <app-icon [icon]="LucideBell"></app-icon>
+                <app-icon
+                  [icon]="LucideBell"
+                ></app-icon>
               </div>
               <div class="notification-content">
-                <span class="notification-title">{{
-                  notif.title
-                }}</span>
-                <span class="notification-message">{{
-                  notif.message
-                }}</span>
+                <span
+                  class="notification-title"
+                  >{{ notif.title }}</span
+                >
+                <span
+                  class="notification-message"
+                  >{{ notif.message }}</span
+                >
               </div>
               <span class="notification-time">{{
                 formatDateTime(notif.createdAt)

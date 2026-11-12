@@ -34,9 +34,9 @@ const LS_USER = 'smartbook_user';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  private readonly accessTokenState = signal<string | null>(
-    null,
-  );
+  private readonly accessTokenState = signal<
+    string | null
+  >(null);
   private readonly currentUserState =
     signal<CurrentUser | null>(null);
   private refreshInFlight$: Observable<AuthResponse> | null =
@@ -46,7 +46,8 @@ export class AuthService {
   private csrfToken = signal<string | null>(null);
 
   // Visual & Reactive Anchors
-  readonly currentUser = this.currentUserState.asReadonly();
+  readonly currentUser =
+    this.currentUserState.asReadonly();
   readonly isAuthenticated = computed(
     () => this.accessTokenState() !== null,
   );
@@ -55,7 +56,9 @@ export class AuthService {
     this.accessTokenState,
   );
 
-  private readonly httpOptions = { withCredentials: true };
+  private readonly httpOptions = {
+    withCredentials: true,
+  };
 
   getAccessToken(): string | null {
     return this.accessTokenState();
@@ -63,7 +66,9 @@ export class AuthService {
 
   hasRole(role: string): boolean {
     return (
-      this.currentUserState()?.roles.includes(role) ?? false
+      this.currentUserState()?.roles.includes(
+        role,
+      ) ?? false
     );
   }
 
@@ -140,20 +145,26 @@ export class AuthService {
 
   refreshAccessToken(): Observable<AuthResponse> {
     if (!this.refreshInFlight$) {
-      this.refreshInFlight$ = this.ensureCsrfToken().pipe(
-        switchMap(() =>
-          this.http.post<AuthResponse>(
-            `${environment.apiUrl}/auth/refresh`,
-            {},
-            this.httpOptions,
+      this.refreshInFlight$ =
+        this.ensureCsrfToken().pipe(
+          switchMap(() =>
+            this.http.post<AuthResponse>(
+              `${environment.apiUrl}/auth/refresh`,
+              {},
+              this.httpOptions,
+            ),
           ),
-        ),
-        tap((response) => this.applyAuthResponse(response)),
-        finalize(() => {
-          this.refreshInFlight$ = null;
-        }),
-        shareReplay({ bufferSize: 1, refCount: false }),
-      );
+          tap((response) =>
+            this.applyAuthResponse(response),
+          ),
+          finalize(() => {
+            this.refreshInFlight$ = null;
+          }),
+          shareReplay({
+            bufferSize: 1,
+            refCount: false,
+          }),
+        );
     }
 
     return this.refreshInFlight$;
@@ -167,7 +178,9 @@ export class AuthService {
         this.httpOptions,
       )
       .pipe(
-        catchError((error) => throwError(() => error)),
+        catchError((error) =>
+          throwError(() => error),
+        ),
         finalize(() => this.clearLocalAuth()),
       );
   }
@@ -183,7 +196,9 @@ export class AuthService {
           this.httpOptions,
         ),
       ),
-      tap((response) => this.applyAuthResponse(response)),
+      tap((response) =>
+        this.applyAuthResponse(response),
+      ),
     );
   }
 
@@ -228,9 +243,12 @@ export class AuthService {
     // the backend rotates the CSRF token on every request.
     // A cached token becomes stale after any subsequent GET request.
     return this.http
-      .get<{ token: string }>(`${environment.apiUrl}/auth/csrf`, {
-        withCredentials: true,
-      })
+      .get<{ token: string }>(
+        `${environment.apiUrl}/auth/csrf`,
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(
         tap((response) => {
           // Store the token in memory for cross-origin use
@@ -240,21 +258,36 @@ export class AuthService {
       );
   }
 
-  private applyAuthResponse(response: AuthResponse): void {
-    this.accessTokenState.set(response.accessToken);
+  private applyAuthResponse(
+    response: AuthResponse,
+  ): void {
+    this.accessTokenState.set(
+      response.accessToken,
+    );
     this.currentUserState.set(response.user);
     // Persist to localStorage so page refresh restores the session
-    localStorage.setItem(LS_ACCESS_TOKEN, response.accessToken);
-    localStorage.setItem(LS_USER, JSON.stringify(response.user));
+    localStorage.setItem(
+      LS_ACCESS_TOKEN,
+      response.accessToken,
+    );
+    localStorage.setItem(
+      LS_USER,
+      JSON.stringify(response.user),
+    );
   }
 
   /** Restore session from localStorage on page load */
   private restoreFromLocalStorage(): boolean {
-    const token = localStorage.getItem(LS_ACCESS_TOKEN);
-    const userJson = localStorage.getItem(LS_USER);
+    const token = localStorage.getItem(
+      LS_ACCESS_TOKEN,
+    );
+    const userJson =
+      localStorage.getItem(LS_USER);
     if (token && userJson) {
       try {
-        const user = JSON.parse(userJson) as CurrentUser;
+        const user = JSON.parse(
+          userJson,
+        ) as CurrentUser;
         this.accessTokenState.set(token);
         this.currentUserState.set(user);
         return true;

@@ -13,7 +13,9 @@ describe('ReportsAlComponent', () => {
       imports: [ReportsAlComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ReportsAlComponent);
+    fixture = TestBed.createComponent(
+      ReportsAlComponent,
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

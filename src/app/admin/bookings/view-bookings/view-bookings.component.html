@@ -14,7 +14,9 @@
         [icon]="LucideRefreshCw"
         [size]="14"
       ></app-icon>
-      {{ loading() ? 'Refreshing...' : 'Refresh' }}
+      {{
+        loading() ? 'Refreshing...' : 'Refresh'
+      }}
     </button>
   </app-page-banner>
   @if (errorMessage()) {
@@ -31,7 +33,10 @@
     </div>
   }
   @if (successMessage()) {
-    <div class="alert alert-success" role="status">
+    <div
+      class="alert alert-success"
+      role="status"
+    >
       <span>{{ successMessage() }}</span>
       <button
         type="button"
@@ -67,7 +72,9 @@
         ></app-icon>
       </div>
       <div class="stat-content">
-        <span class="stat-value">{{ pendingCount() }}</span>
+        <span class="stat-value">{{
+          pendingCount()
+        }}</span>
         <span class="stat-label">Pending</span>
       </div>
     </div>
@@ -79,7 +86,9 @@
         ></app-icon>
       </div>
       <div class="stat-content">
-        <span class="stat-value">{{ activeCount() }}</span>
+        <span class="stat-value">{{
+          activeCount()
+        }}</span>
         <span class="stat-label">Active</span>
       </div>
     </div>
@@ -105,13 +114,18 @@
         ></app-icon>
       </div>
       <div class="stat-content">
-        <span class="stat-value">{{ noShowCount() }}</span>
+        <span class="stat-value">{{
+          noShowCount()
+        }}</span>
         <span class="stat-label">No Shows</span>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon stat-icon-red">
-        <app-icon [icon]="LucideBan" [size]="18"></app-icon>
+        <app-icon
+          [icon]="LucideBan"
+          [size]="18"
+        ></app-icon>
       </div>
       <div class="stat-content">
         <span class="stat-value">{{
@@ -125,7 +139,9 @@
     <div class="section-heading">
       <div>
         <h2>All user bookings</h2>
-        <p>Filter by status and manage any booking.</p>
+        <p>
+          Filter by status and manage any booking.
+        </p>
       </div>
 
       <span class="result-count">
@@ -137,8 +153,14 @@
         }}
       </span>
     </div>
-    <nav class="filter-list" aria-label="Filter bookings">
-      @for (filter of filters; track filter.value) {
+    <nav
+      class="filter-list"
+      aria-label="Filter bookings"
+    >
+      @for (
+        filter of filters;
+        track filter.value
+      ) {
         <button
           type="button"
           class="filter-button"
@@ -199,9 +221,15 @@
                 </p>
               </div>
               <app-status-badge
-                [label]="statusLabel(booking.bookingStatus)"
+                [label]="
+                  statusLabel(
+                    booking.bookingStatus
+                  )
+                "
                 [variant]="
-                  getBadgeVariant(booking.bookingStatus)
+                  getBadgeVariant(
+                    booking.bookingStatus
+                  )
                 "
               ></app-status-badge>
             </div>
@@ -212,7 +240,10 @@
                   [size]="14"
                   class="meta-chip-icon"
                 ></app-icon>
-                {{ booking.startTime | date: 'mediumDate' }}
+                {{
+                  booking.startTime
+                    | date: 'mediumDate'
+                }}
               </span>
               <span class="meta-chip">
                 <app-icon
@@ -221,9 +252,14 @@
                   class="meta-chip-icon"
                 ></app-icon>
                 {{
-                  booking.startTime | date: 'shortTime'
+                  booking.startTime
+                    | date: 'shortTime'
                 }}
-                — {{ booking.endTime | date: 'shortTime' }}
+                —
+                {{
+                  booking.endTime
+                    | date: 'shortTime'
+                }}
               </span>
               <span class="meta-chip">
                 <app-icon
@@ -233,7 +269,9 @@
                 ></app-icon>
                 {{ booking.userName }}
               </span>
-              @if (booking.bookedHourlyRate !== null) {
+              @if (
+                booking.bookedHourlyRate !== null
+              ) {
                 <span class="meta-chip">
                   <app-icon
                     [icon]="LucideCheckCircle"
@@ -242,27 +280,33 @@
                   ></app-icon>
                   {{
                     booking.bookedHourlyRate
-                      | currency: 'KSH ' : 'symbol-narrow'
+                      | currency
+                        : 'KSH '
+                        : 'symbol-narrow'
                   }}
                 </span>
               }
             </div>
             @if (
-              booking.bookingStatus === 'CANCELLED' ||
+              booking.bookingStatus ===
+                'CANCELLED' ||
               booking.bookingStatus === 'NO_SHOW'
             ) {
               <div class="booking-note">
                 @if (booking.cancellationReason) {
                   <span
                     >Reason:
-                    {{ booking.cancellationReason }}</span
+                    {{
+                      booking.cancellationReason
+                    }}</span
                   >
                 }
                 @if (booking.cancelledAt) {
                   <span
                     >Cancelled:
                     {{
-                      booking.cancelledAt | date: 'medium'
+                      booking.cancelledAt
+                        | date: 'medium'
                     }}</span
                   >
                 }
@@ -274,16 +318,22 @@
                   type="button"
                   class="action-btn action-btn-success"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
-                  (click)="confirmBooking(booking)"
+                  (click)="
+                    confirmBooking(booking)
+                  "
                 >
                   <app-icon
                     [icon]="LucideCheckCircle"
                     [size]="14"
                   ></app-icon>
                   {{
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                       ? 'Processing...'
                       : 'Confirm'
                   }}
@@ -294,16 +344,22 @@
                   type="button"
                   class="action-btn action-btn-success"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
-                  (click)="checkInBooking(booking)"
+                  (click)="
+                    checkInBooking(booking)
+                  "
                 >
                   <app-icon
                     [icon]="LucideCheckCircle"
                     [size]="14"
                   ></app-icon>
                   {{
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                       ? 'Processing...'
                       : 'Check In'
                   }}
@@ -314,16 +370,22 @@
                   type="button"
                   class="action-btn action-btn-primary"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
-                  (click)="checkOutBooking(booking)"
+                  (click)="
+                    checkOutBooking(booking)
+                  "
                 >
                   <app-icon
                     [icon]="LucideClock"
                     [size]="14"
                   ></app-icon>
                   {{
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                       ? 'Processing...'
                       : 'Check Out'
                   }}
@@ -334,7 +396,9 @@
                   type="button"
                   class="action-btn action-btn-danger"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
                   (click)="cancelBooking(booking)"
                 >
@@ -345,7 +409,10 @@
                   Cancel
                 </button>
               }
-              @if (booking.bookingStatus === 'COMPLETED') {
+              @if (
+                booking.bookingStatus ===
+                'COMPLETED'
+              ) {
                 <span
                   class="status-note status-note-success"
                 >
@@ -356,8 +423,13 @@
                   Completed
                 </span>
               }
-              @if (booking.bookingStatus === 'CANCELLED') {
-                <span class="status-note status-note-muted">
+              @if (
+                booking.bookingStatus ===
+                'CANCELLED'
+              ) {
+                <span
+                  class="status-note status-note-muted"
+                >
                   <app-icon
                     [icon]="LucideBan"
                     [size]="14"
@@ -365,8 +437,13 @@
                   Cancelled
                 </span>
               }
-              @if (booking.bookingStatus === 'NO_SHOW') {
-                <span class="status-note status-note-muted">
+              @if (
+                booking.bookingStatus ===
+                'NO_SHOW'
+              ) {
+                <span
+                  class="status-note status-note-muted"
+                >
                   <app-icon
                     [icon]="LucideXCircle"
                     [size]="14"

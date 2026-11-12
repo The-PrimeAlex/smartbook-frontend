@@ -1,11 +1,18 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+} from '@angular/router';
 import { LucideLayoutGrid } from '@lucide/angular';
 
 import { RoomService } from '../../../shared/services/room.service';
@@ -29,36 +36,48 @@ import { PageBannerComponent } from '../../../shared/ui';
 export class NewRoomComponent {
   readonly LucideLayoutGrid = LucideLayoutGrid;
   private readonly fb = inject(FormBuilder);
-  private readonly roomService = inject(RoomService);
+  private readonly roomService =
+    inject(RoomService);
   private readonly router = inject(Router);
 
   readonly submitting = signal(false);
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
 
-  readonly roomTypes: { value: RoomType; label: string }[] =
-    [
-      { value: 'BOARDROOM', label: 'Boardroom' },
-      {
-        value: 'VIDEO_CONFERENCE',
-        label: 'Video Conference',
-      },
-      { value: 'MEETING_SUITE', label: 'Meeting Suite' },
-    ];
+  readonly roomTypes: {
+    value: RoomType;
+    label: string;
+  }[] = [
+    { value: 'BOARDROOM', label: 'Boardroom' },
+    {
+      value: 'VIDEO_CONFERENCE',
+      label: 'Video Conference',
+    },
+    {
+      value: 'MEETING_SUITE',
+      label: 'Meeting Suite',
+    },
+  ];
 
   readonly roomStatuses: {
     value: RoomStatus;
     label: string;
   }[] = [
     { value: 'ACTIVE', label: 'Active' },
-    { value: 'MAINTENANCE', label: 'Maintenance' },
+    {
+      value: 'MAINTENANCE',
+      label: 'Maintenance',
+    },
     { value: 'RETIRED', label: 'Retired' },
   ];
 
   readonly roomForm = this.fb.nonNullable.group({
     roomName: [
       '',
-      [Validators.required, Validators.maxLength(100)],
+      [
+        Validators.required,
+        Validators.maxLength(100),
+      ],
     ],
     roomType: [
       'BOARDROOM' as RoomType,
@@ -76,8 +95,14 @@ export class NewRoomComponent {
       0,
       [Validators.required, Validators.min(0)],
     ],
-    status: ['ACTIVE' as RoomStatus, Validators.required],
-    description: ['', [Validators.maxLength(1000)]],
+    status: [
+      'ACTIVE' as RoomStatus,
+      Validators.required,
+    ],
+    description: [
+      '',
+      [Validators.maxLength(1000)],
+    ],
   });
 
   fieldInvalid(
@@ -85,7 +110,8 @@ export class NewRoomComponent {
   ): boolean {
     const control = this.roomForm.controls[field];
     return (
-      control.invalid && (control.dirty || control.touched)
+      control.invalid &&
+      (control.dirty || control.touched)
     );
   }
 
@@ -94,7 +120,10 @@ export class NewRoomComponent {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    if (this.roomForm.invalid || this.submitting()) {
+    if (
+      this.roomForm.invalid ||
+      this.submitting()
+    ) {
       return;
     }
 
@@ -118,12 +147,15 @@ export class NewRoomComponent {
             'Room created successfully.',
           );
 
-          void this.router.navigate(['/admin/rooms']);
+          void this.router.navigate([
+            '/admin/rooms',
+          ]);
         },
         error: (error: Error) => {
           this.submitting.set(false);
           this.errorMessage.set(
-            error.message || 'Unable to create the room.',
+            error.message ||
+              'Unable to create the room.',
           );
         },
       });

@@ -9,7 +9,10 @@ import {
   signal,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import {
   LucideBuilding2,
   LucideCheckCircle2,
@@ -40,12 +43,15 @@ import { PageBannerComponent } from '../../../shared/ui';
   styleUrl: './my-profile.component.css',
 })
 export class MyProfileComponent implements OnInit {
-  private readonly log = createLogger('MyProfile');
-  private readonly usersService = inject(UsersService);
+  private readonly log =
+    createLogger('MyProfile');
+  private readonly usersService =
+    inject(UsersService);
   private readonly fb = inject(FormBuilder);
 
   readonly LucideBuilding2 = LucideBuilding2;
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideFileText = LucideFileText;
   readonly LucideMail = LucideMail;
   readonly LucidePencil = LucidePencil;
@@ -53,7 +59,9 @@ export class MyProfileComponent implements OnInit {
   readonly LucideUser = LucideUser;
   readonly LucideXCircle = LucideXCircle;
 
-  readonly profile = signal<MyProfile | null>(null);
+  readonly profile = signal<MyProfile | null>(
+    null,
+  );
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly errorMessage = signal('');
@@ -76,25 +84,35 @@ export class MyProfileComponent implements OnInit {
     return `${user.firstName?.charAt(0) ?? ''}${user.lastName?.charAt(0) ?? ''}`.toUpperCase();
   });
 
-  readonly profileForm = this.fb.nonNullable.group({
-    firstName: [
-      '',
-      [Validators.required, Validators.maxLength(100)],
-    ],
-    lastName: [
-      '',
-      [Validators.required, Validators.maxLength(100)],
-    ],
-    email: [
-      '',
-      [
-        Validators.required,
-        Validators.email,
-        Validators.maxLength(200),
+  readonly profileForm =
+    this.fb.nonNullable.group({
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(100),
+        ],
       ],
-    ],
-    phoneNumber: ['', [Validators.maxLength(20)]],
-  });
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(100),
+        ],
+      ],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email,
+          Validators.maxLength(200),
+        ],
+      ],
+      phoneNumber: [
+        '',
+        [Validators.maxLength(20)],
+      ],
+    });
 
   ngOnInit(): void {
     this.loadProfile();
@@ -118,7 +136,10 @@ export class MyProfileComponent implements OnInit {
         this.loading.set(false);
       },
       error: (error) => {
-        this.log.error('Failed to load profile:', error);
+        this.log.error(
+          'Failed to load profile:',
+          error,
+        );
         this.errorMessage.set(
           'Unable to load your profile. Please try again.',
         );
@@ -167,7 +188,8 @@ export class MyProfileComponent implements OnInit {
     const updatedProfile: MyProfile = {
       ...this.profile()!,
       ...this.profileForm.getRawValue(),
-      organization: this.profile()?.organization ?? null,
+      organization:
+        this.profile()?.organization ?? null,
     };
 
     this.saving.set(true);
@@ -196,7 +218,8 @@ export class MyProfileComponent implements OnInit {
             typeof error.error === 'object' &&
             error.error !== null &&
             'message' in error.error &&
-            typeof error.error.message === 'string'
+            typeof error.error.message ===
+              'string'
               ? error.error.message
               : 'Unable to update your profile. Please try again.';
 

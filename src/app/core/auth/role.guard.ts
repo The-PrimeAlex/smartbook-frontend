@@ -1,10 +1,16 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import {
+  CanActivateFn,
+  Router,
+} from '@angular/router';
 import { map, of, switchMap } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
-export const roleGuard: CanActivateFn = (route, state) => {
+export const roleGuard: CanActivateFn = (
+  route,
+  state,
+) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -15,9 +21,10 @@ export const roleGuard: CanActivateFn = (route, state) => {
     return of(true);
   }
 
-  const sessionCheck$ = authService.getAccessToken()
-    ? of(true)
-    : authService.restoreSession();
+  const sessionCheck$ =
+    authService.getAccessToken()
+      ? of(true)
+      : authService.restoreSession();
 
   return sessionCheck$.pipe(
     map((authenticated) => {
@@ -27,8 +34,8 @@ export const roleGuard: CanActivateFn = (route, state) => {
         });
       }
 
-      const hasRequiredRole = requiredRoles.some((role) =>
-        authService.hasRole(role),
+      const hasRequiredRole = requiredRoles.some(
+        (role) => authService.hasRole(role),
       );
 
       return hasRequiredRole

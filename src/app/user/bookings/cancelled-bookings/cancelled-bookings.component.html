@@ -14,7 +14,9 @@
         [icon]="LucideRefreshCw"
         [size]="14"
       ></app-icon>
-      {{ loading() ? 'Refreshing...' : 'Refresh' }}
+      {{
+        loading() ? 'Refreshing...' : 'Refresh'
+      }}
     </button>
   </app-page-banner>
 
@@ -72,7 +74,9 @@
         ></span>
         <p>Loading your cancelled bookings...</p>
       </div>
-    } @else if (cancelledBookings().length === 0) {
+    } @else if (
+      cancelledBookings().length === 0
+    ) {
       <app-empty-state
         [icon]="LucideCalendar"
         title="No cancelled bookings"
@@ -88,23 +92,32 @@
           <article class="booking-card">
             <div class="booking-main">
               <div class="booking-title-row">
-                <div class="room-icon" aria-hidden="true">
+                <div
+                  class="room-icon"
+                  aria-hidden="true"
+                >
                   ⌂
                 </div>
 
                 <div class="booking-title">
                   <h3>{{ booking.roomName }}</h3>
                   <p class="booking-reference">
-                    Booking #{{ booking.bookingId }}
+                    Booking #{{
+                      booking.bookingId
+                    }}
                   </p>
                 </div>
 
                 <app-status-badge
                   [label]="
-                    statusLabel(booking.bookingStatus)
+                    statusLabel(
+                      booking.bookingStatus
+                    )
                   "
                   [variant]="
-                    getBadgeVariant(booking.bookingStatus)
+                    getBadgeVariant(
+                      booking.bookingStatus
+                    )
                   "
                 ></app-status-badge>
               </div>
@@ -115,14 +128,22 @@
                     >Start time</span
                   >
                   <span class="detail-value">
-                    {{ booking.startTime | date: 'medium' }}
+                    {{
+                      booking.startTime
+                        | date: 'medium'
+                    }}
                   </span>
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label">End time</span>
+                  <span class="detail-label"
+                    >End time</span
+                  >
                   <span class="detail-value">
-                    {{ booking.endTime | date: 'medium' }}
+                    {{
+                      booking.endTime
+                        | date: 'medium'
+                    }}
                   </span>
                 </div>
 
@@ -132,10 +153,12 @@
                   >
                   <span class="detail-value">
                     @if (
-                      booking.bookedHourlyRate !== null
+                      booking.bookedHourlyRate !==
+                      null
                     ) {
                       {{
-                        booking.bookedHourlyRate | currency
+                        booking.bookedHourlyRate
+                          | currency
                       }}
                     } @else {
                       Not specified
@@ -154,22 +177,32 @@
               </div>
 
               <div class="purpose-block">
-                <span class="detail-label">Purpose</span>
+                <span class="detail-label"
+                  >Purpose</span
+                >
                 <p>{{ booking.purpose }}</p>
               </div>
 
               <div class="cancellation-note">
                 @if (booking.cancellationReason) {
-                  <div class="cancellation-reason">
-                    <strong>Cancellation reason:</strong>
-                    {{ booking.cancellationReason }}
+                  <div
+                    class="cancellation-reason"
+                  >
+                    <strong
+                      >Cancellation
+                      reason:</strong
+                    >
+                    {{
+                      booking.cancellationReason
+                    }}
                   </div>
                 }
                 @if (booking.cancelledAt) {
                   <div class="cancellation-time">
                     <strong>Cancelled at:</strong>
                     {{
-                      booking.cancelledAt | date: 'medium'
+                      booking.cancelledAt
+                        | date: 'medium'
                     }}
                   </div>
                 }

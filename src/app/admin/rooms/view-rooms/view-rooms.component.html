@@ -8,17 +8,25 @@
   <!-- Overview Stats -->
   <div class="overview-grid">
     <div class="overview-card">
-      <div class="overview-icon" aria-hidden="true">
+      <div
+        class="overview-icon"
+        aria-hidden="true"
+      >
         <app-icon
           [icon]="LucideMonitor"
           [size]="18"
         ></app-icon>
       </div>
-      <span class="overview-label">Total rooms</span>
+      <span class="overview-label"
+        >Total rooms</span
+      >
       <strong>{{ rooms().length }}</strong>
     </div>
     <div class="overview-card">
-      <div class="overview-icon" aria-hidden="true">
+      <div
+        class="overview-icon"
+        aria-hidden="true"
+      >
         <app-icon
           [icon]="LucideCheck"
           [size]="18"
@@ -28,7 +36,10 @@
       <strong>{{ activeRoomCount() }}</strong>
     </div>
     <div class="overview-card">
-      <div class="overview-icon" aria-hidden="true">
+      <div
+        class="overview-icon"
+        aria-hidden="true"
+      >
         <app-icon
           [icon]="LucideUsers"
           [size]="18"
@@ -38,13 +49,18 @@
       <strong>{{ totalCapacity() }}</strong>
     </div>
     <div class="overview-card">
-      <div class="overview-icon" aria-hidden="true">
+      <div
+        class="overview-icon"
+        aria-hidden="true"
+      >
         <app-icon
           [icon]="LucideWrench"
           [size]="18"
         ></app-icon>
       </div>
-      <span class="overview-label">Equipment</span>
+      <span class="overview-label"
+        >Equipment</span
+      >
       <strong>{{ totalEquipment() }}</strong>
     </div>
   </div>
@@ -62,7 +78,9 @@
       <button
         type="button"
         class="filter-button"
-        [class.active]="selectedType() === 'BOARDROOM'"
+        [class.active]="
+          selectedType() === 'BOARDROOM'
+        "
         (click)="setRoomType('BOARDROOM')"
       >
         Boardrooms
@@ -80,7 +98,9 @@
       <button
         type="button"
         class="filter-button"
-        [class.active]="selectedType() === 'MEETING_SUITE'"
+        [class.active]="
+          selectedType() === 'MEETING_SUITE'
+        "
         (click)="setRoomType('MEETING_SUITE')"
       >
         Meeting Suites
@@ -89,7 +109,9 @@
     <span class="results-count"
       >{{ filteredCards().length }}
       {{
-        filteredCards().length === 1 ? 'room' : 'rooms'
+        filteredCards().length === 1
+          ? 'room'
+          : 'rooms'
       }}</span
     >
   </div>
@@ -125,7 +147,9 @@
         <article
           class="room-card"
           [class.expanded]="card.expanded"
-          [style.animation-delay]="idx * 50 + 'ms'"
+          [style.animation-delay]="
+            idx * 50 + 'ms'
+          "
         >
           <div class="room-card-header">
             <div class="room-info">
@@ -135,9 +159,13 @@
                 </h3>
                 <span
                   class="room-status"
-                  [class]="getStatusClass(room.status)"
+                  [class]="
+                    getStatusClass(room.status)
+                  "
                 >
-                  {{ roomStatusLabel(room.status) }}
+                  {{
+                    roomStatusLabel(room.status)
+                  }}
                 </span>
               </div>
               <div class="room-meta">
@@ -156,7 +184,8 @@
                 <span class="meta-item"
                   >KES
                   {{
-                    room.hourlyRate | number: '1.0-2'
+                    room.hourlyRate
+                      | number: '1.0-2'
                   }}/hr</span
                 >
               </div>
@@ -167,7 +196,9 @@
               (click)="toggleExpand(room.roomId)"
             >
               <span class="expand-label">{{
-                card.expanded ? 'Collapse' : 'View details'
+                card.expanded
+                  ? 'Collapse'
+                  : 'View details'
               }}</span>
             </button>
           </div>
@@ -177,7 +208,8 @@
                 [icon]="LucideWrench"
                 [size]="14"
               ></app-icon>
-              {{ card.equipment.length }} equipment
+              {{ card.equipment.length }}
+              equipment
             </span>
           </div>
 
@@ -193,28 +225,40 @@
               }
               <div class="details-grid">
                 <div class="detail-item">
-                  <span class="detail-label">Capacity</span>
+                  <span class="detail-label"
+                    >Capacity</span
+                  >
                   <span class="detail-value"
-                    >{{ room.capacity }} people</span
+                    >{{
+                      room.capacity
+                    }}
+                    people</span
                   >
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">Rate</span>
+                  <span class="detail-label"
+                    >Rate</span
+                  >
                   <span class="detail-value"
                     >KES
                     {{
-                      room.hourlyRate | number: '1.0-2'
+                      room.hourlyRate
+                        | number: '1.0-2'
                     }}</span
                   >
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">Type</span>
+                  <span class="detail-label"
+                    >Type</span
+                  >
                   <span class="detail-value">{{
                     roomTypeLabel(room.roomType)
                   }}</span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">Status</span>
+                  <span class="detail-label"
+                    >Status</span
+                  >
                   <span class="detail-value">{{
                     roomStatusLabel(room.status)
                   }}</span>
@@ -226,14 +270,20 @@
                     [icon]="LucideWrench"
                     [size]="14"
                   ></app-icon>
-                  Equipment ({{ card.equipment.length }})
+                  Equipment ({{
+                    card.equipment.length
+                  }})
                 </h4>
                 @if (card.detailsLoading) {
                   <div class="equipment-loading">
-                    <span class="mini-spinner"></span
+                    <span
+                      class="mini-spinner"
+                    ></span
                     >Loading…
                   </div>
-                } @else if (card.equipment.length > 0) {
+                } @else if (
+                  card.equipment.length > 0
+                ) {
                   <div class="equipment-list">
                     @for (
                       item of card.equipment;
@@ -246,18 +296,25 @@
                           eqIdx * 40 + 'ms'
                         "
                       >
-                        <div class="equipment-name">
+                        <div
+                          class="equipment-name"
+                        >
                           <span>{{
                             item.equipmentName
                           }}</span>
-                          <span class="asset-code">{{
-                            item.assetCode
-                          }}</span>
+                          <span
+                            class="asset-code"
+                            >{{
+                              item.assetCode
+                            }}</span
+                          >
                         </div>
                         <span
                           class="equip-status"
                           [class]="
-                            getEquipStatusClass(item.status)
+                            getEquipStatusClass(
+                              item.status
+                            )
                           "
                         >
                           {{

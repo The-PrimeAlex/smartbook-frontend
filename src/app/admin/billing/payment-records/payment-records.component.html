@@ -15,7 +15,9 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title">Payment Summary</span>
+      <span class="stats-toggle-title"
+        >Payment Summary</span
+      >
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -23,7 +25,10 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+    <div
+      class="stats-row-wrapper"
+      [class.collapsed]="statsCollapsed()"
+    >
       <div class="stats-bar">
         <app-stat-card
           [icon]="LucideCreditCard"
@@ -31,7 +36,9 @@
           [iconColor]="'var(--info,#3b82f6)'"
           delay="0s"
         >
-          <span stat-value>{{ totalPayments() }}</span>
+          <span stat-value>{{
+            totalPayments()
+          }}</span>
           <span stat-label>Total Payments</span>
         </app-stat-card>
         <app-stat-card
@@ -40,7 +47,9 @@
           [iconColor]="'var(--success,#22c55e)'"
           delay="0.05s"
         >
-          <span stat-value>{{ successCount() }}</span>
+          <span stat-value>{{
+            successCount()
+          }}</span>
           <span stat-label>Successful</span>
         </app-stat-card>
         <app-stat-card
@@ -49,7 +58,9 @@
           [iconColor]="'var(--warning,#f59e0b)'"
           delay="0.1s"
         >
-          <span stat-value>{{ pendingCount() }}</span>
+          <span stat-value>{{
+            pendingCount()
+          }}</span>
           <span stat-label>Pending</span>
         </app-stat-card>
         <app-stat-card
@@ -58,7 +69,9 @@
           [iconColor]="'var(--error,#ef4444)'"
           delay="0.15s"
         >
-          <span stat-value>{{ failedCount() }}</span>
+          <span stat-value>{{
+            failedCount()
+          }}</span>
           <span stat-label>Failed</span>
         </app-stat-card>
         <app-stat-card
@@ -70,9 +83,12 @@
           <span stat-value
             >KES
             {{
-              totalAmount().toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-              })
+              totalAmount().toLocaleString(
+                'en-US',
+                {
+                  minimumFractionDigits: 2,
+                }
+              )
             }}</span
           >
           <span stat-label>Total Collected</span>
@@ -117,20 +133,28 @@
         ) {
           <article
             class="payment-card"
-            [style.animation-delay]="i * 0.05 + 's'"
+            [style.animation-delay]="
+              i * 0.05 + 's'
+            "
           >
             <div class="payment-card-header">
               <div class="payment-header-left">
                 <app-status-badge
                   [label]="
-                    getStatusLabel(payment.paymentStatus)
+                    getStatusLabel(
+                      payment.paymentStatus
+                    )
                   "
                   [variant]="
-                    getBadgeVariant(payment.paymentStatus)
+                    getBadgeVariant(
+                      payment.paymentStatus
+                    )
                   "
                 ></app-status-badge>
                 <span class="method-badge">{{
-                  getMethodLabel(payment.paymentMethod)
+                  getMethodLabel(
+                    payment.paymentMethod
+                  )
                 }}</span>
               </div>
               <span class="payment-amount">{{
@@ -143,21 +167,29 @@
 
             <div class="payment-card-body">
               <div class="payment-info-row">
-                <span class="payment-label">User</span>
+                <span class="payment-label"
+                  >User</span
+                >
                 <span class="payment-value">{{
                   payment.userName
                 }}</span>
               </div>
               <div class="payment-info-row">
-                <span class="payment-label">Room</span>
+                <span class="payment-label"
+                  >Room</span
+                >
                 <span class="payment-value">{{
                   payment.roomName
                 }}</span>
               </div>
               <div class="payment-info-row">
-                <span class="payment-label">Date</span>
+                <span class="payment-label"
+                  >Date</span
+                >
                 <span class="payment-value">{{
-                  formatDateTime(payment.createdAt)
+                  formatDateTime(
+                    payment.createdAt
+                  )
                 }}</span>
               </div>
               @if (payment.transactionReference) {
@@ -172,7 +204,9 @@
               }
               @if (payment.paidAt) {
                 <div class="payment-info-row">
-                  <span class="payment-label">Paid At</span>
+                  <span class="payment-label"
+                    >Paid At</span
+                  >
                   <span class="payment-value">{{
                     formatDateTime(payment.paidAt)
                   }}</span>

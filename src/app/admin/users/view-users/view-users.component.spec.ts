@@ -13,7 +13,9 @@ describe('ViewUsersComponent', () => {
       imports: [ViewUsersComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ViewUsersComponent);
+    fixture = TestBed.createComponent(
+      ViewUsersComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -1,11 +1,22 @@
 <main class="registration-page">
   <div class="registration-container">
     <header class="registration-header">
-      <div class="header-decoration" aria-hidden="true">
-        <span class="hero-ring hero-ring-large"></span>
-        <span class="hero-ring hero-ring-small"></span>
-        <span class="hero-dot hero-dot-one"></span>
-        <span class="hero-dot hero-dot-two"></span>
+      <div
+        class="header-decoration"
+        aria-hidden="true"
+      >
+        <span
+          class="hero-ring hero-ring-large"
+        ></span>
+        <span
+          class="hero-ring hero-ring-small"
+        ></span>
+        <span
+          class="hero-dot hero-dot-one"
+        ></span>
+        <span
+          class="hero-dot hero-dot-two"
+        ></span>
         <span class="hero-square"></span>
       </div>
 
@@ -26,13 +37,15 @@
           ></app-icon>
         </div>
 
-        <p class="eyebrow">SMARTBOOK REGISTRATION</p>
+        <p class="eyebrow">
+          SMARTBOOK REGISTRATION
+        </p>
 
         <h1>Register your organisation</h1>
 
         <p class="header-description">
-          Request access to SmartBook to start booking
-          meeting rooms.
+          Request access to SmartBook to start
+          booking meeting rooms.
         </p>
       </div>
     </header>
@@ -50,8 +63,8 @@
         <div>
           <h2>Organisation details</h2>
           <p>
-            Enter your details to request an organisation
-            account.
+            Enter your details to request an
+            organisation account.
           </p>
         </div>
       </div>
@@ -71,7 +84,9 @@
             <div class="form-field">
               <label for="firstName">
                 First name
-                <span class="required-mark">*</span>
+                <span class="required-mark"
+                  >*</span
+                >
               </label>
 
               <input
@@ -80,8 +95,12 @@
                 formControlName="firstName"
                 placeholder="Enter first name"
                 autocomplete="given-name"
-                [class.invalid]="showError('firstName')"
-                [attr.aria-invalid]="showError('firstName')"
+                [class.invalid]="
+                  showError('firstName')
+                "
+                [attr.aria-invalid]="
+                  showError('firstName')
+                "
                 [attr.aria-describedby]="
                   showError('firstName')
                     ? 'firstName-error'
@@ -90,7 +109,10 @@
               />
 
               @if (showError('firstName')) {
-                <p class="field-error" id="firstName-error">
+                <p
+                  class="field-error"
+                  id="firstName-error"
+                >
                   First name is required.
                 </p>
               }
@@ -99,7 +121,9 @@
             <div class="form-field">
               <label for="lastName">
                 Last name
-                <span class="required-mark">*</span>
+                <span class="required-mark"
+                  >*</span
+                >
               </label>
 
               <input
@@ -108,8 +132,12 @@
                 formControlName="lastName"
                 placeholder="Enter last name"
                 autocomplete="family-name"
-                [class.invalid]="showError('lastName')"
-                [attr.aria-invalid]="showError('lastName')"
+                [class.invalid]="
+                  showError('lastName')
+                "
+                [attr.aria-invalid]="
+                  showError('lastName')
+                "
                 [attr.aria-describedby]="
                   showError('lastName')
                     ? 'lastName-error'
@@ -118,7 +146,10 @@
               />
 
               @if (showError('lastName')) {
-                <p class="field-error" id="lastName-error">
+                <p
+                  class="field-error"
+                  id="lastName-error"
+                >
                   Last name is required.
                 </p>
               }
@@ -127,7 +158,9 @@
             <div class="form-field">
               <label for="email">
                 Email address
-                <span class="required-mark">*</span>
+                <span class="required-mark"
+                  >*</span
+                >
               </label>
 
               <input
@@ -136,15 +169,24 @@
                 formControlName="email"
                 placeholder="you@example.com"
                 autocomplete="email"
-                [class.invalid]="showError('email')"
-                [attr.aria-invalid]="showError('email')"
+                [class.invalid]="
+                  showError('email')
+                "
+                [attr.aria-invalid]="
+                  showError('email')
+                "
                 [attr.aria-describedby]="
-                  showError('email') ? 'email-error' : null
+                  showError('email')
+                    ? 'email-error'
+                    : null
                 "
               />
 
               @if (showError('email')) {
-                <p class="field-error" id="email-error">
+                <p
+                  class="field-error"
+                  id="email-error"
+                >
                   @if (
                     registrationForm.controls.email.hasError(
                       'required'
@@ -161,27 +203,37 @@
             <div class="form-field">
               <label for="phoneNumber">
                 Phone number
-                <span class="required-mark">*</span>
+                <span class="required-mark"
+                  >*</span
+                >
               </label>
 
               <div
                 class="phone-control"
-                [class.invalid]="showError('phoneNumber')"
+                [class.invalid]="
+                  showError('phoneNumber')
+                "
               >
                 <div class="country-picker">
                   <button
                     class="country-trigger"
                     type="button"
-                    (click)="toggleCountryDropdown()"
+                    (click)="
+                      toggleCountryDropdown()
+                    "
                     [attr.aria-expanded]="
                       countryDropdownOpen
                     "
                     aria-label="Choose country calling code"
                   >
-                    @if (selectedCountry; as country) {
-                      <span class="country-flag">{{
-                        country.flag
-                      }}</span>
+                    @if (
+                      selectedCountry;
+                      as country
+                    ) {
+                      <span
+                        class="country-flag"
+                        >{{ country.flag }}</span
+                      >
                       <span class="country-iso">{{
                         country.countryCode
                       }}</span>
@@ -208,12 +260,16 @@
                             )
                           "
                           (keydown)="
-                            onCountrySearchKeydown($event)
+                            onCountrySearchKeydown(
+                              $event
+                            )
                           "
                           autofocus
                         />
                       </div>
-                      <div class="country-options">
+                      <div
+                        class="country-options"
+                      >
                         @for (
                           country of filteredCountries;
                           track country.countryCode
@@ -221,33 +277,52 @@
                           <button
                             class="country-option"
                             type="button"
-                            (click)="selectCountry(country)"
+                            (click)="
+                              selectCountry(
+                                country
+                              )
+                            "
                           >
-                            <span class="option-flag">{{
-                              country.flag
-                            }}</span>
-                            <span class="option-name">{{
-                              country.countryName
-                            }}</span>
-                            <span class="option-code">{{
-                              country.callingCode
-                            }}</span>
+                            <span
+                              class="option-flag"
+                              >{{
+                                country.flag
+                              }}</span
+                            >
+                            <span
+                              class="option-name"
+                              >{{
+                                country.countryName
+                              }}</span
+                            >
+                            <span
+                              class="option-code"
+                              >{{
+                                country.callingCode
+                              }}</span
+                            >
                           </button>
                         } @empty {
                           <p class="no-countries">
-                            No matching countries found.
+                            No matching countries
+                            found.
                           </p>
                         }
                       </div>
                     </div>
                   }
                 </div>
-                @if (selectedCountry; as country) {
+                @if (
+                  selectedCountry;
+                  as country
+                ) {
                   <span class="calling-code">{{
                     country.callingCode
                   }}</span>
                 }
-                <span class="phone-divider"></span>
+                <span
+                  class="phone-divider"
+                ></span>
                 <input
                   id="phoneNumber"
                   type="tel"
@@ -258,8 +333,9 @@
                   inputmode="numeric"
                   (input)="
                     onPhoneInput(
-                      registrationForm.get('phoneNumber')
-                        ?.value ?? ''
+                      registrationForm.get(
+                        'phoneNumber'
+                      )?.value ?? ''
                     )
                   "
                   [attr.aria-invalid]="
@@ -269,8 +345,8 @@
               </div>
 
               <p class="field-hint">
-                Choose a country, then enter the phone
-                number using digits only.
+                Choose a country, then enter the
+                phone number using digits only.
               </p>
 
               @if (showError('phoneNumber')) {
@@ -289,15 +365,15 @@
                       'pattern'
                     )
                   ) {
-                    Use digits only, without spaces or
-                    symbols.
+                    Use digits only, without
+                    spaces or symbols.
                   } @else if (
                     registrationForm.controls.phoneNumber.hasError(
                       'invalidPhone'
                     )
                   ) {
-                    Enter a valid phone number for the
-                    selected country.
+                    Enter a valid phone number for
+                    the selected country.
                   } @else {
                     Phone number is required.
                   }
@@ -319,7 +395,9 @@
             <div class="form-field">
               <label for="companyName">
                 Organisation name
-                <span class="required-mark">*</span>
+                <span class="required-mark"
+                  >*</span
+                >
               </label>
 
               <input
@@ -328,7 +406,9 @@
                 formControlName="companyName"
                 placeholder="Enter organisation name"
                 autocomplete="organization"
-                [class.invalid]="showError('companyName')"
+                [class.invalid]="
+                  showError('companyName')
+                "
                 [attr.aria-invalid]="
                   showError('companyName')
                 "
@@ -352,7 +432,9 @@
             <div class="form-field">
               <label for="registrationNumber">
                 Registration number
-                <span class="optional-label">Optional</span>
+                <span class="optional-label"
+                  >Optional</span
+                >
               </label>
 
               <input
@@ -364,10 +446,14 @@
               />
             </div>
 
-            <div class="form-field form-field-full">
+            <div
+              class="form-field form-field-full"
+            >
               <label for="contactEmail">
                 Organisation contact email
-                <span class="required-mark">*</span>
+                <span class="required-mark"
+                  >*</span
+                >
               </label>
 
               <input
@@ -376,7 +462,9 @@
                 formControlName="contactEmail"
                 placeholder="e.g. admin@organisation.com"
                 autocomplete="off"
-                [class.invalid]="showError('contactEmail')"
+                [class.invalid]="
+                  showError('contactEmail')
+                "
                 [attr.aria-invalid]="
                   showError('contactEmail')
                 "
@@ -397,7 +485,8 @@
                       'required'
                     )
                   ) {
-                    Organisation contact email is required.
+                    Organisation contact email is
+                    required.
                   } @else {
                     Enter a valid email address.
                   }
@@ -405,8 +494,8 @@
               }
 
               <p class="field-hint">
-                Use an email address your organisation can
-                access.
+                Use an email address your
+                organisation can access.
               </p>
             </div>
           </div>
@@ -422,9 +511,10 @@
           </div>
 
           <p>
-            Your information will be used to review your
-            registration request and set up your
-            organisation's access to SmartBook.
+            Your information will be used to
+            review your registration request and
+            set up your organisation's access to
+            SmartBook.
           </p>
         </div>
 
@@ -434,7 +524,9 @@
             role="alert"
             aria-live="polite"
           >
-            <span class="auth-error-icon" aria-hidden="true"
+            <span
+              class="auth-error-icon"
+              aria-hidden="true"
               >!</span
             >
             <p>{{ errorMessage }}</p>
@@ -460,7 +552,8 @@
 
         <p class="required-note">
           Fields marked with
-          <span class="required-mark">*</span> are required.
+          <span class="required-mark">*</span> are
+          required.
         </p>
       </form>
     </section>

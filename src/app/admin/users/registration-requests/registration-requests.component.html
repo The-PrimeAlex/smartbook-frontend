@@ -42,7 +42,9 @@
       [iconColor]="'var(--success)'"
       delay="0.1s"
     >
-      <span stat-value>{{ approvedCount() }}</span>
+      <span stat-value>{{
+        approvedCount()
+      }}</span>
       <span stat-label>Approved</span>
     </app-stat-card>
     <app-stat-card
@@ -51,7 +53,9 @@
       [iconColor]="'var(--danger)'"
       delay="0.15s"
     >
-      <span stat-value>{{ rejectedCount() }}</span>
+      <span stat-value>{{
+        rejectedCount()
+      }}</span>
       <span stat-label>Rejected</span>
     </app-stat-card>
   </div>
@@ -111,7 +115,9 @@
     </div>
   }
 
-  @if (!loading() && filteredRequests().length === 0) {
+  @if (
+    !loading() && filteredRequests().length === 0
+  ) {
     <app-empty-state
       [icon]="LucideMail"
       title="No Registration Requests"
@@ -124,7 +130,9 @@
   }
 
   <!-- Requests Grid -->
-  @if (!loading() && filteredRequests().length > 0) {
+  @if (
+    !loading() && filteredRequests().length > 0
+  ) {
     <div class="requests-grid">
       @for (
         request of filteredRequests();
@@ -143,8 +151,12 @@
               >
             </div>
             <app-status-badge
-              [label]="getStatusLabel(request.status)"
-              [variant]="getBadgeVariant(request.status)"
+              [label]="
+                getStatusLabel(request.status)
+              "
+              [variant]="
+                getBadgeVariant(request.status)
+              "
             ></app-status-badge>
           </div>
 
@@ -161,26 +173,36 @@
                 [icon]="LucideBuilding"
                 [size]="14"
               ></app-icon>
-              <span>{{ request.companyName }}</span>
+              <span>{{
+                request.companyName
+              }}</span>
             </div>
             <div class="request-detail">
               <app-icon
                 [icon]="LucidePhone"
                 [size]="14"
               ></app-icon>
-              <span>{{ request.phoneNumber }}</span>
+              <span>{{
+                request.phoneNumber
+              }}</span>
             </div>
             @if (request.registrationNumber) {
               <div class="request-detail">
-                <span class="detail-label">Reg #:</span>
+                <span class="detail-label"
+                  >Reg #:</span
+                >
                 <span>{{
                   request.registrationNumber
                 }}</span>
               </div>
             }
             <div class="request-detail">
-              <span class="detail-label">Contact:</span>
-              <span>{{ request.contactEmail }}</span>
+              <span class="detail-label"
+                >Contact:</span
+              >
+              <span>{{
+                request.contactEmail
+              }}</span>
             </div>
           </div>
 
@@ -200,10 +222,14 @@
                 class="action-btn approve"
                 (click)="approveRequest(request)"
                 [disabled]="
-                  processingId() === request.requestId
+                  processingId() ===
+                  request.requestId
                 "
               >
-                @if (processingId() === request.requestId) {
+                @if (
+                  processingId() ===
+                  request.requestId
+                ) {
                   <span class="spinner"></span>
                 } @else {
                   <app-icon
@@ -217,10 +243,14 @@
                 class="action-btn reject"
                 (click)="rejectRequest(request)"
                 [disabled]="
-                  processingId() === request.requestId
+                  processingId() ===
+                  request.requestId
                 "
               >
-                @if (processingId() === request.requestId) {
+                @if (
+                  processingId() ===
+                  request.requestId
+                ) {
                   <span class="spinner"></span>
                 } @else {
                   <app-icon

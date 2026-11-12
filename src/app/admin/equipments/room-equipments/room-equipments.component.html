@@ -10,7 +10,9 @@
       type="button"
       (click)="loadAllRooms()"
     >
-      <app-icon [icon]="LucideRefreshCw"></app-icon>
+      <app-icon
+        [icon]="LucideRefreshCw"
+      ></app-icon>
       Refresh
     </button>
   </app-page-banner>
@@ -20,7 +22,10 @@
     </div>
   }
   @if (successMessage) {
-    <div class="alert alert-success" role="status">
+    <div
+      class="alert alert-success"
+      role="status"
+    >
       {{ successMessage }}
     </div>
   }
@@ -33,19 +38,24 @@
       }}</strong>
     </div>
     <div class="summary-item">
-      <span class="summary-label">Total Equipment</span>
+      <span class="summary-label"
+        >Total Equipment</span
+      >
       <strong class="summary-value">{{
         totalEquipment
       }}</strong>
     </div>
     <div class="summary-item">
       <span class="summary-label">Active</span>
-      <strong class="summary-value summary-active">{{
-        totalActive
-      }}</strong>
+      <strong
+        class="summary-value summary-active"
+        >{{ totalActive }}</strong
+      >
     </div>
     <div class="summary-item">
-      <span class="summary-label">Out of Service</span>
+      <span class="summary-label"
+        >Out of Service</span
+      >
       <strong class="summary-value summary-out">{{
         totalOutOfService
       }}</strong>
@@ -75,9 +85,15 @@
     <div class="loading-grid">
       @for (i of [1, 2, 3, 4, 5, 6]; track i) {
         <div class="room-card skeleton">
-          <div class="skeleton-line skeleton-title"></div>
-          <div class="skeleton-line skeleton-sub"></div>
-          <div class="skeleton-line skeleton-count"></div>
+          <div
+            class="skeleton-line skeleton-title"
+          ></div>
+          <div
+            class="skeleton-line skeleton-sub"
+          ></div>
+          <div
+            class="skeleton-line skeleton-count"
+          ></div>
         </div>
       }
     </div>
@@ -103,12 +119,16 @@
           [class.expanded]="
             expandingRoomId === card.room.roomId
           "
-          [style.animation-delay]="idx * 50 + 'ms'"
+          [style.animation-delay]="
+            idx * 50 + 'ms'
+          "
         >
           <!-- Card Header -->
           <div
             class="card-header"
-            (click)="toggleExpand(card.room.roomId)"
+            (click)="
+              toggleExpand(card.room.roomId)
+            "
           >
             <div class="card-header-left">
               <div
@@ -126,7 +146,10 @@
                 </h3>
                 <div class="room-meta">
                   <span class="room-type-badge">{{
-                    card.room.roomType.replace('_', ' ')
+                    card.room.roomType.replace(
+                      '_',
+                      ' '
+                    )
                   }}</span>
                   <span class="room-capacity">
                     <app-icon
@@ -176,12 +199,17 @@
                     class="spinner"
                     aria-hidden="true"
                   ></span>
-                  <span>Loading equipment...</span>
+                  <span
+                    >Loading equipment...</span
+                  >
                 </div>
-              } @else if (card.equipment.length === 0) {
+              } @else if (
+                card.equipment.length === 0
+              ) {
                 <div class="no-equipment">
                   <p>
-                    No equipment assigned to this room yet.
+                    No equipment assigned to this
+                    room yet.
                   </p>
                 </div>
               } @else {
@@ -206,36 +234,52 @@
                             [icon]="LucideWrench"
                           ></app-icon>
                         </div>
-                        <div class="equipment-text">
-                          <strong class="eq-name">{{
-                            item.equipmentName
-                          }}</strong>
-                          <span class="eq-asset">{{
-                            item.assetCode
-                          }}</span>
+                        <div
+                          class="equipment-text"
+                        >
+                          <strong
+                            class="eq-name"
+                            >{{
+                              item.equipmentName
+                            }}</strong
+                          >
+                          <span
+                            class="eq-asset"
+                            >{{
+                              item.assetCode
+                            }}</span
+                          >
                           @if (item.description) {
-                            <span class="eq-desc">{{
-                              item.description
-                            }}</span>
+                            <span
+                              class="eq-desc"
+                              >{{
+                                item.description
+                              }}</span
+                            >
                           }
                         </div>
                       </div>
-                      <div class="equipment-actions">
+                      <div
+                        class="equipment-actions"
+                      >
                         <div class="status-group">
-                          <span class="status-label"
+                          <span
+                            class="status-label"
                             >Status:</span
                           >
                           <select
                             class="status-select"
                             [class.status-active]="
-                              item.status === 'ACTIVE'
+                              item.status ===
+                              'ACTIVE'
                             "
                             [class.status-out]="
                               item.status ===
                               'OUT_OF_SERVICE'
                             "
                             [class.status-retired]="
-                              item.status === 'RETIRED'
+                              item.status ===
+                              'RETIRED'
                             "
                             [value]="item.status"
                             [attr.aria-label]="
@@ -249,7 +293,9 @@
                               changeStatus(
                                 card.room.roomId,
                                 item,
-                                $any($event.target).value
+                                $any(
+                                  $event.target
+                                ).value
                               )
                             "
                           >
@@ -257,7 +303,9 @@
                               status of statuses;
                               track status
                             ) {
-                              <option [value]="status">
+                              <option
+                                [value]="status"
+                              >
                                 {{
                                   equipmentStatusLabel(
                                     status
@@ -277,7 +325,8 @@
                             )
                           "
                           [attr.aria-label]="
-                            'Remove ' + item.equipmentName
+                            'Remove ' +
+                            item.equipmentName
                           "
                         >
                           <app-icon
@@ -295,26 +344,39 @@
               <button
                 type="button"
                 class="add-eq-btn"
-                (click)="toggleAddForm(card.room.roomId)"
+                (click)="
+                  toggleAddForm(card.room.roomId)
+                "
               >
-                <app-icon [icon]="LucidePlus"></app-icon>
+                <app-icon
+                  [icon]="LucidePlus"
+                ></app-icon>
                 Add equipment
               </button>
 
               <!-- Add Equipment Form -->
-              @if (addingRoomId === card.room.roomId) {
+              @if (
+                addingRoomId === card.room.roomId
+              ) {
                 <div class="add-form-panel">
-                  <h4>Add to {{ card.room.roomName }}</h4>
+                  <h4>
+                    Add to
+                    {{ card.room.roomName }}
+                  </h4>
 
                   <form
                     [formGroup]="equipmentForm"
                     (ngSubmit)="
-                      addEquipment(card.room.roomId)
+                      addEquipment(
+                        card.room.roomId
+                      )
                     "
                   >
                     <div class="form-grid">
                       <label class="form-field">
-                        <span>Equipment name *</span>
+                        <span
+                          >Equipment name *</span
+                        >
                         <input
                           type="text"
                           formControlName="equipmentName"
@@ -322,12 +384,14 @@
                         />
                         @if (
                           equipmentForm.controls
-                            .equipmentName.touched &&
+                            .equipmentName
+                            .touched &&
                           equipmentForm.controls
                             .equipmentName.invalid
                         ) {
                           <small
-                            >Enter an equipment name.</small
+                            >Enter an equipment
+                            name.</small
                           >
                         }
                       </label>
@@ -339,17 +403,20 @@
                           placeholder="e.g. EQ-001"
                         />
                         @if (
-                          equipmentForm.controls.assetCode
-                            .touched &&
-                          equipmentForm.controls.assetCode
-                            .invalid
+                          equipmentForm.controls
+                            .assetCode.touched &&
+                          equipmentForm.controls
+                            .assetCode.invalid
                         ) {
                           <small
-                            >Enter an asset code.</small
+                            >Enter an asset
+                            code.</small
                           >
                         }
                       </label>
-                      <label class="form-field full-width">
+                      <label
+                        class="form-field full-width"
+                      >
                         <span>Description</span>
                         <textarea
                           formControlName="description"
@@ -359,14 +426,20 @@
                       </label>
                       <label class="form-field">
                         <span>Status</span>
-                        <select formControlName="status">
+                        <select
+                          formControlName="status"
+                        >
                           @for (
                             status of statuses;
                             track status
                           ) {
-                            <option [value]="status">
+                            <option
+                              [value]="status"
+                            >
                               {{
-                                equipmentStatusLabel(status)
+                                equipmentStatusLabel(
+                                  status
+                                )
                               }}
                             </option>
                           }
@@ -378,7 +451,9 @@
                         type="button"
                         class="btn btn-outline"
                         (click)="
-                          toggleAddForm(card.room.roomId)
+                          toggleAddForm(
+                            card.room.roomId
+                          )
                         "
                       >
                         Cancel
@@ -386,7 +461,9 @@
                       <button
                         type="submit"
                         class="btn btn-primary"
-                        [disabled]="equipmentForm.invalid"
+                        [disabled]="
+                          equipmentForm.invalid
+                        "
                       >
                         Save equipment
                       </button>

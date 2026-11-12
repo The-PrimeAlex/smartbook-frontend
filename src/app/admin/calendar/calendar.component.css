@@ -43,7 +43,8 @@
   min-height: 100%;
   color: var(--t);
   background: var(--app-layout-bg);
-  font-family: Inter, 'Segoe UI', Arial, sans-serif;
+  font-family:
+    Inter, 'Segoe UI', Arial, sans-serif;
   animation: fi 500ms ease both;
 }
 @keyframes fi {
@@ -96,7 +97,8 @@
     transform: translate(0, 0) rotate(0deg);
   }
   50% {
-    transform: translate(20px, -15px) rotate(180deg);
+    transform: translate(20px, -15px)
+      rotate(180deg);
   }
 }
 @keyframes fl3 {
@@ -314,12 +316,17 @@ button:focus-visible {
   color: var(--w);
   font-weight: 750;
   font-size: 0.88rem;
-  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms
+    cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .btn-google,
 .btn-sync,
 .btn-disconnect {
-  background: linear-gradient(135deg, var(--o), var(--od));
+  background: linear-gradient(
+    135deg,
+    var(--o),
+    var(--od)
+  );
   box-shadow:
     0 4px 12px rgb(242 140 40 / 30%),
     inset 0 1px 0 rgb(255 255 255 / 20%);
@@ -338,7 +345,11 @@ button:focus-visible {
   transform: translateY(0);
 }
 .btn-disconnect {
-  background: linear-gradient(135deg, var(--er), var(--er));
+  background: linear-gradient(
+    135deg,
+    var(--er),
+    var(--er)
+  );
   box-shadow:
     0 4px 12px rgb(239 68 68 / 20%),
     inset 0 1px 0 rgb(255 255 255 / 15%);
@@ -357,7 +368,8 @@ button:focus-visible {
   color: var(--w);
   font-size: 0.82rem;
   font-weight: 700;
-  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms
+    cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .btn-small:hover:not(:disabled) {
   background: rgb(255 255 255 / 20);
@@ -402,7 +414,10 @@ button:focus-visible {
 /* ── Glass summary cards ── */
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    4,
+    minmax(0, 1fr)
+  );
   gap: 20px;
   margin-bottom: 32px;
 }
@@ -419,7 +434,8 @@ button:focus-visible {
   background: var(--card-bg);
   box-shadow: var(--card-shadow);
   backdrop-filter: blur(10px);
-  transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 300ms
+    cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: pop 400ms ease both;
 }
 .summary-card:nth-child(1) {
@@ -441,7 +457,11 @@ button:focus-visible {
   width: 5px;
   height: 100%;
   content: '';
-  background: linear-gradient(180deg, var(--o), #ffd27a);
+  background: linear-gradient(
+    180deg,
+    var(--o),
+    #ffd27a
+  );
   transition: width 300ms;
   border-radius: 0 4px 0 0;
 }
@@ -556,7 +576,8 @@ button:focus-visible {
   color: var(--t);
   font-size: 0.82rem;
   font-weight: 700;
-  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms
+    cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .filter-chip::before {
   position: absolute;
@@ -583,7 +604,11 @@ button:focus-visible {
 .filter-chip.active {
   border-color: transparent;
   color: var(--white);
-  background: linear-gradient(135deg, var(--n), var(--nl));
+  background: linear-gradient(
+    135deg,
+    var(--n),
+    var(--nl)
+  );
   box-shadow:
     0 4px 12px var(--card-shadow),
     inset 0 1px 0 rgb(255 255 255 / 10%);
@@ -609,14 +634,21 @@ button:focus-visible {
 /* ── Modern calendar grid ── */
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    7,
+    minmax(0, 1fr)
+  );
   border: 1px solid var(--border-color);
   border-radius: 16px;
   overflow: hidden;
 }
 .weekday-heading {
   padding: 14px 6px;
-  background: linear-gradient(135deg, var(--nd), var(--n));
+  background: linear-gradient(
+    135deg,
+    var(--nd),
+    var(--n)
+  );
   color: var(--white);
   font-size: 0.72rem;
   font-weight: 800;
@@ -683,7 +715,11 @@ button:focus-visible {
   transition: all 200ms;
 }
 .calendar-day.today .day-number {
-  background: linear-gradient(135deg, var(--o), var(--od));
+  background: linear-gradient(
+    135deg,
+    var(--o),
+    var(--od)
+  );
   color: var(--white);
   box-shadow: 0 2px 8px rgb(242 140 40 / 30%);
 }
@@ -714,7 +750,10 @@ button:focus-visible {
 /* ── Week grid ── */
 .week-grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    7,
+    minmax(0, 1fr)
+  );
   gap: 12px;
 }
 .week-day {
@@ -730,7 +769,8 @@ button:focus-visible {
   border-radius: 14px;
   background: var(--card-bg);
   color: var(--t);
-  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms
+    cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .week-day::before {
   position: absolute;
@@ -739,7 +779,11 @@ button:focus-visible {
   width: 4px;
   height: 100%;
   content: '';
-  background: linear-gradient(180deg, var(--o), #ffd27a);
+  background: linear-gradient(
+    180deg,
+    var(--o),
+    #ffd27a
+  );
   opacity: 0;
   transition: opacity 200ms;
   border-radius: 0 4px 0 0;
@@ -762,7 +806,11 @@ button:focus-visible {
 }
 .week-day.selected {
   border-color: var(--n);
-  background: linear-gradient(135deg, var(--n), var(--nl));
+  background: linear-gradient(
+    135deg,
+    var(--n),
+    var(--nl)
+  );
   color: var(--white);
 }
 .week-day.selected .week-day-name {
@@ -854,7 +902,11 @@ button:focus-visible {
   width: 3px;
   height: 100%;
   border-radius: 3px;
-  background: linear-gradient(180deg, var(--o), #ffd27a);
+  background: linear-gradient(
+    180deg,
+    var(--o),
+    #ffd27a
+  );
   opacity: 0;
   transition: opacity 200ms;
 }
@@ -968,7 +1020,8 @@ button:focus-visible {
   white-space: nowrap;
   padding: 6px 12px;
   border-radius: 8px;
-  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms
+    cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .event-link:hover {
   background: var(--ol);
@@ -994,7 +1047,10 @@ button:focus-visible {
 /* ── Responsive ── */
 @media (max-width: 1000px) {
   .summary-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
   }
   .calendar-day {
     min-height: 95px;
@@ -1034,7 +1090,10 @@ button:focus-visible {
     padding: 14px;
   }
   .calendar-grid {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(
+      7,
+      minmax(0, 1fr)
+    );
   }
   .weekday-heading {
     padding: 8px 2px;
@@ -1056,7 +1115,10 @@ button:focus-visible {
     font-size: 8px;
   }
   .week-grid {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(
+      7,
+      minmax(0, 1fr)
+    );
     gap: 3px;
   }
   .week-day {

@@ -14,7 +14,9 @@
         [icon]="LucideRefreshCw"
         [size]="14"
       ></app-icon>
-      {{ loading() ? 'Refreshing...' : 'Refresh' }}
+      {{
+        loading() ? 'Refreshing...' : 'Refresh'
+      }}
     </button>
   </app-page-banner>
 
@@ -51,7 +53,9 @@
       [iconColor]="'var(--success,#22c55e)'"
       delay="0.05s"
     >
-      <span stat-value>{{ completedCount() }}</span>
+      <span stat-value>{{
+        completedCount()
+      }}</span>
       <span stat-label>Completed</span>
     </app-stat-card>
     <app-stat-card
@@ -69,7 +73,9 @@
     <div class="section-heading">
       <div>
         <h2>Your past reservations</h2>
-        <p>Completed bookings and no-show records.</p>
+        <p>
+          Completed bookings and no-show records.
+        </p>
       </div>
 
       <span class="result-count">
@@ -105,23 +111,32 @@
           <article class="booking-card">
             <div class="booking-main">
               <div class="booking-title-row">
-                <div class="room-icon" aria-hidden="true">
+                <div
+                  class="room-icon"
+                  aria-hidden="true"
+                >
                   ⌂
                 </div>
 
                 <div class="booking-title">
                   <h3>{{ booking.roomName }}</h3>
                   <p class="booking-reference">
-                    Booking #{{ booking.bookingId }}
+                    Booking #{{
+                      booking.bookingId
+                    }}
                   </p>
                 </div>
 
                 <app-status-badge
                   [label]="
-                    statusLabel(booking.bookingStatus)
+                    statusLabel(
+                      booking.bookingStatus
+                    )
                   "
                   [variant]="
-                    getBadgeVariant(booking.bookingStatus)
+                    getBadgeVariant(
+                      booking.bookingStatus
+                    )
                   "
                 ></app-status-badge>
               </div>
@@ -132,14 +147,22 @@
                     >Start time</span
                   >
                   <span class="detail-value">
-                    {{ booking.startTime | date: 'medium' }}
+                    {{
+                      booking.startTime
+                        | date: 'medium'
+                    }}
                   </span>
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label">End time</span>
+                  <span class="detail-label"
+                    >End time</span
+                  >
                   <span class="detail-value">
-                    {{ booking.endTime | date: 'medium' }}
+                    {{
+                      booking.endTime
+                        | date: 'medium'
+                    }}
                   </span>
                 </div>
 
@@ -149,10 +172,12 @@
                   >
                   <span class="detail-value">
                     @if (
-                      booking.bookedHourlyRate !== null
+                      booking.bookedHourlyRate !==
+                      null
                     ) {
                       {{
-                        booking.bookedHourlyRate | currency
+                        booking.bookedHourlyRate
+                          | currency
                       }}
                     } @else {
                       Not specified
@@ -171,22 +196,33 @@
               </div>
 
               <div class="purpose-block">
-                <span class="detail-label">Purpose</span>
+                <span class="detail-label"
+                  >Purpose</span
+                >
                 <p>{{ booking.purpose }}</p>
               </div>
             </div>
 
             <div class="booking-actions">
-              @if (booking.bookingStatus === 'COMPLETED') {
+              @if (
+                booking.bookingStatus ===
+                'COMPLETED'
+              ) {
                 <span class="completed-note">
-                  <span aria-hidden="true">✓</span>
+                  <span aria-hidden="true"
+                    >✓</span
+                  >
                   Booking completed
                 </span>
               }
 
-              @if (booking.bookingStatus === 'NO_SHOW') {
+              @if (
+                booking.bookingStatus ===
+                'NO_SHOW'
+              ) {
                 <span class="terminal-note">
-                  This booking was marked as a no-show.
+                  This booking was marked as a
+                  no-show.
                 </span>
               }
             </div>

@@ -1,4 +1,7 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import {
+  CommonModule,
+  DatePipe,
+} from '@angular/common';
 import {
   Component,
   computed,
@@ -64,40 +67,45 @@ export class ViewUsersComponent {
   readonly LucidePhone = LucidePhone;
   readonly LucideSearch = LucideSearch;
   readonly LucideShield = LucideShield;
-  readonly LucideTriangleAlert = LucideTriangleAlert;
+  readonly LucideTriangleAlert =
+    LucideTriangleAlert;
   readonly LucideUser = LucideUser;
   readonly LucideUserCheck = LucideUserCheck;
   readonly LucideX = LucideX;
   readonly searchTerm = signal('');
-  readonly activeFilter = signal<UserFilter>('ALL');
-  readonly selectedUser = signal<SmartBookUser | null>(
-    null,
-  );
-  readonly deactivateConfirm = signal<SmartBookUser | null>(
-    null,
-  );
+  readonly activeFilter =
+    signal<UserFilter>('ALL');
+  readonly selectedUser =
+    signal<SmartBookUser | null>(null);
+  readonly deactivateConfirm =
+    signal<SmartBookUser | null>(null);
   readonly deactivating = signal(false);
   readonly message = signal<{
     type: 'success' | 'error';
     text: string;
   } | null>(null);
 
-  protected users = this.usersService.readOnlyUsers;
+  protected users =
+    this.usersService.readOnlyUsers;
   protected loading = this.usersService.isLoading;
 
-  readonly filters: { label: string; value: UserFilter }[] =
-    [
-      { label: 'All Users', value: 'ALL' },
-      { label: 'Admins', value: 'ADMINS' },
-      { label: 'Active', value: 'ACTIVE' },
-      { label: 'Disabled', value: 'DISABLED' },
-      { label: 'Pending', value: 'PENDING' },
-    ];
+  readonly filters: {
+    label: string;
+    value: UserFilter;
+  }[] = [
+    { label: 'All Users', value: 'ALL' },
+    { label: 'Admins', value: 'ADMINS' },
+    { label: 'Active', value: 'ACTIVE' },
+    { label: 'Disabled', value: 'DISABLED' },
+    { label: 'Pending', value: 'PENDING' },
+  ];
 
   constructor() {}
 
   readonly filteredUsers = computed(() => {
-    const term = this.searchTerm().trim().toLowerCase();
+    const term = this.searchTerm()
+      .trim()
+      .toLowerCase();
     const filter = this.activeFilter();
     const users = this.users();
 
@@ -109,7 +117,8 @@ export class ViewUsersComponent {
         case 'ADMINS':
           // Safe navigation added (?.) to prevent crashes if roles is undefined
           matchesFilter =
-            user.roles?.includes('ADMIN') ?? false;
+            user.roles?.includes('ADMIN') ??
+            false;
           break;
         case 'ACTIVE':
         case 'DISABLED':
@@ -205,7 +214,9 @@ export class ViewUsersComponent {
     return icons[status];
   }
 
-  hasCompanyDetails(user: SmartBookUser): boolean {
+  hasCompanyDetails(
+    user: SmartBookUser,
+  ): boolean {
     return (
       !this.isAdminUser(user) &&
       Boolean(
@@ -223,7 +234,9 @@ export class ViewUsersComponent {
     return user.id;
   }
 
-  openDeactivateConfirm(user: SmartBookUser): void {
+  openDeactivateConfirm(
+    user: SmartBookUser,
+  ): void {
     this.deactivateConfirm.set(user);
   }
 
@@ -235,30 +248,39 @@ export class ViewUsersComponent {
     const user = this.deactivateConfirm();
     if (!user) return;
     this.deactivating.set(true);
-    this.usersService.deactivateUser(user.id).subscribe({
-      next: () => {
-        this.deactivating.set(false);
-        this.deactivateConfirm.set(null);
-        this.message.set({
-          type: 'success',
-          text: `${user.firstName} ${user.lastName} has been deactivated.`,
-        });
-        setTimeout(() => this.message.set(null), 4000);
-      },
-      error: (err) => {
-        this.deactivating.set(false);
-        this.message.set({
-          type: 'error',
-          text: 'Failed to deactivate user. Please try again.',
-        });
-        setTimeout(() => this.message.set(null), 4000);
-      },
-    });
+    this.usersService
+      .deactivateUser(user.id)
+      .subscribe({
+        next: () => {
+          this.deactivating.set(false);
+          this.deactivateConfirm.set(null);
+          this.message.set({
+            type: 'success',
+            text: `${user.firstName} ${user.lastName} has been deactivated.`,
+          });
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
+        },
+        error: (err) => {
+          this.deactivating.set(false);
+          this.message.set({
+            type: 'error',
+            text: 'Failed to deactivate user. Please try again.',
+          });
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
+        },
+      });
   }
 
   canDeactivate(user: SmartBookUser): boolean {
     return (
-      user.status === 'ACTIVE' || user.status === 'PENDING'
+      user.status === 'ACTIVE' ||
+      user.status === 'PENDING'
     );
   }
 

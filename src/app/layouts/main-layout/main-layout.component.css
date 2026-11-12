@@ -34,9 +34,50 @@ app-sidebar {
   display: none;
 }
 
+/* Mobile sidebar overlay backdrop */
+.mobile-sidebar-overlay {
+  display: none;
+}
+
 @media (max-width: 30rem) {
-  /* Sidebar uses display: contents on :host, so it's already removed from flex flow.
-     The inner .sidebar and .sidebar-overlay are fixed-position overlays. */
+  /* Sidebar :host is position: fixed on mobile. We hide it from the flex layout
+     but restore it when mobile-open is applied. The sidebar component handles
+     its own fixed overlay positioning and slide animation. */
+  app-sidebar {
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+
+  /* When mobile-open, restore the sidebar host so its own :host CSS takes over */
+  app-sidebar.mobile-open {
+    position: fixed !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: hidden !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+  }
+
+  /* Overlay backdrop - shown when sidebar is open */
+  .mobile-sidebar-overlay {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 999 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 300ms ease !important;
+  }
+
+  app-sidebar.mobile-open ~ .mobile-sidebar-overlay {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
 
   .app-layout {
     flex-direction: column !important;
@@ -81,6 +122,11 @@ app-sidebar {
   }
 
   .mobile-menu-button:hover {
-    background: rgba(242, 140, 40, 0.2) !important;
+    background: rgba(
+      242,
+      140,
+      40,
+      0.2
+    ) !important;
   }
 }

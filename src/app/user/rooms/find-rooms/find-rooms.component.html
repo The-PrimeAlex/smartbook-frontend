@@ -4,45 +4,98 @@
     [icon]="LucideMonitor"
     eyebrow="Rooms"
     title="Find a Room"
-    description="Browse available meeting rooms and book the perfect space for your next meeting."
+    description="Browse available meeting rooms
+    and book the perfect space for your next meeting."
   ></app-page-banner>
 
   <!-- Quick Stats Row -->
   <div class="quick-stats">
     <div class="quick-stat">
-      <div class="quick-stat-icon" style="background: rgba(59,130,246,0.12); color: var(--info,#3b82f6);">
-        <app-icon [icon]="LucideMonitor" [size]="18"></app-icon>
+      <div
+        class="quick-stat-icon"
+        style="
+          background: rgba(59, 130, 246, 0.12);
+          color: var(--info, #3b82f6);
+        "
+      >
+        <app-icon
+          [icon]="LucideMonitor"
+          [size]="18"
+        ></app-icon>
       </div>
       <div class="quick-stat-info">
-        <span class="quick-stat-value">{{ totalRooms() }}</span>
-        <span class="quick-stat-label">Total Rooms</span>
+        <span class="quick-stat-value">{{
+          totalRooms()
+        }}</span>
+        <span class="quick-stat-label"
+          >Total Rooms</span
+        >
       </div>
     </div>
     <div class="quick-stat">
-      <div class="quick-stat-icon" style="background: rgba(34,197,94,0.12); color: var(--success,#22c55e);">
-        <app-icon [icon]="LucideCheck" [size]="18"></app-icon>
+      <div
+        class="quick-stat-icon"
+        style="
+          background: rgba(34, 197, 94, 0.12);
+          color: var(--success, #22c55e);
+        "
+      >
+        <app-icon
+          [icon]="LucideCheck"
+          [size]="18"
+        ></app-icon>
       </div>
       <div class="quick-stat-info">
-        <span class="quick-stat-value">{{ activeRooms() }}</span>
-        <span class="quick-stat-label">Available</span>
+        <span class="quick-stat-value">{{
+          activeRooms()
+        }}</span>
+        <span class="quick-stat-label"
+          >Available</span
+        >
       </div>
     </div>
     <div class="quick-stat">
-      <div class="quick-stat-icon" style="background: rgba(20,184,166,0.12); color: var(--teal,#14b8a6);">
-        <app-icon [icon]="LucideUsers" [size]="18"></app-icon>
+      <div
+        class="quick-stat-icon"
+        style="
+          background: rgba(20, 184, 166, 0.12);
+          color: var(--teal, #14b8a6);
+        "
+      >
+        <app-icon
+          [icon]="LucideUsers"
+          [size]="18"
+        ></app-icon>
       </div>
       <div class="quick-stat-info">
-        <span class="quick-stat-value">{{ totalCapacity() }}</span>
-        <span class="quick-stat-label">Capacity</span>
+        <span class="quick-stat-value">{{
+          totalCapacity()
+        }}</span>
+        <span class="quick-stat-label"
+          >Capacity</span
+        >
       </div>
     </div>
     <div class="quick-stat">
-      <div class="quick-stat-icon" style="background: rgba(139,92,246,0.12); color: var(--purple,#8b5cf6);">
-        <app-icon [icon]="LucideMonitor" [size]="18"></app-icon>
+      <div
+        class="quick-stat-icon"
+        style="
+          background: rgba(139, 92, 246, 0.12);
+          color: var(--purple, #8b5cf6);
+        "
+      >
+        <app-icon
+          [icon]="LucideMonitor"
+          [size]="18"
+        ></app-icon>
       </div>
       <div class="quick-stat-info">
-        <span class="quick-stat-value">{{ totalEquipment() }}</span>
-        <span class="quick-stat-label">Equipment</span>
+        <span class="quick-stat-value">{{
+          totalEquipment()
+        }}</span>
+        <span class="quick-stat-label"
+          >Equipment</span
+        >
       </div>
     </div>
   </div>
@@ -77,7 +130,12 @@
   <!-- Results Count -->
   @if (!loading() && filteredRooms().length > 0) {
     <div class="results-count">
-      <span>{{ filteredRooms().length }} room{{ filteredRooms().length !== 1 ? 's' : '' }} found</span>
+      <span
+        >{{ filteredRooms().length }} room{{
+          filteredRooms().length !== 1 ? 's' : ''
+        }}
+        found</span
+      >
       @if (
         searchQuery() ||
         filterType() !== 'all' ||
@@ -91,7 +149,10 @@
             filterStatus.set('all')
           "
         >
-          <app-icon [icon]="LucideX" [size]="14"></app-icon>
+          <app-icon
+            [icon]="LucideX"
+            [size]="14"
+          ></app-icon>
           Clear all
         </button>
       }
@@ -106,14 +167,24 @@
           <div class="skeleton-header">
             <div class="skeleton-circle"></div>
             <div class="skeleton-text-group">
-              <div class="skeleton-line skeleton-title"></div>
-              <div class="skeleton-line skeleton-subtitle"></div>
+              <div
+                class="skeleton-line skeleton-title"
+              ></div>
+              <div
+                class="skeleton-line skeleton-subtitle"
+              ></div>
             </div>
           </div>
           <div class="skeleton-meta-row">
-            <div class="skeleton-line skeleton-meta"></div>
-            <div class="skeleton-line skeleton-meta"></div>
-            <div class="skeleton-line skeleton-meta"></div>
+            <div
+              class="skeleton-line skeleton-meta"
+            ></div>
+            <div
+              class="skeleton-line skeleton-meta"
+            ></div>
+            <div
+              class="skeleton-line skeleton-meta"
+            ></div>
           </div>
         </div>
       }
@@ -121,7 +192,9 @@
   }
 
   <!-- Empty State -->
-  @if (!loading() && filteredRooms().length === 0) {
+  @if (
+    !loading() && filteredRooms().length === 0
+  ) {
     <app-empty-state
       [icon]="LucideSearch"
       title="No rooms found"
@@ -140,7 +213,10 @@
             filterStatus.set('all')
           "
         >
-          <app-icon [icon]="LucideX" [size]="16"></app-icon>
+          <app-icon
+            [icon]="LucideX"
+            [size]="16"
+          ></app-icon>
           Clear Filters
         </button>
       }
@@ -157,87 +233,206 @@
       ) {
         <div
           class="room-card"
-          [style.animation-delay]="idx * 50 + 'ms'"
+          [style.animation-delay]="
+            idx * 50 + 'ms'
+          "
         >
           <!-- Card Top Section -->
           <div class="card-top">
             <div class="room-icon-wrap">
-              {{ getRoomTypeIcon(card.room.roomType) }}
+              {{
+                getRoomTypeIcon(
+                  card.room.roomType
+                )
+              }}
             </div>
             <div class="card-header-info">
               <div class="card-title-row">
-                <h3 class="room-name">{{ card.room.roomName }}</h3>
-                <span class="status-pill {{ getStatusClass(card.room.status) }}">
+                <h3 class="room-name">
+                  {{ card.room.roomName }}
+                </h3>
+                <span
+                  class="status-pill {{
+                    getStatusClass(
+                      card.room.status
+                    )
+                  }}"
+                >
                   <span class="status-dot"></span>
-                  {{ card.room.status === 'ACTIVE' ? 'Available' : card.room.status === 'MAINTENANCE' ? 'Maintenance' : 'Retired' }}
+                  {{
+                    card.room.status === 'ACTIVE'
+                      ? 'Available'
+                      : card.room.status ===
+                          'MAINTENANCE'
+                        ? 'Maintenance'
+                        : 'Retired'
+                  }}
                 </span>
               </div>
-              <span class="room-type-tag">{{ getRoomTypeLabel(card.room.roomType) }}</span>
+              <span class="room-type-tag">{{
+                getRoomTypeLabel(
+                  card.room.roomType
+                )
+              }}</span>
             </div>
             <button
               class="expand-toggle"
               (click)="toggleExpand(idx)"
               [attr.aria-expanded]="card.expanded"
-              [attr.title]="card.expanded ? 'Show less' : 'Show details'"
+              [attr.title]="
+                card.expanded
+                  ? 'Show less'
+                  : 'Show details'
+              "
             >
-              <app-icon [icon]="LucideChevronDown" [size]="18"></app-icon>
+              <app-icon
+                [icon]="LucideChevronDown"
+                [size]="18"
+              ></app-icon>
             </button>
           </div>
 
           <!-- Quick Info Row -->
           <div class="quick-info">
             <div class="info-chip">
-              <app-icon [icon]="LucideUsers" [size]="14"></app-icon>
-              <span>{{ card.room.capacity }} seats</span>
+              <app-icon
+                [icon]="LucideUsers"
+                [size]="14"
+              ></app-icon>
+              <span
+                >{{
+                  card.room.capacity
+                }}
+                seats</span
+              >
             </div>
             <div class="info-chip">
-              <app-icon [icon]="LucideDollarSign" [size]="14"></app-icon>
-              <span>KES {{ card.room.hourlyRate }}<small>/hr</small></span>
+              <app-icon
+                [icon]="LucideDollarSign"
+                [size]="14"
+              ></app-icon>
+              <span
+                >KES {{ card.room.hourlyRate
+                }}<small>/hr</small></span
+              >
             </div>
             <div class="info-chip">
-              <app-icon [icon]="LucideMonitor" [size]="14"></app-icon>
-              <span>{{ card.equipment.length }} equip</span>
+              <app-icon
+                [icon]="LucideMonitor"
+                [size]="14"
+              ></app-icon>
+              <span
+                >{{
+                  card.equipment.length
+                }}
+                equip</span
+              >
             </div>
           </div>
 
           <!-- Quick Book Button (always visible for active rooms) -->
           @if (card.room.status === 'ACTIVE') {
-            <button class="quick-book-btn" (click)="bookRoom(card.room.roomId)">
-              <app-icon [icon]="LucideCalendar" [size]="16"></app-icon>
+            <button
+              class="quick-book-btn"
+              (click)="bookRoom(card.room.roomId)"
+            >
+              <app-icon
+                [icon]="LucideCalendar"
+                [size]="16"
+              ></app-icon>
               Book Now
             </button>
           }
 
           <!-- Expanded Details -->
-          <div class="details-wrapper" [class.expanded]="card.expanded">
+          <div
+            class="details-wrapper"
+            [class.expanded]="card.expanded"
+          >
             <div class="details-content">
               @if (card.room.description) {
-                <p class="room-description">{{ card.room.description }}</p>
+                <p class="room-description">
+                  {{ card.room.description }}
+                </p>
               }
 
               <!-- Schedule Timeline -->
               <div class="details-section">
                 <h4 class="details-section-title">
-                  <app-icon [icon]="LucideCalendar" [size]="16"></app-icon>
+                  <app-icon
+                    [icon]="LucideCalendar"
+                    [size]="16"
+                  ></app-icon>
                   Schedule
                 </h4>
                 @if (card.schedule.length > 0) {
-                  @for (group of getScheduleByDate(card.schedule); track group.date) {
+                  @for (
+                    group of getScheduleByDate(
+                      card.schedule
+                    );
+                    track group.date
+                  ) {
                     <div class="schedule-day">
-                      <div class="schedule-day-label">{{ group.date }}</div>
-                      @for (booking of group.bookings; track booking.bookingId) {
-                        <div class="schedule-slot">
+                      <div
+                        class="schedule-day-label"
+                      >
+                        {{ group.date }}
+                      </div>
+                      @for (
+                        booking of group.bookings;
+                        track booking.bookingId
+                      ) {
+                        <div
+                          class="schedule-slot"
+                        >
                           <div class="slot-time">
-                            <span class="time-start">{{ formatTime(booking.startTime) }}</span>
-                            <span class="time-sep">–</span>
-                            <span class="time-end">{{ formatTime(booking.endTime) }}</span>
+                            <span
+                              class="time-start"
+                              >{{
+                                formatTime(
+                                  booking.startTime
+                                )
+                              }}</span
+                            >
+                            <span class="time-sep"
+                              >–</span
+                            >
+                            <span
+                              class="time-end"
+                              >{{
+                                formatTime(
+                                  booking.endTime
+                                )
+                              }}</span
+                            >
                           </div>
                           <div class="slot-info">
-                            <span class="slot-purpose">{{ booking.purpose || 'Meeting' }}</span>
-                            <span class="slot-user">{{ booking.userName }}</span>
+                            <span
+                              class="slot-purpose"
+                              >{{
+                                booking.purpose ||
+                                  'Meeting'
+                              }}</span
+                            >
+                            <span
+                              class="slot-user"
+                              >{{
+                                booking.userName
+                              }}</span
+                            >
                           </div>
-                          <span class="slot-status {{ getBookingStatusClass(booking.bookingStatus) }}">
-                            {{ getBookingStatusLabel(booking.bookingStatus) }}
+                          <span
+                            class="slot-status {{
+                              getBookingStatusClass(
+                                booking.bookingStatus
+                              )
+                            }}"
+                          >
+                            {{
+                              getBookingStatusLabel(
+                                booking.bookingStatus
+                              )
+                            }}
                           </span>
                         </div>
                       }
@@ -245,8 +440,14 @@
                   }
                 } @else {
                   <div class="schedule-free">
-                    <app-icon [icon]="LucideCheck" [size]="20"></app-icon>
-                    <span>No bookings – room is available!</span>
+                    <app-icon
+                      [icon]="LucideCheck"
+                      [size]="20"
+                    ></app-icon>
+                    <span
+                      >No bookings – room is
+                      available!</span
+                    >
                   </div>
                 }
               </div>
@@ -254,15 +455,37 @@
               <!-- Equipment List -->
               @if (card.equipment.length > 0) {
                 <div class="details-section">
-                  <h4 class="details-section-title">
-                    <app-icon [icon]="LucideMonitor" [size]="16"></app-icon>
+                  <h4
+                    class="details-section-title"
+                  >
+                    <app-icon
+                      [icon]="LucideMonitor"
+                      [size]="16"
+                    ></app-icon>
                     Equipment
                   </h4>
                   <div class="equipment-grid">
-                    @for (eq of card.equipment; track eq.equipmentName) {
+                    @for (
+                      eq of card.equipment;
+                      track eq.equipmentName
+                    ) {
                       <div class="equip-chip">
-                        <span class="equip-name">{{ eq.equipmentName }}</span>
-                        <span class="equip-dot {{ eq.status === 'ACTIVE' ? 'equip-active' : eq.status === 'OUT_OF_SERVICE' ? 'equip-oos' : 'equip-retired' }}"></span>
+                        <span
+                          class="equip-name"
+                          >{{
+                            eq.equipmentName
+                          }}</span
+                        >
+                        <span
+                          class="equip-dot {{
+                            eq.status === 'ACTIVE'
+                              ? 'equip-active'
+                              : eq.status ===
+                                  'OUT_OF_SERVICE'
+                                ? 'equip-oos'
+                                : 'equip-retired'
+                          }}"
+                        ></span>
                       </div>
                     }
                   </div>
@@ -270,13 +493,26 @@
               }
 
               <!-- Full Book Button in expanded -->
-              @if (card.room.status === 'ACTIVE') {
-                <button class="book-btn-full" (click)="bookRoom(card.room.roomId)">
-                  <app-icon [icon]="LucideCalendar" [size]="18"></app-icon>
+              @if (
+                card.room.status === 'ACTIVE'
+              ) {
+                <button
+                  class="book-btn-full"
+                  (click)="
+                    bookRoom(card.room.roomId)
+                  "
+                >
+                  <app-icon
+                    [icon]="LucideCalendar"
+                    [size]="18"
+                  ></app-icon>
                   Book {{ card.room.roomName }}
                 </button>
               } @else {
-                <button class="book-btn-full disabled" disabled>
+                <button
+                  class="book-btn-full disabled"
+                  disabled
+                >
                   Room Unavailable
                 </button>
               }

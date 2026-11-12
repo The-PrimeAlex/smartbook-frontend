@@ -49,8 +49,10 @@ import {
     FilterGroupComponent,
     PageBannerComponent,
   ],
-  templateUrl: './registration-requests.component.html',
-  styleUrl: './registration-requests.component.css',
+  templateUrl:
+    './registration-requests.component.html',
+  styleUrl:
+    './registration-requests.component.css',
 })
 export class RegistrationRequestsComponent implements OnInit {
   private readonly service =
@@ -86,21 +88,26 @@ export class RegistrationRequestsComponent implements OnInit {
     return all.filter((r) => r.status === filter);
   });
 
-  totalCount = computed(() => this.requests().length);
+  totalCount = computed(
+    () => this.requests().length,
+  );
   pendingCount = computed(
     () =>
-      this.requests().filter((r) => r.status === 'PENDING')
-        .length,
+      this.requests().filter(
+        (r) => r.status === 'PENDING',
+      ).length,
   );
   approvedCount = computed(
     () =>
-      this.requests().filter((r) => r.status === 'APPROVED')
-        .length,
+      this.requests().filter(
+        (r) => r.status === 'APPROVED',
+      ).length,
   );
   rejectedCount = computed(
     () =>
-      this.requests().filter((r) => r.status === 'REJECTED')
-        .length,
+      this.requests().filter(
+        (r) => r.status === 'REJECTED',
+      ).length,
   );
 
   ngOnInit() {

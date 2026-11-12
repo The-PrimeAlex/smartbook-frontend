@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../../shared/ui';
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -16,7 +20,9 @@ import { resetPasswordChangeRedirected } from '../../../core/http/auth.intercept
 function passwordsMatch(
   control: AbstractControl,
 ): ValidationErrors | null {
-  const newPassword = control.get('newPassword')?.value;
+  const newPassword = control.get(
+    'newPassword',
+  )?.value;
   const confirmPassword = control.get(
     'confirmPassword',
   )?.value;
@@ -44,7 +50,8 @@ function passwordsMatch(
   styleUrl: './change-password.component.css',
 })
 export class ChangePasswordComponent {
-  private readonly authService = inject(AuthService);
+  private readonly authService =
+    inject(AuthService);
   private readonly fb = inject(FormBuilder);
 
   readonly LucideLock = LucideLock;
@@ -57,17 +64,27 @@ export class ChangePasswordComponent {
   readonly showNewPassword = signal(false);
   readonly showConfirmPassword = signal(false);
 
-  readonly passwordForm = this.fb.nonNullable.group(
-    {
-      currentPassword: ['', Validators.required],
-      newPassword: [
-        '',
-        [Validators.required, Validators.minLength(12)],
-      ],
-      confirmPassword: ['', Validators.required],
-    },
-    { validators: passwordsMatch },
-  );
+  readonly passwordForm =
+    this.fb.nonNullable.group(
+      {
+        currentPassword: [
+          '',
+          Validators.required,
+        ],
+        newPassword: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(12),
+          ],
+        ],
+        confirmPassword: [
+          '',
+          Validators.required,
+        ],
+      },
+      { validators: passwordsMatch },
+    );
 
   changePassword(): void {
     this.successMessage.set('');
@@ -84,7 +101,10 @@ export class ChangePasswordComponent {
     this.loading.set(true);
 
     this.authService
-      .changePassword({ currentPassword, newPassword })
+      .changePassword({
+        currentPassword,
+        newPassword,
+      })
       .subscribe({
         next: () => {
           // The backend returns a new access token with updated user data.
@@ -107,7 +127,8 @@ export class ChangePasswordComponent {
             typeof error.error === 'object' &&
             error.error !== null &&
             'message' in error.error &&
-            typeof error.error.message === 'string'
+            typeof error.error.message ===
+              'string'
               ? error.error.message
               : 'Unable to change your password. Check your current password and try again.';
 

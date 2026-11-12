@@ -1,4 +1,7 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+} from '@angular/common';
 import {
   Component,
   computed,
@@ -34,10 +37,8 @@ import {
   getErrorMessage,
 } from '../../../shared/directives';
 
-const HISTORY_STATUSES: readonly BookingStatus[] = [
-  'COMPLETED',
-  'NO_SHOW',
-];
+const HISTORY_STATUSES: readonly BookingStatus[] =
+  ['COMPLETED', 'NO_SHOW'];
 
 @Component({
   selector: 'app-booking-history',
@@ -56,11 +57,14 @@ const HISTORY_STATUSES: readonly BookingStatus[] = [
 })
 export class BookingHistoryComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideRefreshCw = LucideRefreshCw;
   readonly LucideXCircle = LucideXCircle;
 
-  private readonly bookingService = inject(BookingService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
 
   readonly bookings = signal<Booking[]>([]);
   readonly loading = signal(false);
@@ -98,9 +102,12 @@ export class BookingHistoryComponent implements OnInit {
 
     this.bookingService
       .getMyBookings()
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
-        next: (bookings) => this.bookings.set(bookings),
+        next: (bookings) =>
+          this.bookings.set(bookings),
         error: (error: unknown) => {
           this.errorMessage.set(
             this.getErrorMessage(

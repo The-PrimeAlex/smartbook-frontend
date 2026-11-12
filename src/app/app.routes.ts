@@ -103,7 +103,8 @@ export const routes: Routes = [
             path: 'bookings/upcoming',
             loadComponent: () =>
               import('./user/bookings/upcoming-bookings/upcoming-bookings.component').then(
-                (m) => m.UpcomingBookingsComponent,
+                (m) =>
+                  m.UpcomingBookingsComponent,
               ),
           },
           {
@@ -117,7 +118,8 @@ export const routes: Routes = [
             path: 'bookings/cancelled',
             loadComponent: () =>
               import('./user/bookings/cancelled-bookings/cancelled-bookings.component').then(
-                (m) => m.CancelledBookingsComponent,
+                (m) =>
+                  m.CancelledBookingsComponent,
               ),
           },
           {
@@ -131,7 +133,8 @@ export const routes: Routes = [
             path: 'notifications',
             loadComponent: () =>
               import('./user/notifications/notification-inbox/notification-inbox.component').then(
-                (m) => m.NotificationInboxComponent,
+                (m) =>
+                  m.NotificationInboxComponent,
               ),
           },
           {
@@ -166,7 +169,8 @@ export const routes: Routes = [
             path: 'settings/calendar',
             loadComponent: () =>
               import('./admin/settings/calendar-integration/calendar-integration.component').then(
-                (m) => m.CalendarIntegrationComponent,
+                (m) =>
+                  m.CalendarIntegrationComponent,
               ),
           },
         ],
@@ -244,7 +248,8 @@ export const routes: Routes = [
             path: 'users/requests',
             loadComponent: () =>
               import('./admin/users/registration-requests/registration-requests.component').then(
-                (m) => m.RegistrationRequestsComponent,
+                (m) =>
+                  m.RegistrationRequestsComponent,
               ),
           },
           {
@@ -265,21 +270,24 @@ export const routes: Routes = [
             path: 'monitoring',
             loadComponent: () =>
               import('./admin/monitoring/room-monitoring/room-monitoring-al.component').then(
-                (m) => m.RoomMonitoringAlComponent,
+                (m) =>
+                  m.RoomMonitoringAlComponent,
               ),
           },
           {
             path: 'monitoring/no-shows',
             loadComponent: () =>
               import('./admin/monitoring/room-monitoring/room-monitoring-al.component').then(
-                (m) => m.RoomMonitoringAlComponent,
+                (m) =>
+                  m.RoomMonitoringAlComponent,
               ),
           },
           {
             path: 'monitoring/overruns',
             loadComponent: () =>
               import('./admin/monitoring/room-monitoring/room-monitoring-al.component').then(
-                (m) => m.RoomMonitoringAlComponent,
+                (m) =>
+                  m.RoomMonitoringAlComponent,
               ),
           },
           {
@@ -356,7 +364,8 @@ export const routes: Routes = [
             path: 'settings/rooms',
             loadComponent: () =>
               import('./admin/settings/room-configuration/room-configuration.component').then(
-                (m) => m.RoomConfigurationComponent,
+                (m) =>
+                  m.RoomConfigurationComponent,
               ),
           },
           {
@@ -377,14 +386,16 @@ export const routes: Routes = [
             path: 'settings/notifications',
             loadComponent: () =>
               import('./admin/settings/notifications-settings/notifications-settings.component').then(
-                (m) => m.NotificationsSettingsComponent,
+                (m) =>
+                  m.NotificationsSettingsComponent,
               ),
           },
           {
             path: 'settings/calendar',
             loadComponent: () =>
               import('./admin/settings/calendar-integration/calendar-integration.component').then(
-                (m) => m.CalendarIntegrationComponent,
+                (m) =>
+                  m.CalendarIntegrationComponent,
               ),
           },
           {
@@ -413,7 +424,11 @@ export const routes: Routes = [
         (m) => m.ChangePasswordComponent,
       ),
   },
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard',
+  },
   { path: '**', redirectTo: 'dashboard' },
   {
     path: 'admin',

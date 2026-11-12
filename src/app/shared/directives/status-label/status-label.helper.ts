@@ -17,7 +17,9 @@ export function getBookingStatusLabel(
 }
 
 /** Maps bill status strings to display labels. */
-export function getBillStatusLabel(status: string): string {
+export function getBillStatusLabel(
+  status: string,
+): string {
   switch (status) {
     case 'PAID':
       return 'Paid';
@@ -57,7 +59,9 @@ export function getIncidentStatusLabel(
 }
 
 /** Maps user account status strings to display labels. */
-export function getUserStatusLabel(status: string): string {
+export function getUserStatusLabel(
+  status: string,
+): string {
   const labels: Record<string, string> = {
     ACTIVE: 'Active',
     PENDING: 'Pending',
@@ -85,7 +89,9 @@ export function getRegistrationStatusLabel(
 }
 
 /** Maps room status enums to display labels. */
-export function getRoomStatusLabel(status: string): string {
+export function getRoomStatusLabel(
+  status: string,
+): string {
   switch (status) {
     case 'ACTIVE':
       return 'Active';

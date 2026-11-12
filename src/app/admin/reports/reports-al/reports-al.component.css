@@ -151,7 +151,10 @@
   transition: border-color 150ms ease;
 }
 .status-pill:hover {
-  border-color: var(--border-color-hover, #d4d4d8);
+  border-color: var(
+    --border-color-hover,
+    #d4d4d8
+  );
 }
 [data-theme='dark'] .status-pill {
   background: var(--card, #18181b);
@@ -653,7 +656,10 @@
 }
 
 .state-error .reset-button:hover {
-  border-color: var(--border-color-hover, #d4d4d8);
+  border-color: var(
+    --border-color-hover,
+    #d4d4d8
+  );
   background: var(--muted, #f4f4f5);
 }
 
@@ -663,7 +669,9 @@
   color: var(--text, #fafafa);
 }
 
-[data-theme='dark'] .state-error .reset-button:hover {
+[data-theme='dark']
+  .state-error
+  .reset-button:hover {
   background: var(--muted, #27272a);
 }
 
@@ -698,7 +706,10 @@
 }
 
 .card-row:hover {
-  border-color: var(--border-color-hover, #d4d4d8);
+  border-color: var(
+    --border-color-hover,
+    #d4d4d8
+  );
 }
 
 [data-theme='dark'] .card-row {

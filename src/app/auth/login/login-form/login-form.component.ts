@@ -1,4 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -17,12 +21,17 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [FormsModule, RouterLink, ReactiveFormsModule],
+  imports: [
+    FormsModule,
+    RouterLink,
+    ReactiveFormsModule,
+  ],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css',
 })
 export class LoginFormComponent {
-  private readonly authService = inject(AuthService);
+  private readonly authService =
+    inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
@@ -33,7 +42,10 @@ export class LoginFormComponent {
   readonly form = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email],
+      validators: [
+        Validators.required,
+        Validators.email,
+      ],
     }),
     password: new FormControl('', {
       nonNullable: true,
@@ -53,7 +65,9 @@ export class LoginFormComponent {
     return this.form.get('email');
   }
   setShowPassword(): void {
-    this.showPassword.update((current) => !current);
+    this.showPassword.update(
+      (current) => !current,
+    );
   }
   onSubmit(): void {
     if (this.loading()) {
@@ -67,7 +81,9 @@ export class LoginFormComponent {
     this.errorMessage.set('');
     this.authService
       .login(this.form.getRawValue())
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
         next: (user) => {
           if (user.mustChangePassword) {
@@ -101,7 +117,9 @@ export class LoginFormComponent {
           }
 
           // Redirect to role-appropriate dashboard using the user object from the response
-          const destination = user.roles.includes('ADMIN')
+          const destination = user.roles.includes(
+            'ADMIN',
+          )
             ? '/admin/dashboard'
             : '/dashboard';
           void this.router.navigateByUrl(

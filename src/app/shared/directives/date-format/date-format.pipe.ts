@@ -1,4 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 
 @Pipe({
   name: 'dateFormat',
@@ -11,20 +14,28 @@ export class DateFormatPipe implements PipeTransform {
   ): string {
     if (!value) return '—';
     const date =
-      typeof value === 'string' ? new Date(value) : value;
+      typeof value === 'string'
+        ? new Date(value)
+        : value;
 
-    const dateStr = date.toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
+    const dateStr = date.toLocaleDateString(
+      'en-GB',
+      {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      },
+    );
 
     if (format === 'datetime') {
-      const timeStr = date.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      });
+      const timeStr = date.toLocaleTimeString(
+        'en-US',
+        {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        },
+      );
       return `${dateStr}, ${timeStr}`;
     }
 

@@ -1,4 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { createLogger } from '../../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -60,7 +64,8 @@ import {
   styleUrl: './my-charges.component.css',
 })
 export class MyChargesComponent implements OnInit {
-  private readonly log = createLogger('MyCharges');
+  private readonly log =
+    createLogger('MyCharges');
   bills = signal<Bill[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -80,7 +85,8 @@ export class MyChargesComponent implements OnInit {
   readonly LucideFileText = LucideFileText;
   readonly LucideLoader = LucideLoader;
   readonly LucideSmartphone = LucideSmartphone;
-  readonly LucideTriangleAlert = LucideTriangleAlert;
+  readonly LucideTriangleAlert =
+    LucideTriangleAlert;
   readonly LucideX = LucideX;
   readonly LucideXCircle = LucideXCircle;
 
@@ -102,19 +108,27 @@ export class MyChargesComponent implements OnInit {
   paymentSuccess = signal(false);
   paymentError = signal<string | null>(null);
   paymentWaiting = signal(false); // Waiting for M-Pesa confirmation
-  mpesaCheckoutRequestId = signal<string | null>(null);
-  private pollSubscription: Subscription | null = null;
+  mpesaCheckoutRequestId = signal<string | null>(
+    null,
+  );
+  private pollSubscription: Subscription | null =
+    null;
 
   filterStatus = signal('ALL');
 
   paymentMethods = [
     { value: 'MPESA', label: 'M-Pesa' },
     { value: 'CARD', label: 'Card' },
-    { value: 'BANK_TRANSFER', label: 'Bank Transfer' },
+    {
+      value: 'BANK_TRANSFER',
+      label: 'Bank Transfer',
+    },
     { value: 'CASH', label: 'Cash' },
   ];
 
-  constructor(private billingService: BillingService) {}
+  constructor(
+    private billingService: BillingService,
+  ) {}
 
   ngOnInit(): void {
     this.loadBills();
@@ -128,9 +142,14 @@ export class MyChargesComponent implements OnInit {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set('Failed to load your charges');
+        this.error.set(
+          'Failed to load your charges',
+        );
         this.loading.set(false);
-        this.log.error('Error loading bills:', err);
+        this.log.error(
+          'Error loading bills:',
+          err,
+        );
       },
     });
   }
@@ -155,7 +174,9 @@ export class MyChargesComponent implements OnInit {
     this.mpesaCheckoutRequestId.set(null);
   }
 
-  closePaymentModalIfOverlayClick(event: MouseEvent): void {
+  closePaymentModalIfOverlayClick(
+    event: MouseEvent,
+  ): void {
     if (event.target === event.currentTarget) {
       this.closePaymentModal();
     }
@@ -171,7 +192,8 @@ export class MyChargesComponent implements OnInit {
     const request: PaymentRequest = {
       paymentMethod: this.paymentMethod(),
       amount: this.paymentAmount(),
-      transactionReference: this.transactionReference(),
+      transactionReference:
+        this.transactionReference(),
       phoneNumber: this.phoneNumber(),
     };
 
@@ -212,16 +234,21 @@ export class MyChargesComponent implements OnInit {
 
   startPolling(): void {
     // Poll every 3 seconds for up to 2 minutes
-    this.pollSubscription = interval(3000).subscribe({
+    this.pollSubscription = interval(
+      3000,
+    ).subscribe({
       next: () => {
-        const checkoutId = this.mpesaCheckoutRequestId();
+        const checkoutId =
+          this.mpesaCheckoutRequestId();
         if (!checkoutId) return;
 
         this.billingService
           .queryMpesaPaymentStatus(checkoutId)
           .subscribe({
             next: (status) => {
-              if (status.paymentStatus === 'SUCCESS') {
+              if (
+                status.paymentStatus === 'SUCCESS'
+              ) {
                 this.stopPolling();
                 this.paymentWaiting.set(false);
                 this.paymentSuccess.set(true);
@@ -239,7 +266,10 @@ export class MyChargesComponent implements OnInit {
             },
             error: (err) => {
               // Ignore polling errors — keep trying
-              this.log.error('Polling error:', err);
+              this.log.error(
+                'Polling error:',
+                err,
+              );
             },
           });
       },
@@ -265,7 +295,8 @@ export class MyChargesComponent implements OnInit {
   }
 
   get filteredBills(): Bill[] {
-    if (this.filterStatus() === 'ALL') return this.bills();
+    if (this.filterStatus() === 'ALL')
+      return this.bills();
     return this.bills().filter(
       (b) => b.billStatus === this.filterStatus(),
     );
@@ -273,7 +304,8 @@ export class MyChargesComponent implements OnInit {
 
   get totalOutstanding(): number {
     return this.bills().reduce(
-      (sum, b) => sum + (b.totalAmount - b.amountPaid),
+      (sum, b) =>
+        sum + (b.totalAmount - b.amountPaid),
       0,
     );
   }
@@ -288,7 +320,8 @@ export class MyChargesComponent implements OnInit {
   get unpaidCount(): number {
     return this.bills().filter(
       (b) =>
-        b.billStatus !== 'PAID' && b.billStatus !== 'VOID',
+        b.billStatus !== 'PAID' &&
+        b.billStatus !== 'VOID',
     ).length;
   }
 

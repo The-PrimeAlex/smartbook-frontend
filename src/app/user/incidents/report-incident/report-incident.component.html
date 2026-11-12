@@ -13,8 +13,8 @@
         [size]="20"
       ></app-icon>
       <span
-        >Incident reported successfully. It will be reviewed
-        by an administrator.</span
+        >Incident reported successfully. It will
+        be reviewed by an administrator.</span
       >
     </div>
   }
@@ -36,7 +36,9 @@
     </div>
   }
   <!-- No Checked-In Bookings -->
-  @if (!loading() && checkedInRooms().length === 0) {
+  @if (
+    !loading() && checkedInRooms().length === 0
+  ) {
     <app-empty-state
       [icon]="LucideCalendar"
       title="No Eligible Bookings"
@@ -45,7 +47,9 @@
       <button
         class="action-button"
         (click)="
-          router.navigate(['/app/bookings/upcoming'])
+          router.navigate([
+            '/app/bookings/upcoming',
+          ])
         "
       >
         View Your Bookings
@@ -53,7 +57,9 @@
     </app-empty-state>
   }
   <!-- Main Content -->
-  @if (!loading() && checkedInRooms().length > 0) {
+  @if (
+    !loading() && checkedInRooms().length > 0
+  ) {
     <div class="content-grid">
       <!-- Room Selection Panel -->
       <div class="room-panel">
@@ -65,7 +71,8 @@
           Select Room
         </h2>
         <p class="panel-hint">
-          Choose the room where the incident occurred
+          Choose the room where the incident
+          occurred
         </p>
         <div class="room-list">
           @for (
@@ -75,7 +82,8 @@
             <div
               class="room-item"
               [class.selected]="
-                selectedRoom()?.roomId === room.roomId
+                selectedRoom()?.roomId ===
+                room.roomId
               "
               (click)="selectRoom(room)"
             >
@@ -91,19 +99,27 @@
                     [icon]="LucideClock"
                     [size]="14"
                   ></app-icon>
-                  {{ room.startTime | date: 'short' }} –
-                  {{ room.endTime | date: 'short' }}
+                  {{
+                    room.startTime | date: 'short'
+                  }}
+                  –
+                  {{
+                    room.endTime | date: 'short'
+                  }}
                 </div>
               </div>
               <div class="room-status">
                 <app-status-badge
                   [label]="
-                    room.bookingStatus === 'CHECKED_IN'
+                    room.bookingStatus ===
+                    'CHECKED_IN'
                       ? 'Checked In'
                       : 'Completed'
                   "
                   [variant]="
-                    getBadgeVariant(room.bookingStatus)
+                    getBadgeVariant(
+                      room.bookingStatus
+                    )
                   "
                 ></app-status-badge>
               </div>
@@ -151,7 +167,9 @@
               </select>
             </div>
             <div class="form-field">
-              <label for="description">Description *</label>
+              <label for="description"
+                >Description *</label
+              >
               <textarea
                 id="description"
                 [(ngModel)]="description"
@@ -194,7 +212,9 @@
               [size]="48"
               [strokeWidth]="1.5"
             ></app-icon>
-            <p>Select a room to report an incident</p>
+            <p>
+              Select a room to report an incident
+            </p>
           </div>
         }
       </div>

@@ -74,7 +74,8 @@
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s
+    cubic-bezier(0.4, 0, 0.2, 1);
 }
 .filter-btn:hover {
   border-color: var(--brand-accent);
@@ -125,7 +126,8 @@
   border-radius: var(--radius-lg);
   padding: 0;
   animation: fadeUp 0.4s ease-out both;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s
+    cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -268,8 +270,8 @@
   background: rgba(34, 197, 94, 0.1);
   color: var(--success);
   border-color: rgba(34, 197, 94, 0.25);
-}gg
-.status-badge.status-verified::before {
+}
+gg .status-badge.status-verified::before {
   background: var(--success);
 }
 
@@ -335,7 +337,8 @@
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s
+    cubic-bezier(0.4, 0, 0.2, 1);
   flex: 1;
   justify-content: center;
 }
@@ -540,7 +543,8 @@
   flex-direction: column;
   overflow: hidden;
   transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.35s
+    cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .side-panel-overlay.visible .side-panel {

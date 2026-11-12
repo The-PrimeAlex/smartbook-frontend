@@ -1,5 +1,7 @@
 export type RoomType =
-  'BOARDROOM' | 'VIDEO_CONFERENCE' | 'MEETING_SUITE';
+  | 'BOARDROOM'
+  | 'VIDEO_CONFERENCE'
+  | 'MEETING_SUITE';
 
 export type RoomStatus =
   'ACTIVE' | 'MAINTENANCE' | 'RETIRED';

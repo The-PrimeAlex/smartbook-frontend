@@ -1,4 +1,7 @@
-<div class="modal-overlay visible" (click)="closeModal()">
+<div
+  class="modal-overlay visible"
+  (click)="closeModal()"
+>
   <div
     class="modal-content"
     (click)="$event.stopPropagation()"
@@ -23,7 +26,10 @@
       <p>{{ message() }}</p>
     </div>
     <div class="modal-actions">
-      <button class="btn-primary" (click)="closeModal()">
+      <button
+        class="btn-primary"
+        (click)="closeModal()"
+      >
         OK, got it
       </button>
     </div>

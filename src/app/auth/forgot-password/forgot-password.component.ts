@@ -23,12 +23,17 @@ import { IconComponent } from '../../shared/ui';
 @Component({
   selector: 'app-password-reset',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, IconComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    IconComponent,
+  ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })
 export class PasswordResetComponent {
-  private readonly formBuilder = inject(FormBuilder);
+  private readonly formBuilder =
+    inject(FormBuilder);
   private readonly passwordResetService = inject(
     PasswordResetService,
   );
@@ -39,10 +44,15 @@ export class PasswordResetComponent {
   readonly LucideMail = LucideMail;
   readonly LucideShieldCheck = LucideShieldCheck;
 
-  constructor(private readonly cdr: ChangeDetectorRef) {}
+  constructor(
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
   readonly passwordResetForm =
     this.formBuilder.nonNullable.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+      ],
     });
 
   isSubmitting = false;

@@ -111,7 +111,11 @@ import { LucideDynamicIcon } from '@lucide/angular';
 export class StatCardComponent {
   icon = input<any | null>(null);
   iconSize = input<number>(24);
-  iconBg = input<string>('rgba(59, 130, 246, 0.12)');
-  iconColor = input<string>('var(--info, #3b82f6)');
+  iconBg = input<string>(
+    'rgba(59, 130, 246, 0.12)',
+  );
+  iconColor = input<string>(
+    'var(--info, #3b82f6)',
+  );
   delay = input<string>('0s');
 }

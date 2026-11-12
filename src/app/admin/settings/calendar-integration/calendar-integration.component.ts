@@ -14,19 +14,24 @@ import { PageBannerComponent } from '../../../shared/ui';
   selector: 'app-calendar-integration',
   standalone: true,
   imports: [FormsModule, PageBannerComponent],
-  templateUrl: './calendar-integration.component.html',
-  styleUrl: './calendar-integration.component.css',
+  templateUrl:
+    './calendar-integration.component.html',
+  styleUrl:
+    './calendar-integration.component.css',
 })
 export class CalendarIntegrationComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
-  private readonly settingsService =
-    inject(SettingsService);
+  private readonly settingsService = inject(
+    SettingsService,
+  );
   readonly settings = signal<Setting[]>([]);
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly saved = signal(false);
   readonly error = signal('');
-  readonly formValues = signal<Record<string, string>>({});
+  readonly formValues = signal<
+    Record<string, string>
+  >({});
 
   ngOnInit(): void {
     this.load();
@@ -39,7 +44,8 @@ export class CalendarIntegrationComponent implements OnInit {
       .subscribe({
         next: (settings) => {
           this.settings.set(settings);
-          const values: Record<string, string> = {};
+          const values: Record<string, string> =
+            {};
           settings.forEach(
             (s) => (values[s.key] = s.value),
           );
@@ -65,7 +71,10 @@ export class CalendarIntegrationComponent implements OnInit {
         next: () => {
           this.saved.set(true);
           this.saving.set(false);
-          setTimeout(() => this.saved.set(false), 3000);
+          setTimeout(
+            () => this.saved.set(false),
+            3000,
+          );
         },
         error: (e: Error) => {
           this.error.set(e.message);
@@ -77,6 +86,9 @@ export class CalendarIntegrationComponent implements OnInit {
     return this.formValues()[key] ?? '';
   }
   setValue(key: string, value: string): void {
-    this.formValues.update((v) => ({ ...v, [key]: value }));
+    this.formValues.update((v) => ({
+      ...v,
+      [key]: value,
+    }));
   }
 }

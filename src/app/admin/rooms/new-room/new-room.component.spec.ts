@@ -13,7 +13,9 @@ describe('NewRoomComponent', () => {
       imports: [NewRoomComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NewRoomComponent);
+    fixture = TestBed.createComponent(
+      NewRoomComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

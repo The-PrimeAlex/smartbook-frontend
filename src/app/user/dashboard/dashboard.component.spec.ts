@@ -13,7 +13,9 @@ describe('DashboardComponent', () => {
       imports: [DashboardComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(
+      DashboardComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

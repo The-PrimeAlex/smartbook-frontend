@@ -14,7 +14,9 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title">Damage Summary</span>
+      <span class="stats-toggle-title"
+        >Damage Summary</span
+      >
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -22,7 +24,10 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+    <div
+      class="stats-row-wrapper"
+      [class.collapsed]="statsCollapsed()"
+    >
       <div class="stats-bar">
         <app-stat-card
           [icon]="LucideAlertTriangle"
@@ -30,7 +35,9 @@
           [iconColor]="'var(--error,#ef4444)'"
           delay="0s"
         >
-          <span stat-value>{{ totalDamageBills() }}</span>
+          <span stat-value>{{
+            totalDamageBills()
+          }}</span>
           <span stat-label>Incidents</span>
         </app-stat-card>
         <app-stat-card
@@ -85,7 +92,9 @@
         ) {
           <article
             class="bill-card"
-            [style.animation-delay]="i * 0.05 + 's'"
+            [style.animation-delay]="
+              i * 0.05 + 's'
+            "
           >
             <div class="bill-card-header">
               <div class="bill-header-left">
@@ -101,9 +110,15 @@
                   }}</span>
                 </div>
                 <app-status-badge
-                  [label]="getStatusLabel(bill.billStatus)"
+                  [label]="
+                    getStatusLabel(
+                      bill.billStatus
+                    )
+                  "
                   [variant]="
-                    getBadgeVariant(bill.billStatus)
+                    getBadgeVariant(
+                      bill.billStatus
+                    )
                   "
                 ></app-status-badge>
               </div>
@@ -111,7 +126,9 @@
                 <span class="bill-amount">
                   {{
                     getIncidentTotal(bill)
-                      | currency: 'KSH ' : 'symbol-narrow'
+                      | currency
+                        : 'KSH '
+                        : 'symbol-narrow'
                   }}
                 </span>
               </div>
@@ -132,7 +149,9 @@
                       [size]="14"
                     ></app-icon>
                     {{
-                      formatDateTime(bill.booking.startTime)
+                      formatDateTime(
+                        bill.booking.startTime
+                      )
                     }}
                   </span>
                 </div>
@@ -144,13 +163,19 @@
                   track item.description;
                   let j = $index
                 ) {
-                  @if (item.itemType === 'INCIDENT') {
-                    <div class="item-row item-incident">
+                  @if (
+                    item.itemType === 'INCIDENT'
+                  ) {
+                    <div
+                      class="item-row item-incident"
+                    >
                       <span
                         class="item-type-badge incident-badge"
                       >
                         <app-icon
-                          [icon]="LucideAlertTriangle"
+                          [icon]="
+                            LucideAlertTriangle
+                          "
                           [size]="12"
                         ></app-icon>
                         Incident
@@ -173,23 +198,31 @@
                   <span class="bill-summary-label"
                     >Damage Total</span
                   >
-                  <span class="bill-summary-value">{{
-                    formatCurrency(
-                      getIncidentTotal(bill),
-                      bill.currency
-                    )
-                  }}</span>
+                  <span
+                    class="bill-summary-value"
+                    >{{
+                      formatCurrency(
+                        getIncidentTotal(bill),
+                        bill.currency
+                      )
+                    }}</span
+                  >
                 </div>
-                <div class="bill-summary-item bill-paid">
+                <div
+                  class="bill-summary-item bill-paid"
+                >
                   <span class="bill-summary-label"
                     >Paid</span
                   >
-                  <span class="bill-summary-value">{{
-                    formatCurrency(
-                      bill.amountPaid,
-                      bill.currency
-                    )
-                  }}</span>
+                  <span
+                    class="bill-summary-value"
+                    >{{
+                      formatCurrency(
+                        bill.amountPaid,
+                        bill.currency
+                      )
+                    }}</span
+                  >
                 </div>
               </div>
             </div>

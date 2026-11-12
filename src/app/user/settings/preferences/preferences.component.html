@@ -46,8 +46,8 @@
         <div>
           <h2>Display &amp; Regional</h2>
           <p>
-            Customize how SmartBook displays dates, times,
-            and currency.
+            Customize how SmartBook displays
+            dates, times, and currency.
           </p>
         </div>
       </div>
@@ -59,8 +59,8 @@
             >Timezone</label
           >
           <p class="pref-description">
-            Used for scheduling and displaying meeting
-            times.
+            Used for scheduling and displaying
+            meeting times.
           </p>
           <select
             id="timezone"
@@ -73,8 +73,13 @@
               )
             "
           >
-            @for (tz of timezoneOptions; track tz) {
-              <option [value]="tz">{{ tz }}</option>
+            @for (
+              tz of timezoneOptions;
+              track tz
+            ) {
+              <option [value]="tz">
+                {{ tz }}
+              </option>
             }
           </select>
         </div>
@@ -85,7 +90,8 @@
             >Currency</label
           >
           <p class="pref-description">
-            Default currency for billing and invoices.
+            Default currency for billing and
+            invoices.
           </p>
           <input
             id="currency"
@@ -105,16 +111,21 @@
 
         <!-- Week Start -->
         <div class="pref-field">
-          <label class="pref-label" for="weekStart"
+          <label
+            class="pref-label"
+            for="weekStart"
             >Week Starts On</label
           >
           <p class="pref-description">
-            First day of the week in calendar views.
+            First day of the week in calendar
+            views.
           </p>
           <select
             id="weekStart"
             class="pref-select"
-            [value]="getValue('general.week_start')"
+            [value]="
+              getValue('general.week_start')
+            "
             (change)="
               setValue(
                 'general.week_start',
@@ -122,8 +133,13 @@
               )
             "
           >
-            @for (day of weekStartOptions; track day) {
-              <option [value]="day">{{ day }}</option>
+            @for (
+              day of weekStartOptions;
+              track day
+            ) {
+              <option [value]="day">
+                {{ day }}
+              </option>
             }
           </select>
         </div>
@@ -131,27 +147,36 @@
 
       <!-- Business Name (read-only for regular users) -->
       <div class="pref-field read-only-field">
-        <label class="pref-label">Business Name</label>
+        <label class="pref-label"
+          >Business Name</label
+        >
         <p class="pref-description">
           Organization name displayed on invoices.
         </p>
         <input
           type="text"
           class="pref-input"
-          [value]="getValue('general.business_name')"
+          [value]="
+            getValue('general.business_name')
+          "
           disabled
         />
-        <span class="field-hint">Set by administrator</span>
+        <span class="field-hint"
+          >Set by administrator</span
+        >
       </div>
 
       <!-- Dark Mode Toggle -->
       <div class="pref-field dark-mode-field">
         <div class="dark-mode-header">
           <div>
-            <label class="pref-label">Dark Mode</label>
+            <label class="pref-label"
+              >Dark Mode</label
+            >
             <p class="pref-description">
-              Switch between light and dark theme for a more
-              comfortable viewing experience.
+              Switch between light and dark theme
+              for a more comfortable viewing
+              experience.
             </p>
           </div>
           <button

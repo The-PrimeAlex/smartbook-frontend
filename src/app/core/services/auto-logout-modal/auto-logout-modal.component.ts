@@ -1,4 +1,8 @@
-import { Component, computed, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -14,11 +18,14 @@ import { IconComponent } from '../../../shared/ui';
   selector: 'app-auto-logout-modal',
   standalone: true,
   imports: [CommonModule, IconComponent],
-  templateUrl: './auto-logout-modal.component.html',
+  templateUrl:
+    './auto-logout-modal.component.html',
   styleUrl: './auto-logout-modal.component.css',
 })
 export class AutoLogoutModalComponent {
-  readonly inactivityService = inject(InactivityService);
+  readonly inactivityService = inject(
+    InactivityService,
+  );
   private readonly router = inject(Router);
 
   readonly LucideCircleAlert = LucideCircleAlert;
@@ -28,21 +35,26 @@ export class AutoLogoutModalComponent {
 
   readonly warningVisible = computed(
     () =>
-      this.inactivityService.stateSignal().warningVisible,
+      this.inactivityService.stateSignal()
+        .warningVisible,
   );
 
   readonly secondsRemaining = computed(
     () =>
-      this.inactivityService.stateSignal().secondsRemaining,
+      this.inactivityService.stateSignal()
+        .secondsRemaining,
   );
 
   readonly loggedOut = computed(
-    () => this.inactivityService.stateSignal().loggedOut,
+    () =>
+      this.inactivityService.stateSignal()
+        .loggedOut,
   );
 
   readonly backNavWarning = computed(
     () =>
-      this.inactivityService.stateSignal().backNavWarning,
+      this.inactivityService.stateSignal()
+        .backNavWarning,
   );
 
   stay() {

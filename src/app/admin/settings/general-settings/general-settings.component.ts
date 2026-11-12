@@ -25,19 +25,24 @@ import { PageBannerComponent } from '../../../shared/ui';
     PageBannerComponent,
     IconComponent,
   ],
-  templateUrl: './general-settings.component.html',
+  templateUrl:
+    './general-settings.component.html',
   styleUrl: './general-settings.component.css',
 })
 export class GeneralSettingsComponent implements OnInit {
-  private readonly settingsService =
-    inject(SettingsService);
-  private readonly themeService = inject(ThemeService);
+  private readonly settingsService = inject(
+    SettingsService,
+  );
+  private readonly themeService =
+    inject(ThemeService);
 
   readonly LucideMoon = LucideMoon;
   readonly LucideSettings = LucideSettings;
   readonly LucideSun = LucideSun;
 
-  readonly darkMode = signal(this.themeService.isDark);
+  readonly darkMode = signal(
+    this.themeService.isDark,
+  );
 
   toggleDarkMode(): void {
     this.themeService.toggle();
@@ -50,7 +55,9 @@ export class GeneralSettingsComponent implements OnInit {
   readonly saved = signal(false);
   readonly error = signal('');
 
-  readonly formValues = signal<Record<string, string>>({});
+  readonly formValues = signal<
+    Record<string, string>
+  >({});
 
   ngOnInit(): void {
     this.load();
@@ -64,7 +71,8 @@ export class GeneralSettingsComponent implements OnInit {
       .subscribe({
         next: (settings) => {
           this.settings.set(settings);
-          const values: Record<string, string> = {};
+          const values: Record<string, string> =
+            {};
           settings.forEach(
             (s) => (values[s.key] = s.value),
           );
@@ -91,7 +99,10 @@ export class GeneralSettingsComponent implements OnInit {
         next: () => {
           this.saved.set(true);
           this.saving.set(false);
-          setTimeout(() => this.saved.set(false), 3000);
+          setTimeout(
+            () => this.saved.set(false),
+            3000,
+          );
         },
         error: (e: Error) => {
           this.error.set(e.message);
@@ -105,6 +116,9 @@ export class GeneralSettingsComponent implements OnInit {
   }
 
   setValue(key: string, value: string): void {
-    this.formValues.update((v) => ({ ...v, [key]: value }));
+    this.formValues.update((v) => ({
+      ...v,
+      [key]: value,
+    }));
   }
 }

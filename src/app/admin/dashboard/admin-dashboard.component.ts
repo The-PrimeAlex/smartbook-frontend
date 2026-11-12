@@ -82,11 +82,18 @@ export interface QuickAction {
   styleUrl: './admin-dashboard.component.css',
 })
 export class AdminDashboard implements OnInit {
-  private readonly log = createLogger('AdminDashboard');
-  private readonly authService = inject(AuthService);
-  private readonly roomService = inject(RoomService);
-  private readonly bookingService = inject(BookingService);
-  private readonly usersService = inject(UsersService);
+  private readonly log = createLogger(
+    'AdminDashboard',
+  );
+  private readonly authService =
+    inject(AuthService);
+  private readonly roomService =
+    inject(RoomService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
+  private readonly usersService =
+    inject(UsersService);
   private readonly monitoringService = inject(
     RoomMonitoringAlService,
   );
@@ -98,8 +105,10 @@ export class AdminDashboard implements OnInit {
   );
   private readonly router = inject(Router);
 
-  protected readonly LucideCalendar = LucideCalendar;
-  protected readonly LucideCreditCard = LucideCreditCard;
+  protected readonly LucideCalendar =
+    LucideCalendar;
+  protected readonly LucideCreditCard =
+    LucideCreditCard;
   protected readonly LucideTriangleAlert =
     LucideTriangleAlert;
   protected readonly LucideLayoutDashboard =
@@ -109,16 +118,24 @@ export class AdminDashboard implements OnInit {
   protected readonly LucideClock = LucideClock;
   protected readonly LucideUsers = LucideUsers;
   protected readonly LucideSearch = LucideSearch;
-  protected readonly LucideSettings = LucideSettings;
-  protected readonly LucideMonitor = LucideMonitor;
-  protected readonly LucideFileText = LucideFileText;
-  protected readonly LucideTrendingUp = LucideTrendingUp;
-  protected readonly LucideShieldCheck = LucideShieldCheck;
+  protected readonly LucideSettings =
+    LucideSettings;
+  protected readonly LucideMonitor =
+    LucideMonitor;
+  protected readonly LucideFileText =
+    LucideFileText;
+  protected readonly LucideTrendingUp =
+    LucideTrendingUp;
+  protected readonly LucideShieldCheck =
+    LucideShieldCheck;
   protected readonly LucidePlus = LucidePlus;
-  protected readonly LucideActivity = LucideActivity;
-  protected readonly LucideChevronDown = LucideChevronDown;
+  protected readonly LucideActivity =
+    LucideActivity;
+  protected readonly LucideChevronDown =
+    LucideChevronDown;
 
-  readonly currentUser = this.authService.currentUser;
+  readonly currentUser =
+    this.authService.currentUser;
 
   readonly fullName = computed(() => {
     const user = this.currentUser();
@@ -133,10 +150,12 @@ export class AdminDashboard implements OnInit {
   readonly rooms = signal<MeetingRoom[]>([]);
   readonly bookings = signal<Booking[]>([]);
   readonly users = signal<SmartBookUser[]>([]);
-  readonly liveStatus = signal<RoomMonitoringRecordAl[]>(
-    [],
-  );
-  readonly revenueReports = signal<RevenueReportAl[]>([]);
+  readonly liveStatus = signal<
+    RoomMonitoringRecordAl[]
+  >([]);
+  readonly revenueReports = signal<
+    RevenueReportAl[]
+  >([]);
   readonly incidents = signal<any[]>([]);
   readonly loading = signal(true);
   readonly statsCollapsed = signal(false);
@@ -146,16 +165,20 @@ export class AdminDashboard implements OnInit {
   }
 
   // Computed stats
-  readonly totalRooms = computed(() => this.rooms().length);
+  readonly totalRooms = computed(
+    () => this.rooms().length,
+  );
   readonly activeRooms = computed(
     () =>
-      this.rooms().filter((r) => r.status === 'ACTIVE')
-        .length,
+      this.rooms().filter(
+        (r) => r.status === 'ACTIVE',
+      ).length,
   );
   readonly maintenanceRooms = computed(
     () =>
-      this.rooms().filter((r) => r.status === 'MAINTENANCE')
-        .length,
+      this.rooms().filter(
+        (r) => r.status === 'MAINTENANCE',
+      ).length,
   );
   readonly totalCapacity = computed(() =>
     this.rooms().reduce(
@@ -192,16 +215,20 @@ export class AdminDashboard implements OnInit {
       ).length,
   );
 
-  readonly totalUsers = computed(() => this.users().length);
+  readonly totalUsers = computed(
+    () => this.users().length,
+  );
   readonly activeUsers = computed(
     () =>
-      this.users().filter((u) => u.status === 'ACTIVE')
-        .length,
+      this.users().filter(
+        (u) => u.status === 'ACTIVE',
+      ).length,
   );
   readonly adminUsers = computed(
     () =>
-      this.users().filter((u) => u.roles?.includes('ADMIN'))
-        .length,
+      this.users().filter((u) =>
+        u.roles?.includes('ADMIN'),
+      ).length,
   );
 
   readonly totalRevenue = computed(() => {
@@ -303,18 +330,22 @@ export class AdminDashboard implements OnInit {
     this.loading.set(true);
     forkJoin({
       rooms: this.roomService.getRooms(),
-      bookings: this.bookingService.getAllBookings(),
+      bookings:
+        this.bookingService.getAllBookings(),
       liveStatus:
         this.monitoringService.getLiveRoomStatus(),
       revenueReports:
         this.reportsService.getRevenueReports(),
-      incidents: this.incidentsService.getAllIncidents(),
+      incidents:
+        this.incidentsService.getAllIncidents(),
     }).subscribe({
       next: (data) => {
         this.rooms.set(data.rooms);
         this.bookings.set(data.bookings);
         this.liveStatus.set(data.liveStatus);
-        this.revenueReports.set(data.revenueReports);
+        this.revenueReports.set(
+          data.revenueReports,
+        );
         this.incidents.set(data.incidents);
         this.users.set(
           this.usersService.readOnlyUsers() ?? [],
@@ -378,7 +409,8 @@ export class AdminDashboard implements OnInit {
   timeUntil(dateStr: string): string {
     const now = new Date();
     const target = new Date(dateStr);
-    const diffMs = target.getTime() - now.getTime();
+    const diffMs =
+      target.getTime() - now.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);

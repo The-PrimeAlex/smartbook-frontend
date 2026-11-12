@@ -13,7 +13,9 @@ describe('MyProfileComponent', () => {
       imports: [MyProfileComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MyProfileComponent);
+    fixture = TestBed.createComponent(
+      MyProfileComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -1,4 +1,7 @@
-<section class="form-panel" aria-labelledby="login-heading">
+<section
+  class="form-panel"
+  aria-labelledby="login-heading"
+>
   <form
     [formGroup]="form"
     class="login-form"
@@ -6,8 +9,8 @@
   >
     <h2 id="login-heading">Sign In.</h2>
     <p class="form-description">
-      Welcome back. Sign in to manage your meetings and
-      workspaces.
+      Welcome back. Sign in to manage your
+      meetings and workspaces.
     </p>
     <div class="field">
       <input
@@ -18,11 +21,13 @@
         formControlName="email"
         [class.email-required]="
           emailControl?.hasError('required') &&
-          (emailControl?.dirty || emailControl?.touched)
+          (emailControl?.dirty ||
+            emailControl?.touched)
         "
         [placeholder]="
           emailControl?.hasError('required') &&
-          (emailControl?.dirty || emailControl?.touched)
+          (emailControl?.dirty ||
+            emailControl?.touched)
             ? 'Email is required'
             : ' '
         "
@@ -31,7 +36,8 @@
       <label for="email">Email</label>
       @if (
         emailControl?.hasError('email') &&
-        (emailControl?.dirty || emailControl?.touched)
+        (emailControl?.dirty ||
+          emailControl?.touched)
       ) {
         <small class="error-message">
           Please enter a valid email.
@@ -43,7 +49,9 @@
       <input
         class="login-form-input"
         [class.auth-invalid]="!!errorMessage()"
-        [type]="showPassword() ? 'text' : 'password'"
+        [type]="
+          showPassword() ? 'text' : 'password'
+        "
         id="password"
         name="password"
         placeholder=" "
@@ -59,7 +67,9 @@
         class="password-toggle"
         (click)="setShowPassword()"
         [attr.aria-label]="
-          showPassword() ? 'Hide password' : 'Show password'
+          showPassword()
+            ? 'Hide password'
+            : 'Show password'
         "
       >
         {{ showPassword() ? 'Hide' : 'Show' }}
@@ -91,7 +101,9 @@
         role="alert"
         aria-live="polite"
       >
-        <span class="auth-error-icon" aria-hidden="true"
+        <span
+          class="auth-error-icon"
+          aria-hidden="true"
           >!</span
         >
         <p>{{ errorMessage() }}</p>
@@ -104,7 +116,8 @@
         class="admin-link"
         [routerLink]="['/registration-request']"
       >
-        Ask your administrator to create one for you
+        Ask your administrator to create one for
+        you
       </a>
     </p>
   </form>

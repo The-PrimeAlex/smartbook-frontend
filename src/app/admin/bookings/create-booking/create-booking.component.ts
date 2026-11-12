@@ -3,7 +3,11 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { createLogger } from '../../../shared/services/logger.service';
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { finalize, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
@@ -24,7 +28,6 @@ import {
   IconComponent,
 } from '../../../shared/ui';
 import { environment } from '../../../../environments/environment';
-
 
 interface Room {
   roomId: string;
@@ -54,13 +57,16 @@ interface BookingResponse {
   styleUrl: './create-booking.component.css',
 })
 export class CreateBookingComponent implements OnInit {
-  private readonly log = createLogger('CreateBooking');
+  private readonly log = createLogger(
+    'CreateBooking',
+  );
   private readonly http = inject(HttpClient);
 
   readonly LucideArrowDown = LucideArrowDown;
   readonly LucideArrowRight = LucideArrowRight;
   readonly LucideCalendar = LucideCalendar;
-  readonly LucideCalendarCheck = LucideCalendarCheck;
+  readonly LucideCalendarCheck =
+    LucideCalendarCheck;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCircleHelp = LucideCircleHelp;
   readonly LucideClock = LucideClock;
@@ -98,21 +104,24 @@ export class CreateBookingComponent implements OnInit {
 
   private formatDate(date: Date): string {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(
+    const month = String(
+      date.getMonth() + 1,
+    ).padStart(2, '0');
+    const day = String(date.getDate()).padStart(
       2,
       '0',
     );
-    const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
 
   private formatTime(date: Date): string {
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(
-      2,
-      '0',
-    );
+    const hours = String(
+      date.getHours(),
+    ).padStart(2, '0');
+    const minutes = String(
+      date.getMinutes(),
+    ).padStart(2, '0');
 
     return `${hours}:${minutes}`;
   }
@@ -129,10 +138,17 @@ export class CreateBookingComponent implements OnInit {
     time: string,
     hoursToAdd: number,
   ): string {
-    const [hours, minutes] = time.split(':').map(Number);
+    const [hours, minutes] = time
+      .split(':')
+      .map(Number);
     const date = new Date();
 
-    date.setHours(hours + hoursToAdd, minutes, 0, 0);
+    date.setHours(
+      hours + hoursToAdd,
+      minutes,
+      0,
+      0,
+    );
 
     return this.formatTime(date);
   }
@@ -142,8 +158,14 @@ export class CreateBookingComponent implements OnInit {
     this.errorMessage = '';
 
     this.http
-      .get<Room[] | { content: Room[] }>(`${environment.apiUrl}/rooms`)
-      .pipe(finalize(() => (this.loadingRooms = false)))
+      .get<Room[] | { content: Room[] }>(
+        `${environment.apiUrl}/rooms`,
+      )
+      .pipe(
+        finalize(
+          () => (this.loadingRooms = false),
+        ),
+      )
       .subscribe({
         next: (response) => {
           const roomList = Array.isArray(response)
@@ -152,7 +174,8 @@ export class CreateBookingComponent implements OnInit {
 
           this.rooms = roomList.filter(
             (room) =>
-              !room.status || room.status === 'ACTIVE',
+              !room.status ||
+              room.status === 'ACTIVE',
           );
 
           if (this.rooms.length === 0) {
@@ -168,7 +191,10 @@ export class CreateBookingComponent implements OnInit {
                 ? 'You do not have permission to load rooms.'
                 : 'Unable to load rooms. Please try again.';
 
-          this.log.error('Failed to load rooms:', error);
+          this.log.error(
+            'Failed to load rooms:',
+            error,
+          );
         },
       });
   }
@@ -203,7 +229,9 @@ export class CreateBookingComponent implements OnInit {
 
     const result = new Date(`${date}T${time}:00`);
 
-    return Number.isNaN(result.getTime()) ? null : result;
+    return Number.isNaN(result.getTime())
+      ? null
+      : result;
   }
 
   get startDateTime(): Date | null {
@@ -225,14 +253,18 @@ export class CreateBookingComponent implements OnInit {
     const end = this.endDateTime;
 
     return (
-      !!start && !!end && end.getTime() <= start.getTime()
+      !!start &&
+      !!end &&
+      end.getTime() <= start.getTime()
     );
   }
 
   get startIsInPast(): boolean {
     const start = this.startDateTime;
 
-    return !!start && start.getTime() <= Date.now();
+    return (
+      !!start && start.getTime() <= Date.now()
+    );
   }
 
   get durationMinutes(): number {
@@ -289,12 +321,14 @@ export class CreateBookingComponent implements OnInit {
     this.clearMessages();
 
     if (!this.roomId) {
-      this.errorMessage = 'Please select a meeting room.';
+      this.errorMessage =
+        'Please select a meeting room.';
       return;
     }
 
     if (!this.meetingTitle.trim()) {
-      this.errorMessage = 'Please enter a meeting title.';
+      this.errorMessage =
+        'Please enter a meeting title.';
       return;
     }
 
@@ -346,7 +380,9 @@ export class CreateBookingComponent implements OnInit {
     this.saving = true;
 
     this.http
-      .get<unknown>(`${environment.apiUrl}/auth/csrf`)
+      .get<unknown>(
+        `${environment.apiUrl}/auth/csrf`,
+      )
       .pipe(
         switchMap(() =>
           this.http.post<BookingResponse>(
@@ -368,7 +404,10 @@ export class CreateBookingComponent implements OnInit {
           this.startDate = this.getToday();
           this.endDate = this.getToday();
           this.startTime = this.getNextHour();
-          this.endTime = this.addHours(this.startTime, 1);
+          this.endTime = this.addHours(
+            this.startTime,
+            1,
+          );
         },
         error: (error: HttpErrorResponse) => {
           this.saving = false;

@@ -5,7 +5,10 @@ import {
   signal,
 } from '@angular/core';
 import { finalize } from 'rxjs';
-import { LucideChevronDown, LucideCreditCard } from '@lucide/angular';
+import {
+  LucideChevronDown,
+  LucideCreditCard,
+} from '@lucide/angular';
 import {
   AdminBillingService,
   AdminPaymentRecord,
@@ -44,7 +47,9 @@ import {
 export class PaymentRecordsComponent implements OnInit {
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCreditCard = LucideCreditCard;
-  readonly payments = signal<AdminPaymentRecord[]>([]);
+  readonly payments = signal<
+    AdminPaymentRecord[]
+  >([]);
   readonly loading = signal(true);
   readonly selectedFilter = signal<string>('ALL');
   readonly statsCollapsed = signal(false);
@@ -57,7 +62,9 @@ export class PaymentRecordsComponent implements OnInit {
     const filter = this.selectedFilter();
     const all = this.payments();
     if (filter === 'ALL') return all;
-    return all.filter((p) => p.paymentStatus === filter);
+    return all.filter(
+      (p) => p.paymentStatus === filter,
+    );
   });
   readonly totalPayments = computed(
     () => this.payments().length,
@@ -82,7 +89,9 @@ export class PaymentRecordsComponent implements OnInit {
   );
   readonly totalAmount = computed(() =>
     this.payments()
-      .filter((p) => p.paymentStatus === 'SUCCESS')
+      .filter(
+        (p) => p.paymentStatus === 'SUCCESS',
+      )
       .reduce((sum, p) => sum + p.amount, 0),
   );
   readonly filterOptions: FilterOption[] = [
@@ -101,7 +110,9 @@ export class PaymentRecordsComponent implements OnInit {
     this.loading.set(true);
     this.billingService
       .getAllPayments()
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
         next: (data) => this.payments.set(data),
         error: () => this.loading.set(false),

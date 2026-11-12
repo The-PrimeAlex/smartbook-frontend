@@ -12,7 +12,10 @@
   <!-- Loading Skeleton -->
   @if (loading()) {
     <div class="skeleton-grid">
-      @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+      @for (
+        i of [1, 2, 3, 4, 5, 6, 7, 8];
+        track i
+      ) {
         <div class="skeleton-card"></div>
       }
     </div>
@@ -26,7 +29,9 @@
         [attr.aria-expanded]="!statsCollapsed()"
         aria-label="Toggle statistics"
       >
-        <span class="stats-toggle-title">System Overview</span>
+        <span class="stats-toggle-title"
+          >System Overview</span
+        >
         <app-icon
           [icon]="LucideChevronDown"
           [size]="20"
@@ -34,7 +39,10 @@
           [class.rotated]="!statsCollapsed()"
         ></app-icon>
       </button>
-      <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+      <div
+        class="stats-row-wrapper"
+        [class.collapsed]="statsCollapsed()"
+      >
         <div class="stats-row">
           <app-stat-card
             [icon]="LucideMapPin"
@@ -42,7 +50,9 @@
             [iconColor]="'#ffffff'"
             delay="0ms"
           >
-            <span stat-value>{{ totalRooms() }}</span>
+            <span stat-value>{{
+              totalRooms()
+            }}</span>
             <span stat-label>Total Rooms</span>
           </app-stat-card>
           <app-stat-card
@@ -51,7 +61,9 @@
             [iconColor]="'#ffffff'"
             delay="50ms"
           >
-            <span stat-value>{{ occupiedRooms() }}</span>
+            <span stat-value>{{
+              occupiedRooms()
+            }}</span>
             <span stat-label>Rooms Occupied</span>
           </app-stat-card>
           <app-stat-card
@@ -60,7 +72,9 @@
             [iconColor]="'#ffffff'"
             delay="100ms"
           >
-            <span stat-value>{{ totalBookings() }}</span>
+            <span stat-value>{{
+              totalBookings()
+            }}</span>
             <span stat-label>Total Bookings</span>
           </app-stat-card>
           <app-stat-card
@@ -69,8 +83,12 @@
             [iconColor]="'#ffffff'"
             delay="150ms"
           >
-            <span stat-value>{{ totalUsers() }}</span>
-            <span stat-label>Registered Users</span>
+            <span stat-value>{{
+              totalUsers()
+            }}</span>
+            <span stat-label
+              >Registered Users</span
+            >
           </app-stat-card>
           <app-stat-card
             [icon]="LucideTriangleAlert"
@@ -78,8 +96,12 @@
             [iconColor]="'#ffffff'"
             delay="200ms"
           >
-            <span stat-value>{{ reportedIncidents() }}</span>
-            <span stat-label>Pending Incidents</span>
+            <span stat-value>{{
+              reportedIncidents()
+            }}</span>
+            <span stat-label
+              >Pending Incidents</span
+            >
           </app-stat-card>
           <app-stat-card
             [icon]="LucideCreditCard"
@@ -108,12 +130,16 @@
         ) {
           <button
             class="quick-link-card"
-            [style.animation-delay]="i * 50 + 'ms'"
+            [style.animation-delay]="
+              i * 50 + 'ms'
+            "
             (click)="navigateTo(link.route)"
           >
             <div
               class="quick-link-icon"
-              [style.background]="link.color + '15'"
+              [style.background]="
+                link.color + '15'
+              "
               [style.color]="link.color"
             >
               <app-icon
@@ -136,7 +162,9 @@
           <h2>Live Room Status</h2>
           <button
             class="view-all-link"
-            (click)="navigateTo('/admin/monitoring')"
+            (click)="
+              navigateTo('/admin/monitoring')
+            "
           >
             View all
           </button>
@@ -150,12 +178,15 @@
             ) {
               <div
                 class="live-status-card"
-                [style.animation-delay]="i * 50 + 'ms'"
+                [style.animation-delay]="
+                  i * 50 + 'ms'
+                "
               >
                 <div class="live-status-info">
                   <div class="live-status-header">
                     <span class="room-name">{{
-                      room.roomName || 'Unknown Room'
+                      room.roomName ||
+                        'Unknown Room'
                     }}</span>
                     <span
                       class="status-badge {{
@@ -164,7 +195,10 @@
                         )
                       }}"
                     >
-                      {{ room.liveStatus || 'Unknown' }}
+                      {{
+                        room.liveStatus ||
+                          'Unknown'
+                      }}
                     </span>
                   </div>
                   @if (room.bookerName) {
@@ -174,7 +208,9 @@
                   }
                   @if (room.startTime) {
                     <span class="time-slot">{{
-                      formatDateTime(room.startTime)
+                      formatDateTime(
+                        room.startTime
+                      )
                     }}</span>
                   }
                 </div>
@@ -195,7 +231,9 @@
           <h2>Recent Bookings</h2>
           <button
             class="view-all-link"
-            (click)="navigateTo('/admin/bookings')"
+            (click)="
+              navigateTo('/admin/bookings')
+            "
           >
             View all
           </button>
@@ -209,14 +247,18 @@
             ) {
               <div
                 class="booking-card"
-                [style.animation-delay]="i * 50 + 'ms'"
+                [style.animation-delay]="
+                  i * 50 + 'ms'
+                "
               >
                 <div class="booking-time-block">
                   <span class="booking-date">{{
                     formatDate(booking.startTime)
                   }}</span>
                   <span class="booking-time">{{
-                    formatDateTime(booking.startTime)
+                    formatDateTime(
+                      booking.startTime
+                    )
                   }}</span>
                 </div>
                 <div class="booking-details">
@@ -242,12 +284,19 @@
                     booking.purpose
                   }}</span>
                   @if (
-                    booking.bookingStatus === 'PENDING' ||
-                    booking.bookingStatus === 'CONFIRMED'
+                    booking.bookingStatus ===
+                      'PENDING' ||
+                    booking.bookingStatus ===
+                      'CONFIRMED'
                   ) {
-                    <span class="booking-countdown">{{
-                      timeUntil(booking.startTime)
-                    }}</span>
+                    <span
+                      class="booking-countdown"
+                      >{{
+                        timeUntil(
+                          booking.startTime
+                        )
+                      }}</span
+                    >
                   }
                 </div>
               </div>
@@ -261,7 +310,9 @@
           >
             <button
               class="empty-action"
-              (click)="navigateTo('/admin/bookings/new')"
+              (click)="
+                navigateTo('/admin/bookings/new')
+              "
             >
               Create Booking
             </button>
@@ -295,7 +346,9 @@
             <span class="breakdown-value">{{
               pendingBookings()
             }}</span>
-            <span class="breakdown-label">Pending</span>
+            <span class="breakdown-label"
+              >Pending</span
+            >
           </div>
         </div>
         <div
@@ -318,7 +371,9 @@
             <span class="breakdown-value">{{
               confirmedBookings()
             }}</span>
-            <span class="breakdown-label">Confirmed</span>
+            <span class="breakdown-label"
+              >Confirmed</span
+            >
           </div>
         </div>
         <div
@@ -341,7 +396,9 @@
             <span class="breakdown-value">{{
               checkedInBookings()
             }}</span>
-            <span class="breakdown-label">Checked In</span>
+            <span class="breakdown-label"
+              >Checked In</span
+            >
           </div>
         </div>
         <div
@@ -364,7 +421,9 @@
             <span class="breakdown-value">{{
               noShowBookings()
             }}</span>
-            <span class="breakdown-label">No Shows</span>
+            <span class="breakdown-label"
+              >No Shows</span
+            >
           </div>
         </div>
       </div>
@@ -401,7 +460,9 @@
             <span class="overview-value">{{
               activeRooms()
             }}</span>
-            <span class="overview-label">Active Rooms</span>
+            <span class="overview-label"
+              >Active Rooms</span
+            >
           </div>
         </div>
         <div
@@ -424,7 +485,9 @@
             <span class="overview-value">{{
               maintenanceRooms()
             }}</span>
-            <span class="overview-label">Maintenance</span>
+            <span class="overview-label"
+              >Maintenance</span
+            >
           </div>
         </div>
         <div
@@ -472,7 +535,9 @@
             <span class="overview-value">{{
               overrunRooms()
             }}</span>
-            <span class="overview-label">Overruns</span>
+            <span class="overview-label"
+              >Overruns</span
+            >
           </div>
         </div>
       </div>

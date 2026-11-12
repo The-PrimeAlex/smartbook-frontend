@@ -90,14 +90,20 @@ button {
   transition: border-color 150ms ease;
 }
 .stat-card:hover {
-  border-color: var(--border-color-hover, #d4d4d8);
+  border-color: var(
+    --border-color-hover,
+    #d4d4d8
+  );
 }
 [data-theme='dark'] .stat-card {
   background: var(--card, #18181b);
   border-color: var(--border, #27272a);
 }
 [data-theme='dark'] .stat-card:hover {
-  border-color: var(--border-color-hover, #3f3f46);
+  border-color: var(
+    --border-color-hover,
+    #3f3f46
+  );
 }
 .stat-icon {
   display: flex;
@@ -246,7 +252,10 @@ button {
     box-shadow 150ms ease;
 }
 .booking-card:hover {
-  border-color: var(--border-color-hover, #d4d4d8);
+  border-color: var(
+    --border-color-hover,
+    #d4d4d8
+  );
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.04);
 }
 [data-theme='dark'] .booking-card {
@@ -254,7 +263,10 @@ button {
   border-color: var(--border, #27272a);
 }
 [data-theme='dark'] .booking-card:hover {
-  border-color: var(--border-color-hover, #3f3f46);
+  border-color: var(
+    --border-color-hover,
+    #3f3f46
+  );
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
 }
 /* ── Booking Card Top ── */

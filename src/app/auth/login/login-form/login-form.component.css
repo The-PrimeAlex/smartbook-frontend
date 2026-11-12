@@ -183,7 +183,8 @@
 }
 
 /* Non-empty Password: Orange While Focused */
-.password-field input:not(:placeholder-shown):focus,
+.password-field
+  input:not(:placeholder-shown):focus,
 .password-field
   input:not(:placeholder-shown):focus-visible {
   border-bottom-color: #f28c28;
@@ -289,7 +290,8 @@
     #1b2d4f 0%,
     #14213d 100%
   );
-  box-shadow: 0 0.375rem 1rem rgba(20, 33, 61, 0.16);
+  box-shadow: 0 0.375rem 1rem
+    rgba(20, 33, 61, 0.16);
   color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 0.8125rem;
@@ -311,7 +313,8 @@
 
 .login-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 0.625rem 1.25rem rgba(20, 33, 61, 0.22);
+  box-shadow: 0 0.625rem 1.25rem
+    rgba(20, 33, 61, 0.22);
 }
 
 .login-button:hover:not(:disabled) span {
@@ -437,7 +440,8 @@
   box-shadow: 0 0 0 1000px #ffffff inset !important;
   -webkit-text-fill-color: #14213d !important;
   caret-color: #14213d;
-  transition: background-color 9999s ease-in-out 0s;
+  transition: background-color 9999s ease-in-out
+    0s;
 }
 
 /* Autofilled Input Focus Underline */
@@ -449,7 +453,8 @@
 
 /* Autofilled Password Default Underline */
 
-.password-field input:-webkit-autofill:not(:focus) {
+.password-field
+  input:-webkit-autofill:not(:focus) {
   border-bottom-color: #b8b8b8;
 }
 

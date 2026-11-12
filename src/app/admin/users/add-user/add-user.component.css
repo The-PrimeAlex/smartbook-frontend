@@ -2,7 +2,8 @@
   display: block;
   min-height: 100%;
   color: var(--text-primary);
-  font-family: Inter, 'Segoe UI', Arial, sans-serif;
+  font-family:
+    Inter, 'Segoe UI', Arial, sans-serif;
 }
 * {
   box-sizing: border-box;
@@ -200,7 +201,10 @@ form {
 ======================================== */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    2,
+    minmax(0, 1fr)
+  );
   gap: 1.5rem;
 }
 .form-field {
@@ -372,7 +376,8 @@ form {
   min-width: 88px;
   padding: 0 0.75rem;
   border: 0;
-  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  border-radius: var(--radius-md) 0 0
+    var(--radius-md);
   background: transparent;
   color: var(--text-primary);
   cursor: pointer;
@@ -508,7 +513,8 @@ form {
   color: var(--text-primary);
   font: inherit;
   font-size: 0.8125rem;
-  transition: border-color var(--transition-smooth);
+  transition: border-color
+    var(--transition-smooth);
 }
 
 .country-search input:focus {

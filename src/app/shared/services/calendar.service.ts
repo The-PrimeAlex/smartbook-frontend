@@ -1,11 +1,13 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import {
   HttpClient,
   HttpParams,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
 
 export interface GoogleCalendarEventDto {
   id: string;
@@ -34,7 +36,8 @@ export interface BookingSyncResult {
 export class CalendarService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiBaseUrl = environment.apiUrl;
+  private readonly apiBaseUrl =
+    environment.apiUrl;
 
   getMyBookings(): Observable<unknown> {
     return this.http.get<unknown>(
@@ -50,18 +53,19 @@ export class CalendarService {
       .set('from', from)
       .set('to', to);
 
-    return this.http.get<GoogleCalendarEventDto[]>(
-      `${this.apiBaseUrl}/calendar/events`,
-      {
-        params,
-      },
-    );
+    return this.http.get<
+      GoogleCalendarEventDto[]
+    >(`${this.apiBaseUrl}/calendar/events`, {
+      params,
+    });
   }
 
   connectGoogleCalendar(): Observable<{
     authorizationUrl: string;
   }> {
-    return this.http.get<{ authorizationUrl: string }>(
+    return this.http.get<{
+      authorizationUrl: string;
+    }>(
       `${this.apiBaseUrl}/calendar/integrations/google/connect`,
     );
   }
@@ -73,7 +77,9 @@ export class CalendarService {
     );
   }
 
-  disconnectGoogleCalendar(): Observable<{ message: string }> {
+  disconnectGoogleCalendar(): Observable<{
+    message: string;
+  }> {
     return this.http.delete<{ message: string }>(
       `${this.apiBaseUrl}/calendar/integrations/google`,
     );

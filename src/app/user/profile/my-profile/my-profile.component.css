@@ -220,7 +220,10 @@
 /* ── Details Grid (Read-only view) ── */
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    2,
+    minmax(0, 1fr)
+  );
   gap: var(--space-lg);
 }
 
@@ -275,7 +278,10 @@
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    2,
+    minmax(0, 1fr)
+  );
   gap: var(--space-md);
 }
 
@@ -317,7 +323,8 @@
   box-shadow: 0 0 0 3px var(--brand-accent-bg);
 }
 
-.form-field input:invalid:not(:placeholder-shown) {
+.form-field
+  input:invalid:not(:placeholder-shown) {
   border-color: var(--danger);
 }
 

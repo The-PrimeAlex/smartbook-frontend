@@ -48,7 +48,8 @@ import {
   styleUrl: './damage-charges.component.css',
 })
 export class DamageChargesComponent implements OnInit {
-  readonly LucideAlertTriangle = LucideAlertTriangle;
+  readonly LucideAlertTriangle =
+    LucideAlertTriangle;
   readonly LucideCalendar = LucideCalendar;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideUser = LucideUser;
@@ -64,7 +65,9 @@ export class DamageChargesComponent implements OnInit {
   // Filter bills that have at least one INCIDENT item
   readonly damageBills = computed(() =>
     this.bills().filter((b) =>
-      b.items.some((item) => item.itemType === 'INCIDENT'),
+      b.items.some(
+        (item) => item.itemType === 'INCIDENT',
+      ),
     ),
   );
 
@@ -95,8 +98,13 @@ export class DamageChargesComponent implements OnInit {
   // Calculate the incident-only total for a bill (not the full bill total)
   getIncidentTotal(bill: AdminBill): number {
     return bill.items
-      .filter((item) => item.itemType === 'INCIDENT')
-      .reduce((sum, item) => sum + item.amount, 0);
+      .filter(
+        (item) => item.itemType === 'INCIDENT',
+      )
+      .reduce(
+        (sum, item) => sum + item.amount,
+        0,
+      );
   }
 
   constructor(
@@ -111,7 +119,9 @@ export class DamageChargesComponent implements OnInit {
     this.loading.set(true);
     this.billingService
       .getAllBills()
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
         next: (bills) => this.bills.set(bills),
         error: () => this.loading.set(false),

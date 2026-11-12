@@ -1,4 +1,8 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import {
   LucideDynamicIcon,
   LucideSearch,
@@ -24,7 +28,9 @@ import {
         type="search"
         [placeholder]="placeholder()"
         [value]="value()"
-        (input)="change.emit($any($event.target).value)"
+        (input)="
+          change.emit($any($event.target).value)
+        "
         [attr.aria-label]="placeholder()"
       />
       @if (value().length > 0) {

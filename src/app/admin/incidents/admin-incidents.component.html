@@ -16,7 +16,9 @@
   }
   <!-- Message -->
   @if (message()) {
-    <div class="alert alert-{{ message()?.type }}">
+    <div
+      class="alert alert-{{ message()?.type }}"
+    >
       <app-icon
         [icon]="LucideCircleAlert"
         [size]="20"
@@ -35,7 +37,9 @@
         <span stat-value>{{
           formatCurrency(totalChargesAmount)
         }}</span>
-        <span stat-label>Total Charges Collected</span>
+        <span stat-label
+          >Total Charges Collected</span
+        >
       </app-stat-card>
       <app-stat-card
         [icon]="LucideFileText"
@@ -43,7 +47,9 @@
         [iconColor]="'var(--info)'"
         delay="0.05s"
       >
-        <span stat-value>{{ totalIncidents }}</span>
+        <span stat-value>{{
+          totalIncidents
+        }}</span>
         <span stat-label>Charged Incidents</span>
       </app-stat-card>
       <app-stat-card
@@ -54,9 +60,10 @@
       >
         <span stat-value>{{
           totalIncidents > 0
-            ? (totalChargesAmount / totalIncidents).toFixed(
-                0
-              )
+            ? (
+                totalChargesAmount /
+                totalIncidents
+              ).toFixed(0)
             : 0
         }}</span>
         <span stat-label>Avg Charge (KES)</span>
@@ -70,7 +77,9 @@
         [iconColor]="'var(--brand-accent)'"
         delay="0s"
       >
-        <span stat-value>{{ totalIncidents }}</span>
+        <span stat-value>{{
+          totalIncidents
+        }}</span>
         <span stat-label>Total Incidents</span>
       </app-stat-card>
       <app-stat-card
@@ -79,7 +88,9 @@
         [iconColor]="'var(--warning)'"
         delay="0.05s"
       >
-        <span stat-value>{{ pendingActionCount }}</span>
+        <span stat-value>{{
+          pendingActionCount
+        }}</span>
         <span stat-label>Pending Action</span>
       </app-stat-card>
       <app-stat-card
@@ -88,7 +99,9 @@
         [iconColor]="'var(--success)'"
         delay="0.1s"
       >
-        <span stat-value>{{ verifiedCount }}</span>
+        <span stat-value>{{
+          verifiedCount
+        }}</span>
         <span stat-label>Verified</span>
       </app-stat-card>
       <app-stat-card
@@ -97,7 +110,9 @@
         [iconColor]="'var(--neutral-500)'"
         delay="0.2s"
       >
-        <span stat-value>{{ rejectedCount }}</span>
+        <span stat-value>{{
+          rejectedCount
+        }}</span>
         <span stat-label>Waived</span>
       </app-stat-card>
     </div>
@@ -138,7 +153,10 @@
       }
     </div>
   }
-  @if (!loading() && getFilteredIncidents().length === 0) {
+  @if (
+    !loading() &&
+    getFilteredIncidents().length === 0
+  ) {
     @if (isDamagePage()) {
       <app-empty-state
         [icon]="LucideDollarSign"
@@ -161,7 +179,8 @@
           <button
             class="btn-secondary"
             (click)="
-              filterStatus.set('all'); onFilterChange()
+              filterStatus.set('all');
+              onFilterChange()
             "
           >
             View All Incidents
@@ -171,7 +190,10 @@
     }
   }
   <!-- Incident Cards -->
-  @if (!loading() && getFilteredIncidents().length > 0) {
+  @if (
+    !loading() &&
+    getFilteredIncidents().length > 0
+  ) {
     <div class="incidents-grid">
       @for (
         incident of getFilteredIncidents();
@@ -180,19 +202,29 @@
       ) {
         <div
           class="incident-card"
-          [style.animation-delay]="idx * 0.05 + 's'"
+          [style.animation-delay]="
+            idx * 0.05 + 's'
+          "
         >
           <!-- Card Header -->
           <div class="incident-card-header">
             <div class="incident-type-badge">
-              {{ getTypeLabel(incident.incidentType) }}
+              {{
+                getTypeLabel(
+                  incident.incidentType
+                )
+              }}
             </div>
             <app-status-badge
               [label]="
-                getStatusLabel(incident.incidentStatus)
+                getStatusLabel(
+                  incident.incidentStatus
+                )
               "
               [variant]="
-                getBadgeVariant(incident.incidentStatus)
+                getBadgeVariant(
+                  incident.incidentStatus
+                )
               "
             ></app-status-badge>
           </div>
@@ -213,21 +245,29 @@
                 [icon]="LucideMapPin"
                 [size]="14"
               ></app-icon>
-              {{ incident.roomName || 'Unknown Room' }}
+              {{
+                incident.roomName ||
+                  'Unknown Room'
+              }}
             </div>
             <div class="meta-item">
               <app-icon
                 [icon]="LucideUser"
                 [size]="14"
               ></app-icon>
-              {{ incident.reportedByName || 'Unknown' }}
+              {{
+                incident.reportedByName ||
+                  'Unknown'
+              }}
             </div>
             <div class="meta-item">
               <app-icon
                 [icon]="LucideCalendar"
                 [size]="14"
               ></app-icon>
-              {{ formatDate(incident.reportedAt) }}
+              {{
+                formatDate(incident.reportedAt)
+              }}
             </div>
             @if (incident.chargeAmount) {
               <div class="charge-amount">
@@ -235,7 +275,11 @@
                   [icon]="LucideDollarSign"
                   [size]="14"
                 ></app-icon>
-                {{ formatCurrency(incident.chargeAmount) }}
+                {{
+                  formatCurrency(
+                    incident.chargeAmount
+                  )
+                }}
               </div>
             }
             @if (incident.roleDescription) {
@@ -249,11 +293,16 @@
             }
           </div>
           <!-- Card Footer (Actions) - Only show on All Incidents page -->
-          @if (!isDamagePage() && canTakeAction(incident)) {
+          @if (
+            !isDamagePage() &&
+            canTakeAction(incident)
+          ) {
             <div class="incident-card-footer">
               <button
                 class="btn-charge"
-                (click)="openChargePanel(incident)"
+                (click)="
+                  openChargePanel(incident)
+                "
               >
                 <app-icon
                   [icon]="LucideFileText"
@@ -271,10 +320,15 @@
                 ></app-icon>
                 Let it Go
               </button>
-              @if (incident.incidentStatus === 'REPORTED') {
+              @if (
+                incident.incidentStatus ===
+                'REPORTED'
+              ) {
                 <button
                   class="btn-verify"
-                  (click)="verifyIncident(incident)"
+                  (click)="
+                    verifyIncident(incident)
+                  "
                 >
                   <app-icon
                     [icon]="LucideCheckCircle2"
@@ -324,28 +378,38 @@
         <!-- Incident Summary -->
         <div class="incident-summary">
           <div class="summary-row">
-            <span class="summary-label">Room</span>
+            <span class="summary-label"
+              >Room</span
+            >
             <span class="summary-value">{{
-              selectedIncident()?.roomName || 'Unknown'
-            }}</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Type</span>
-            <span class="summary-value">{{
-              getTypeLabel(
-                selectedIncident()?.incidentType || ''
-              )
-            }}</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Reported by</span>
-            <span class="summary-value">{{
-              selectedIncident()?.reportedByName ||
+              selectedIncident()?.roomName ||
                 'Unknown'
             }}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Description</span>
+            <span class="summary-label"
+              >Type</span
+            >
+            <span class="summary-value">{{
+              getTypeLabel(
+                selectedIncident()
+                  ?.incidentType || ''
+              )
+            }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label"
+              >Reported by</span
+            >
+            <span class="summary-value">{{
+              selectedIncident()
+                ?.reportedByName || 'Unknown'
+            }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label"
+              >Description</span
+            >
             <span class="summary-value">{{
               selectedIncident()?.description ||
                 'No description'
@@ -356,16 +420,22 @@
         <div class="panel-tabs">
           <button
             class="panel-tab {{
-              sidePanelMode() === 'charge' ? 'active' : ''
+              sidePanelMode() === 'charge'
+                ? 'active'
+                : ''
             }}"
             (click)="switchPanelTab('charge')"
           >
-            <app-icon [icon]="LucideFileText"></app-icon>
+            <app-icon
+              [icon]="LucideFileText"
+            ></app-icon>
             Apply Charge
           </button>
           <button
             class="panel-tab {{
-              sidePanelMode() === 'waive' ? 'active' : ''
+              sidePanelMode() === 'waive'
+                ? 'active'
+                : ''
             }}"
             (click)="switchPanelTab('waive')"
           >
@@ -398,12 +468,18 @@
               />
               @if (chargeAmount()) {
                 <div class="amount-preview">
-                  {{ formatCurrency(+chargeAmount()) }}
+                  {{
+                    formatCurrency(
+                      +chargeAmount()
+                    )
+                  }}
                 </div>
               }
             </div>
             <div class="form-group">
-              <label for="charge-reason">Reason</label>
+              <label for="charge-reason"
+                >Reason</label
+              >
               <textarea
                 id="charge-reason"
                 rows="3"
@@ -423,7 +499,9 @@
               <button
                 type="submit"
                 class="btn-submit-charge"
-                [disabled]="!chargeAmount() || processing()"
+                [disabled]="
+                  !chargeAmount() || processing()
+                "
               >
                 @if (processing()) {}
                 Apply Charge
@@ -444,9 +522,9 @@
                 [size]="20"
               ></app-icon>
               <p>
-                Waiving this charge means no bill will be
-                created for this incident. The user will not
-                be charged.
+                Waiving this charge means no bill
+                will be created for this incident.
+                The user will not be charged.
               </p>
             </div>
             <div class="form-group">

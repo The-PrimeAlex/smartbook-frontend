@@ -7,12 +7,19 @@
   ></app-page-banner>
   <main class="page-content">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a routerLink="/admin/dashboard">Dashboard </a>
+    <nav
+      class="breadcrumb"
+      aria-label="Breadcrumb"
+    >
+      <a routerLink="/admin/dashboard"
+        >Dashboard
+      </a>
       <span class="breadcrumb-separator">/</span>
       <a routerLink="/admin/users">Users</a>
       <span class="breadcrumb-separator">/</span>
-      <span class="breadcrumb-current">Add user</span>
+      <span class="breadcrumb-current"
+        >Add user</span
+      >
     </nav>
     <form
       [formGroup]="form"
@@ -33,13 +40,18 @@
           </div>
           <div class="card-title-group">
             <h2>Personal Information</h2>
-            <p>Enter the user's basic contact details.</p>
+            <p>
+              Enter the user's basic contact
+              details.
+            </p>
           </div>
         </div>
         <div class="form-grid">
           <div class="form-field">
             <label for="firstName">
-              <span class="label-text">First name</span>
+              <span class="label-text"
+                >First name</span
+              >
               <span class="required">*</span>
             </label>
             <input
@@ -48,9 +60,13 @@
               formControlName="firstName"
               placeholder="Enter first name"
               autocomplete="given-name"
-              [class.invalid]="hasError('firstName')"
+              [class.invalid]="
+                hasError('firstName')
+              "
             />
-            @if (hasError('firstName', 'required')) {
+            @if (
+              hasError('firstName', 'required')
+            ) {
               <small class="field-error"
                 >First name is required.</small
               >
@@ -58,7 +74,8 @@
               hasError('firstName', 'minlength')
             ) {
               <small class="field-error"
-                >Enter at least 2 characters.</small
+                >Enter at least 2
+                characters.</small
               >
             } @else if (
               hasError('firstName', 'maxlength')
@@ -70,7 +87,9 @@
           </div>
           <div class="form-field">
             <label for="lastName">
-              <span class="label-text">Last name</span>
+              <span class="label-text"
+                >Last name</span
+              >
               <span class="required">*</span>
             </label>
             <input
@@ -79,17 +98,26 @@
               formControlName="lastName"
               placeholder="Enter last name"
               autocomplete="family-name"
-              [class.invalid]="hasError('lastName')"
+              [class.invalid]="
+                hasError('lastName')
+              "
             />
-            @if (hasError('lastName', 'required')) {
+            @if (
+              hasError('lastName', 'required')
+            ) {
               <small class="field-error"
                 >Last name is required.</small
               >
-            } @else if (hasError('lastName', 'minlength')) {
+            } @else if (
+              hasError('lastName', 'minlength')
+            ) {
               <small class="field-error"
-                >Enter at least 2 characters.</small
+                >Enter at least 2
+                characters.</small
               >
-            } @else if (hasError('lastName', 'maxlength')) {
+            } @else if (
+              hasError('lastName', 'maxlength')
+            ) {
               <small class="field-error"
                 >Last name is too long.</small
               >
@@ -97,7 +125,9 @@
           </div>
           <div class="form-field form-field-full">
             <label for="email">
-              <span class="label-text">Email address</span>
+              <span class="label-text"
+                >Email address</span
+              >
               <span class="required">*</span>
             </label>
             <div class="input-with-icon">
@@ -107,37 +137,53 @@
                 formControlName="email"
                 placeholder="name@example.com"
                 autocomplete="email"
-                [class.invalid]="hasError('email')"
+                [class.invalid]="
+                  hasError('email')
+                "
               />
             </div>
             @if (hasError('email', 'required')) {
               <small class="field-error"
                 >Email address is required.</small
               >
-            } @else if (hasError('email', 'email')) {
+            } @else if (
+              hasError('email', 'email')
+            ) {
               <small class="field-error"
-                >Enter a valid email address.</small
+                >Enter a valid email
+                address.</small
               >
             }
           </div>
           <div class="form-field form-field-full">
             <label for="phoneNumber">
-              <span class="label-text">Phone number</span>
+              <span class="label-text"
+                >Phone number</span
+              >
               <span class="required">*</span>
             </label>
             <div
               class="phone-control"
-              [class.invalid]="hasError('phoneNumber')"
+              [class.invalid]="
+                hasError('phoneNumber')
+              "
             >
               <div class="country-picker">
                 <button
                   class="country-trigger"
                   type="button"
-                  (click)="toggleCountryDropdown()"
-                  [attr.aria-expanded]="countryDropdownOpen"
+                  (click)="
+                    toggleCountryDropdown()
+                  "
+                  [attr.aria-expanded]="
+                    countryDropdownOpen
+                  "
                   aria-label="Choose country calling code"
                 >
-                  @if (selectedCountry; as country) {
+                  @if (
+                    selectedCountry;
+                    as country
+                  ) {
                     <span class="country-flag">{{
                       country.flag
                     }}</span>
@@ -146,7 +192,9 @@
                     }}</span>
                     <span
                       class="country-chevron"
-                      [class.rotated]="countryDropdownOpen"
+                      [class.rotated]="
+                        countryDropdownOpen
+                      "
                     ></span>
                   }
                 </button>
@@ -165,7 +213,9 @@
                           )
                         "
                         (keydown)="
-                          onCountrySearchKeydown($event)
+                          onCountrySearchKeydown(
+                            $event
+                          )
                         "
                         autofocus
                       />
@@ -178,21 +228,33 @@
                         <button
                           class="country-option"
                           type="button"
-                          (click)="selectCountry(country)"
+                          (click)="
+                            selectCountry(country)
+                          "
                         >
-                          <span class="option-flag">{{
-                            country.flag
-                          }}</span>
-                          <span class="option-name">{{
-                            country.countryName
-                          }}</span>
-                          <span class="option-code">{{
-                            country.callingCode
-                          }}</span>
+                          <span
+                            class="option-flag"
+                            >{{
+                              country.flag
+                            }}</span
+                          >
+                          <span
+                            class="option-name"
+                            >{{
+                              country.countryName
+                            }}</span
+                          >
+                          <span
+                            class="option-code"
+                            >{{
+                              country.callingCode
+                            }}</span
+                          >
                         </button>
                       } @empty {
                         <p class="no-countries">
-                          No matching countries found.
+                          No matching countries
+                          found.
                         </p>
                       }
                     </div>
@@ -214,7 +276,8 @@
                 inputmode="numeric"
                 (input)="
                   onPhoneInput(
-                    form.get('phoneNumber')?.value ?? ''
+                    form.get('phoneNumber')
+                      ?.value ?? ''
                   )
                 "
                 [attr.aria-invalid]="
@@ -223,10 +286,12 @@
               />
             </div>
             <p class="field-hint">
-              Choose a country, then enter the phone number
-              using digits only.
+              Choose a country, then enter the
+              phone number using digits only.
             </p>
-            @if (hasError('phoneNumber', 'required')) {
+            @if (
+              hasError('phoneNumber', 'required')
+            ) {
               <small class="field-error"
                 >Phone number is required.</small
               >
@@ -234,15 +299,18 @@
               hasError('phoneNumber', 'pattern')
             ) {
               <small class="field-error"
-                >Use digits only, without spaces or
-                symbols.</small
+                >Use digits only, without spaces
+                or symbols.</small
               >
             } @else if (
-              hasError('phoneNumber', 'invalidPhone')
+              hasError(
+                'phoneNumber',
+                'invalidPhone'
+              )
             ) {
               <small class="field-error"
-                >Enter a valid phone number for the selected
-                country.</small
+                >Enter a valid phone number for
+                the selected country.</small
               >
             }
           </div>
@@ -271,11 +339,15 @@
         <div class="form-grid">
           <div class="form-field form-field-full">
             <label for="companyName">
-              <span class="label-text">Company name</span>
+              <span class="label-text"
+                >Company name</span
+              >
               @if (!isAdmin) {
                 <span class="required">*</span>
               } @else {
-                <span class="optional">(Optional)</span>
+                <span class="optional"
+                  >(Optional)</span
+                >
               }
             </label>
             <input
@@ -284,12 +356,16 @@
               formControlName="companyName"
               placeholder="Enter company name"
               autocomplete="organization"
-              [class.invalid]="hasError('companyName')"
+              [class.invalid]="
+                hasError('companyName')
+              "
             />
-            @if (hasError('companyName', 'required')) {
+            @if (
+              hasError('companyName', 'required')
+            ) {
               <small class="field-error"
-                >Company name is required for a user
-                account.</small
+                >Company name is required for a
+                user account.</small
               >
             } @else if (
               hasError('companyName', 'maxlength')
@@ -304,7 +380,9 @@
               <span class="label-text"
                 >Registration number</span
               >
-              <span class="optional">(Optional)</span>
+              <span class="optional"
+                >(Optional)</span
+              >
             </label>
             <input
               id="registrationNumber"
@@ -316,10 +394,14 @@
               "
             />
             @if (
-              hasError('registrationNumber', 'maxlength')
+              hasError(
+                'registrationNumber',
+                'maxlength'
+              )
             ) {
               <small class="field-error"
-                >Registration number is too long.</small
+                >Registration number is too
+                long.</small
               >
             }
           </div>
@@ -331,7 +413,9 @@
               @if (!isAdmin) {
                 <span class="required">*</span>
               } @else {
-                <span class="optional">(Optional)</span>
+                <span class="optional"
+                  >(Optional)</span
+                >
               }
             </label>
             <input
@@ -339,16 +423,23 @@
               type="email"
               formControlName="contactEmail"
               placeholder="office@example.com"
-              [class.invalid]="hasError('contactEmail')"
+              [class.invalid]="
+                hasError('contactEmail')
+              "
             />
-            @if (hasError('contactEmail', 'required')) {
+            @if (
+              hasError('contactEmail', 'required')
+            ) {
               <small class="field-error"
-                >Organization email is required for a user
-                account.</small
+                >Organization email is required
+                for a user account.</small
               >
-            } @else if (hasError('contactEmail', 'email')) {
+            } @else if (
+              hasError('contactEmail', 'email')
+            ) {
               <small class="field-error"
-                >Enter a valid organization email.</small
+                >Enter a valid organization
+                email.</small
               >
             }
           </div>
@@ -364,7 +455,8 @@
           <div class="card-title-group">
             <h2>Access Settings</h2>
             <p>
-              Choose the user's role and account status.
+              Choose the user's role and account
+              status.
             </p>
           </div>
         </div>
@@ -372,12 +464,20 @@
         <div class="form-grid">
           <div class="form-field">
             <label for="role">
-              <span class="label-text">User role</span>
+              <span class="label-text"
+                >User role</span
+              >
               <span class="required">*</span>
             </label>
             <div class="select-wrapper">
-              <select id="role" formControlName="role">
-                @for (role of roles; track role.value) {
+              <select
+                id="role"
+                formControlName="role"
+              >
+                @for (
+                  role of roles;
+                  track role.value
+                ) {
                   <option [value]="role.value">
                     {{ role.label }}
                   </option>
@@ -389,18 +489,23 @@
               ></app-icon>
             </div>
             <p class="field-hint">
-              Administrators manage the system and user
-              accounts.
+              Administrators manage the system and
+              user accounts.
             </p>
           </div>
 
           <div class="form-field">
             <label for="status">
-              <span class="label-text">Account status</span>
+              <span class="label-text"
+                >Account status</span
+              >
               <span class="required">*</span>
             </label>
             <div class="select-wrapper">
-              <select id="status" formControlName="status">
+              <select
+                id="status"
+                formControlName="status"
+              >
                 @for (
                   status of statuses;
                   track status.value
@@ -416,8 +521,8 @@
               ></app-icon>
             </div>
             <p class="field-hint">
-              Pending accounts can be reviewed before
-              activation.
+              Pending accounts can be reviewed
+              before activation.
             </p>
           </div>
         </div>
@@ -426,8 +531,8 @@
       <!-- Required Note -->
       <div class="required-note">
         <span class="required-dot">*</span>
-        Required fields must be completed before creating
-        the account.
+        Required fields must be completed before
+        creating the account.
       </div>
 
       <!-- Action Buttons -->
@@ -439,7 +544,10 @@
         >
           Cancel
         </button>
-        <button class="btn btn-primary" type="submit">
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >
           Create User
         </button>
       </div>

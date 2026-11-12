@@ -9,13 +9,22 @@
   >
     <div class="modal-header">
       <div class="modal-icon waive-icon">
-        <app-icon [icon]="LucideX" [size]="28"></app-icon>
+        <app-icon
+          [icon]="LucideX"
+          [size]="28"
+        ></app-icon>
       </div>
       <h3>Waive Charge</h3>
-      <p>Let this incident go without charging the user</p>
+      <p>
+        Let this incident go without charging the
+        user
+      </p>
     </div>
 
-    <form #waiveForm="ngForm" (ngSubmit)="onSubmit()">
+    <form
+      #waiveForm="ngForm"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="modal-body">
         <div class="form-field">
           <label>Reason (optional)</label>

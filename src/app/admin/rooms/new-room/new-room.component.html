@@ -13,7 +13,9 @@
   <section class="form-card">
     <div class="form-heading">
       <div>
-        <span class="section-eyebrow">ROOM DETAILS</span>
+        <span class="section-eyebrow"
+          >ROOM DETAILS</span
+        >
         <h2>Room information</h2>
         <p>Fields marked with * are required.</p>
       </div>
@@ -23,12 +25,19 @@
     </div>
     @if (errorMessage()) {
       <div class="alert alert-error" role="alert">
-        <span class="alert-icon" aria-hidden="true">!</span>
+        <span
+          class="alert-icon"
+          aria-hidden="true"
+          >!</span
+        >
         <span>{{ errorMessage() }}</span>
       </div>
     }
     @if (successMessage()) {
-      <div class="alert alert-success" role="status">
+      <div
+        class="alert alert-success"
+        role="status"
+      >
         {{ successMessage() }}
       </div>
     }
@@ -49,7 +58,9 @@
             placeholder="e.g. Executive Boardroom"
             maxlength="100"
             autocomplete="off"
-            [class.invalid]="fieldInvalid('roomName')"
+            [class.invalid]="
+              fieldInvalid('roomName')
+            "
           />
           @if (fieldInvalid('roomName')) {
             <small class="field-error">
@@ -64,7 +75,8 @@
                   'maxlength'
                 )
               ) {
-                Room name cannot exceed 100 characters.
+                Room name cannot exceed 100
+                characters.
               }
             </small>
           }
@@ -76,9 +88,14 @@
           <select
             id="roomType"
             formControlName="roomType"
-            [class.invalid]="fieldInvalid('roomType')"
+            [class.invalid]="
+              fieldInvalid('roomType')
+            "
           >
-            @for (type of roomTypes; track type.value) {
+            @for (
+              type of roomTypes;
+              track type.value
+            ) {
               <option [value]="type.value">
                 {{ type.label }}
               </option>
@@ -93,7 +110,8 @@
         </div>
         <div class="form-field">
           <label for="capacity"
-            >Maximum capacity <span>*</span></label
+            >Maximum capacity
+            <span>*</span></label
           >
           <div class="input-with-suffix">
             <input
@@ -103,7 +121,9 @@
               min="1"
               max="1000"
               step="1"
-              [class.invalid]="fieldInvalid('capacity')"
+              [class.invalid]="
+                fieldInvalid('capacity')
+              "
             />
             <span>people</span>
           </div>
@@ -126,7 +146,9 @@
               formControlName="hourlyRate"
               min="0"
               step="0.01"
-              [class.invalid]="fieldInvalid('hourlyRate')"
+              [class.invalid]="
+                fieldInvalid('hourlyRate')
+              "
             />
           </div>
           @if (fieldInvalid('hourlyRate')) {
@@ -142,7 +164,9 @@
           <select
             id="status"
             formControlName="status"
-            [class.invalid]="fieldInvalid('status')"
+            [class.invalid]="
+              fieldInvalid('status')
+            "
           >
             @for (
               status of roomStatuses;
@@ -155,7 +179,9 @@
           </select>
         </div>
         <div class="form-field full-width">
-          <label for="description">Description</label>
+          <label for="description"
+            >Description</label
+          >
           <textarea
             id="description"
             formControlName="description"
@@ -170,8 +196,8 @@
       </div>
       <div class="form-footer">
         <p class="form-footer-note">
-          You can manage room equipment separately after
-          creating the room.
+          You can manage room equipment separately
+          after creating the room.
         </p>
         <div class="form-actions">
           <button

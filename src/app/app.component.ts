@@ -7,7 +7,10 @@ import { OnDestroy } from '@angular/core';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AutoLogoutModalComponent],
+  imports: [
+    RouterOutlet,
+    AutoLogoutModalComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

@@ -247,7 +247,8 @@
   border-radius: 999px;
   background: var(--card-bg-alt);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s
+    cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toggle-switch:hover {
@@ -271,7 +272,8 @@
   background: var(--white);
   color: var(--brand-accent);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s
+    cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toggle-switch.active .toggle-slider {

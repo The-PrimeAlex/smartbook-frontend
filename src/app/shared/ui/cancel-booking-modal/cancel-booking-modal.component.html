@@ -1,4 +1,7 @@
-<div class="modal-overlay visible" (click)="onCancel()">
+<div
+  class="modal-overlay visible"
+  (click)="onCancel()"
+>
   <div
     class="modal-content"
     (click)="$event.stopPropagation()"
@@ -21,7 +24,8 @@
       }
       <h3>Cancel Booking</h3>
       <p class="modal-subtitle">
-        Are you sure you want to cancel the booking for
+        Are you sure you want to cancel the
+        booking for
         <strong>{{ data().roomName }}</strong
         >?
       </p>
@@ -51,35 +55,44 @@
           ></app-icon>
         </div>
         <div class="fee-text">
-          <p class="fee-title">Cancellation Fee Applies</p>
+          <p class="fee-title">
+            Cancellation Fee Applies
+          </p>
           <p class="fee-description">
-            This booking is outside the free cancellation
-            window of
+            This booking is outside the free
+            cancellation window of
             <strong
-              >{{ data().freeCancellationHours }} hour{{
+              >{{
+                data().freeCancellationHours
+              }}
+              hour{{
                 data().freeCancellationHours !== 1
                   ? 's'
                   : ''
               }}</strong
             >
-            before the meeting start time. A cancellation
-            fee of
-            <strong>{{ data().feeAmount }}</strong> will be
-            charged.
+            before the meeting start time. A
+            cancellation fee of
+            <strong>{{
+              data().feeAmount
+            }}</strong>
+            will be charged.
           </p>
         </div>
       </div>
     } @else {
       <div class="free-cancellation-notice">
         <p>
-          You are within the free cancellation window. No
-          fee will be charged.
+          You are within the free cancellation
+          window. No fee will be charged.
         </p>
       </div>
     }
 
     <div class="reason-field">
-      <label for="cancel-reason">Cancellation reason</label>
+      <label for="cancel-reason"
+        >Cancellation reason</label
+      >
       <textarea
         id="cancel-reason"
         [(ngModel)]="reason"
@@ -88,7 +101,9 @@
         maxlength="500"
         required
       ></textarea>
-      <p class="char-count">{{ reason.length }}/500</p>
+      <p class="char-count">
+        {{ reason.length }}/500
+      </p>
     </div>
 
     <div class="modal-actions">

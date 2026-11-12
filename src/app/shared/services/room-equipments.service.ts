@@ -1,4 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
@@ -6,7 +9,6 @@ import {
 import { Observable, switchMap } from 'rxjs';
 import { RoomEquipment } from '../models/room.model';
 import { environment } from '../../../environments/environment';
-
 
 interface CsrfTokenResponse {
   token: string;

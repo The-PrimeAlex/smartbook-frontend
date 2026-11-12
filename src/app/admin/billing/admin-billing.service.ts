@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-
 export interface AdminBill {
   billId: string;
   currency: string;
@@ -85,7 +84,9 @@ export class AdminBillingService {
     );
   }
 
-  getAllPayments(): Observable<AdminPaymentRecord[]> {
+  getAllPayments(): Observable<
+    AdminPaymentRecord[]
+  > {
     return this.http.get<AdminPaymentRecord[]>(
       `${this.baseUrl}/payments`,
     );

@@ -13,7 +13,9 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title">Billing Summary</span>
+      <span class="stats-toggle-title"
+        >Billing Summary</span
+      >
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -21,7 +23,10 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+    <div
+      class="stats-row-wrapper"
+      [class.collapsed]="statsCollapsed()"
+    >
       <div class="stats-grid">
         <app-stat-card
           [icon]="LucideFileText"
@@ -29,7 +34,9 @@
           [iconColor]="'var(--info,#3b82f6)'"
           delay="0s"
         >
-          <span stat-value>{{ bills().length }}</span>
+          <span stat-value>{{
+            bills().length
+          }}</span>
           <span stat-label>Total Invoices</span>
         </app-stat-card>
         <app-stat-card
@@ -38,7 +45,9 @@
           [iconColor]="'var(--warning,#f59e0b)'"
           delay="0.05s"
         >
-          <span stat-value>{{ unpaidCount }}</span>
+          <span stat-value>{{
+            unpaidCount
+          }}</span>
           <span stat-label>Unpaid</span>
         </app-stat-card>
         <app-stat-card
@@ -89,7 +98,10 @@
         [size]="48"
       ></app-icon>
       <h3>{{ error() }}</h3>
-      <button class="retry-btn" (click)="loadBills()">
+      <button
+        class="retry-btn"
+        (click)="loadBills()"
+      >
         Try Again
       </button>
     </div>
@@ -123,7 +135,9 @@
                   {{ bill.booking.purpose }}
                 </p>
               } @else {
-                <h3 class="bill-room">Incident Charge</h3>
+                <h3 class="bill-room">
+                  Incident Charge
+                </h3>
               }
               @if (bill.invoiceNumber) {
                 <p class="bill-invoice-number">
@@ -138,7 +152,9 @@
                       [size]="14"
                     ></app-icon>
                     {{
-                      formatDateTime(bill.booking.startTime)
+                      formatDateTime(
+                        bill.booking.startTime
+                      )
                     }}
                   </span>
                 </div>
@@ -146,8 +162,12 @@
             </div>
             <div class="bill-amount-section">
               <app-status-badge
-                [label]="getStatusLabel(bill.billStatus)"
-                [variant]="getBadgeVariant(bill.billStatus)"
+                [label]="
+                  getStatusLabel(bill.billStatus)
+                "
+                [variant]="
+                  getBadgeVariant(bill.billStatus)
+                "
               ></app-status-badge>
               <div class="bill-amount">
                 {{
@@ -172,17 +192,23 @@
           </div>
           <!-- Bill Items -->
           <div class="bill-items">
-            @for (item of bill.items; track $index) {
+            @for (
+              item of bill.items;
+              track $index
+            ) {
               <div
                 class="item-row"
                 [class.item-incident]="
                   item.itemType === 'INCIDENT'
                 "
                 [class.item-cancellation]="
-                  item.itemType === 'CANCELLATION_FEE'
+                  item.itemType ===
+                  'CANCELLATION_FEE'
                 "
               >
-                @if (item.itemType === 'INCIDENT') {
+                @if (
+                  item.itemType === 'INCIDENT'
+                ) {
                   <span
                     class="item-type-badge incident-badge"
                   >
@@ -193,7 +219,8 @@
                     Incident
                   </span>
                 } @else if (
-                  item.itemType === 'CANCELLATION_FEE'
+                  item.itemType ===
+                  'CANCELLATION_FEE'
                 ) {
                   <span
                     class="item-type-badge cancellation-badge"
@@ -219,7 +246,10 @@
                   item.description
                 }}</span>
                 <span class="item-amount">{{
-                  formatCurrency(item.amount, bill.currency)
+                  formatCurrency(
+                    item.amount,
+                    bill.currency
+                  )
                 }}</span>
               </div>
             }
@@ -275,7 +305,9 @@
   <div
     class="modal-overlay"
     [class.visible]="showPaymentModal()"
-    (click)="closePaymentModalIfOverlayClick($event)"
+    (click)="
+      closePaymentModalIfOverlayClick($event)
+    "
   >
     <div
       class="payment-modal"
@@ -287,7 +319,10 @@
           class="close-btn"
           (click)="closePaymentModal()"
         >
-          <app-icon [icon]="LucideX" [size]="20"></app-icon>
+          <app-icon
+            [icon]="LucideX"
+            [size]="20"
+          ></app-icon>
         </button>
       </div>
       <!-- Waiting for M-Pesa Confirmation -->
@@ -296,8 +331,8 @@
           <div class="waiting-spinner"></div>
           <h3>Waiting for Payment</h3>
           <p>
-            Please check your phone and enter your M-Pesa
-            PIN to complete the payment.
+            Please check your phone and enter your
+            M-Pesa PIN to complete the payment.
           </p>
           <p class="waiting-hint">
             We are checking for confirmation...
@@ -305,7 +340,9 @@
         </div>
       }
       <!-- Success State -->
-      @if (!paymentWaiting() && paymentSuccess()) {
+      @if (
+        !paymentWaiting() && paymentSuccess()
+      ) {
         <div class="success-state">
           <app-icon
             [icon]="LucideCheckCircle"
@@ -313,7 +350,8 @@
           ></app-icon>
           <h3>Payment Confirmed</h3>
           <p>
-            Your payment has been confirmed successfully.
+            Your payment has been confirmed
+            successfully.
           </p>
           <button
             class="done-btn"
@@ -324,21 +362,29 @@
         </div>
       }
       <!-- Payment Form -->
-      @if (!paymentWaiting() && !paymentSuccess()) {
+      @if (
+        !paymentWaiting() && !paymentSuccess()
+      ) {
         <div class="payment-form">
           @if (selectedBill()) {
             <div class="bill-summary">
               @if (selectedBill()!.booking) {
                 <p>
                   <strong>{{
-                    selectedBill()!.booking!.roomName
+                    selectedBill()!.booking!
+                      .roomName
                   }}</strong>
                 </p>
                 <p>
-                  {{ selectedBill()!.booking!.purpose }}
+                  {{
+                    selectedBill()!.booking!
+                      .purpose
+                  }}
                 </p>
               } @else {
-                <p><strong>Incident Charge</strong></p>
+                <p>
+                  <strong>Incident Charge</strong>
+                </p>
               }
               <div class="summary-amount">
                 <span>Amount Due</span>
@@ -359,7 +405,9 @@
             <select
               id="payment-method"
               [ngModel]="paymentMethod()"
-              (ngModelChange)="paymentMethod.set($event)"
+              (ngModelChange)="
+                paymentMethod.set($event)
+              "
               name="paymentMethod"
             >
               @for (
@@ -382,9 +430,9 @@
               <div class="mpesa-info-content">
                 <h4>M-Pesa STK Push</h4>
                 <p>
-                  A payment prompt will be sent to your
-                  phone. Enter your M-Pesa PIN to complete
-                  the payment.
+                  A payment prompt will be sent to
+                  your phone. Enter your M-Pesa
+                  PIN to complete the payment.
                 </p>
               </div>
             </div>
@@ -394,29 +442,37 @@
             <div class="form-group">
               <label for="phone-number"
                 >Phone Number
-                <span class="required">*</span></label
+                <span class="required"
+                  >*</span
+                ></label
               >
               <input
                 type="tel"
                 id="phone-number"
                 [ngModel]="phoneNumber()"
-                (ngModelChange)="phoneNumber.set($event)"
+                (ngModelChange)="
+                  phoneNumber.set($event)
+                "
                 name="phoneNumber"
                 placeholder="e.g. 0712345678 or 254712345678"
               />
               <span class="field-hint"
-                >Enter the phone number to receive the
-                M-Pesa prompt</span
+                >Enter the phone number to receive
+                the M-Pesa prompt</span
               >
             </div>
           }
           <div class="form-group">
-            <label for="payment-amount">Amount</label>
+            <label for="payment-amount"
+              >Amount</label
+            >
             <input
               type="number"
               id="payment-amount"
               [ngModel]="paymentAmount()"
-              (ngModelChange)="paymentAmount.set($event)"
+              (ngModelChange)="
+                paymentAmount.set($event)
+              "
               name="paymentAmount"
               min="0"
               step="0.01"

@@ -23,7 +23,10 @@ export type BadgeVariant =
   template: `<span
     class="status-badge badge-{{ variant() }}"
     [attr.class]="
-      'status-badge badge-' + variant() + ' ' + class()
+      'status-badge badge-' +
+      variant() +
+      ' ' +
+      class()
     "
     >{{ label() }}</span
   >`,

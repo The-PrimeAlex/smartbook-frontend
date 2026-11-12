@@ -1,12 +1,19 @@
-import { Injectable, effect, inject } from '@angular/core';
+import {
+  Injectable,
+  effect,
+  inject,
+} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 export type ThemeMode = 'light' | 'dark';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private readonly document = inject(DOCUMENT) as Document;
-  private readonly STORAGE_KEY = 'smartbook-theme';
+  private readonly document = inject(
+    DOCUMENT,
+  ) as Document;
+  private readonly STORAGE_KEY =
+    'smartbook-theme';
 
   /** Current theme mode stored in localStorage */
   private get storedTheme(): ThemeMode | null {
@@ -38,10 +45,14 @@ export class ThemeService {
     // Listen for system preference changes
     try {
       window
-        .matchMedia('(prefers-color-scheme: dark)')
+        .matchMedia(
+          '(prefers-color-scheme: dark)',
+        )
         .addEventListener('change', (e) => {
           if (!this.storedTheme) {
-            this.applyTheme(e.matches ? 'dark' : 'light');
+            this.applyTheme(
+              e.matches ? 'dark' : 'light',
+            );
           }
         });
     } catch {
@@ -72,7 +83,10 @@ export class ThemeService {
   setTheme(theme: ThemeMode): void {
     this.applyTheme(theme);
     try {
-      localStorage.setItem(this.STORAGE_KEY, theme);
+      localStorage.setItem(
+        this.STORAGE_KEY,
+        theme,
+      );
     } catch {
       // Ignore storage errors
     }
@@ -85,7 +99,9 @@ export class ThemeService {
       theme,
     );
     if (theme === 'dark') {
-      this.document.documentElement.classList.add('dark');
+      this.document.documentElement.classList.add(
+        'dark',
+      );
     } else {
       this.document.documentElement.classList.remove(
         'dark',

@@ -1,6 +1,12 @@
 <div class="app-layout">
   <app-sidebar #sidebar />
 
+  <!-- Mobile sidebar overlay backdrop -->
+  <div
+    class="mobile-sidebar-overlay"
+    (click)="closeSidebar()"
+  ></div>
+
   <main class="app-content">
     <!-- Mobile hamburger menu button -->
     <button
@@ -9,7 +15,10 @@
       (click)="toggleSidebar()"
       aria-label="Open menu"
     >
-      <app-icon [icon]="LucideMenu" [size]="24"></app-icon>
+      <app-icon
+        [icon]="LucideMenu"
+        [size]="24"
+      ></app-icon>
     </button>
 
     <router-outlet />

@@ -9,7 +9,9 @@
   @if (message(); as msg) {
     <div
       class="notice"
-      [class.notice-success]="msg.type === 'success'"
+      [class.notice-success]="
+        msg.type === 'success'
+      "
       [class.notice-error]="msg.type === 'error'"
     >
       <span class="notice-icon">{{
@@ -29,7 +31,9 @@
       <span class="results-count">
         {{ filteredUsers().length }}
         {{
-          filteredUsers().length === 1 ? 'user' : 'users'
+          filteredUsers().length === 1
+            ? 'user'
+            : 'users'
         }}
       </span>
     </div>
@@ -49,12 +53,20 @@
       </button>
     </div>
 
-    <nav class="filter-list" aria-label="Filter users">
-      @for (filter of filters; track filter.value) {
+    <nav
+      class="filter-list"
+      aria-label="Filter users"
+    >
+      @for (
+        filter of filters;
+        track filter.value
+      ) {
         <button
           type="button"
           class="filter-button"
-          [class.active]="activeFilter() === filter.value"
+          [class.active]="
+            activeFilter() === filter.value
+          "
           [attr.aria-pressed]="
             activeFilter() === filter.value
           "
@@ -72,11 +84,16 @@
 
     @if (filteredUsers().length > 0) {
       <div class="users-grid">
-        @for (user of filteredUsers(); track user.id) {
+        @for (
+          user of filteredUsers();
+          track user.id
+        ) {
           <article
             class="user-card"
             [class.admin-card]="isAdminUser(user)"
-            [class.tenant-card]="!isAdminUser(user)"
+            [class.tenant-card]="
+              !isAdminUser(user)
+            "
           >
             <div class="card-accent"></div>
 
@@ -84,24 +101,34 @@
               <div class="identity">
                 <div
                   class="avatar"
-                  [class.admin-avatar]="isAdminUser(user)"
+                  [class.admin-avatar]="
+                    isAdminUser(user)
+                  "
                 >
                   {{ getInitials(user) }}
                 </div>
 
                 <div class="identity-text">
                   <h3>{{ getFullName(user) }}</h3>
-                  <p class="user-email">{{ user.email }}</p>
+                  <p class="user-email">
+                    {{ user.email }}
+                  </p>
                 </div>
               </div>
 
               <span
                 class="role-badge"
-                [class.admin-role]="isAdminUser(user)"
+                [class.admin-role]="
+                  isAdminUser(user)
+                "
               >
                 @if (isAdminUser(user)) {
                 } @else {}
-                {{ isAdminUser(user) ? 'Admin' : 'Tenant' }}
+                {{
+                  isAdminUser(user)
+                    ? 'Admin'
+                    : 'Tenant'
+                }}
               </span>
             </div>
 
@@ -123,9 +150,10 @@
                   <span class="detail-label"
                     >Email address</span
                   >
-                  <span class="detail-value break-value">{{
-                    user.email
-                  }}</span>
+                  <span
+                    class="detail-value break-value"
+                    >{{ user.email }}</span
+                  >
                 </div>
               </div>
 
@@ -168,14 +196,17 @@
                     >
                     <span class="detail-value">
                       {{
-                        user.companyName || 'Not provided'
+                        user.companyName ||
+                          'Not provided'
                       }}
                     </span>
                   </div>
                 </div>
 
                 @if (user.registrationNumber) {
-                  <div class="detail-row compact-detail">
+                  <div
+                    class="detail-row compact-detail"
+                  >
                     <span
                       class="detail-icon"
                       aria-hidden="true"
@@ -190,9 +221,12 @@
                       <span class="detail-label"
                         >Registration number</span
                       >
-                      <span class="detail-value">{{
-                        user.registrationNumber
-                      }}</span>
+                      <span
+                        class="detail-value"
+                        >{{
+                          user.registrationNumber
+                        }}</span
+                      >
                     </div>
                   </div>
                 }
@@ -202,13 +236,20 @@
             <div class="card-footer">
               <div class="footer-meta">
                 <app-status-badge
-                  [label]="getStatusLabel(user.status)"
-                  [variant]="getBadgeVariant(user.status)"
+                  [label]="
+                    getStatusLabel(user.status)
+                  "
+                  [variant]="
+                    getBadgeVariant(user.status)
+                  "
                 ></app-status-badge>
 
                 <span class="created-date">
                   Joined
-                  {{ user.createdAt | date: 'd MMM yyyy' }}
+                  {{
+                    user.createdAt
+                      | date: 'd MMM yyyy'
+                  }}
                 </span>
               </div>
 
@@ -218,7 +259,8 @@
                   class="view-profile-button"
                   (click)="openProfile(user)"
                   [attr.aria-label]="
-                    'View profile for ' + getFullName(user)
+                    'View profile for ' +
+                    getFullName(user)
                   "
                 >
                   View profile
@@ -228,9 +270,12 @@
                   <button
                     type="button"
                     class="deactivate-button"
-                    (click)="openDeactivateConfirm(user)"
+                    (click)="
+                      openDeactivateConfirm(user)
+                    "
                     [attr.aria-label]="
-                      'Deactivate ' + getFullName(user)
+                      'Deactivate ' +
+                      getFullName(user)
                     "
                   >
                     Deactivate
@@ -283,7 +328,8 @@
       <p>
         Are you sure you want to deactivate
         <strong>{{ getFullName(user) }}</strong
-        >? This user will no longer be able to log in.
+        >? This user will no longer be able to log
+        in.
       </p>
       <div class="deactivate-actions">
         <button
@@ -311,7 +357,10 @@
 }
 
 @if (selectedUser(); as user) {
-  <div class="modal-backdrop" (click)="closeProfile()">
+  <div
+    class="modal-backdrop"
+    (click)="closeProfile()"
+  >
     <section
       class="profile-modal"
       [class.admin-profile]="isAdminUser(user)"
@@ -325,10 +374,13 @@
 
       <header class="modal-header">
         <div>
-          <span class="modal-eyebrow">USER DIRECTORY</span>
+          <span class="modal-eyebrow"
+            >USER DIRECTORY</span
+          >
           <h2 id="profile-title">User profile</h2>
           <p>
-            Account information and registration details.
+            Account information and registration
+            details.
           </p>
         </div>
 
@@ -355,13 +407,19 @@
           <div class="profile-badges">
             <span
               class="role-badge"
-              [class.admin-role]="isAdminUser(user)"
+              [class.admin-role]="
+                isAdminUser(user)
+              "
             >
               {{ getRoleLabel(user.roles) }}
             </span>
             <app-status-badge
-              [label]="getStatusLabel(user.status)"
-              [variant]="getBadgeVariant(user.status)"
+              [label]="
+                getStatusLabel(user.status)
+              "
+              [variant]="
+                getBadgeVariant(user.status)
+              "
             ></app-status-badge>
           </div>
         </div>
@@ -386,7 +444,9 @@
           </div>
           <div class="profile-field">
             <span>Phone number</span>
-            <strong>{{ user.phoneNumber }}</strong>
+            <strong>{{
+              user.phoneNumber
+            }}</strong>
           </div>
           <div class="profile-field">
             <span>Account status</span>
@@ -397,12 +457,15 @@
           <div class="profile-field">
             <span>Created at</span>
             <strong>{{
-              user.createdAt | date: 'd MMM yyyy, h:mm a'
+              user.createdAt
+                | date: 'd MMM yyyy, h:mm a'
             }}</strong>
           </div>
           <div class="profile-field">
             <span>Role(s)</span>
-            <strong>{{ getRoleLabel(user.roles) }}</strong>
+            <strong>{{
+              getRoleLabel(user.roles)
+            }}</strong>
           </div>
         </div>
       </div>
@@ -422,11 +485,14 @@
             <div class="profile-field">
               <span>Registration number</span>
               <strong>{{
-                user.registrationNumber || 'Not provided'
+                user.registrationNumber ||
+                  'Not provided'
               }}</strong>
             </div>
             <div class="profile-field full-field">
-              <span>Registration contact email</span>
+              <span
+                >Registration contact email</span
+              >
               <strong class="break-value">
                 {{
                   user.registrationContactEmail ||

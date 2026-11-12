@@ -4,8 +4,8 @@
       <p class="eyebrow">SMARTBOOK</p>
       <h1>Booking Calendar</h1>
       <p class="calendar-subtitle">
-        Manage room bookings and keep your Google Calendar
-        in sync.
+        Manage room bookings and keep your Google
+        Calendar in sync.
       </p>
     </div>
     <div class="calendar-actions">
@@ -25,10 +25,14 @@
         type="button"
         class="btn btn-sync"
         (click)="syncBookingsToGoogleCalendar()"
-        [disabled]="googleSyncing() || bookingsLoading()"
+        [disabled]="
+          googleSyncing() || bookingsLoading()
+        "
       >
         {{
-          googleSyncing() ? 'Syncing...' : 'Sync Bookings'
+          googleSyncing()
+            ? 'Syncing...'
+            : 'Sync Bookings'
         }}
       </button>
       <button
@@ -46,7 +50,10 @@
     </div>
   </header>
   @if (googleConnectionMessage()) {
-    <div class="notice notice-success" role="status">
+    <div
+      class="notice notice-success"
+      role="status"
+    >
       {{ googleConnectionMessage() }}
     </div>
   }
@@ -73,7 +80,10 @@
     </div>
   }
   @if (googleSyncMessage()) {
-    <div class="notice notice-success" role="status">
+    <div
+      class="notice notice-success"
+      role="status"
+    >
       {{ googleSyncMessage() }}
     </div>
   }
@@ -83,7 +93,10 @@
     </div>
   }
   @if (googleDisconnectMessage()) {
-    <div class="notice notice-success" role="status">
+    <div
+      class="notice notice-success"
+      role="status"
+    >
       {{ googleDisconnectMessage() }}
     </div>
   }
@@ -97,7 +110,9 @@
     aria-label="Booking summary"
   >
     <article class="summary-card">
-      <span class="summary-label">Total bookings</span>
+      <span class="summary-label"
+        >Total bookings</span
+      >
       <strong class="summary-value">{{
         totalBookings()
       }}</strong>
@@ -106,7 +121,9 @@
       >
     </article>
     <article class="summary-card">
-      <span class="summary-label">Today's bookings</span>
+      <span class="summary-label"
+        >Today's bookings</span
+      >
       <strong class="summary-value">{{
         todayBookings()
       }}</strong>
@@ -169,11 +186,16 @@
       class="room-filters"
       aria-label="Filter bookings by room type"
     >
-      @for (roomType of roomTypes; track roomType) {
+      @for (
+        roomType of roomTypes;
+        track roomType
+      ) {
         <button
           type="button"
           class="filter-chip"
-          [class.active]="selectedRoomType() === roomType"
+          [class.active]="
+            selectedRoomType() === roomType
+          "
           [attr.aria-pressed]="
             selectedRoomType() === roomType
           "
@@ -183,7 +205,9 @@
         </button>
       }
     </div>
-    @if (bookingsLoading() || googleEventsLoading()) {
+    @if (
+      bookingsLoading() || googleEventsLoading()
+    ) {
       <p class="loading-message" role="status">
         @if (bookingsLoading()) {
           Loading SmartBook bookings...
@@ -212,7 +236,9 @@
         <button
           type="button"
           class="calendar-day"
-          [class.other-month]="!day.isCurrentMonth"
+          [class.other-month]="
+            !day.isCurrentMonth
+          "
           [class.today]="day.isToday"
           [class.selected]="day.isSelected"
           [attr.aria-label]="
@@ -228,20 +254,29 @@
             day.date.getDate()
           }}</span>
 
-          @if (bookingsForDate(day.date).length > 0) {
+          @if (
+            bookingsForDate(day.date).length > 0
+          ) {
             <span class="day-booking-count">
-              {{ bookingsForDate(day.date).length }}
               {{
-                bookingsForDate(day.date).length === 1
+                bookingsForDate(day.date).length
+              }}
+              {{
+                bookingsForDate(day.date)
+                  .length === 1
                   ? 'booking'
                   : 'bookings'
               }}
             </span>
             <span class="day-booking-preview">
-              {{ bookingsForDate(day.date)[0].title }}
+              {{
+                bookingsForDate(day.date)[0].title
+              }}
             </span>
           } @else {
-            <span class="day-empty">No bookings</span>
+            <span class="day-empty"
+              >No bookings</span
+            >
           }
         </button>
       }
@@ -288,11 +323,14 @@
           <span class="week-day-name">
             {{ day.date | date: 'EEE' }}
           </span>
-          <strong>{{ day.date | date: 'd' }}</strong>
+          <strong>{{
+            day.date | date: 'd'
+          }}</strong>
           <span class="week-day-count">
             {{ bookingsForDate(day.date).length }}
             {{
-              bookingsForDate(day.date).length === 1
+              bookingsForDate(day.date).length ===
+              1
                 ? 'booking'
                 : 'bookings'
             }}
@@ -334,7 +372,10 @@
                 formatTime(booking.startTime)
               }}</strong>
               <span
-                >to {{ formatTime(booking.endTime) }}</span
+                >to
+                {{
+                  formatTime(booking.endTime)
+                }}</span
               >
             </div>
             <div class="agenda-content">

@@ -13,7 +13,9 @@ describe('SidebarComponent', () => {
       imports: [SidebarComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(
+      SidebarComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

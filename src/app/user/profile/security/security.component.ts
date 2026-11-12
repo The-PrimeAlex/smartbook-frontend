@@ -35,11 +35,13 @@ import { PageBannerComponent } from '../../../shared/ui';
   styleUrl: './security.component.css',
 })
 export class SecurityComponent implements OnInit {
-  private readonly authService = inject(AuthService);
+  private readonly authService =
+    inject(AuthService);
   private readonly router = inject(Router);
 
   readonly LucideCheck = LucideCheck;
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideClock = LucideClock;
   readonly LucideFileText = LucideFileText;
   readonly LucideLock = LucideLock;
@@ -65,7 +67,9 @@ export class SecurityComponent implements OnInit {
   }
 
   goToChangePassword(): void {
-    this.router.navigate(['/app/profile/password']);
+    this.router.navigate([
+      '/app/profile/password',
+    ]);
   }
 
   goToProfile(): void {

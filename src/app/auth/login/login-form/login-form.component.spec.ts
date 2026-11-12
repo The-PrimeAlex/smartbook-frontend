@@ -13,7 +13,9 @@ describe('LoginFormComponent', () => {
       imports: [LoginFormComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LoginFormComponent);
+    fixture = TestBed.createComponent(
+      LoginFormComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

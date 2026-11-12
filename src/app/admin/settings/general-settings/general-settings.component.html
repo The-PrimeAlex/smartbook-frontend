@@ -8,7 +8,9 @@
 
   <!-- Error -->
   @if (error()) {
-    <div class="notice notice-error">{{ error() }}</div>
+    <div class="notice notice-error">
+      {{ error() }}
+    </div>
   }
 
   <!-- Success -->
@@ -20,13 +22,20 @@
 
   <!-- Loading -->
   @if (loading()) {
-    <div class="loading-panel">Loading settings...</div>
+    <div class="loading-panel">
+      Loading settings...
+    </div>
   } @else {
     <div class="settings-panel">
       <div class="settings-section">
-        <h2 class="section-title">Business Information</h2>
+        <h2 class="section-title">
+          Business Information
+        </h2>
         <div class="settings-grid">
-          @for (setting of settings(); track setting.key) {
+          @for (
+            setting of settings();
+            track setting.key
+          ) {
             <div class="setting-card">
               <label class="setting-label">{{
                 setting.label
@@ -34,7 +43,9 @@
               <p class="setting-description">
                 {{ setting.description }}
               </p>
-              @if (setting.valueType === 'string') {
+              @if (
+                setting.valueType === 'string'
+              ) {
                 <input
                   type="text"
                   class="setting-input"
@@ -47,7 +58,9 @@
                   "
                   placeholder="Enter value..."
                 />
-              } @else if (setting.valueType === 'number') {
+              } @else if (
+                setting.valueType === 'number'
+              ) {
                 <input
                   type="number"
                   class="setting-input"
@@ -59,27 +72,35 @@
                     )
                   "
                 />
-              } @else if (setting.valueType === 'boolean') {
+              } @else if (
+                setting.valueType === 'boolean'
+              ) {
                 <label class="toggle-switch">
                   <input
                     type="checkbox"
                     [checked]="
-                      getValue(setting.key) === 'true'
+                      getValue(setting.key) ===
+                      'true'
                     "
                     (change)="
                       setValue(
                         setting.key,
-                        $any($event).target.checked
+                        $any($event).target
+                          .checked
                           ? 'true'
                           : 'false'
                       )
                     "
                   />
-                  <span class="toggle-slider"></span>
+                  <span
+                    class="toggle-slider"
+                  ></span>
                 </label>
               }
               @if (!setting.systemDefault) {
-                <span class="modified-badge">Modified</span>
+                <span class="modified-badge"
+                  >Modified</span
+                >
               }
             </div>
           }
@@ -91,10 +112,13 @@
         <div class="dark-mode-card">
           <div class="dark-mode-header">
             <div>
-              <label class="setting-label">Dark Mode</label>
+              <label class="setting-label"
+                >Dark Mode</label
+              >
               <p class="setting-description">
-                Switch between light and dark theme for a
-                more comfortable viewing experience.
+                Switch between light and dark
+                theme for a more comfortable
+                viewing experience.
               </p>
             </div>
             <button

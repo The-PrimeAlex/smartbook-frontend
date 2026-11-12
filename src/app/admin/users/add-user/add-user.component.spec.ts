@@ -13,7 +13,9 @@ describe('AddUserComponent', () => {
       imports: [AddUserComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AddUserComponent);
+    fixture = TestBed.createComponent(
+      AddUserComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

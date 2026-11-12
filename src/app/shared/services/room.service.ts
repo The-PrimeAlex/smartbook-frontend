@@ -1,17 +1,26 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  throwError,
+} from 'rxjs';
 import {
   MeetingRoom,
   RoomDetails,
 } from '../models/room.model';
 import { environment } from '../../../environments/environment';
 
-
-export type CreateRoomRequest = Omit<MeetingRoom, 'roomId'>;
+export type CreateRoomRequest = Omit<
+  MeetingRoom,
+  'roomId'
+>;
 
 @Injectable({ providedIn: 'root' })
 export class RoomService {
@@ -32,7 +41,9 @@ export class RoomService {
       .pipe(catchError(this.handleError));
   }
 
-  getRoomDetails(roomId: string): Observable<RoomDetails> {
+  getRoomDetails(
+    roomId: string,
+  ): Observable<RoomDetails> {
     return this.http
       .get<RoomDetails>(
         `${this.apiUrl}/${encodeURIComponent(roomId)}/details`,
@@ -53,7 +64,8 @@ export class RoomService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    let message = 'Something went wrong. Please try again.';
+    let message =
+      'Something went wrong. Please try again.';
 
     if (error.status === 0) {
       message =

@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { createLogger } from '../../../shared/services/logger.service';
 import { IconComponent } from '../../../shared/ui';
-import { Component, inject, output } from '@angular/core';
+import {
+  Component,
+  inject,
+  output,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -32,7 +36,10 @@ import {
   CreateUserRequest,
   UserStatus,
 } from './add-user.model';
-import { UserRole, UsersService } from '../users.service';
+import {
+  UserRole,
+  UsersService,
+} from '../users.service';
 import { PageBannerComponent } from '../../../shared/ui';
 
 interface CountryOption {
@@ -58,20 +65,26 @@ interface CountryOption {
 })
 export class AddUserComponent {
   private readonly log = createLogger('AddUser');
-  private readonly usersService = inject(UsersService);
-  private readonly formBuilder = inject(FormBuilder);
+  private readonly usersService =
+    inject(UsersService);
+  private readonly formBuilder =
+    inject(FormBuilder);
   cancel = output<void>();
 
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideChevronLeft = LucideChevronLeft;
-  readonly LucideChevronRight = LucideChevronRight;
+  readonly LucideChevronRight =
+    LucideChevronRight;
   readonly LucideHome = LucideHome;
   readonly LucideMail = LucideMail;
   readonly LucideSearch = LucideSearch;
   readonly LucideShieldCheck = LucideShieldCheck;
   readonly LucideUser = LucideUser;
 
-  readonly roles: { value: UserRole; label: string }[] = [
+  readonly roles: {
+    value: UserRole;
+    label: string;
+  }[] = [
     { value: 'ADMIN', label: 'Administrator' },
     { value: 'USER', label: 'User' },
   ];
@@ -141,8 +154,8 @@ export class AddUserComponent {
             }
 
             const selectedCountry =
-              this.form?.get('countryIsoCode')?.value ??
-              'KE';
+              this.form?.get('countryIsoCode')
+                ?.value ?? 'KE';
 
             try {
               return isValidPhoneNumber(
@@ -157,7 +170,10 @@ export class AddUserComponent {
           },
         ],
       ],
-      role: ['USER' as UserRole, Validators.required],
+      role: [
+        'USER' as UserRole,
+        Validators.required,
+      ],
       status: [
         'PENDING' as UserStatus,
         Validators.required,
@@ -177,25 +193,31 @@ export class AddUserComponent {
           });
       });
 
-    this.form.get('role')?.valueChanges.subscribe(() => {
-      this.updateOrganizationValidators();
-    });
+    this.form
+      .get('role')
+      ?.valueChanges.subscribe(() => {
+        this.updateOrganizationValidators();
+      });
 
     this.updateOrganizationValidators();
   }
 
   get isAdmin(): boolean {
-    return this.form.get('role')?.value === 'ADMIN';
+    return (
+      this.form.get('role')?.value === 'ADMIN'
+    );
   }
 
-  get selectedCountry(): CountryOption | undefined {
+  get selectedCountry():
+    CountryOption | undefined {
     const selectedCountryCode = this.form.get(
       'countryIsoCode',
     )?.value;
 
     return this.countries.find(
       (country) =>
-        country.countryCode === selectedCountryCode,
+        country.countryCode ===
+        selectedCountryCode,
     );
   }
 
@@ -208,10 +230,8 @@ export class AddUserComponent {
       return this.countries;
     }
 
-    const normalizedSearchTerm = searchTerm.replace(
-      /\s/g,
-      '',
-    );
+    const normalizedSearchTerm =
+      searchTerm.replace(/\s/g, '');
 
     return this.countries.filter(
       (country) =>
@@ -221,14 +241,22 @@ export class AddUserComponent {
         country.countryCode
           .toLowerCase()
           .includes(searchTerm) ||
-        country.callingCode.includes(normalizedSearchTerm),
+        country.callingCode.includes(
+          normalizedSearchTerm,
+        ),
     );
   }
 
-  hasError(fieldName: string, errorName?: string): boolean {
+  hasError(
+    fieldName: string,
+    errorName?: string,
+  ): boolean {
     const control = this.form.get(fieldName);
 
-    if (!control || !(control.touched || this.submitted)) {
+    if (
+      !control ||
+      !(control.touched || this.submitted)
+    ) {
       return false;
     }
 
@@ -238,7 +266,8 @@ export class AddUserComponent {
   }
 
   toggleCountryDropdown(): void {
-    this.countryDropdownOpen = !this.countryDropdownOpen;
+    this.countryDropdownOpen =
+      !this.countryDropdownOpen;
 
     if (this.countryDropdownOpen) {
       this.countrySearch = '';
@@ -258,7 +287,9 @@ export class AddUserComponent {
     this.countrySearch = searchTerm;
   }
 
-  onCountrySearchKeydown(event: KeyboardEvent): void {
+  onCountrySearchKeydown(
+    event: KeyboardEvent,
+  ): void {
     if (event.key === 'Escape') {
       this.countryDropdownOpen = false;
       this.countrySearch = '';
@@ -277,10 +308,8 @@ export class AddUserComponent {
   }
 
   onPhoneInput(phoneNumber: string): void {
-    const digitsOnlyPhoneNumber = phoneNumber.replace(
-      /\D/g,
-      '',
-    );
+    const digitsOnlyPhoneNumber =
+      phoneNumber.replace(/\D/g, '');
 
     if (phoneNumber !== digitsOnlyPhoneNumber) {
       this.form
@@ -305,33 +334,44 @@ export class AddUserComponent {
     const userRequest: CreateUserRequest = {
       firstName: formValues.firstName.trim(),
       lastName: formValues.lastName.trim(),
-      email: formValues.email.trim().toLowerCase(),
+      email: formValues.email
+        .trim()
+        .toLowerCase(),
       phoneNumber:
         `${getCountryCallingCode(formValues.countryIsoCode as CountryCode)}` +
         formValues.phoneNumber,
       role: formValues.role,
       status: formValues.status,
-      companyName: formValues.companyName?.trim() ?? '',
+      companyName:
+        formValues.companyName?.trim() ?? '',
       registrationNumber:
-        formValues.registrationNumber?.trim() ?? '',
+        formValues.registrationNumber?.trim() ??
+        '',
       companyEmail:
-        formValues.contactEmail?.trim().toLowerCase() ?? '',
+        formValues.contactEmail
+          ?.trim()
+          .toLowerCase() ?? '',
     };
 
-    this.usersService.addUser(userRequest).subscribe({
-      next: (response) => {
-        this.log.log(
-          'User added successfully:',
-          response.message,
-        );
-        this.isSubmitting = true;
-      },
-      error: (error) => {
-        this.log.error('Failed to add user:', error);
+    this.usersService
+      .addUser(userRequest)
+      .subscribe({
+        next: (response) => {
+          this.log.log(
+            'User added successfully:',
+            response.message,
+          );
+          this.isSubmitting = true;
+        },
+        error: (error) => {
+          this.log.error(
+            'Failed to add user:',
+            error,
+          );
 
-        this.isSubmitting = true;
-      },
-    });
+          this.isSubmitting = true;
+        },
+      });
   }
 
   onCancel(): void {
@@ -339,12 +379,14 @@ export class AddUserComponent {
   }
 
   private updateOrganizationValidators(): void {
-    const companyNameControl = this.form.get('companyName');
-    const registrationNumberControl = this.form.get(
-      'registrationNumber',
+    const companyNameControl = this.form.get(
+      'companyName',
     );
-    const contactEmailControl =
-      this.form.get('contactEmail');
+    const registrationNumberControl =
+      this.form.get('registrationNumber');
+    const contactEmailControl = this.form.get(
+      'contactEmail',
+    );
 
     if (
       !companyNameControl ||
@@ -377,24 +419,30 @@ export class AddUserComponent {
     companyNameControl.updateValueAndValidity({
       emitEvent: false,
     });
-    registrationNumberControl.updateValueAndValidity({
-      emitEvent: false,
-    });
+    registrationNumberControl.updateValueAndValidity(
+      {
+        emitEvent: false,
+      },
+    );
     contactEmailControl.updateValueAndValidity({
       emitEvent: false,
     });
   }
 
   private buildCountries(): CountryOption[] {
-    const countryNames = new Intl.DisplayNames(['en'], {
-      type: 'region',
-    });
+    const countryNames = new Intl.DisplayNames(
+      ['en'],
+      {
+        type: 'region',
+      },
+    );
 
     return getCountries()
       .map((countryCode): CountryOption => ({
         countryCode,
         countryName:
-          countryNames.of(countryCode) ?? countryCode,
+          countryNames.of(countryCode) ??
+          countryCode,
         callingCode: `+${getCountryCallingCode(countryCode)}`,
         flag: this.getCountryFlag(countryCode),
       }))
@@ -405,7 +453,9 @@ export class AddUserComponent {
       );
   }
 
-  private getCountryFlag(countryCode: string): string {
+  private getCountryFlag(
+    countryCode: string,
+  ): string {
     return countryCode
       .toUpperCase()
       .replace(/[A-Z]/g, (character) =>

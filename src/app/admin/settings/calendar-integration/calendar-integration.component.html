@@ -6,7 +6,9 @@
     description="Configure Google Calendar sync settings, auto-sync intervals, and event creation behavior."
   ></app-page-banner>
   @if (error()) {
-    <div class="notice notice-error">{{ error() }}</div>
+    <div class="notice notice-error">
+      {{ error() }}
+    </div>
   }
   @if (saved()) {
     <div class="notice notice-success">
@@ -14,7 +16,9 @@
     </div>
   }
   @if (loading()) {
-    <div class="loading-panel">Loading settings...</div>
+    <div class="loading-panel">
+      Loading settings...
+    </div>
   } @else {
     <div class="settings-panel">
       <div class="settings-section">
@@ -22,7 +26,10 @@
           Calendar Sync Settings
         </h2>
         <div class="settings-grid">
-          @for (setting of settings(); track setting.key) {
+          @for (
+            setting of settings();
+            track setting.key
+          ) {
             <div class="setting-card">
               <label class="setting-label">{{
                 setting.label
@@ -30,7 +37,9 @@
               <p class="setting-description">
                 {{ setting.description }}
               </p>
-              @if (setting.valueType === 'number') {
+              @if (
+                setting.valueType === 'number'
+              ) {
                 <input
                   type="number"
                   class="setting-input"
@@ -42,27 +51,35 @@
                     )
                   "
                 />
-              } @else if (setting.valueType === 'boolean') {
+              } @else if (
+                setting.valueType === 'boolean'
+              ) {
                 <label class="toggle-switch">
                   <input
                     type="checkbox"
                     [checked]="
-                      getValue(setting.key) === 'true'
+                      getValue(setting.key) ===
+                      'true'
                     "
                     (change)="
                       setValue(
                         setting.key,
-                        $any($event).target.checked
+                        $any($event).target
+                          .checked
                           ? 'true'
                           : 'false'
                       )
                     "
                   />
-                  <span class="toggle-slider"></span>
+                  <span
+                    class="toggle-slider"
+                  ></span>
                 </label>
               }
               @if (!setting.systemDefault) {
-                <span class="modified-badge">Modified</span>
+                <span class="modified-badge"
+                  >Modified</span
+                >
               }
             </div>
           }
@@ -75,7 +92,8 @@
           [disabled]="saving()"
         >
           @if (saving()) {
-            <span class="spinner"></span> Saving...
+            <span class="spinner"></span>
+            Saving...
           } @else {
             Save Changes
           }

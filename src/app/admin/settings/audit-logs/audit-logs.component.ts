@@ -28,15 +28,18 @@ import {
 })
 export class AuditLogsComponent implements OnInit {
   readonly LucideFileClock = LucideFileClock;
-  private readonly settingsService =
-    inject(SettingsService);
+  private readonly settingsService = inject(
+    SettingsService,
+  );
   readonly settings = signal<Setting[]>([]);
   readonly allSettings = signal<Setting[]>([]);
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly saved = signal(false);
   readonly error = signal('');
-  readonly formValues = signal<Record<string, string>>({});
+  readonly formValues = signal<
+    Record<string, string>
+  >({});
 
   /** Modified settings sorted by updatedAt descending (most recent first) */
   get sortedModifiedSettings() {
@@ -58,7 +61,8 @@ export class AuditLogsComponent implements OnInit {
       .subscribe({
         next: (settings) => {
           this.settings.set(settings);
-          const values: Record<string, string> = {};
+          const values: Record<string, string> =
+            {};
           settings.forEach(
             (s) => (values[s.key] = s.value),
           );
@@ -71,16 +75,18 @@ export class AuditLogsComponent implements OnInit {
         },
       });
     // Load all settings to show modified ones
-    this.settingsService.getAllSettings().subscribe({
-      next: (all) => {
-        this.allSettings.set(
-          all.filter((s) => !s.systemDefault),
-        );
-      },
-      error: () => {
-        /* non-critical */
-      },
-    });
+    this.settingsService
+      .getAllSettings()
+      .subscribe({
+        next: (all) => {
+          this.allSettings.set(
+            all.filter((s) => !s.systemDefault),
+          );
+        },
+        error: () => {
+          /* non-critical */
+        },
+      });
   }
   save(): void {
     this.saving.set(true);
@@ -95,7 +101,10 @@ export class AuditLogsComponent implements OnInit {
         next: () => {
           this.saved.set(true);
           this.saving.set(false);
-          setTimeout(() => this.saved.set(false), 3000);
+          setTimeout(
+            () => this.saved.set(false),
+            3000,
+          );
         },
         error: (e: Error) => {
           this.error.set(e.message);
@@ -107,6 +116,9 @@ export class AuditLogsComponent implements OnInit {
     return this.formValues()[key] ?? '';
   }
   setValue(key: string, value: string): void {
-    this.formValues.update((v) => ({ ...v, [key]: value }));
+    this.formValues.update((v) => ({
+      ...v,
+      [key]: value,
+    }));
   }
 }

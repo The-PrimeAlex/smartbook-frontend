@@ -230,7 +230,8 @@ export const ADMIN_MENU: MenuSection[] = [
           {
             label: 'Notifications',
             icon: 'bell',
-            route: '/admin/settings/notifications',
+            route:
+              '/admin/settings/notifications',
           },
           // { label: 'Calendar Integration', icon: 'calendar', route: '/admin/settings/calendar' },
           {

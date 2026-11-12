@@ -1,4 +1,7 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+} from '@angular/common';
 import {
   Component,
   computed,
@@ -40,11 +43,8 @@ import {
   getErrorMessage,
 } from '../../../shared/directives';
 
-const UPCOMING_STATUSES: readonly BookingStatus[] = [
-  'PENDING',
-  'CONFIRMED',
-  'CHECKED_IN',
-];
+const UPCOMING_STATUSES: readonly BookingStatus[] =
+  ['PENDING', 'CONFIRMED', 'CHECKED_IN'];
 
 @Component({
   selector: 'app-upcoming-bookings',
@@ -59,7 +59,8 @@ const UPCOMING_STATUSES: readonly BookingStatus[] = [
     CancelBookingModalComponent,
     IconComponent,
   ],
-  templateUrl: './upcoming-bookings.component.html',
+  templateUrl:
+    './upcoming-bookings.component.html',
   styleUrl: './upcoming-bookings.component.css',
 })
 export class UpcomingBookingsComponent implements OnInit {
@@ -76,13 +77,17 @@ export class UpcomingBookingsComponent implements OnInit {
     this.statsCollapsed.update((v) => !v);
   }
 
-  private readonly bookingService = inject(BookingService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
 
   readonly bookings = signal<Booking[]>([]);
   readonly loading = signal(false);
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
-  readonly processingBookingIds = signal<string[]>([]);
+  readonly processingBookingIds = signal<
+    string[]
+  >([]);
 
   // Cancel booking modal
   readonly showCancelModal = signal(false);
@@ -127,9 +132,12 @@ export class UpcomingBookingsComponent implements OnInit {
 
     this.bookingService
       .getMyBookings()
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+      )
       .subscribe({
-        next: (bookings) => this.bookings.set(bookings),
+        next: (bookings) =>
+          this.bookings.set(bookings),
         error: (error: unknown) => {
           this.errorMessage.set(
             this.getErrorMessage(
@@ -142,7 +150,9 @@ export class UpcomingBookingsComponent implements OnInit {
   }
 
   isProcessing(bookingId: string): boolean {
-    return this.processingBookingIds().includes(bookingId);
+    return this.processingBookingIds().includes(
+      bookingId,
+    );
   }
 
   canConfirm(booking: Booking): boolean {
@@ -257,8 +267,12 @@ export class UpcomingBookingsComponent implements OnInit {
 
     this.cancelModalData.set({
       roomName: booking.roomName,
-      startTime: this.formatDateTime(booking.startTime),
-      endTime: this.formatDateTime(booking.endTime),
+      startTime: this.formatDateTime(
+        booking.startTime,
+      ),
+      endTime: this.formatDateTime(
+        booking.endTime,
+      ),
       hasFee,
       feeAmount,
       freeCancellationHours,
@@ -312,7 +326,9 @@ export class UpcomingBookingsComponent implements OnInit {
     this.cancelModalData.set(null);
   }
 
-  private formatDateTime(isoString: string): string {
+  private formatDateTime(
+    isoString: string,
+  ): string {
     const date = new Date(isoString);
     return date.toLocaleString('en-GB', {
       day: '2-digit',
@@ -335,7 +351,10 @@ export class UpcomingBookingsComponent implements OnInit {
     this.clearMessages();
 
     this.bookingService
-      .updateBookingStatus(booking.bookingId, request)
+      .updateBookingStatus(
+        booking.bookingId,
+        request,
+      )
       .pipe(
         finalize(() =>
           this.stopProcessing(booking.bookingId),
@@ -357,7 +376,9 @@ export class UpcomingBookingsComponent implements OnInit {
       });
   }
 
-  private replaceBooking(updatedBooking: Booking): void {
+  private replaceBooking(
+    updatedBooking: Booking,
+  ): void {
     this.bookings.update((current) =>
       current.map((b) =>
         b.bookingId === updatedBooking.bookingId
@@ -367,13 +388,19 @@ export class UpcomingBookingsComponent implements OnInit {
     );
   }
 
-  private startProcessing(bookingId: string): void {
+  private startProcessing(
+    bookingId: string,
+  ): void {
     this.processingBookingIds.update((ids) =>
-      ids.includes(bookingId) ? ids : [...ids, bookingId],
+      ids.includes(bookingId)
+        ? ids
+        : [...ids, bookingId],
     );
   }
 
-  private stopProcessing(bookingId: string): void {
+  private stopProcessing(
+    bookingId: string,
+  ): void {
     this.processingBookingIds.update((ids) =>
       ids.filter((id) => id !== bookingId),
     );

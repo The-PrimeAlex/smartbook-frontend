@@ -13,7 +13,9 @@ describe('ViewRoomsComponent', () => {
       imports: [ViewRoomsComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ViewRoomsComponent);
+    fixture = TestBed.createComponent(
+      ViewRoomsComponent,
+    );
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

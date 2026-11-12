@@ -1,4 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import {
@@ -58,9 +62,11 @@ import {
   styleUrl: './admin-incidents.component.css',
 })
 export class AdminIncidentsComponent implements OnInit {
-  readonly LucideAlertTriangle = LucideAlertTriangle;
+  readonly LucideAlertTriangle =
+    LucideAlertTriangle;
   readonly LucideCalendar = LucideCalendar;
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideCircleAlert = LucideCircleAlert;
   readonly LucideDollarSign = LucideDollarSign;
   readonly LucideFileText = LucideFileText;
@@ -87,8 +93,11 @@ export class AdminIncidentsComponent implements OnInit {
 
   // Side panel
   showSidePanel = signal(false);
-  sidePanelMode = signal<'charge' | 'waive'>('charge');
-  selectedIncident = signal<IncidentResponse | null>(null);
+  sidePanelMode = signal<'charge' | 'waive'>(
+    'charge',
+  );
+  selectedIncident =
+    signal<IncidentResponse | null>(null);
   chargeAmount = signal('');
   chargeReason = signal('');
   waiveReason = signal('');
@@ -102,7 +111,8 @@ export class AdminIncidentsComponent implements OnInit {
 
   ngOnInit() {
     this.isDamagePage.set(
-      this.router.url === '/admin/incidents/damage',
+      this.router.url ===
+        '/admin/incidents/damage',
     );
     this.load();
   }
@@ -214,7 +224,9 @@ export class AdminIncidentsComponent implements OnInit {
     }
   }
 
-  canTakeAction(incident: IncidentResponse): boolean {
+  canTakeAction(
+    incident: IncidentResponse,
+  ): boolean {
     return incident.incidentStatus === 'REPORTED';
   }
 
@@ -228,7 +240,10 @@ export class AdminIncidentsComponent implements OnInit {
             text: 'Incident verified',
           });
           this.load();
-          setTimeout(() => this.message.set(null), 4000);
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
         },
         error: (err) => {
           this.message.set({
@@ -237,7 +252,10 @@ export class AdminIncidentsComponent implements OnInit {
               err.error?.message ||
               'Failed to verify incident',
           });
-          setTimeout(() => this.message.set(null), 4000);
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
         },
       });
   }
@@ -282,12 +300,18 @@ export class AdminIncidentsComponent implements OnInit {
 
     this.processing.set(true);
     const request: IncidentActionRequest = {
-      chargeAmount: parseFloat(this.chargeAmount()),
-      reason: this.chargeReason() || 'Incident charge',
+      chargeAmount: parseFloat(
+        this.chargeAmount(),
+      ),
+      reason:
+        this.chargeReason() || 'Incident charge',
     };
 
     this.incidentsService
-      .chargeIncident(incident.incidentId, request)
+      .chargeIncident(
+        incident.incidentId,
+        request,
+      )
       .subscribe({
         next: () => {
           this.showSidePanel.set(false);
@@ -297,7 +321,10 @@ export class AdminIncidentsComponent implements OnInit {
             text: 'Charge applied successfully',
           });
           this.load();
-          setTimeout(() => this.message.set(null), 4000);
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
         },
         error: (err) => {
           this.processing.set(false);
@@ -307,7 +334,10 @@ export class AdminIncidentsComponent implements OnInit {
               err.error?.message ||
               'Failed to apply charge',
           });
-          setTimeout(() => this.message.set(null), 4000);
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
         },
       });
   }
@@ -320,7 +350,8 @@ export class AdminIncidentsComponent implements OnInit {
     const request: IncidentActionRequest = {
       chargeAmount: 0,
       reason:
-        this.waiveReason() || 'Charge waived by admin',
+        this.waiveReason() ||
+        'Charge waived by admin',
     };
 
     this.incidentsService
@@ -334,7 +365,10 @@ export class AdminIncidentsComponent implements OnInit {
             text: 'Charge waived successfully',
           });
           this.load();
-          setTimeout(() => this.message.set(null), 4000);
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
         },
         error: (err) => {
           this.processing.set(false);
@@ -344,7 +378,10 @@ export class AdminIncidentsComponent implements OnInit {
               err.error?.message ||
               'Failed to waive charge',
           });
-          setTimeout(() => this.message.set(null), 4000);
+          setTimeout(
+            () => this.message.set(null),
+            4000,
+          );
         },
       });
   }

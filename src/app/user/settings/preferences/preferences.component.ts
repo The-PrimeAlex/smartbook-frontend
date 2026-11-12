@@ -32,11 +32,14 @@ import { PageBannerComponent } from '../../../shared/ui';
   styleUrl: './preferences.component.css',
 })
 export class PreferencesComponent implements OnInit {
-  private readonly settingsService =
-    inject(SettingsService);
-  private readonly themeService = inject(ThemeService);
+  private readonly settingsService = inject(
+    SettingsService,
+  );
+  private readonly themeService =
+    inject(ThemeService);
 
-  readonly LucideCheckCircle2 = LucideCheckCircle2;
+  readonly LucideCheckCircle2 =
+    LucideCheckCircle2;
   readonly LucideFileBox = LucideFileBox;
   readonly LucideMoon = LucideMoon;
   readonly LucideSettings = LucideSettings;
@@ -47,8 +50,12 @@ export class PreferencesComponent implements OnInit {
   readonly saving = signal(false);
   readonly saved = signal(false);
   readonly error = signal('');
-  readonly formValues = signal<Record<string, string>>({});
-  readonly darkMode = signal(this.themeService.isDark);
+  readonly formValues = signal<
+    Record<string, string>
+  >({});
+  readonly darkMode = signal(
+    this.themeService.isDark,
+  );
 
   readonly timezoneOptions = [
     'Africa/Nairobi',
@@ -88,7 +95,8 @@ export class PreferencesComponent implements OnInit {
       .subscribe({
         next: (settings) => {
           this.settings.set(settings);
-          const values: Record<string, string> = {};
+          const values: Record<string, string> =
+            {};
           settings.forEach(
             (s) => (values[s.key] = s.value),
           );
@@ -115,7 +123,10 @@ export class PreferencesComponent implements OnInit {
         next: () => {
           this.saved.set(true);
           this.saving.set(false);
-          setTimeout(() => this.saved.set(false), 3000);
+          setTimeout(
+            () => this.saved.set(false),
+            3000,
+          );
         },
         error: (e: Error) => {
           this.error.set(e.message);
@@ -129,7 +140,10 @@ export class PreferencesComponent implements OnInit {
   }
 
   setValue(key: string, value: string): void {
-    this.formValues.update((v) => ({ ...v, [key]: value }));
+    this.formValues.update((v) => ({
+      ...v,
+      [key]: value,
+    }));
   }
 
   toggleDarkMode(): void {

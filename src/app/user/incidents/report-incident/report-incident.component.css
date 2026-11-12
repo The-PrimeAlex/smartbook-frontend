@@ -102,7 +102,10 @@
   margin: 0 0 8px;
 }
 .empty-state p {
-  color: var(--neutral-500, var(--text-secondary));
+  color: var(
+    --neutral-500,
+    var(--text-secondary)
+  );
   margin: 0 0 24px;
   max-width: 400px;
 }
@@ -112,7 +115,10 @@
   gap: 8px;
   padding: 10px 20px;
   border-radius: var(--radius-md, 8px);
-  background: var(--brand-primary, var(--brand-primary));
+  background: var(
+    --brand-primary,
+    var(--brand-primary)
+  );
   color: var(--white, var(--card-bg));
   border: none;
   font-size: 0.9rem;
@@ -121,7 +127,10 @@
   transition: all 0.2s ease;
 }
 .action-button:hover {
-  background: var(--brand-accent, var(--brand-accent));
+  background: var(
+    --brand-accent,
+    var(--brand-accent)
+  );
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(242, 140, 40, 0.3);
 }
@@ -136,7 +145,8 @@
 .room-panel,
 .form-panel {
   background: var(--card-bg, var(--card-bg));
-  border: 1px solid var(--border-color, var(--border-color));
+  border: 1px solid
+    var(--border-color, var(--border-color));
   border-radius: var(--radius-lg, 12px);
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -166,7 +176,10 @@
   color: var(--brand-accent, var(--brand-accent));
 }
 .panel-hint {
-  color: var(--neutral-500, var(--text-secondary));
+  color: var(
+    --neutral-500,
+    var(--text-secondary)
+  );
   font-size: 0.85rem;
   margin: 0 0 20px;
 }
@@ -189,12 +202,18 @@
   background: var(--card-bg, var(--card-bg));
 }
 .room-item:hover {
-  border-color: var(--brand-accent, var(--brand-accent));
+  border-color: var(
+    --brand-accent,
+    var(--brand-accent)
+  );
   box-shadow: 0 2px 8px rgba(242, 140, 40, 0.15);
   transform: translateY(-1px);
 }
 .room-item.selected {
-  border-color: var(--brand-primary, var(--brand-primary));
+  border-color: var(
+    --brand-primary,
+    var(--brand-primary)
+  );
   background: var(--brand-primary-bg, #f0f4f8);
   box-shadow: 0 2px 8px rgba(20, 43, 74, 0.15);
 }
@@ -208,7 +227,10 @@
   margin-bottom: 4px;
 }
 .room-purpose {
-  color: var(--neutral-500, var(--text-secondary));
+  color: var(
+    --neutral-500,
+    var(--text-secondary)
+  );
   font-size: 0.85rem;
   margin-bottom: 6px;
 }
@@ -216,7 +238,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--neutral-500, var(--text-secondary));
+  color: var(
+    --neutral-500,
+    var(--text-secondary)
+  );
   font-size: 0.8rem;
 }
 .room-time svg {
@@ -247,14 +272,21 @@
 }
 .selected-room-info {
   padding: 12px 16px;
-  background: var(--neutral-50, var(--neutral-50));
+  background: var(
+    --neutral-50,
+    var(--neutral-50)
+  );
   border-radius: var(--radius-md, 8px);
-  border: 1px solid var(--border-color, var(--border-color));
+  border: 1px solid
+    var(--border-color, var(--border-color));
   font-size: 0.9rem;
   color: var(--text-primary, var(--text-primary));
 }
 .selected-room-info strong {
-  color: var(--brand-primary, var(--brand-primary));
+  color: var(
+    --brand-primary,
+    var(--brand-primary)
+  );
 }
 .form-field {
   display: flex;
@@ -281,7 +313,10 @@
 .form-field select:focus,
 .form-field textarea:focus {
   outline: none;
-  border-color: var(--brand-accent, var(--brand-accent));
+  border-color: var(
+    --brand-accent,
+    var(--brand-accent)
+  );
   box-shadow: 0 0 0 3px rgba(242, 140, 40, 0.15);
 }
 .form-field textarea {
@@ -299,7 +334,10 @@
   gap: 8px;
   padding: 12px 24px;
   border-radius: var(--radius-md, 8px);
-  background: var(--brand-primary, var(--brand-primary));
+  background: var(
+    --brand-primary,
+    var(--brand-primary)
+  );
   color: var(--white, var(--card-bg));
   border: none;
   font-size: 0.95rem;
@@ -309,7 +347,10 @@
   width: 100%;
 }
 .submit-button:hover:not(:disabled) {
-  background: var(--brand-accent, var(--brand-accent));
+  background: var(
+    --brand-accent,
+    var(--brand-accent)
+  );
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(242, 140, 40, 0.3);
 }
@@ -344,7 +385,10 @@
 }
 
 .form-placeholder p {
-  color: var(--neutral-500, var(--text-secondary));
+  color: var(
+    --neutral-500,
+    var(--text-secondary)
+  );
   font-size: 0.95rem;
   margin: 0;
 }

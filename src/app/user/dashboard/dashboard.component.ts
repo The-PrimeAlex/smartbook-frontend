@@ -63,33 +63,48 @@ import {
   styleUrl: './dashboard.component.css',
 })
 export class Dashboard implements OnInit {
-  private readonly log = createLogger('UserDashboard');
-  private readonly authService = inject(AuthService);
-  private readonly bookingService = inject(BookingService);
-  private readonly billingService = inject(BillingService);
+  private readonly log = createLogger(
+    'UserDashboard',
+  );
+  private readonly authService =
+    inject(AuthService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
+  private readonly billingService = inject(
+    BillingService,
+  );
   private readonly notificationService = inject(
     NotificationService,
   );
   private readonly router = inject(Router);
 
-  protected readonly LucideCalendar = LucideCalendar;
-  protected readonly LucideCreditCard = LucideCreditCard;
-  protected readonly LucideFileText = LucideFileText;
+  protected readonly LucideCalendar =
+    LucideCalendar;
+  protected readonly LucideCreditCard =
+    LucideCreditCard;
+  protected readonly LucideFileText =
+    LucideFileText;
   protected readonly LucideLayoutDashboard =
     LucideLayoutDashboard;
   protected readonly LucideMapPin = LucideMapPin;
   protected readonly LucideMail = LucideMail;
-  protected readonly LucideMapPinned = LucideMapPinned;
+  protected readonly LucideMapPinned =
+    LucideMapPinned;
   protected readonly LucideBell = LucideBell;
   protected readonly LucideClock = LucideClock;
-  protected readonly LucideShieldCheck = LucideShieldCheck;
+  protected readonly LucideShieldCheck =
+    LucideShieldCheck;
   protected readonly LucideUsers = LucideUsers;
   protected readonly LucideSearch = LucideSearch;
-  protected readonly LucideSettings = LucideSettings;
+  protected readonly LucideSettings =
+    LucideSettings;
   protected readonly LucideX = LucideX;
-  protected readonly LucideChevronDown = LucideChevronDown;
+  protected readonly LucideChevronDown =
+    LucideChevronDown;
 
-  readonly currentUser = this.authService.currentUser;
+  readonly currentUser =
+    this.authService.currentUser;
 
   readonly fullName = computed(() => {
     const user = this.currentUser();
@@ -110,13 +125,17 @@ export class Dashboard implements OnInit {
   });
 
   readonly email = computed(
-    () => this.currentUser()?.email ?? 'Not available',
+    () =>
+      this.currentUser()?.email ??
+      'Not available',
   );
 
   // Data signals
   readonly bookings = signal<Booking[]>([]);
   readonly bills = signal<Bill[]>([]);
-  readonly notifications = signal<Notification[]>([]);
+  readonly notifications = signal<Notification[]>(
+    [],
+  );
   readonly loading = signal(true);
   readonly statsCollapsed = signal(false);
 
@@ -132,9 +151,11 @@ export class Dashboard implements OnInit {
         const startTime = new Date(b.startTime);
         return (
           startTime >= now &&
-          ['PENDING', 'CONFIRMED', 'CHECKED_IN'].includes(
-            b.bookingStatus,
-          )
+          [
+            'PENDING',
+            'CONFIRMED',
+            'CHECKED_IN',
+          ].includes(b.bookingStatus)
         );
       })
       .sort(
@@ -172,7 +193,9 @@ export class Dashboard implements OnInit {
 
   readonly unreadCount = computed(
     () =>
-      this.notifications().filter((n) => !n.isRead).length,
+      this.notifications().filter(
+        (n) => !n.isRead,
+      ).length,
   );
 
   readonly upcomingCount = computed(
@@ -187,7 +210,8 @@ export class Dashboard implements OnInit {
           b.billStatus !== 'VOID',
       )
       .reduce(
-        (sum, b) => sum + (b.totalAmount - b.amountPaid),
+        (sum, b) =>
+          sum + (b.totalAmount - b.amountPaid),
         0,
       );
   });
@@ -243,15 +267,20 @@ export class Dashboard implements OnInit {
   loadData(): void {
     this.loading.set(true);
     forkJoin({
-      bookings: this.bookingService.getMyBookings(),
+      bookings:
+        this.bookingService.getMyBookings(),
       bills: this.billingService.getMyBills(),
       notifications:
-        this.notificationService.getNotifications(false),
+        this.notificationService.getNotifications(
+          false,
+        ),
     }).subscribe({
       next: (data) => {
         this.bookings.set(data.bookings);
         this.bills.set(data.bills);
-        this.notifications.set(data.notifications);
+        this.notifications.set(
+          data.notifications,
+        );
         this.loading.set(false);
       },
       error: (err) => {
@@ -306,7 +335,9 @@ export class Dashboard implements OnInit {
 
   getBillStatusLabel = getBillStatusLabel;
 
-  getNotificationIconClass(eventType: string): string {
+  getNotificationIconClass(
+    eventType: string,
+  ): string {
     switch (eventType) {
       case 'AUTO_CHECK_IN':
         return 'icon-checkin';
@@ -328,7 +359,8 @@ export class Dashboard implements OnInit {
   timeUntil(dateStr: string): string {
     const now = new Date();
     const target = new Date(dateStr);
-    const diffMs = target.getTime() - now.getTime();
+    const diffMs =
+      target.getTime() - now.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);

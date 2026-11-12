@@ -73,8 +73,11 @@ interface RoomCardData {
   styleUrl: './find-rooms.component.css',
 })
 export class FindRoomsComponent {
-  private readonly roomService = inject(RoomService);
-  private readonly bookingService = inject(BookingService);
+  private readonly roomService =
+    inject(RoomService);
+  private readonly bookingService = inject(
+    BookingService,
+  );
   private readonly router = inject(Router);
 
   readonly LucideCalendar = LucideCalendar;
@@ -95,7 +98,10 @@ export class FindRoomsComponent {
       value: 'VIDEO_CONFERENCE',
       label: 'Video Conference',
     },
-    { value: 'MEETING_SUITE', label: 'Meeting Suite' },
+    {
+      value: 'MEETING_SUITE',
+      label: 'Meeting Suite',
+    },
   ];
 
   readonly filterStatusOptions: FilterOption[] = [
@@ -112,7 +118,9 @@ export class FindRoomsComponent {
   readonly filterStatus = signal<string>('all');
 
   readonly filteredRooms = computed(() => {
-    const query = this.searchQuery().toLowerCase().trim();
+    const query = this.searchQuery()
+      .toLowerCase()
+      .trim();
     const typeFilter = this.filterType();
     const statusFilter = this.filterStatus();
     let result = this.rooms();
@@ -131,24 +139,29 @@ export class FindRoomsComponent {
 
     if (typeFilter !== 'all') {
       result = result.filter(
-        (card) => card.room.roomType === typeFilter,
+        (card) =>
+          card.room.roomType === typeFilter,
       );
     }
 
     if (statusFilter !== 'all') {
       result = result.filter(
-        (card) => card.room.status === statusFilter,
+        (card) =>
+          card.room.status === statusFilter,
       );
     }
 
     return result;
   });
 
-  readonly totalRooms = computed(() => this.rooms().length);
+  readonly totalRooms = computed(
+    () => this.rooms().length,
+  );
   readonly activeRooms = computed(
     () =>
-      this.rooms().filter((c) => c.room.status === 'ACTIVE')
-        .length,
+      this.rooms().filter(
+        (c) => c.room.status === 'ACTIVE',
+      ).length,
   );
   readonly totalCapacity = computed(() =>
     this.rooms().reduce(
@@ -179,62 +192,66 @@ export class FindRoomsComponent {
         }
 
         const detailRequests = rooms.map((room) =>
-          this.roomService.getRoomDetails(room.roomId),
+          this.roomService.getRoomDetails(
+            room.roomId,
+          ),
         );
 
         forkJoin(detailRequests).subscribe({
           next: (details) => {
             // Fetch schedules for all rooms in parallel
-            const scheduleRequests = rooms.map((room) =>
-              this.bookingService.getRoomSchedule(
-                room.roomId,
-              ),
+            const scheduleRequests = rooms.map(
+              (room) =>
+                this.bookingService.getRoomSchedule(
+                  room.roomId,
+                ),
             );
 
             forkJoin(scheduleRequests).subscribe({
               next: (schedules) => {
-                const cards: RoomCardData[] = rooms.map(
-                  (room, i) => ({
+                const cards: RoomCardData[] =
+                  rooms.map((room, i) => ({
                     room,
                     equipment: (
                       details[i]?.equipment ?? []
                     ).map((eq) => ({
-                      equipmentName: eq.equipmentName,
+                      equipmentName:
+                        eq.equipmentName,
                       status: eq.status,
                     })),
-                    schedule: (schedules[i] ?? []).map(
-                      (b) => ({
-                        bookingId: b.bookingId,
-                        startTime: b.startTime,
-                        endTime: b.endTime,
-                        bookingStatus: b.bookingStatus,
-                        purpose: b.purpose,
-                        userName: b.userName,
-                      }),
-                    ),
+                    schedule: (
+                      schedules[i] ?? []
+                    ).map((b) => ({
+                      bookingId: b.bookingId,
+                      startTime: b.startTime,
+                      endTime: b.endTime,
+                      bookingStatus:
+                        b.bookingStatus,
+                      purpose: b.purpose,
+                      userName: b.userName,
+                    })),
                     expanded: false,
                     loading: false,
-                  }),
-                );
+                  }));
                 this.rooms.set(cards);
                 this.loading.set(false);
               },
               error: () => {
                 // If schedules fail, still show rooms without schedule
-                const cards: RoomCardData[] = rooms.map(
-                  (room, i) => ({
+                const cards: RoomCardData[] =
+                  rooms.map((room, i) => ({
                     room,
                     equipment: (
                       details[i]?.equipment ?? []
                     ).map((eq) => ({
-                      equipmentName: eq.equipmentName,
+                      equipmentName:
+                        eq.equipmentName,
                       status: eq.status,
                     })),
                     schedule: [],
                     expanded: false,
                     loading: false,
-                  }),
-                );
+                  }));
                 this.rooms.set(cards);
                 this.loading.set(false);
               },
@@ -242,15 +259,14 @@ export class FindRoomsComponent {
           },
           error: () => {
             // If details fail, still show rooms without equipment
-            const cards: RoomCardData[] = rooms.map(
-              (room) => ({
+            const cards: RoomCardData[] =
+              rooms.map((room) => ({
                 room,
                 equipment: [],
                 schedule: [],
                 expanded: false,
                 loading: false,
-              }),
-            );
+              }));
             this.rooms.set(cards);
             this.loading.set(false);
           },
@@ -263,10 +279,13 @@ export class FindRoomsComponent {
   }
 
   toggleExpand(index: number) {
-    const filteredCard = this.filteredRooms()[index];
+    const filteredCard =
+      this.filteredRooms()[index];
     const allCards = this.rooms();
     const realIndex = allCards.findIndex(
-      (c) => c.room.roomId === filteredCard.room.roomId,
+      (c) =>
+        c.room.roomId ===
+        filteredCard.room.roomId,
     );
 
     if (realIndex >= 0) {
@@ -327,17 +346,22 @@ export class FindRoomsComponent {
    */
   getScheduleByDate(
     bookings: ScheduleBooking[],
-  ): { date: string; bookings: ScheduleBooking[] }[] {
-    const map = new Map<string, ScheduleBooking[]>();
+  ): {
+    date: string;
+    bookings: ScheduleBooking[];
+  }[] {
+    const map = new Map<
+      string,
+      ScheduleBooking[]
+    >();
     for (const b of bookings) {
-      const date = new Date(b.startTime).toLocaleDateString(
-        'en-US',
-        {
-          weekday: 'short',
-          month: 'short',
-          day: 'numeric',
-        },
-      );
+      const date = new Date(
+        b.startTime,
+      ).toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+      });
       const existing = map.get(date) ?? [];
       existing.push(b);
       map.set(date, existing);
@@ -351,11 +375,14 @@ export class FindRoomsComponent {
    * Format a time string for display (e.g., "9:00 AM").
    */
   formatTime(timeStr: string): string {
-    return new Date(timeStr).toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    });
+    return new Date(timeStr).toLocaleTimeString(
+      'en-US',
+      {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      },
+    );
   }
 
   /**

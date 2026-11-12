@@ -47,8 +47,8 @@
         <div>
           <h2>Email Notifications</h2>
           <p>
-            Choose which email notifications you'd like to
-            receive.
+            Choose which email notifications you'd
+            like to receive.
           </p>
         </div>
       </div>
@@ -61,7 +61,9 @@
         ) {
           <div
             class="notif-row"
-            [style.animation-delay]="i * 0.05 + 's'"
+            [style.animation-delay]="
+              i * 0.05 + 's'
+            "
           >
             <div class="notif-info">
               <div class="notif-label">
@@ -77,10 +79,16 @@
                 [class.active]="
                   isPreferenceEnabled(pref.key)
                 "
-                (click)="togglePreference(pref.key)"
-                [attr.aria-label]="'Toggle ' + pref.label"
+                (click)="
+                  togglePreference(pref.key)
+                "
+                [attr.aria-label]="
+                  'Toggle ' + pref.label
+                "
               >
-                <span class="toggle-slider"></span>
+                <span
+                  class="toggle-slider"
+                ></span>
               </button>
             </div>
           </div>

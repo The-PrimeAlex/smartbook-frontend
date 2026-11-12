@@ -4,7 +4,10 @@ import { Component, input } from '@angular/core';
   selector: 'app-form-field',
   standalone: true,
   template: `
-    <div class="form-field" [class.invalid]="invalid()">
+    <div
+      class="form-field"
+      [class.invalid]="invalid()"
+    >
       @if (label()) {
         <label [for]="id()">
           {{ label() }}
@@ -15,7 +18,10 @@ import { Component, input } from '@angular/core';
       }
       <ng-content></ng-content>
       @if (invalid() && errorMessage()) {
-        <p class="field-error" [id]="id() + '-error'">
+        <p
+          class="field-error"
+          [id]="id() + '-error'"
+        >
           {{ errorMessage() }}
         </p>
       }

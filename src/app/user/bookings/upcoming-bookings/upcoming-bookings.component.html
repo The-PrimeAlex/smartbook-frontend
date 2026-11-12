@@ -14,7 +14,9 @@
         [icon]="LucideRefreshCw"
         [size]="14"
       ></app-icon>
-      {{ loading() ? 'Refreshing...' : 'Refresh' }}
+      {{
+        loading() ? 'Refreshing...' : 'Refresh'
+      }}
     </button>
   </app-page-banner>
 
@@ -33,7 +35,10 @@
   }
 
   @if (successMessage()) {
-    <div class="alert alert-success" role="status">
+    <div
+      class="alert alert-success"
+      role="status"
+    >
       <span>{{ successMessage() }}</span>
       <button
         type="button"
@@ -54,7 +59,9 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title">Booking Summary</span>
+      <span class="stats-toggle-title"
+        >Booking Summary</span
+      >
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -62,7 +69,10 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+    <div
+      class="stats-row-wrapper"
+      [class.collapsed]="statsCollapsed()"
+    >
       <section
         class="stats-grid"
         aria-label="Booking statistics"
@@ -73,7 +83,9 @@
           [iconColor]="'var(--info,#3b82f6)'"
           delay="0s"
         >
-          <span stat-value>{{ totalCount() }}</span>
+          <span stat-value>{{
+            totalCount()
+          }}</span>
           <span stat-label>Upcoming</span>
         </app-stat-card>
         <app-stat-card
@@ -82,7 +94,9 @@
           [iconColor]="'var(--warning,#f59e0b)'"
           delay="0.05s"
         >
-          <span stat-value>{{ pendingCount() }}</span>
+          <span stat-value>{{
+            pendingCount()
+          }}</span>
           <span stat-label>Pending</span>
         </app-stat-card>
         <app-stat-card
@@ -91,7 +105,9 @@
           [iconColor]="'var(--success,#22c55e)'"
           delay="0.1s"
         >
-          <span stat-value>{{ confirmedCount() }}</span>
+          <span stat-value>{{
+            confirmedCount()
+          }}</span>
           <span stat-label>Confirmed</span>
         </app-stat-card>
         <app-stat-card
@@ -100,7 +116,9 @@
           [iconColor]="'var(--teal,#14b8a6)'"
           delay="0.15s"
         >
-          <span stat-value>{{ checkedInCount() }}</span>
+          <span stat-value>{{
+            checkedInCount()
+          }}</span>
           <span stat-label>Checked In</span>
         </app-stat-card>
       </section>
@@ -112,8 +130,8 @@
       <div>
         <h2>Your upcoming reservations</h2>
         <p>
-          Bookings that are pending, confirmed, or currently
-          checked in.
+          Bookings that are pending, confirmed, or
+          currently checked in.
         </p>
       </div>
 
@@ -151,23 +169,32 @@
           <article class="booking-card">
             <div class="booking-main">
               <div class="booking-title-row">
-                <div class="room-icon" aria-hidden="true">
+                <div
+                  class="room-icon"
+                  aria-hidden="true"
+                >
                   ⌂
                 </div>
 
                 <div class="booking-title">
                   <h3>{{ booking.roomName }}</h3>
                   <p class="booking-reference">
-                    Booking #{{ booking.bookingId }}
+                    Booking #{{
+                      booking.bookingId
+                    }}
                   </p>
                 </div>
 
                 <app-status-badge
                   [label]="
-                    statusLabel(booking.bookingStatus)
+                    statusLabel(
+                      booking.bookingStatus
+                    )
                   "
                   [variant]="
-                    getBadgeVariant(booking.bookingStatus)
+                    getBadgeVariant(
+                      booking.bookingStatus
+                    )
                   "
                 ></app-status-badge>
               </div>
@@ -178,14 +205,22 @@
                     >Start time</span
                   >
                   <span class="detail-value">
-                    {{ booking.startTime | date: 'medium' }}
+                    {{
+                      booking.startTime
+                        | date: 'medium'
+                    }}
                   </span>
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label">End time</span>
+                  <span class="detail-label"
+                    >End time</span
+                  >
                   <span class="detail-value">
-                    {{ booking.endTime | date: 'medium' }}
+                    {{
+                      booking.endTime
+                        | date: 'medium'
+                    }}
                   </span>
                 </div>
 
@@ -195,10 +230,12 @@
                   >
                   <span class="detail-value">
                     @if (
-                      booking.bookedHourlyRate !== null
+                      booking.bookedHourlyRate !==
+                      null
                     ) {
                       {{
-                        booking.bookedHourlyRate | currency
+                        booking.bookedHourlyRate
+                          | currency
                       }}
                     } @else {
                       Not specified
@@ -217,7 +254,9 @@
               </div>
 
               <div class="purpose-block">
-                <span class="detail-label">Purpose</span>
+                <span class="detail-label"
+                  >Purpose</span
+                >
                 <p>{{ booking.purpose }}</p>
               </div>
             </div>
@@ -228,11 +267,19 @@
                   type="button"
                   class="btn btn-success"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
-                  (click)="confirmBooking(booking)"
+                  (click)="
+                    confirmBooking(booking)
+                  "
                 >
-                  @if (isProcessing(booking.bookingId)) {
+                  @if (
+                    isProcessing(
+                      booking.bookingId
+                    )
+                  ) {
                     Processing...
                   } @else {
                     Confirm Booking
@@ -245,11 +292,19 @@
                   type="button"
                   class="btn btn-success"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
-                  (click)="checkInBooking(booking)"
+                  (click)="
+                    checkInBooking(booking)
+                  "
                 >
-                  @if (isProcessing(booking.bookingId)) {
+                  @if (
+                    isProcessing(
+                      booking.bookingId
+                    )
+                  ) {
                     Processing...
                   } @else {
                     Check In
@@ -262,11 +317,19 @@
                   type="button"
                   class="btn btn-primary"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
-                  (click)="checkOutBooking(booking)"
+                  (click)="
+                    checkOutBooking(booking)
+                  "
                 >
-                  @if (isProcessing(booking.bookingId)) {
+                  @if (
+                    isProcessing(
+                      booking.bookingId
+                    )
+                  ) {
                     Checking out...
                   } @else {
                     Check Out
@@ -279,7 +342,9 @@
                   type="button"
                   class="btn btn-danger-outline"
                   [disabled]="
-                    isProcessing(booking.bookingId)
+                    isProcessing(
+                      booking.bookingId
+                    )
                   "
                   (click)="cancelBooking(booking)"
                 >

@@ -92,9 +92,10 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: transform var(--transition-smooth),
-  box-shadow var(--transition-smooth),
-  border-color var(--transition-smooth);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
   animation: fadeUp 400ms ease both;
 }
 .quick-link-card:hover {
@@ -120,7 +121,7 @@
   color: var(--text-primary);
   text-align: center;
 }
- /*Dashboard Columns*/
+/*Dashboard Columns*/
 .dashboard-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -146,9 +147,10 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   animation: fadeUp 400ms ease both;
-  transition: transform var(--transition-smooth),
-  box-shadow var(--transition-smooth),
-  border-color var(--transition-smooth);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
 }
 .live-status-card:hover,
 .booking-card:hover {
@@ -299,9 +301,10 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   animation: fadeUp 400ms ease both;
-  transition: transform var(--transition-smooth),
-  box-shadow var(--transition-smooth),
-  border-color var(--transition-smooth);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
 }
 
 .breakdown-card:hover,
@@ -384,8 +387,9 @@
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition-smooth),
-  transform var(--transition-smooth);
+  transition:
+    background var(--transition-smooth),
+    transform var(--transition-smooth);
 }
 
 .empty-action:hover {
@@ -488,7 +492,9 @@
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .stats-toggle:hover {
@@ -518,7 +524,9 @@
 
 .stats-row-wrapper {
   overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.25s ease;
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease;
   max-height: 800px;
   opacity: 1;
 }

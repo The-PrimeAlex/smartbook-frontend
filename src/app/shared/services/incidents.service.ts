@@ -2,18 +2,25 @@ import {
   HttpClient,
   HttpParams,
 } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-
 export interface IncidentType {
-  value: 'EQUIPMENT_DAMAGE' | 'ROOM_DAMAGE' | 'OTHER';
+  value:
+    'EQUIPMENT_DAMAGE' | 'ROOM_DAMAGE' | 'OTHER';
   label: string;
 }
 
 export interface IncidentStatus {
-  value: 'REPORTED' | 'VERIFIED' | 'REJECTED' | 'CHARGED';
+  value:
+    | 'REPORTED'
+    | 'VERIFIED'
+    | 'REJECTED'
+    | 'CHARGED';
   label: string;
 }
 
@@ -57,8 +64,12 @@ export class IncidentsService {
     );
   }
 
-  getMyIncidents(): Observable<IncidentResponse[]> {
-    return this.http.get<IncidentResponse[]>(this.baseUrl);
+  getMyIncidents(): Observable<
+    IncidentResponse[]
+  > {
+    return this.http.get<IncidentResponse[]>(
+      this.baseUrl,
+    );
   }
 
   // Admin methods

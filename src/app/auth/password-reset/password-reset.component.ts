@@ -34,7 +34,9 @@ import { IconComponent } from '../../shared/ui';
 function passwordsMatchValidator(
   control: AbstractControl,
 ): ValidationErrors | null {
-  const newPassword = control.get('newPassword')?.value;
+  const newPassword = control.get(
+    'newPassword',
+  )?.value;
   const confirmPassword = control.get(
     'confirmPassword',
   )?.value;
@@ -51,20 +53,28 @@ function passwordsMatchValidator(
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, IconComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    IconComponent,
+  ],
   templateUrl: './password-reset.component.html',
   styleUrl: './password-reset.component.css',
 })
 export class ResetPasswordComponent {
-  private readonly formBuilder = inject(FormBuilder);
-  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly formBuilder =
+    inject(FormBuilder);
+  private readonly activatedRoute = inject(
+    ActivatedRoute,
+  );
   private readonly passwordResetService = inject(
     PasswordResetService,
   );
   private readonly changeDetectorRef = inject(
     ChangeDetectorRef,
   );
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly destroyRef =
+    inject(DestroyRef);
 
   readonly LucideArrowLeft = LucideArrowLeft;
   readonly LucideArrowRight = LucideArrowRight;
@@ -87,7 +97,10 @@ export class ResetPasswordComponent {
             Validators.pattern(/[0-9]/),
           ],
         ],
-        confirmPassword: ['', [Validators.required]],
+        confirmPassword: [
+          '',
+          [Validators.required],
+        ],
       },
       {
         validators: passwordsMatchValidator,
@@ -111,17 +124,20 @@ export class ResetPasswordComponent {
   }
 
   get newPasswordControl() {
-    return this.resetPasswordForm.controls.newPassword;
+    return this.resetPasswordForm.controls
+      .newPassword;
   }
 
   get confirmPasswordControl() {
-    return this.resetPasswordForm.controls.confirmPassword;
+    return this.resetPasswordForm.controls
+      .confirmPassword;
   }
 
   get newPasswordHasError(): boolean {
     return (
       this.newPasswordControl.invalid &&
-      (this.newPasswordControl.touched || this.submitted)
+      (this.newPasswordControl.touched ||
+        this.submitted)
     );
   }
 
@@ -137,28 +153,38 @@ export class ResetPasswordComponent {
   }
 
   get passwordsMatch(): boolean {
-    const confirmation = this.confirmPasswordControl.value;
+    const confirmation =
+      this.confirmPasswordControl.value;
 
     return (
       confirmation.length > 0 &&
-      this.newPasswordControl.value === confirmation
+      this.newPasswordControl.value ===
+        confirmation
     );
   }
 
   get passwordLengthValid(): boolean {
-    return this.newPasswordControl.value.length >= 12;
+    return (
+      this.newPasswordControl.value.length >= 12
+    );
   }
 
   get passwordHasLowercase(): boolean {
-    return /[a-z]/.test(this.newPasswordControl.value);
+    return /[a-z]/.test(
+      this.newPasswordControl.value,
+    );
   }
 
   get passwordHasUppercase(): boolean {
-    return /[A-Z]/.test(this.newPasswordControl.value);
+    return /[A-Z]/.test(
+      this.newPasswordControl.value,
+    );
   }
 
   get passwordHasNumber(): boolean {
-    return /[0-9]/.test(this.newPasswordControl.value);
+    return /[0-9]/.test(
+      this.newPasswordControl.value,
+    );
   }
 
   toggleNewPasswordVisibility(): void {
@@ -166,7 +192,8 @@ export class ResetPasswordComponent {
   }
 
   toggleConfirmPasswordVisibility(): void {
-    this.showConfirmPassword = !this.showConfirmPassword;
+    this.showConfirmPassword =
+      !this.showConfirmPassword;
   }
 
   onSubmit(): void {

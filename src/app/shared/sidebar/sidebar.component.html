@@ -1,10 +1,14 @@
-<!-- Mobile overlay backdrop -->
-<div class="sidebar-overlay" [class.mobile-open]="mobileOpen()" (click)="mobileOpen.set(false)"></div>
-
-<aside class="sidebar" [class.collapsed]="collapsed() && !mobileOpen()" [class.mobile-open]="mobileOpen()">
+<aside
+  class="sidebar"
+  [class.collapsed]="collapsed() && !mobileOpen()"
+>
   <!-- Brand and collapse control -->
   <div class="brand">
-    <a class="brand-link" routerLink="/dashboard" (click)="openSidebarOnClick()">
+    <a
+      class="brand-link"
+      routerLink="/dashboard"
+      (click)="openSidebarOnClick()"
+    >
       <span class="brand-mark">B</span>
 
       <span class="brand-copy">
@@ -20,7 +24,9 @@
       class="collapse-button"
       (click)="toggleSidebar()"
       [attr.aria-label]="
-        collapsed() ? 'Expand sidebar' : 'Collapse sidebar'
+        collapsed()
+          ? 'Expand sidebar'
+          : 'Collapse sidebar'
       "
       [attr.data-tooltip]="
         collapsed() ? 'Expand sidebar' : null
@@ -31,12 +37,23 @@
   </div>
 
   <!-- Navigation -->
-  <nav class="navigation" aria-label="Main navigation">
-    @for (section of menu(); track section.label) {
+  <nav
+    class="navigation"
+    aria-label="Main navigation"
+  >
+    @for (
+      section of menu();
+      track section.label
+    ) {
       <div class="menu-section">
-        <p class="section-label">{{ section.label }}</p>
+        <p class="section-label">
+          {{ section.label }}
+        </p>
 
-        @for (item of section.items; track item.label) {
+        @for (
+          item of section.items;
+          track item.label
+        ) {
           <div class="menu-entry">
             @if (hasChildren(item)) {
               <!-- Parent menu item -->
@@ -79,7 +96,8 @@
               <div
                 class="submenu-wrapper"
                 [class.submenu-open]="
-                  isExpanded(item.label) && (!collapsed() || mobileOpen())
+                  isExpanded(item.label) &&
+                  (!collapsed() || mobileOpen())
                 "
               >
                 <div class="submenu">
@@ -89,16 +107,22 @@
                   ) {
                     <a
                       class="submenu-item"
-                      [routerLink]="child.route ?? null"
+                      [routerLink]="
+                        child.route ?? null
+                      "
                       routerLinkActive="submenu-item-active"
                       [routerLinkActiveOptions]="{
                         exact: true,
                       }"
-                      (click)="openSidebarOnClick()"
+                      (click)="
+                        openSidebarOnClick()
+                      "
                     >
                       @if (iconMap[child.icon]) {
                         <app-icon
-                          [icon]="iconMap[child.icon]"
+                          [icon]="
+                            iconMap[child.icon]
+                          "
                           [size]="16"
                         ></app-icon>
                       }
@@ -116,7 +140,9 @@
                 class="menu-item"
                 [routerLink]="item.route ?? null"
                 routerLinkActive="menu-item-active"
-                [routerLinkActiveOptions]="{ exact: true }"
+                [routerLinkActiveOptions]="{
+                  exact: true,
+                }"
                 [attr.data-tooltip]="
                   collapsed() ? item.label : null
                 "
@@ -143,13 +169,17 @@
   <!-- Account and sign out -->
   <footer class="sidebar-footer">
     <div class="account-summary">
-      <span class="account-avatar">{{ initials() }}</span>
+      <span class="account-avatar">{{
+        initials()
+      }}</span>
 
       <div class="account-details">
         <strong class="account-name">{{
           fullName()
         }}</strong>
-        <span class="account-email">{{ email() }}</span>
+        <span class="account-email">{{
+          email()
+        }}</span>
         <small class="account-role">{{
           subtitle()
         }}</small>
@@ -160,7 +190,9 @@
       type="button"
       class="logout-button"
       (click)="signOut()"
-      [attr.aria-label]="collapsed() ? 'Sign out' : null"
+      [attr.aria-label]="
+        collapsed() ? 'Sign out' : null
+      "
     >
       <span class="logout-icon">
         <app-icon

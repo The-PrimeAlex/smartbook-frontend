@@ -1,4 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -15,7 +18,6 @@ import {
 } from '../models/settings.model';
 import { environment } from '../../../environments/environment';
 
-
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   private readonly http = inject(HttpClient);
@@ -31,11 +33,15 @@ export class SettingsService {
     category: string,
   ): Observable<Setting[]> {
     return this.http
-      .get<Setting[]>(`${this.apiUrl}/category/${category}`)
+      .get<Setting[]>(
+        `${this.apiUrl}/category/${category}`,
+      )
       .pipe(catchError(this.handleError));
   }
 
-  getSettingValue(key: string): Observable<string | null> {
+  getSettingValue(
+    key: string,
+  ): Observable<string | null> {
     return this.http
       .get<{ key: string; value: string | null }>(
         `${this.apiUrl}/value/${key}`,
@@ -58,16 +64,21 @@ export class SettingsService {
     updates: UpdateSettingRequest[],
   ): Observable<Setting[]> {
     return this.http
-      .put<Setting[]>(`${this.apiUrl}/bulk`, updates)
+      .put<Setting[]>(
+        `${this.apiUrl}/bulk`,
+        updates,
+      )
       .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {
-    let message = 'Something went wrong. Please try again.';
+    let message =
+      'Something went wrong. Please try again.';
     if (error.status === 0) {
       message = 'Could not connect to the API.';
     } else if (error.status === 400) {
-      message = 'Invalid request. Please check your input.';
+      message =
+        'Invalid request. Please check your input.';
     } else if (
       error.status === 401 ||
       error.status === 403

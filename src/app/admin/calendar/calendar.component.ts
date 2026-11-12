@@ -35,7 +35,8 @@ import {
 } from './util/calendar-date-utils';
 import { EmptyStateComponent } from '../../shared/ui';
 
-type BookingStatus = 'Confirmed' | 'Pending' | 'Cancelled';
+type BookingStatus =
+  'Confirmed' | 'Pending' | 'Cancelled';
 type RoomType =
   | 'All Rooms'
   | 'Boardroom'
@@ -59,8 +60,9 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
-  private readonly calendarService =
-    inject(CalendarService);
+  private readonly calendarService = inject(
+    CalendarService,
+  );
 
   @Input() isAdmin = false;
   @Input() customerId = '';
@@ -71,13 +73,15 @@ export class CalendarComponent implements OnInit {
 
   readonly googleEventsLoading = signal(false);
   readonly googleEventsError = signal('');
-  readonly googleEvents = signal<CalendarBooking[]>([]);
+  readonly googleEvents = signal<
+    CalendarBooking[]
+  >([]);
 
   readonly bookingsLoading = signal(false);
   readonly bookingsError = signal('');
-  readonly smartBookBookings = signal<CalendarBooking[]>(
-    [],
-  );
+  readonly smartBookBookings = signal<
+    CalendarBooking[]
+  >([]);
 
   readonly googleSyncing = signal(false);
   readonly googleSyncMessage = signal('');
@@ -94,25 +98,33 @@ export class CalendarComponent implements OnInit {
     'Video Suite',
   ];
 
-  readonly selectedDate = signal(startOfDay(new Date()));
-  readonly selectedRoomType = signal<RoomType>('All Rooms');
+  readonly selectedDate = signal(
+    startOfDay(new Date()),
+  );
+  readonly selectedRoomType =
+    signal<RoomType>('All Rooms');
 
-  readonly bookings = computed<CalendarBooking[]>(() => {
-    const combined = [
-      ...this.smartBookBookings(),
-      ...this.googleEvents(),
-    ];
+  readonly bookings = computed<CalendarBooking[]>(
+    () => {
+      const combined = [
+        ...this.smartBookBookings(),
+        ...this.googleEvents(),
+      ];
 
-    return combined.sort((a, b) => {
-      const dateComparison = a.date.localeCompare(b.date);
+      return combined.sort((a, b) => {
+        const dateComparison =
+          a.date.localeCompare(b.date);
 
-      if (dateComparison !== 0) {
-        return dateComparison;
-      }
+        if (dateComparison !== 0) {
+          return dateComparison;
+        }
 
-      return a.startTime.localeCompare(b.startTime);
-    });
-  });
+        return a.startTime.localeCompare(
+          b.startTime,
+        );
+      });
+    },
+  );
 
   readonly visibleBookings = computed(() => {
     const roomType = this.selectedRoomType();
@@ -125,57 +137,79 @@ export class CalendarComponent implements OnInit {
     });
   });
 
-  readonly monthDays = computed<CalendarDay[]>(() => {
-    const selected = this.selectedDate();
-    const firstOfMonth = new Date(
-      selected.getFullYear(),
-      selected.getMonth(),
-      1,
-    );
+  readonly monthDays = computed<CalendarDay[]>(
+    () => {
+      const selected = this.selectedDate();
+      const firstOfMonth = new Date(
+        selected.getFullYear(),
+        selected.getMonth(),
+        1,
+      );
 
-    const gridStart = new Date(firstOfMonth);
-    const weekday = (gridStart.getDay() + 6) % 7;
+      const gridStart = new Date(firstOfMonth);
+      const weekday =
+        (gridStart.getDay() + 6) % 7;
 
-    gridStart.setDate(gridStart.getDate() - weekday);
+      gridStart.setDate(
+        gridStart.getDate() - weekday,
+      );
 
-    return Array.from({ length: 42 }, (_, index) => {
-      const date = new Date(gridStart);
-      date.setDate(gridStart.getDate() + index);
+      return Array.from(
+        { length: 42 },
+        (_, index) => {
+          const date = new Date(gridStart);
+          date.setDate(
+            gridStart.getDate() + index,
+          );
 
-      return {
-        date,
-        key: dateKey(date),
-        isCurrentMonth:
-          date.getMonth() === selected.getMonth(),
-        isToday: dateKey(date) === dateKey(new Date()),
-        isSelected: dateKey(date) === dateKey(selected),
-      };
-    });
-  });
+          return {
+            date,
+            key: dateKey(date),
+            isCurrentMonth:
+              date.getMonth() ===
+              selected.getMonth(),
+            isToday:
+              dateKey(date) ===
+              dateKey(new Date()),
+            isSelected:
+              dateKey(date) === dateKey(selected),
+          };
+        },
+      );
+    },
+  );
 
-  readonly weekDays = computed<CalendarDay[]>(() => {
-    const selected = this.selectedDate();
-    const start = startOfDay(selected);
-    const weekday = (start.getDay() + 6) % 7;
+  readonly weekDays = computed<CalendarDay[]>(
+    () => {
+      const selected = this.selectedDate();
+      const start = startOfDay(selected);
+      const weekday = (start.getDay() + 6) % 7;
 
-    start.setDate(start.getDate() - weekday);
+      start.setDate(start.getDate() - weekday);
 
-    return Array.from({ length: 7 }, (_, index) => {
-      const date = new Date(start);
-      date.setDate(start.getDate() + index);
+      return Array.from(
+        { length: 7 },
+        (_, index) => {
+          const date = new Date(start);
+          date.setDate(start.getDate() + index);
 
-      return {
-        date,
-        key: dateKey(date),
-        isCurrentMonth:
-          date.getMonth() ===
-          this.selectedDate().getMonth(),
-        isToday: dateKey(date) === dateKey(new Date()),
-        isSelected:
-          dateKey(date) === dateKey(this.selectedDate()),
-      };
-    });
-  });
+          return {
+            date,
+            key: dateKey(date),
+            isCurrentMonth:
+              date.getMonth() ===
+              this.selectedDate().getMonth(),
+            isToday:
+              dateKey(date) ===
+              dateKey(new Date()),
+            isSelected:
+              dateKey(date) ===
+              dateKey(this.selectedDate()),
+          };
+        },
+      );
+    },
+  );
 
   readonly dayBookings = computed(() => {
     const key = dateKey(this.selectedDate());
@@ -186,10 +220,13 @@ export class CalendarComponent implements OnInit {
   });
 
   readonly monthTitle = computed(() =>
-    this.selectedDate().toLocaleDateString(undefined, {
-      month: 'long',
-      year: 'numeric',
-    }),
+    this.selectedDate().toLocaleDateString(
+      undefined,
+      {
+        month: 'long',
+        year: 'numeric',
+      },
+    ),
   );
 
   readonly weekTitle = computed(() => {
@@ -202,27 +239,36 @@ export class CalendarComponent implements OnInit {
     const first = days[0].date;
     const last = days[days.length - 1].date;
 
-    const firstLabel = first.toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-    });
+    const firstLabel = first.toLocaleDateString(
+      undefined,
+      {
+        month: 'short',
+        day: 'numeric',
+      },
+    );
 
-    const lastLabel = last.toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    const lastLabel = last.toLocaleDateString(
+      undefined,
+      {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      },
+    );
 
     return `${firstLabel} – ${lastLabel}`;
   });
 
   readonly selectedDateTitle = computed(() =>
-    this.selectedDate().toLocaleDateString(undefined, {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    }),
+    this.selectedDate().toLocaleDateString(
+      undefined,
+      {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      },
+    ),
   );
 
   readonly totalBookings = computed(
@@ -240,7 +286,8 @@ export class CalendarComponent implements OnInit {
   readonly confirmedBookings = computed(
     () =>
       this.visibleBookings().filter(
-        (booking) => booking.status === 'Confirmed',
+        (booking) =>
+          booking.status === 'Confirmed',
       ).length,
   );
 
@@ -262,17 +309,27 @@ export class CalendarComponent implements OnInit {
 
     this.calendarService
       .getMyBookings()
-      .pipe(finalize(() => this.bookingsLoading.set(false)))
+      .pipe(
+        finalize(() =>
+          this.bookingsLoading.set(false),
+        ),
+      )
       .subscribe({
         next: (response: unknown) => {
-          const rows = extractBookingArray(response);
+          const rows =
+            extractBookingArray(response);
           this.smartBookBookings.set(
             rows
               .map((booking, index) =>
-                mapSmartBookBooking(booking, index),
+                mapSmartBookBooking(
+                  booking,
+                  index,
+                ),
               )
               .filter(
-                (booking): booking is CalendarBooking =>
+                (
+                  booking,
+                ): booking is CalendarBooking =>
                   booking !== null,
               ),
           );
@@ -310,14 +367,20 @@ export class CalendarComponent implements OnInit {
         toDate.toISOString(),
       )
       .pipe(
-        finalize(() => this.googleEventsLoading.set(false)),
+        finalize(() =>
+          this.googleEventsLoading.set(false),
+        ),
       )
       .subscribe({
-        next: (events: GoogleCalendarEventDto[]) => {
+        next: (
+          events: GoogleCalendarEventDto[],
+        ) => {
           const mapped = (events ?? [])
             .map((event) => mapGoogleEvent(event))
             .filter(
-              (booking): booking is CalendarBooking =>
+              (
+                booking,
+              ): booking is CalendarBooking =>
                 booking !== null,
             );
 
@@ -345,7 +408,9 @@ export class CalendarComponent implements OnInit {
     this.calendarService
       .connectGoogleCalendar()
       .pipe(
-        finalize(() => this.googleConnecting.set(false)),
+        finalize(() =>
+          this.googleConnecting.set(false),
+        ),
       )
       .subscribe({
         next: (response) => {
@@ -356,7 +421,9 @@ export class CalendarComponent implements OnInit {
             return;
           }
 
-          window.location.assign(response.authorizationUrl);
+          window.location.assign(
+            response.authorizationUrl,
+          );
         },
         error: (error: unknown) => {
           this.googleConnectionError.set(
@@ -376,7 +443,11 @@ export class CalendarComponent implements OnInit {
 
     this.calendarService
       .syncBookings()
-      .pipe(finalize(() => this.googleSyncing.set(false)))
+      .pipe(
+        finalize(() =>
+          this.googleSyncing.set(false),
+        ),
+      )
       .subscribe({
         next: (result: BookingSyncResult) => {
           this.googleSyncMessage.set(
@@ -404,15 +475,26 @@ export class CalendarComponent implements OnInit {
 
     this.calendarService
       .disconnectGoogleCalendar()
-      .pipe(finalize(() => this.googleDisconnecting.set(false)))
+      .pipe(
+        finalize(() =>
+          this.googleDisconnecting.set(false),
+        ),
+      )
       .subscribe({
         next: (response) => {
           this.googleDisconnectMessage.set(
-            response?.message ?? 'Google Calendar disconnected.',
+            response?.message ??
+              'Google Calendar disconnected.',
           );
           this.googleEvents.set([]);
           this.googleEventsError.set('');
-          setTimeout(() => this.googleDisconnectMessage.set(''), 5000);
+          setTimeout(
+            () =>
+              this.googleDisconnectMessage.set(
+                '',
+              ),
+            5000,
+          );
         },
         error: (error: unknown) => {
           this.googleDisconnectError.set(
@@ -476,7 +558,10 @@ export class CalendarComponent implements OnInit {
     return `${booking.source}-${booking.id}`;
   }
 
-  trackDay(_index: number, day: CalendarDay): string {
+  trackDay(
+    _index: number,
+    day: CalendarDay,
+  ): string {
     return day.key;
   }
 

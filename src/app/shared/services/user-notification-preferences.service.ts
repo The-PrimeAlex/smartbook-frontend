@@ -1,8 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  inject,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
 
 export interface UserNotificationPreferences {
   booking_confirmation: boolean;
@@ -15,8 +17,7 @@ export interface UserNotificationPreferences {
 @Injectable({ providedIn: 'root' })
 export class UserNotificationPreferencesService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl =
-    `${environment.apiUrl}/notifications/me/preferences`;
+  private readonly baseUrl = `${environment.apiUrl}/notifications/me/preferences`;
 
   /**
    * Get the authenticated user's notification preferences.
@@ -29,12 +30,14 @@ export class UserNotificationPreferencesService {
         map((raw) => ({
           booking_confirmation:
             raw['booking_confirmation'] ?? true,
-          send_reminders: raw['send_reminders'] ?? true,
+          send_reminders:
+            raw['send_reminders'] ?? true,
           noshow_notification:
             raw['noshow_notification'] ?? true,
           overrun_notification:
             raw['overrun_notification'] ?? true,
-          invoice_email: raw['invoice_email'] ?? true,
+          invoice_email:
+            raw['invoice_email'] ?? true,
         })),
       );
   }
@@ -49,7 +52,9 @@ export class UserNotificationPreferencesService {
     return this.http.patch<void>(
       this.baseUrl,
       {},
-      { params: { key, enabled: String(enabled) } },
+      {
+        params: { key, enabled: String(enabled) },
+      },
     );
   }
 

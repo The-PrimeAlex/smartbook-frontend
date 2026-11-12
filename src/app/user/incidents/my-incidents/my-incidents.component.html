@@ -51,25 +51,41 @@
   <!-- Loading State -->
   @if (loading()) {
     <div class="loading-container">
-      @for (i of [1, 2, 3]; track i; let idx = $index) {
+      @for (
+        i of [1, 2, 3];
+        track i;
+        let idx = $index
+      ) {
         <div
           class="skeleton-card"
-          [style.animation-delay]="idx * 0.1 + 's'"
+          [style.animation-delay]="
+            idx * 0.1 + 's'
+          "
         >
           <div class="skeleton-header">
-            <div class="skeleton-line skeleton-type"></div>
+            <div
+              class="skeleton-line skeleton-type"
+            ></div>
             <div
               class="skeleton-line skeleton-status"
             ></div>
           </div>
-          <div class="skeleton-line skeleton-desc"></div>
-          <div class="skeleton-line skeleton-room"></div>
-          <div class="skeleton-line skeleton-date"></div>
+          <div
+            class="skeleton-line skeleton-desc"
+          ></div>
+          <div
+            class="skeleton-line skeleton-room"
+          ></div>
+          <div
+            class="skeleton-line skeleton-date"
+          ></div>
         </div>
       }
     </div>
   }
-  @if (!loading() && filteredIncidents.length === 0) {
+  @if (
+    !loading() && filteredIncidents.length === 0
+  ) {
     @if (filterStatus() !== 'all') {
       <app-empty-state
         [icon]="LucideTriangleAlert"
@@ -100,7 +116,9 @@
   }
 
   <!-- Incidents List -->
-  @if (!loading() && filteredIncidents.length > 0) {
+  @if (
+    !loading() && filteredIncidents.length > 0
+  ) {
     <div class="incidents-list">
       @for (
         incident of filteredIncidents;
@@ -109,19 +127,27 @@
       ) {
         <div
           class="incident-card"
-          [style.animation-delay]="idx * 0.05 + 's'"
+          [style.animation-delay]="
+            idx * 0.05 + 's'
+          "
         >
           <div class="card-header">
             <div class="card-header-left">
               <span class="incident-type-pill">{{
-                getTypeLabel(incident.incidentType)
+                getTypeLabel(
+                  incident.incidentType
+                )
               }}</span>
               <app-status-badge
                 [label]="
-                  getStatusLabel(incident.incidentStatus)
+                  getStatusLabel(
+                    incident.incidentStatus
+                  )
                 "
                 [variant]="
-                  getBadgeVariant(incident.incidentStatus)
+                  getBadgeVariant(
+                    incident.incidentStatus
+                  )
                 "
               ></app-status-badge>
             </div>
@@ -130,16 +156,23 @@
             <p class="incident-desc">
               {{ incident.description }}
             </p>
-            @if (incident.incidentStatus === 'VERIFIED') {
+            @if (
+              incident.incidentStatus ===
+              'VERIFIED'
+            ) {
               <div
                 class="charge-info {{
-                  isCharged(incident) ? 'charged' : 'waived'
+                  isCharged(incident)
+                    ? 'charged'
+                    : 'waived'
                 }}"
               >
                 @if (isCharged(incident)) {
                   <span class="charge-label"
                     >Charged: KES
-                    {{ incident.chargeAmount }}</span
+                    {{
+                      incident.chargeAmount
+                    }}</span
                   >
                 } @else {
                   <span class="charge-label"
@@ -161,7 +194,8 @@
                 [size]="24"
               ></app-icon>
               <span>{{
-                incident.roomName || 'Unknown Room'
+                incident.roomName ||
+                  'Unknown Room'
               }}</span>
             </div>
             <div class="meta-pill">

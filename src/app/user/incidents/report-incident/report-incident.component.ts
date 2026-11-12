@@ -1,4 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { IconComponent } from '../../../shared/ui';
 import { Router } from '@angular/router';
 import { BookingService } from '../../../shared/services/booking.service';
@@ -37,7 +41,10 @@ interface CheckedInRoom {
 }
 
 const INCIDENT_TYPES = [
-  { value: 'EQUIPMENT_DAMAGE', label: 'Equipment Damage' },
+  {
+    value: 'EQUIPMENT_DAMAGE',
+    label: 'Equipment Damage',
+  },
   { value: 'ROOM_DAMAGE', label: 'Room Damage' },
   { value: 'OTHER', label: 'Other' },
 ];
@@ -60,7 +67,9 @@ const INCIDENT_TYPES = [
 export class ReportIncidentComponent implements OnInit {
   readonly incidentTypes = INCIDENT_TYPES;
   checkedInRooms = signal<CheckedInRoom[]>([]);
-  selectedRoom = signal<CheckedInRoom | null>(null);
+  selectedRoom = signal<CheckedInRoom | null>(
+    null,
+  );
   selectedRoomId = signal<string>('');
   incidentType = signal<string>('');
   description = signal<string>('');
@@ -75,7 +84,8 @@ export class ReportIncidentComponent implements OnInit {
   readonly LucideFileText = LucideFileText;
   readonly LucideHome = LucideHome;
   readonly LucideLoader = LucideLoader;
-  readonly LucideTriangleAlert = LucideTriangleAlert;
+  readonly LucideTriangleAlert =
+    LucideTriangleAlert;
   readonly LucideXCircle = LucideXCircle;
   readonly LucideZap = LucideZap;
 
@@ -93,27 +103,30 @@ export class ReportIncidentComponent implements OnInit {
 
   loadCheckedInBookings(): void {
     this.loading.set(true);
-    this.bookingService.getMyBookings().subscribe({
-      next: (bookings) => {
-        const eligible = bookings
-          .filter(
-            (b) =>
-              b.bookingStatus === 'CHECKED_IN' ||
-              b.bookingStatus === 'COMPLETED',
-          )
-          .map((b) => ({
-            roomId: b.roomId,
-            roomName: b.roomName,
-            purpose: b.purpose,
-            startTime: b.startTime,
-            endTime: b.endTime,
-            bookingStatus: b.bookingStatus,
-          }));
-        this.checkedInRooms.set(eligible);
-        this.loading.set(false);
-      },
-      error: () => this.loading.set(false),
-    });
+    this.bookingService
+      .getMyBookings()
+      .subscribe({
+        next: (bookings) => {
+          const eligible = bookings
+            .filter(
+              (b) =>
+                b.bookingStatus ===
+                  'CHECKED_IN' ||
+                b.bookingStatus === 'COMPLETED',
+            )
+            .map((b) => ({
+              roomId: b.roomId,
+              roomName: b.roomName,
+              purpose: b.purpose,
+              startTime: b.startTime,
+              endTime: b.endTime,
+              bookingStatus: b.bookingStatus,
+            }));
+          this.checkedInRooms.set(eligible);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false),
+      });
   }
 
   selectRoom(room: CheckedInRoom): void {
@@ -127,7 +140,9 @@ export class ReportIncidentComponent implements OnInit {
       !this.incidentType() ||
       !this.description()
     ) {
-      this.error.set('Please fill in all fields.');
+      this.error.set(
+        'Please fill in all fields.',
+      );
       return;
     }
 
@@ -148,7 +163,9 @@ export class ReportIncidentComponent implements OnInit {
           this.success.set(true);
           this.saving.set(false);
           setTimeout(() => {
-            this.router.navigate(['/app/incidents/new']);
+            this.router.navigate([
+              '/app/incidents/new',
+            ]);
           }, 2000);
         },
         error: (err) => {

@@ -1,4 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -18,7 +22,8 @@ import { resetPasswordChangeRedirected } from '../../core/http/auth.interceptor'
   styleUrl: './change-password.component.css',
 })
 export class ChangePasswordComponent {
-  private readonly authService = inject(AuthService);
+  private readonly authService =
+    inject(AuthService);
   private readonly router = inject(Router);
 
   readonly loading = signal(false);
@@ -79,7 +84,10 @@ export class ChangePasswordComponent {
     this.loading.set(true);
 
     this.authService
-      .changePassword({ currentPassword, newPassword })
+      .changePassword({
+        currentPassword,
+        newPassword,
+      })
       .pipe(
         finalize(() => this.loading.set(false)),
       )
@@ -91,9 +99,12 @@ export class ChangePasswordComponent {
           this.successMessage.set(
             'Password changed successfully.',
           );
-          void this.router.navigateByUrl('/dashboard', {
-            replaceUrl: true,
-          });
+          void this.router.navigateByUrl(
+            '/dashboard',
+            {
+              replaceUrl: true,
+            },
+          );
         },
         error: (error) => {
           if (error.status === 400) {

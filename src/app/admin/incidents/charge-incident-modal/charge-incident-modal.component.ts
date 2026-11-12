@@ -5,7 +5,10 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import {
+  FormsModule,
+  NgForm,
+} from '@angular/forms';
 import {
   LucideDynamicIcon,
   LucideFileText,
@@ -16,9 +19,15 @@ import { IconComponent } from '../../../shared/ui';
 @Component({
   selector: 'app-charge-incident-modal',
   standalone: true,
-  imports: [FormsModule, LucideDynamicIcon, IconComponent],
-  templateUrl: './charge-incident-modal.component.html',
-  styleUrl: './charge-incident-modal.component.css',
+  imports: [
+    FormsModule,
+    LucideDynamicIcon,
+    IconComponent,
+  ],
+  templateUrl:
+    './charge-incident-modal.component.html',
+  styleUrl:
+    './charge-incident-modal.component.css',
 })
 export class ChargeIncidentModalComponent {
   readonly LucideFileText = LucideFileText;

@@ -6,7 +6,11 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { Observable, Subject, interval } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  interval,
+} from 'rxjs';
 
 export interface InactivityState {
   /** Whether the warning modal is currently visible */
@@ -22,10 +26,12 @@ export interface InactivityState {
 @Injectable({ providedIn: 'root' })
 export class InactivityService {
   private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
+  private readonly authService =
+    inject(AuthService);
 
   /** Total inactivity time before showing the warning (10 minutes = 600000ms) */
-  private readonly inactivityTimeout = 10 * 60 * 1000;
+  private readonly inactivityTimeout =
+    10 * 60 * 1000;
   /** Grace period after warning before actual logout (60 seconds) */
   private readonly gracePeriod = 60;
 
@@ -41,15 +47,17 @@ export class InactivityService {
   > | null = null;
 
   /** State signal for the UI */
-  private readonly state = signal<InactivityState>({
-    warningVisible: false,
-    secondsRemaining: 0,
-    loggedOut: false,
-    backNavWarning: false,
-  });
+  private readonly state =
+    signal<InactivityState>({
+      warningVisible: false,
+      secondsRemaining: 0,
+      loggedOut: false,
+      backNavWarning: false,
+    });
 
   /** Subject for countdown ticks */
-  private readonly countdown$ = new Subject<number>();
+  private readonly countdown$ =
+    new Subject<number>();
 
   /** Observable for countdown ticks */
   get countdownObservable(): Observable<number> {
@@ -124,7 +132,8 @@ export class InactivityService {
         return;
       }
 
-      const elapsed = Date.now() - this.lastActivity;
+      const elapsed =
+        Date.now() - this.lastActivity;
       if (elapsed >= this.inactivityTimeout) {
         this.showWarning();
       }
@@ -177,7 +186,10 @@ export class InactivityService {
       'true',
     );
     // Disable bfcache so the page cannot be restored from memory via back button
-    window.addEventListener('beforeunload', () => {});
+    window.addEventListener(
+      'beforeunload',
+      () => {},
+    );
     // Prevent back button from restoring authenticated pages from bfcache
     window.onpageshow = (event) => {
       if (event.persisted) {
@@ -194,7 +206,10 @@ export class InactivityService {
     // Bind the back-navigation handler only after logout, not during normal use
     this.bindBackNavigationHandler();
     // Show the logged-out state to trigger the back-nav warning on back button
-    this.state.update((s) => ({ ...s, loggedOut: true }));
+    this.state.update((s) => ({
+      ...s,
+      loggedOut: true,
+    }));
   }
 
   /** Bind the back-navigation handler (called only after logout) */

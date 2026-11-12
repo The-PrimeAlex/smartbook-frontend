@@ -1,4 +1,8 @@
-import { Component, Output, signal } from '@angular/core';
+import {
+  Component,
+  Output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventEmitter } from '@angular/core';
 import {
@@ -12,8 +16,10 @@ import { IconComponent } from '../../../shared/ui';
   selector: 'app-confirm-logout-modal',
   standalone: true,
   imports: [CommonModule, IconComponent],
-  templateUrl: './confirm-logout-modal.component.html',
-  styleUrl: './confirm-logout-modal.component.css',
+  templateUrl:
+    './confirm-logout-modal.component.html',
+  styleUrl:
+    './confirm-logout-modal.component.css',
 })
 export class ConfirmLogoutModalComponent {
   readonly LucideClock = LucideClock;

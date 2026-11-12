@@ -29,9 +29,15 @@
       <button
         class="btn-mark-all"
         (click)="markAllRead()"
-        [disabled]="unreadCount === 0 || markingAll()"
+        [disabled]="
+          unreadCount === 0 || markingAll()
+        "
       >
-        {{ markingAll() ? 'Marking...' : 'Mark all read' }}
+        {{
+          markingAll()
+            ? 'Marking...'
+            : 'Mark all read'
+        }}
       </button>
     </div>
   </div>
@@ -64,7 +70,9 @@
       }
     </div>
   }
-  @if (!loading() && notifications().length === 0) {
+  @if (
+    !loading() && notifications().length === 0
+  ) {
     <app-empty-state
       [icon]="LucideBell"
       title="No notifications yet"
@@ -84,19 +92,25 @@
           class="notification-card"
           [class.unread]="!notification.isRead"
           [class.read]="notification.isRead"
-          [style.animation-delay]="idx * 40 + 'ms'"
+          [style.animation-delay]="
+            idx * 40 + 'ms'
+          "
         >
           <div class="notification-header">
             <div
               class="notification-icon {{
-                getEventTypeClass(notification.eventType)
+                getEventTypeClass(
+                  notification.eventType
+                )
               }}"
             >
               @if (
-                notification.eventType === 'AUTO_CHECK_IN'
+                notification.eventType ===
+                'AUTO_CHECK_IN'
               ) {
               } @else if (
-                notification.eventType === 'OVERRUN'
+                notification.eventType ===
+                'OVERRUN'
               ) {
                 <app-icon
                   [icon]="LucideClock"
@@ -121,11 +135,15 @@
               </h3>
               <span
                 class="event-badge {{
-                  getEventTypeClass(notification.eventType)
+                  getEventTypeClass(
+                    notification.eventType
+                  )
                 }}"
               >
                 {{
-                  getEventTypeLabel(notification.eventType)
+                  getEventTypeLabel(
+                    notification.eventType
+                  )
                 }}
               </span>
             </div>

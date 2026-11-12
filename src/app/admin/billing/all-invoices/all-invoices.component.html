@@ -14,7 +14,9 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title">Invoice Summary</span>
+      <span class="stats-toggle-title"
+        >Invoice Summary</span
+      >
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -22,7 +24,10 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+    <div
+      class="stats-row-wrapper"
+      [class.collapsed]="statsCollapsed()"
+    >
       <div class="stats-bar">
         <app-stat-card
           [icon]="LucideFileText"
@@ -30,7 +35,9 @@
           [iconColor]="'var(--info,#3b82f6)'"
           delay="0s"
         >
-          <span stat-value>{{ totalBills() }}</span>
+          <span stat-value>{{
+            totalBills()
+          }}</span>
           <span stat-label>Invoices</span>
         </app-stat-card>
         <app-stat-card
@@ -39,7 +46,9 @@
           [iconColor]="'var(--warning,#f59e0b)'"
           delay="0.05s"
         >
-          <span stat-value>{{ unpaidCount() }}</span>
+          <span stat-value>{{
+            unpaidCount()
+          }}</span>
           <span stat-label>Unpaid</span>
         </app-stat-card>
         <app-stat-card
@@ -48,7 +57,9 @@
           [iconColor]="'var(--success,#22c55e)'"
           delay="0.1s"
         >
-          <span stat-value>{{ paidCount() }}</span>
+          <span stat-value>{{
+            paidCount()
+          }}</span>
           <span stat-label>Paid</span>
         </app-stat-card>
         <app-stat-card
@@ -57,7 +68,9 @@
           [iconColor]="'var(--brand-accent,#f28c28)'"
           delay="0.15s"
         >
-          <span stat-value>{{ partialCount() }}</span>
+          <span stat-value>{{
+            partialCount()
+          }}</span>
           <span stat-label>Partial</span>
         </app-stat-card>
         <app-stat-card
@@ -67,7 +80,8 @@
           delay="0.2s"
         >
           <span stat-value>{{
-            totalRevenue() | currency: 'KSH ' : 'symbol-narrow'
+            totalRevenue()
+              | currency: 'KSH ' : 'symbol-narrow'
           }}</span>
           <span stat-label>Revenue</span>
         </app-stat-card>
@@ -78,7 +92,8 @@
           delay="0.25s"
         >
           <span stat-value>{{
-            totalPaid() | currency: 'KSH ' : 'symbol-narrow'
+            totalPaid()
+              | currency: 'KSH ' : 'symbol-narrow'
           }}</span>
           <span stat-label>Collected</span>
         </app-stat-card>
@@ -97,14 +112,24 @@
       (select)="setFilter($event)"
     ></app-filter-group>
     <div class="sort-bar">
-      <app-icon [icon]="LucideArrowUpDown" [size]="14"></app-icon>
+      <app-icon
+        [icon]="LucideArrowUpDown"
+        [size]="14"
+      ></app-icon>
       <select
         class="sort-select"
         [value]="sortBy()"
-        (change)="setSort($any($event.target).value)"
+        (change)="
+          setSort($any($event.target).value)
+        "
       >
-        @for (opt of sortOptions; track opt.value) {
-          <option [value]="opt.value">{{ opt.label }}</option>
+        @for (
+          opt of sortOptions;
+          track opt.value
+        ) {
+          <option [value]="opt.value">
+            {{ opt.label }}
+          </option>
         }
       </select>
     </div>
@@ -138,7 +163,9 @@
         ) {
           <article
             class="bill-card"
-            [style.animation-delay]="i * 0.05 + 's'"
+            [style.animation-delay]="
+              i * 0.05 + 's'
+            "
           >
             <!-- Card Header -->
             <div class="bill-card-header">
@@ -155,9 +182,15 @@
                   }}</span>
                 </div>
                 <app-status-badge
-                  [label]="getStatusLabel(bill.billStatus)"
+                  [label]="
+                    getStatusLabel(
+                      bill.billStatus
+                    )
+                  "
                   [variant]="
-                    getBadgeVariant(bill.billStatus)
+                    getBadgeVariant(
+                      bill.billStatus
+                    )
                   "
                 ></app-status-badge>
               </div>
@@ -165,7 +198,9 @@
                 <span class="bill-amount">
                   {{
                     bill.totalAmount
-                      | currency: 'KSH ' : 'symbol-narrow'
+                      | currency
+                        : 'KSH '
+                        : 'symbol-narrow'
                   }}
                 </span>
               </div>
@@ -187,7 +222,9 @@
                       [size]="14"
                     ></app-icon>
                     {{
-                      formatDateTime(bill.booking.startTime)
+                      formatDateTime(
+                        bill.booking.startTime
+                      )
                     }}
                   </span>
                 </div>
@@ -207,19 +244,25 @@
                     <div
                       class="item-row"
                       [class.item-incident]="
-                        item.itemType === 'INCIDENT'
+                        item.itemType ===
+                        'INCIDENT'
                       "
                       [class.item-cancellation]="
-                        item.itemType === 'CANCELLATION_FEE'
+                        item.itemType ===
+                        'CANCELLATION_FEE'
                       "
                     >
-                      @if (item.itemType === 'INCIDENT') {
+                      @if (
+                        item.itemType ===
+                        'INCIDENT'
+                      ) {
                         <span
                           class="item-type-badge incident-badge"
                           >Incident
                         </span>
                       } @else if (
-                        item.itemType === 'CANCELLATION_FEE'
+                        item.itemType ===
+                        'CANCELLATION_FEE'
                       ) {
                         <span
                           class="item-type-badge cancellation-badge"
@@ -250,42 +293,58 @@
                   <span class="bill-summary-label"
                     >Subtotal</span
                   >
-                  <span class="bill-summary-value">{{
-                    formatCurrency(
-                      bill.subtotal,
-                      bill.currency
-                    )
-                  }}</span>
+                  <span
+                    class="bill-summary-value"
+                    >{{
+                      formatCurrency(
+                        bill.subtotal,
+                        bill.currency
+                      )
+                    }}</span
+                  >
                 </div>
                 <div class="bill-summary-item">
                   <span class="bill-summary-label"
                     >Tax</span
                   >
-                  <span class="bill-summary-value">{{
-                    formatCurrency(
-                      bill.taxAmount,
-                      bill.currency
-                    )
-                  }}</span>
+                  <span
+                    class="bill-summary-value"
+                    >{{
+                      formatCurrency(
+                        bill.taxAmount,
+                        bill.currency
+                      )
+                    }}</span
+                  >
                 </div>
-                <div class="bill-summary-item bill-paid">
+                <div
+                  class="bill-summary-item bill-paid"
+                >
                   <span class="bill-summary-label"
                     >Paid</span
                   >
-                  <span class="bill-summary-value">{{
-                    formatCurrency(
-                      bill.amountPaid,
-                      bill.currency
-                    )
-                  }}</span>
+                  <span
+                    class="bill-summary-value"
+                    >{{
+                      formatCurrency(
+                        bill.amountPaid,
+                        bill.currency
+                      )
+                    }}</span
+                  >
                 </div>
-                <div class="bill-summary-item bill-due">
+                <div
+                  class="bill-summary-item bill-due"
+                >
                   <span class="bill-summary-label"
                     >Due</span
                   >
-                  <span class="bill-summary-value">{{
-                    formatDate(bill.dueAt)
-                  }}</span>
+                  <span
+                    class="bill-summary-value"
+                    >{{
+                      formatDate(bill.dueAt)
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
