@@ -3552,14 +3552,24 @@ input[type='time']::-moz-focus-inner {
 /* ── Mobile breakpoint (480px) ── */
 @media (max-width: 30rem) {
   :root {
-    --app-content-padding: 12px;
+    --app-content-padding: 0;
   }
 
   body {
     padding: 0 !important;
   }
 
-  /* Full-width cards */
+  /* ── Content area: full-width with proper padding ── */
+  .page-content,
+  .main-content,
+  .dashboard,
+  .admin-dashboard {
+    padding: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Full-width cards with proper spacing */
   .card,
   .card-row,
   .bill-card,
@@ -3568,6 +3578,8 @@ input[type='time']::-moz-focus-inner {
     border-radius: var(--radius-md) !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Stack all grids to single column */
@@ -3576,21 +3588,24 @@ input[type='time']::-moz-focus-inner {
   .overview-cards,
   .finance-grid,
   .revenue-sources-grid,
-  .payment-status-grid {
+  .payment-status-grid,
+  .stats-row,
+  .quick-links-grid,
+  .dashboard-columns,
+  .status-breakdown-grid,
+  .room-overview-grid,
+  .two-col-grid,
+  .three-col-grid,
+  .four-col-grid {
     grid-template-columns: 1fr !important;
     flex-direction: column !important;
     flex-wrap: wrap !important;
+    gap: 12px !important;
   }
 
   /* Compact stat cards */
   .stat-card,
   .finance-mini-card {
-    padding: 12px !important;
-  }
-
-  /* Page content padding */
-  .page-content,
-  .main-content {
     padding: 12px !important;
   }
 
@@ -3608,9 +3623,11 @@ input[type='time']::-moz-focus-inner {
     border-radius: var(--radius-md) !important;
   }
 
-  /* Compact tables */
+  /* Compact tables - horizontal scroll */
   .table-wrapper {
     font-size: 0.75rem !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Hide desktop-only elements */
@@ -3649,10 +3666,19 @@ input[type='time']::-moz-focus-inner {
   }
 
   /* Compact section headings */
+  h1,
   h2.section-heading,
   .section-heading {
-    font-size: 1rem !important;
+    font-size: 1.125rem !important;
     margin-bottom: 12px !important;
+  }
+
+  h2 {
+    font-size: 1rem !important;
+  }
+
+  h3 {
+    font-size: 0.875rem !important;
   }
 
   /* Compact form fields */
@@ -3713,6 +3739,120 @@ input[type='time']::-moz-focus-inner {
   .deco-dots,
   .deco-triangle {
     display: none !important;
+  }
+
+  /* ── Page banner mobile ── */
+  .app-page-banner {
+    padding: 16px 12px !important;
+  }
+
+  .app-page-banner h1 {
+    font-size: 1.125rem !important;
+  }
+
+  /* ── Buttons full-width on mobile ── */
+  .btn,
+  button[type="submit"],
+  input[type="submit"] {
+    min-height: 44px !important;
+  }
+
+  /* ── Live status and booking cards stack vertically ── */
+  .live-status-card,
+  .booking-card {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .booking-time-block {
+    min-width: auto !important;
+    align-self: flex-start !important;
+  }
+
+  /* ── Quick link cards compact ── */
+  .quick-link-card {
+    padding: 12px 8px !important;
+    gap: 6px !important;
+  }
+
+  .quick-link-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .quick-link-label {
+    font-size: 0.75rem !important;
+  }
+
+  /* ── Breakdown and overview cards ── */
+  .breakdown-card,
+  .overview-card {
+    padding: 12px !important;
+    gap: 8px !important;
+  }
+
+  .breakdown-icon,
+  .overview-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  /* ── Section header stacks on mobile ── */
+  .section-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* ── Skeleton loading ── */
+  .skeleton-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .skeleton-card {
+    height: 60px !important;
+  }
+
+  /* ── Empty state compact ── */
+  .empty-state {
+    padding: 24px 16px !important;
+  }
+
+  /* ── Card list compact ── */
+  .card-list {
+    gap: 8px !important;
+  }
+
+  .card-row {
+    padding: 12px !important;
+  }
+
+  /* ── Meta items compact ── */
+  .meta-item {
+    font-size: 0.75rem !important;
+  }
+
+  /* ── Revenue total compact ── */
+  .revenue-total-amount,
+  .total-amount {
+    font-size: 1.25rem !important;
+  }
+
+  /* ── Room card compact ── */
+  .room-card {
+    padding: 12px !important;
+  }
+
+  /* ── Status breakdown compact ── */
+  .status-breakdown-item {
+    padding: 10px !important;
+  }
+
+  /* ── Dashboard section spacing ── */
+  .dashboard-section {
+    margin-top: 20px !important;
   }
 }
 

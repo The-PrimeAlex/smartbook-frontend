@@ -43,12 +43,15 @@ app-sidebar {
 
 @media (max-width: 30rem) {
   app-sidebar {
-    /* Remove sidebar from flex layout on mobile so it doesn't reserve space */
+    /* Remove sidebar from flex layout on mobile; sidebar handles its own slide-in via :host styles */
     position: fixed;
-    flex: 0 0 0;
-    width: 0;
-    min-width: 0;
-    overflow: hidden;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    flex: 0 0 auto;
+    width: 280px;
+    /* Do NOT set overflow:hidden here — sidebar's own :host handles transform */
   }
 
   .app-layout {
@@ -60,6 +63,7 @@ app-sidebar {
     position: relative;
     flex: 1;
     min-width: 0;
+    width: 100%;
   }
 
   .mobile-menu-button {
