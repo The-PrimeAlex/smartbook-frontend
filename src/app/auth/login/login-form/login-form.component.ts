@@ -100,10 +100,8 @@ export class LoginFormComponent {
             return;
           }
 
-          // Redirect to role-appropriate dashboard
-          const destination = this.authService.hasRole(
-            'ADMIN',
-          )
+          // Redirect to role-appropriate dashboard using the user object from the response
+          const destination = user.roles.includes('ADMIN')
             ? '/admin/dashboard'
             : '/dashboard';
           void this.router.navigateByUrl(
