@@ -667,8 +667,8 @@ button.menu-item {
     left: 0;
     bottom: 0;
     z-index: 1000;
-    width: 300px;
-    max-width: 85vw;
+    width: 260px;
+    max-width: 80vw;
     /* Slide in/out animation */
     transform: translateX(-100%);
     transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -684,6 +684,9 @@ button.menu-item {
     /* Solid dark background — no gradient blur */
     background: #0a1628;
     color: #e2e8f0;
+    /* Flex column layout: brand + nav (grows) + footer (pushed to bottom) */
+    display: flex;
+    flex-direction: column;
     /* Single scroll container */
     overflow-y: auto;
     overflow-x: hidden;
@@ -729,11 +732,13 @@ button.menu-item {
     display: none;
   }
 
-  /* ── Navigation ── */
+  /* ── Navigation: grows to fill space, pushing footer to bottom ── */
   .navigation {
     margin: 0;
     padding: 8px 0;
     overflow: visible;
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   /* ── Section labels ── */
