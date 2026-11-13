@@ -3,7 +3,7 @@ import {
   CanActivateFn,
   Router,
 } from '@angular/router';
-import { map, of, switchMap } from 'rxjs';
+import { map, of } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
@@ -21,12 +21,27 @@ export const roleGuard: CanActivateFn = (
     return of(true);
   }
 
-  const sessionCheck$ =
-    authService.getAccessToken()
-      ? of(true)
-      : authService.restoreSession();
+  // If session was expired by auto-logout, redirect immediately
+  if (
+    sessionStorage.getItem('smartbook-session-expired') === 'true'
+  ) {
+    return of(router.createUrlTree(['/login']));
+  }
 
-  return sessionCheck$.pipe(
+  // If we have a token in memory, just check roles
+  if (authService.getAccessToken()) {
+    const hasRequiredRole = requiredRoles.some(
+      (role) => authService.hasRole(role),
+    );
+    return of(
+      hasRequiredRole
+        ? true
+        : router.createUrlTree(['/forbidden']),
+    );
+  }
+
+  // No token in memory — try to restore from localStorage
+  return authService.restoreSession().pipe(
     map((authenticated) => {
       if (!authenticated) {
         return router.createUrlTree(['/login'], {

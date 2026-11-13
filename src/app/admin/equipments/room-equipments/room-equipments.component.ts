@@ -23,7 +23,6 @@ import {
   LucideX,
 } from '@lucide/angular';
 
-import { AuthService } from '../../../core/auth/auth.service';
 import { RoomService } from '../../../shared/services/room.service';
 import {
   MeetingRoom,
@@ -31,7 +30,7 @@ import {
   RoomEquipmentStatus,
 } from '../../../shared/models/room.model';
 import { RoomEquipmentService } from '../../../shared/services/room-equipments.service';
-import { finalize, forkJoin, tap } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 import {
   IconComponent,
   EmptyStateComponent,
@@ -76,8 +75,6 @@ export class RoomEquipmentComponent implements OnInit {
   readonly LucideX = LucideX;
 
   private readonly fb = inject(FormBuilder);
-  private readonly authService =
-    inject(AuthService);
   private readonly roomService =
     inject(RoomService);
   private readonly equipmentService = inject(
@@ -129,16 +126,7 @@ export class RoomEquipmentComponent implements OnInit {
     });
 
   ngOnInit(): void {
-    this.authService
-      .restoreSession()
-      .pipe(tap(() => this.loadAllRooms()))
-      .subscribe({
-        error: (err) =>
-          this.log.error(
-            'Session restore failed:',
-            err,
-          ),
-      });
+    this.loadAllRooms();
   }
 
   get filteredRooms(): RoomCardData[] {

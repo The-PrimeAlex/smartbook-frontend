@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/auth/auth.guard';
+import { authGuard, authMatchGuard } from './core/auth/auth.guard';
 import { roleGuard } from './core/auth/role.guard';
 
 export const routes: Routes = [
@@ -33,6 +33,7 @@ export const routes: Routes = [
   },
   {
     path: '',
+    canMatch: [authMatchGuard],
     canActivate: [authGuard],
     loadComponent: () =>
       import('./layouts/main-layout/main-layout.component').then(
@@ -418,6 +419,7 @@ export const routes: Routes = [
   },
   {
     path: 'change-password',
+    canMatch: [authMatchGuard],
     canActivate: [authGuard],
     loadComponent: () =>
       import('./auth/change-password/change-password.component').then(
