@@ -279,7 +279,29 @@
         }
 
         <!-- Validation Messages -->
-        @if (invalidDateRange) {
+        @if (startDateAfterEndDate) {
+          <div
+            class="validation-message"
+            role="alert"
+          >
+            <app-icon
+              [icon]="LucideAlertCircle"
+              [size]="16"
+            ></app-icon>
+            <div>
+              <strong
+                >Start date is after end date</strong
+              >
+              <p>
+                The start date cannot be later
+                than the end date. Please adjust
+                your dates.
+              </p>
+            </div>
+          </div>
+        }
+
+        @if (invalidDateRange && !startDateAfterEndDate) {
           <div
             class="validation-message"
             role="alert"
@@ -383,6 +405,7 @@
             saving ||
             loadingRooms ||
             rooms.length === 0 ||
+            startDateAfterEndDate ||
             invalidDateRange ||
             (startIsInPast && !conflictMessage)
           "

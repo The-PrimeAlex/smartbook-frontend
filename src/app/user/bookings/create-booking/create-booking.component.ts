@@ -259,6 +259,11 @@ export class CreateBookingComponent implements OnInit {
     );
   }
 
+  get startDateAfterEndDate(): boolean {
+    if (!this.startDate || !this.endDate) return false;
+    return this.startDate > this.endDate;
+  }
+
   get invalidDateRange(): boolean {
     const start = this.startDateTime;
     const end = this.endDateTime;
