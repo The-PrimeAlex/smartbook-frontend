@@ -3,28 +3,24 @@ import {
   Injectable,
   inject,
 } from '@angular/core';
-import {
-  Observable,
-  map,
-  of,
-  switchMap,
-} from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
+import { AuthService } from '../../core/auth/auth.service';
 import {
   Booking,
   CancelBookingRequest,
   CreateBookingRequest,
   UpdateBookingStatusRequest,
 } from '../models/booking.model';
-import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookingService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiUrl = '/api/v1';
   private readonly adminBookingsUrl = `${this.apiUrl}/admin/bookings`;
   private readonly userBookingsUrl = `${this.apiUrl}/bookings`;
 
@@ -75,7 +71,7 @@ export class BookingService {
   createBooking(
     request: CreateBookingRequest,
   ): Observable<Booking> {
-    return this.ensureCsrfToken().pipe(
+    return this.authService.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<Booking>(
           this.userBookingsUrl,
@@ -92,7 +88,7 @@ export class BookingService {
     bookingId: string,
     request: UpdateBookingStatusRequest,
   ): Observable<Booking> {
-    return this.ensureCsrfToken().pipe(
+    return this.authService.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.patch<Booking>(
           `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/status`,
@@ -109,7 +105,7 @@ export class BookingService {
     bookingId: string,
     request: CancelBookingRequest,
   ): Observable<Booking> {
-    return this.ensureCsrfToken().pipe(
+    return this.authService.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.patch<Booking>(
           `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/cancel`,
@@ -119,31 +115,11 @@ export class BookingService {
     );
   }
 
-  private ensureCsrfToken(): Observable<void> {
-    const hasCsrfCookie =
-      typeof document !== 'undefined' &&
-      document.cookie
-        .split(';')
-        .some((cookie) =>
-          cookie.trim().startsWith('XSRF-TOKEN='),
-        );
-
-    if (hasCsrfCookie) {
-      return of(void 0);
-    }
-
-    return this.http
-      .get(`${environment.apiUrl}/auth/csrf`, {
-        responseType: 'text',
-        withCredentials: true,
-      })
-      .pipe(map(() => void 0));
-  }
 
   checkoutBooking(
     bookingId: string,
   ): Observable<Booking> {
-    return this.ensureCsrfToken().pipe(
+    return this.authService.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.patch<Booking>(
           `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/checkout`,

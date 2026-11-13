@@ -181,6 +181,13 @@ export const authInterceptor: HttpInterceptorFn =
                   authService.clearLocalAuth();
                   // Reset the password change flag so it can intercept again after re-login
                   passwordChangeRedirected = false;
+                  // Redirect to login immediately so the user doesn't see a broken
+                  // interface with stale admin/user content and a mismatched sidebar
+                  setTimeout(() => {
+                    void router.navigate(['/login'], {
+                      replaceUrl: true,
+                    });
+                  });
                 }
 
                 // If refresh returns 403 password_change_required, redirect to change password

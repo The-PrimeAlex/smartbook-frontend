@@ -185,31 +185,9 @@ export class InactivityService {
       'smartbook-session-expired',
       'true',
     );
-    // Disable bfcache so the page cannot be restored from memory via back button
-    window.addEventListener(
-      'beforeunload',
-      () => {},
-    );
-    // Prevent back button from restoring authenticated pages from bfcache
-    window.onpageshow = (event) => {
-      if (event.persisted) {
-        window.location.replace('/login');
-      }
-    };
-    // Push a history state so the back button triggers our popstate handler
-    // instead of silently navigating to a previous authenticated page
-    history.pushState(
-      { logout: true },
-      '',
-      window.location.pathname,
-    );
-    // Bind the back-navigation handler only after logout, not during normal use
-    this.bindBackNavigationHandler();
-    // Show the logged-out state to trigger the back-nav warning on back button
-    this.state.update((s) => ({
-      ...s,
-      loggedOut: true,
-    }));
+    // Redirect to login immediately so the user doesn't see a broken
+    // interface with stale admin/user content and a mismatched sidebar
+    window.location.replace('/login');
   }
 
   /** Bind the back-navigation handler (called only after logout) */

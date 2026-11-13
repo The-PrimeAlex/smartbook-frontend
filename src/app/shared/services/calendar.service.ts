@@ -6,8 +6,9 @@ import {
   HttpClient,
   HttpParams,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../core/auth/auth.service';
 
 export interface GoogleCalendarEventDto {
   id: string;
@@ -35,6 +36,7 @@ export interface BookingSyncResult {
 })
 export class CalendarService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
 
   private readonly apiBaseUrl =
     environment.apiUrl;
@@ -71,17 +73,25 @@ export class CalendarService {
   }
 
   syncBookings(): Observable<BookingSyncResult> {
-    return this.http.post<BookingSyncResult>(
-      `${this.apiBaseUrl}/calendar/sync-bookings`,
-      {},
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http.post<BookingSyncResult>(
+          `${this.apiBaseUrl}/calendar/sync-bookings`,
+          {},
+        ),
+      ),
     );
   }
 
   disconnectGoogleCalendar(): Observable<{
     message: string;
   }> {
-    return this.http.delete<{ message: string }>(
-      `${this.apiBaseUrl}/calendar/integrations/google`,
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http.delete<{ message: string }>(
+          `${this.apiBaseUrl}/calendar/integrations/google`,
+        ),
+      ),
     );
   }
 }
