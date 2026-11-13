@@ -118,17 +118,21 @@ export class AuthService {
     }
     // Restore from localStorage first (survives page refresh)
     if (this.restoreFromLocalStorage()) {
-      // After restoring from localStorage, fetch a fresh CSRF token for cross-origin requests
-      // The in-memory CSRF token is lost on page refresh, so we need to get a new one
-      return this.ensureCsrfToken().pipe(
-        map(() => true),
-        catchError(() => {
-          // If CSRF fetch fails, the session might still be valid for GET requests
-          // but POST requests will fail - clear the session to force re-login
-          this.clearLocalAuth();
-          return of(false);
-        }),
-      );
+      // After restoring from localStorage, try to fetch a fresh CSRF token for cross-origin requests.
+      // The in-memory CSRF token is lost on page refresh, so we need to get a new one.
+      // However, if the CSRF fetch fails (e.g., Neon database sleeping, network hiccup),
+      // we do NOT clear the session — the user still has a valid access token, so GET requests
+      // will work normally. The CSRF token will be fetched lazily before the first mutating
+      // request via ensureCsrfToken() in the auth interceptor.
+      if (environment.production) {
+        this.ensureCsrfToken().subscribe({
+          error: () => {
+            // CSRF fetch failed — the session is still valid for GET requests.
+            // Mutating requests will fetch a fresh CSRF token before execution.
+          },
+        });
+      }
+      return of(true);
     }
     if (this.isAuthenticated()) return of(true);
 
