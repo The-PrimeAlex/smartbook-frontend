@@ -29,19 +29,29 @@ let passwordChangeRedirected = false;
 let lastLoginTimestamp = 0;
 const LOGIN_GRACE_PERIOD_MS = 10_000; // 10 seconds
 
-const ME_ENDPOINT = `${environment.apiUrl}/auth/me`;
+const ME_ENDPOINT = environment.apiUrl.endsWith('/api/v1')
+  ? '/api/v1/auth/me'
+  : `${environment.apiUrl}/auth/me`;
 
-const API_PREFIX = environment.apiUrl.replace(
-  /\/api\/v1$/,
-  '',
-);
+/**
+ * API prefix for matching intercepted requests.
+ * In production, requests use relative paths (/api/v1) proxied by Cloudflare Pages,
+ * so we always check for the relative /api prefix regardless of the environment.apiUrl value.
+ */
+const API_PREFIX = '/api';
 
+/**
+ * Auth endpoint paths for checking if a request should skip the auth token.
+ * Uses relative paths since all services use relative paths in production.
+ * AuthService uses environment.apiUrl (full Azure URL), so we also check
+ * against the full URL patterns in isAuthEndpoint.
+ */
 const AUTH_ENDPOINTS = [
-  `${environment.apiUrl}/auth/login`,
-  `${environment.apiUrl}/auth/refresh`,
-  `${environment.apiUrl}/auth/logout`,
-  `${environment.apiUrl}/auth/csrf`,
-  `${environment.apiUrl}/auth/change-password`,
+  '/api/v1/auth/login',
+  '/api/v1/auth/refresh',
+  '/api/v1/auth/logout',
+  '/api/v1/auth/csrf',
+  '/api/v1/auth/change-password',
 ];
 
 const MUTATING_METHODS = new Set([
@@ -102,7 +112,9 @@ export const authInterceptor: HttpInterceptorFn =
     const router = inject(Router);
 
     // Only intercept requests using the API route.
-    if (!request.url.startsWith(API_PREFIX)) {
+    // Requests may use relative paths (/api/v1) via Cloudflare Pages proxy,
+    // or full Azure URLs (https://smartbook-api-.../api/v1) from AuthService.
+    if (!request.url.includes('/api/v1')) {
       return next(request);
     }
 
@@ -110,6 +122,13 @@ export const authInterceptor: HttpInterceptorFn =
       (path) =>
         request.url === path ||
         request.url.startsWith(`${path}?`),
+    ) || (
+      // AuthService uses full Azure URLs for auth endpoints in production.
+      // Check if the request URL ends with an auth endpoint path.
+      AUTH_ENDPOINTS.some((path) =>
+        request.url.endsWith(path) ||
+        request.url.startsWith(`${path}?`),
+      )
     );
 
     const headers: Record<string, string> = {};
@@ -251,7 +270,9 @@ export const authInterceptor: HttpInterceptorFn =
           now - lastLoginTimestamp < LOGIN_GRACE_PERIOD_MS;
         const isMeEndpoint =
           request.url === ME_ENDPOINT ||
-          request.url.startsWith(ME_ENDPOINT + '?');
+          request.url.startsWith(ME_ENDPOINT + '?') ||
+          request.url.endsWith('/auth/me') ||
+          request.url.endsWith('/auth/me?');
 
         if (
           withinGracePeriod &&
