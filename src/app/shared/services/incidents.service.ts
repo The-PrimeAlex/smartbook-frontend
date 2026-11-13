@@ -6,7 +6,8 @@ import {
   Injectable,
   inject,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
+import { AuthService } from '../../core/auth/auth.service';
 
 export interface IncidentType {
   value:
@@ -51,16 +52,23 @@ export interface IncidentResponse {
 @Injectable({ providedIn: 'root' })
 export class IncidentsService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly baseUrl = '/api/v1/incidents/me';
   private readonly adminUrl = '/api/v1/incidents';
 
   createIncident(
     request: CreateIncidentRequest,
   ): Observable<IncidentResponse> {
-    return this.http.post<IncidentResponse>(
-      this.baseUrl,
-      request,
-    );
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.post<IncidentResponse>(
+            this.baseUrl,
+            request,
+          ),
+        ),
+      );
   }
 
   getMyIncidents(): Observable<
@@ -90,28 +98,46 @@ export class IncidentsService {
     incidentId: string,
     request: IncidentActionRequest,
   ): Observable<IncidentResponse> {
-    return this.http.post<IncidentResponse>(
-      `${this.adminUrl}/${incidentId}/charge`,
-      request,
-    );
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.post<IncidentResponse>(
+            `${this.adminUrl}/${incidentId}/charge`,
+            request,
+          ),
+        ),
+      );
   }
 
   waiveIncident(
     incidentId: string,
     request: IncidentActionRequest,
   ): Observable<IncidentResponse> {
-    return this.http.post<IncidentResponse>(
-      `${this.adminUrl}/${incidentId}/waive`,
-      request,
-    );
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.post<IncidentResponse>(
+            `${this.adminUrl}/${incidentId}/waive`,
+            request,
+          ),
+        ),
+      );
   }
 
   verifyIncident(
     incidentId: string,
   ): Observable<IncidentResponse> {
-    return this.http.post<IncidentResponse>(
-      `${this.adminUrl}/${incidentId}/verify`,
-      {},
-    );
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.post<IncidentResponse>(
+            `${this.adminUrl}/${incidentId}/verify`,
+            {},
+          ),
+        ),
+      );
   }
 }

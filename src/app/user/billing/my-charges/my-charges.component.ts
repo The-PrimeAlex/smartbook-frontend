@@ -1,11 +1,13 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   signal,
 } from '@angular/core';
 import { createLogger } from '../../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, NavigationEnd } from '@angular/router';
 import {
   LucideCalendar,
   LucideCheckCircle,
@@ -63,13 +65,14 @@ import {
   templateUrl: './my-charges.component.html',
   styleUrl: './my-charges.component.css',
 })
-export class MyChargesComponent implements OnInit {
+export class MyChargesComponent implements OnInit, OnDestroy {
   private readonly log =
     createLogger('MyCharges');
   bills = signal<Bill[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   statsCollapsed = signal(false);
+  private routerSubscription: Subscription | null = null;
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);
@@ -128,10 +131,20 @@ export class MyChargesComponent implements OnInit {
 
   constructor(
     private billingService: BillingService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.loadBills();
+    this.routerSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.loadBills();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.routerSubscription?.unsubscribe();
   }
 
   loadBills(): void {

@@ -10,16 +10,19 @@ import {
   Observable,
   catchError,
   map,
+  switchMap,
   throwError,
 } from 'rxjs';
 import {
   Setting,
   UpdateSettingRequest,
 } from '../models/settings.model';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly apiUrl = '/api/v1/settings';
 
   getAllSettings(): Observable<Setting[]> {
@@ -54,20 +57,32 @@ export class SettingsService {
   updateSetting(
     request: UpdateSettingRequest,
   ): Observable<Setting> {
-    return this.http
-      .put<Setting>(this.apiUrl, request)
-      .pipe(catchError(this.handleError));
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http
+            .put<Setting>(this.apiUrl, request)
+            .pipe(catchError(this.handleError)),
+        ),
+      );
   }
 
   bulkUpdateSettings(
     updates: UpdateSettingRequest[],
   ): Observable<Setting[]> {
-    return this.http
-      .put<Setting[]>(
-        `${this.apiUrl}/bulk`,
-        updates,
-      )
-      .pipe(catchError(this.handleError));
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http
+            .put<Setting[]>(
+              `${this.apiUrl}/bulk`,
+              updates,
+            )
+            .pipe(catchError(this.handleError)),
+        ),
+      );
   }
 
   private handleError(error: HttpErrorResponse) {

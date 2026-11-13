@@ -3,7 +3,8 @@ import {
   inject,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, switchMap } from 'rxjs';
+import { AuthService } from '../../core/auth/auth.service';
 
 export interface UserNotificationPreferences {
   booking_confirmation: boolean;
@@ -16,6 +17,7 @@ export interface UserNotificationPreferences {
 @Injectable({ providedIn: 'root' })
 export class UserNotificationPreferencesService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly baseUrl = '/api/v1/notifications/me/preferences';
 
   /**
@@ -48,13 +50,19 @@ export class UserNotificationPreferencesService {
     key: string,
     enabled: boolean,
   ): Observable<void> {
-    return this.http.patch<void>(
-      this.baseUrl,
-      {},
-      {
-        params: { key, enabled: String(enabled) },
-      },
-    );
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.patch<void>(
+            this.baseUrl,
+            {},
+            {
+              params: { key, enabled: String(enabled) },
+            },
+          ),
+        ),
+      );
   }
 
   /**
@@ -63,9 +71,15 @@ export class UserNotificationPreferencesService {
   bulkUpdatePreferences(
     preferences: UserNotificationPreferences,
   ): Observable<void> {
-    return this.http.patch<void>(
-      `${this.baseUrl}/bulk`,
-      preferences,
-    );
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.patch<void>(
+            `${this.baseUrl}/bulk`,
+            preferences,
+          ),
+        ),
+      );
   }
 }
