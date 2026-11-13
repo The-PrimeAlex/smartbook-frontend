@@ -8,7 +8,7 @@ import {
 import { createLogger } from '../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 
 import {
   LucideCalendar,
@@ -267,12 +267,25 @@ export class Dashboard implements OnInit {
   loadData(): void {
     this.loading.set(true);
     forkJoin({
-      bookings:
-        this.bookingService.getMyBookings(),
-      bills: this.billingService.getMyBills(),
-      notifications:
-        this.notificationService.getNotifications(
-          false,
+      bookings: this.bookingService.getMyBookings().pipe(
+        catchError((err) => {
+          this.log.error('Error loading bookings:', err);
+          return of([]);
+        }),
+      ),
+      bills: this.billingService.getMyBills().pipe(
+        catchError((err) => {
+          this.log.error('Error loading bills:', err);
+          return of([]);
+        }),
+      ),
+      notifications: this.notificationService
+        .getNotifications(false)
+        .pipe(
+          catchError((err) => {
+            this.log.error('Error loading notifications:', err);
+            return of([]);
+          }),
         ),
     }).subscribe({
       next: (data) => {

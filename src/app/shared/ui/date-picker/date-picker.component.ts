@@ -56,15 +56,6 @@ export class DatePickerComponent
           this._value = dateStr;
           this.onChangeCallback(dateStr);
         },
-        onReady: () => {
-          // Apply min date after initialization
-          if (this.min) {
-            this.fpInstance.set(
-              'minDate',
-              this.min,
-            );
-          }
-        },
       },
     );
 
@@ -112,8 +103,12 @@ export class DatePickerComponent
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    if (this.fpInstance) {
-      this.fpInstance.set('disabled', isDisabled);
+    const input = this.el.nativeElement.querySelector('input');
+    if (input) {
+      input.disabled = isDisabled;
+    }
+    if (this.fpInstance && isDisabled) {
+      this.fpInstance.close();
     }
   }
 

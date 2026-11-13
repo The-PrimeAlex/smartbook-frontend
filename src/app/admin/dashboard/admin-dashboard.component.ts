@@ -8,7 +8,7 @@ import {
 import { createLogger } from '../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 
 import {
   LucideCalendar,
@@ -329,15 +329,36 @@ export class AdminDashboard implements OnInit {
   loadData(): void {
     this.loading.set(true);
     forkJoin({
-      rooms: this.roomService.getRooms(),
-      bookings:
-        this.bookingService.getAllBookings(),
-      liveStatus:
-        this.monitoringService.getLiveRoomStatus(),
-      revenueReports:
-        this.reportsService.getRevenueReports(),
-      incidents:
-        this.incidentsService.getAllIncidents(),
+      rooms: this.roomService.getRooms().pipe(
+        catchError((err) => {
+          this.log.error('Error loading rooms:', err);
+          return of([]);
+        }),
+      ),
+      bookings: this.bookingService.getAllBookings().pipe(
+        catchError((err) => {
+          this.log.error('Error loading bookings:', err);
+          return of([]);
+        }),
+      ),
+      liveStatus: this.monitoringService.getLiveRoomStatus().pipe(
+        catchError((err) => {
+          this.log.error('Error loading live status:', err);
+          return of([]);
+        }),
+      ),
+      revenueReports: this.reportsService.getRevenueReports().pipe(
+        catchError((err) => {
+          this.log.error('Error loading revenue:', err);
+          return of([]);
+        }),
+      ),
+      incidents: this.incidentsService.getAllIncidents().pipe(
+        catchError((err) => {
+          this.log.error('Error loading incidents:', err);
+          return of([]);
+        }),
+      ),
     }).subscribe({
       next: (data) => {
         this.rooms.set(data.rooms);
