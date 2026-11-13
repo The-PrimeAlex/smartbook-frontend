@@ -18,6 +18,17 @@ import { environment } from '../../../environments/environment';
  */
 let passwordChangeRedirected = false;
 
+/**
+ * Timestamp of the last successful login.
+ * Used to create a grace period after login where transient 401 errors on /me
+ * are ignored — the Neon database may still be waking up from auto-pause,
+ * causing the first /me request to fail even though the login succeeded.
+ */
+let lastLoginTimestamp = 0;
+const LOGIN_GRACE_PERIOD_MS = 10_000; // 10 seconds
+
+const ME_ENDPOINT = `${environment.apiUrl}/auth/me`;
+
 const API_PREFIX = environment.apiUrl.replace(
   /\/api\/v1$/,
   '',
@@ -157,6 +168,27 @@ export const authInterceptor: HttpInterceptorFn =
           );
         }
 
+        // During the grace period after login, ignore 401 on /me — the Neon database
+        // may still be waking up from auto-pause. The login just succeeded, so the token
+        // is valid; the /me endpoint simply couldn't reach the database yet.
+        const now = Date.now();
+        const withinGracePeriod =
+          now - lastLoginTimestamp < LOGIN_GRACE_PERIOD_MS;
+        const isMeEndpoint =
+          request.url === ME_ENDPOINT ||
+          request.url.startsWith(ME_ENDPOINT + '?');
+
+        if (
+          withinGracePeriod &&
+          isMeEndpoint &&
+          error instanceof HttpErrorResponse &&
+          error.status === 401
+        ) {
+          // Silently fail — the component will retry or the user can refresh.
+          // Do NOT trigger the refresh+logout cascade.
+          return throwError(() => error);
+        }
+
         if (
           !(error instanceof HttpErrorResponse) ||
           error.status !== 401 ||
@@ -288,4 +320,13 @@ export const authInterceptor: HttpInterceptorFn =
  */
 export function resetPasswordChangeRedirected(): void {
   passwordChangeRedirected = false;
+}
+
+/**
+ * Call this after a successful login to start the grace period.
+ * During the grace period, 401 errors on /me are ignored to prevent
+ * immediate logout when the Neon database is waking up from auto-pause.
+ */
+export function setLastLoginTimestamp(): void {
+  lastLoginTimestamp = Date.now();
 }

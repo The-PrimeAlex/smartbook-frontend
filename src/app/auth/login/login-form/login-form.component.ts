@@ -16,6 +16,7 @@ import {
   RouterLink,
 } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { setLastLoginTimestamp } from '../../../core/http/auth.interceptor';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -86,6 +87,10 @@ export class LoginFormComponent {
       )
       .subscribe({
         next: (user) => {
+          // Mark the login time so the interceptor's grace period prevents
+          // immediate logout if /me returns 401 due to Neon database sleep
+          setLastLoginTimestamp();
+
           if (user.mustChangePassword) {
             void this.router.navigate(
               ['/change-password'],
