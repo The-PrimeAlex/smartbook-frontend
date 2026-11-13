@@ -52,12 +52,20 @@ const MUTATING_METHODS = new Set([
 ]);
 
 /**
- * Custom header used to mark requests that have already been retried
- * after a token refresh. If a retried request still returns 401, the
- * interceptor will not attempt another refresh+retry cycle — this prevents
- * infinite loops when the backend consistently rejects the token.
+ * Guard to prevent multiple concurrent refresh+retry cycles.
+ * When one request triggers a token refresh, all other pending 401s
+ * must wait for that refresh to complete instead of each triggering
+ * their own refresh attempt — this prevents infinite retry loops.
  */
-const RETRY_HEADER = 'X-SmartBook-Retried';
+let refreshInProgress = false;
+
+/**
+ * Safety timeout (in ms) to reset refreshInProgress if the retry
+ * pipeline hangs without completing. This prevents the flag from
+ * staying true forever and blocking all subsequent 401 handling.
+ */
+const REFRESH_TIMEOUT_MS = 15_000;
+let refreshTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
 /**
  * Read the CSRF token value.
@@ -132,6 +140,63 @@ export const authInterceptor: HttpInterceptorFn =
       setHeaders: headers,
     });
 
+    function handleRefreshFailure(
+      refreshError: unknown,
+    ): ReturnType<typeof throwError> {
+      if (
+        refreshError instanceof
+          HttpErrorResponse &&
+        refreshError.status === 401
+      ) {
+        authService.clearLocalAuth();
+        passwordChangeRedirected = false;
+        setTimeout(() => {
+          void router.navigate(['/login'], {
+            replaceUrl: true,
+          });
+        });
+      }
+
+      if (
+        refreshError instanceof
+          HttpErrorResponse &&
+        refreshError.status === 403 &&
+        !passwordChangeRedirected
+      ) {
+        const body = refreshError.error;
+        const isPasswordChangeRequired =
+          (typeof body === 'string' &&
+            body.includes(
+              'password_change_required',
+            )) ||
+          (typeof body === 'object' &&
+            body !== null &&
+            ((
+              body as Record<string, string>
+            )['code'] ===
+              'password_change_required' ||
+              (
+                body as Record<string, string>
+              )['error'] ===
+                'password_change_required'));
+
+        if (isPasswordChangeRequired) {
+          passwordChangeRedirected = true;
+          authService.clearLocalAuth();
+          setTimeout(() => {
+            void router.navigate(
+              ['/change-password'],
+              {
+                replaceUrl: true,
+              },
+            );
+          });
+        }
+      }
+
+      return throwError(() => refreshError);
+    }
+
     return next(authenticatedRequest).pipe(
       catchError((error: unknown) => {
         // Handle 403 password_change_required — redirect user to change password
@@ -199,119 +264,79 @@ export const authInterceptor: HttpInterceptorFn =
           return throwError(() => error);
         }
 
-        // If this request was already retried after a token refresh, do not retry again.
-        // This prevents infinite loops when the backend consistently rejects the token.
-        const alreadyRetried = request.headers.has(RETRY_HEADER);
-
+        // Only handle 401 on protected endpoints with a valid token.
         if (
           !(error instanceof HttpErrorResponse) ||
           error.status !== 401 ||
           !token ||
-          isAuthEndpoint ||
-          alreadyRetried
+          isAuthEndpoint
         ) {
           return throwError(() => error);
         }
 
-        // Refresh once, then retry the original request.
-        // If the refresh fails (e.g., Neon database sleeping), retry once after a short delay
-        // to give the database time to wake up before logging out the user.
+        // If a refresh+retry is already in progress, do not start another one.
+        // Multiple requests may fail with 401 at the same time (e.g., schedule
+        // requests for all rooms), but only one token refresh is needed.
+        // Subsequent requests will use the refreshed token automatically.
+        if (refreshInProgress) {
+          return throwError(() => error);
+        }
+
+        // Mark that a refresh is in progress so other pending 401s skip the retry.
+        refreshInProgress = true;
+
+        // Set a safety timeout to reset the flag if the retry pipeline hangs.
+        // This prevents the flag from staying true forever and blocking all
+        // subsequent requests when the backend is unresponsive.
+        if (refreshTimeoutId !== null) {
+          clearTimeout(refreshTimeoutId);
+        }
+        refreshTimeoutId = setTimeout(() => {
+          refreshInProgress = false;
+          refreshTimeoutId = null;
+        }, REFRESH_TIMEOUT_MS);
+
+        // Refresh the token, then retry the original request.
+        // If the refresh fails (e.g., Neon database sleeping), retry once after
+        // a short delay to give the database time to wake up.
         return authService
           .refreshAccessToken()
           .pipe(
-            catchError(
-              (refreshError: unknown) => {
-                // First refresh failed — retry once after a delay to allow the Neon database
-                // to wake up from auto-pause. This prevents users from being logged out
-                // when the database is temporarily sleeping.
-                return authService
-                  .refreshAccessToken()
-                  .pipe(
-                    delay(3000),
-                    catchError((retryError: unknown) => {
-                      // Second refresh also failed — handle the error normally
-                      if (
-                        retryError instanceof
-                          HttpErrorResponse &&
-                        retryError.status === 401
-                      ) {
-                        authService.clearLocalAuth();
-                        passwordChangeRedirected = false;
-                        setTimeout(() => {
-                          void router.navigate(['/login'], {
-                            replaceUrl: true,
-                          });
-                        });
-                      }
-
-                      if (
-                        retryError instanceof
-                          HttpErrorResponse &&
-                        retryError.status === 403 &&
-                        !passwordChangeRedirected
-                      ) {
-                        const body = retryError.error;
-                        const isPasswordChangeRequired =
-                          (typeof body === 'string' &&
-                            body.includes(
-                              'password_change_required',
-                            )) ||
-                          (typeof body === 'object' &&
-                            body !== null &&
-                            ((
-                              body as Record<
-                                string,
-                                string
-                              >
-                            )['code'] ===
-                              'password_change_required' ||
-                              (
-                                body as Record<
-                                  string,
-                                  string
-                                >
-                              )['error'] ===
-                                'password_change_required'));
-
-                        if (isPasswordChangeRequired) {
-                          passwordChangeRedirected = true;
-                          authService.clearLocalAuth();
-                          setTimeout(() => {
-                            void router.navigate(
-                              ['/change-password'],
-                              {
-                                replaceUrl: true,
-                              },
-                            );
-                          });
-                        }
-                      }
-
-                      return throwError(
-                        () => retryError,
-                      );
-                    }),
-                  );
-              },
-            ),
-
+            catchError((refreshError: unknown) => {
+              // First refresh failed — retry once after a delay for Neon wake-up.
+              return authService
+                .refreshAccessToken()
+                .pipe(
+                  delay(3000),
+                  catchError((retryError: unknown) => {
+                    // Reset the flag so future 401s can trigger a new refresh.
+                    refreshInProgress = false;
+                    if (refreshTimeoutId !== null) {
+                      clearTimeout(refreshTimeoutId);
+                      refreshTimeoutId = null;
+                    }
+                    return handleRefreshFailure(retryError);
+                  }),
+                );
+            }),
             switchMap(() => {
               const refreshedToken =
                 authService.getAccessToken();
 
               if (!refreshedToken) {
+                refreshInProgress = false;
+                if (refreshTimeoutId !== null) {
+                  clearTimeout(refreshTimeoutId);
+                  refreshTimeoutId = null;
+                }
                 return throwError(() => error);
               }
 
-              const retryHeaders: Record<
-                string,
-                string
-              > = {
+              const retryHeaders: Record<string, string> = {
                 Authorization: `Bearer ${refreshedToken}`,
-                [RETRY_HEADER]: 'true',
               };
 
-              // Include CSRF token on mutating requests, just like the original request.
+              // Include CSRF token on mutating requests.
               if (
                 MUTATING_METHODS.has(
                   request.method.toLowerCase(),
@@ -330,7 +355,39 @@ export const authInterceptor: HttpInterceptorFn =
                 setHeaders: retryHeaders,
               });
 
-              return next(retryRequest);
+              return next(retryRequest).pipe(
+                finalize(() => {
+                  // Reset the flag after the retry completes (success or failure).
+                  refreshInProgress = false;
+                  if (refreshTimeoutId !== null) {
+                    clearTimeout(refreshTimeoutId);
+                    refreshTimeoutId = null;
+                  }
+                }),
+                catchError((retryError: unknown) => {
+                  // Reset the flag if the retry itself fails.
+                  refreshInProgress = false;
+                  if (refreshTimeoutId !== null) {
+                    clearTimeout(refreshTimeoutId);
+                    refreshTimeoutId = null;
+                  }
+                  // If the retry still gets 401, the token is truly invalid — log out.
+                  if (
+                    retryError instanceof
+                      HttpErrorResponse &&
+                    retryError.status === 401
+                  ) {
+                    authService.clearLocalAuth();
+                    passwordChangeRedirected = false;
+                    setTimeout(() => {
+                      void router.navigate(['/login'], {
+                        replaceUrl: true,
+                      });
+                    });
+                  }
+                  return throwError(() => retryError);
+                }),
+              );
             }),
           );
       }),

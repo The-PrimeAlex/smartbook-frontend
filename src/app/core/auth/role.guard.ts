@@ -6,6 +6,7 @@ import {
 import { map, of } from 'rxjs';
 
 import { AuthService } from './auth.service';
+import { restoreSessionOnce } from './auth.guard';
 
 export const roleGuard: CanActivateFn = (
   route,
@@ -13,6 +14,9 @@ export const roleGuard: CanActivateFn = (
 ) => {
   const authService = inject(AuthService);
   const router = inject(Router);
+
+  // Restore session from localStorage before checking the token.
+  restoreSessionOnce(authService);
 
   const requiredRoles = route.data['roles'] as
     string[] | undefined;

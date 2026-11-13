@@ -262,7 +262,7 @@ export class AuthService {
       );
   }
 
-  private applyAuthResponse(
+  applyAuthResponse(
     response: AuthResponse,
   ): void {
     this.accessTokenState.set(

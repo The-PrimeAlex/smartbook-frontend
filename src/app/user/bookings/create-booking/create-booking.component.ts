@@ -418,6 +418,19 @@ export class CreateBookingComponent implements OnInit {
           );
           this.saving = false;
 
+          // If the request was cancelled (e.g., navigation away), ignore it
+          if (error?.name === 'HttpFailure' && error?.status === 0) {
+            return;
+          }
+
+          if (error?.status === 401) {
+            // Token expired or invalid — the auth interceptor will handle the redirect
+            this.clearMessages();
+            this.errorMessage =
+              'Your session has expired. Please log in again.';
+            return;
+          }
+
           if (error?.status === 409) {
             console.log(
               '409 conflict detected, body:',

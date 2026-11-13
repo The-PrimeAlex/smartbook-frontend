@@ -1,13 +1,24 @@
 import { DecimalPipe } from '@angular/common';
 import {
   Component,
+  OnDestroy,
   OnInit,
   computed,
   inject,
   signal,
 } from '@angular/core';
-import { catchError, forkJoin, of } from 'rxjs';
+import {
+  catchError,
+  forkJoin,
+  of,
+  Subscription,
+} from 'rxjs';
 import { map } from 'rxjs/operators';
+import {
+  NavigationEnd,
+  Router,
+} from '@angular/router';
+import { filter } from 'rxjs/operators';
 import {
   LucideCheck,
   LucideChevronDown,
@@ -55,9 +66,12 @@ interface RoomCardData {
   templateUrl: './view-rooms.component.html',
   styleUrl: './view-rooms.component.css',
 })
-export class ViewRoomsComponent implements OnInit {
+export class ViewRoomsComponent implements OnInit, OnDestroy {
   private readonly roomService =
     inject(RoomService);
+  private readonly router = inject(Router);
+  private readonly routerSubscription =
+    new Subscription();
 
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
@@ -119,6 +133,24 @@ export class ViewRoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadRooms();
+
+    // Reload rooms when navigating back to this page (e.g., after creating a new room)
+    this.routerSubscription.add(
+      this.router.events
+        .pipe(
+          filter(
+            (e): e is NavigationEnd =>
+              e instanceof NavigationEnd,
+          ),
+        )
+        .subscribe(() => {
+          this.loadRooms();
+        }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.routerSubscription.unsubscribe();
   }
 
   loadRooms(): void {

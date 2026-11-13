@@ -1,12 +1,20 @@
 import {
   Component,
+  OnDestroy,
   computed,
   inject,
   signal,
 } from '@angular/core';
 import { IconComponent } from '../../../shared/ui';
-import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import {
+  NavigationEnd,
+  Router,
+} from '@angular/router';
+import {
+  forkJoin,
+  Subscription,
+} from 'rxjs';
+import { filter } from 'rxjs/operators';
 import {
   LucideCalendar,
   LucideCheck,
@@ -72,7 +80,7 @@ interface RoomCardData {
   templateUrl: './find-rooms.component.html',
   styleUrl: './find-rooms.component.css',
 })
-export class FindRoomsComponent {
+export class FindRoomsComponent implements OnDestroy {
   private readonly roomService =
     inject(RoomService);
   private readonly bookingService = inject(
@@ -176,8 +184,28 @@ export class FindRoomsComponent {
     ),
   );
 
+  private readonly routerSubscription = new Subscription();
+
   ngOnInit() {
     this.loadAllRooms();
+
+    // Reload rooms when navigating back to this page (e.g., after admin creates a new room)
+    this.routerSubscription.add(
+      this.router.events
+        .pipe(
+          filter(
+            (e): e is NavigationEnd =>
+              e instanceof NavigationEnd,
+          ),
+        )
+        .subscribe(() => {
+          this.loadAllRooms();
+        }),
+    );
+  }
+
+  ngOnDestroy() {
+    this.routerSubscription.unsubscribe();
   }
 
   loadAllRooms() {

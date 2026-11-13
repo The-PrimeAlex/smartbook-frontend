@@ -9,6 +9,41 @@ import { map, of } from 'rxjs';
 import { AuthService } from './auth.service';
 
 /**
+ * Restores the session from localStorage synchronously before any guard
+ * checks the in-memory token. On page refresh, Angular recreates the
+ * AuthService with null signals, so we must repopulate them from localStorage
+ * before the CanMatch guard runs — otherwise the guard sees no token and
+ * redirects to /login before restoreSession() ever gets a chance.
+ */
+let sessionRestoredFromLocalStorage = false;
+export function restoreSessionOnce(authService: AuthService): void {
+  if (sessionRestoredFromLocalStorage) return;
+  sessionRestoredFromLocalStorage = true;
+
+  // If the session was expired by auto-logout, clear everything
+  if (sessionStorage.getItem('smartbook-session-expired') === 'true') {
+    authService.clearLocalAuth();
+    return;
+  }
+
+  const token = localStorage.getItem('smartbook_access_token');
+  const userJson = localStorage.getItem('smartbook_user');
+  if (token && userJson) {
+    try {
+      const user = JSON.parse(userJson);
+      authService.applyAuthResponse({
+        accessToken: token,
+        tokenType: 'Bearer',
+        expiresAt: '',
+        user,
+      });
+    } catch {
+      authService.clearLocalAuth();
+    }
+  }
+}
+
+/**
  * Shared logic for checking authentication and roles.
  * Used by both authGuard (CanActivate) and authMatchGuard (CanMatch).
  */
@@ -58,6 +93,11 @@ export const authMatchGuard: CanMatchFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  // Restore session from localStorage before checking the token.
+  // On page refresh, Angular recreates AuthService with null signals,
+  // so we must repopulate them before the guard checks for a token.
+  restoreSessionOnce(authService);
+
   const result = checkAuth(authService, router, route, router.url);
   return result === true ? of(true) : of(result);
 };
@@ -72,6 +112,9 @@ export const authGuard: CanActivateFn = (
 ) => {
   const authService = inject(AuthService);
   const router = inject(Router);
+
+  // Restore session from localStorage before checking the token.
+  restoreSessionOnce(authService);
 
   // If the session was expired by auto-logout, redirect to login immediately
   if (
