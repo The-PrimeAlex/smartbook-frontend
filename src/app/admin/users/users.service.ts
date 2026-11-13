@@ -13,7 +13,6 @@ import {
   tap,
 } from 'rxjs';
 import { CreateUserRequest } from './add-user/add-user.model';
-import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
 
 export interface OrganizationProfile {
@@ -124,7 +123,7 @@ export class UsersService {
     this.loading.set(true);
     this.http
       .get<BackendUser[]>(
-        `${environment.apiUrl}/users/`,
+        '/api/v1/users/',
       )
       .pipe(
         tap(() => this.loading.set(false)),
@@ -149,7 +148,7 @@ export class UsersService {
       switchMap(() =>
         this.http
           .patch<{ message: string }>(
-            `${environment.apiUrl}/users/${userId}/deactivate`,
+            `/api/v1/users/${userId}/deactivate`,
             {},
           )
           .pipe(
@@ -174,7 +173,7 @@ export class UsersService {
 
   getMyProfile(): Observable<MyProfile> {
     return this.http.get<MyProfile>(
-      `${environment.apiUrl}/users/me/profile`,
+      '/api/v1/users/me/profile',
     );
   }
 
@@ -184,7 +183,7 @@ export class UsersService {
     return this.authService.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.put<void>(
-          `${environment.apiUrl}/users/me/profile`,
+          '/api/v1/users/me/profile',
           profile,
         ),
       ),
@@ -196,7 +195,7 @@ export class UsersService {
       switchMap(() =>
         this.http
           .post<{ message: string }>(
-            `${environment.apiUrl}/users`,
+            '/api/v1/users',
             user,
           )
           .pipe(tap(() => this.loadUsers())),

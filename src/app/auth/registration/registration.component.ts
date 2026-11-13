@@ -31,7 +31,6 @@ import {
   LucideShieldCheck,
   LucideUserRound,
 } from '@lucide/angular';
-import { environment } from '../../../environments/environment';
 
 interface CountryOption {
   countryCode: CountryCode;
@@ -302,7 +301,7 @@ export class RegistrationRequestComponent {
       .pipe(
         switchMap(() =>
           this.http.post(
-            `${environment.apiUrl}/registration-requests`,
+            '/api/v1/registration-requests',
             body,
           ),
         ),

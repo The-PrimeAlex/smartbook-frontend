@@ -12,7 +12,6 @@ import {
   throwError,
 } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { environment } from '../../../environments/environment';
 
 /**
  * Guard to prevent infinite redirect loops when the user must change their password.
@@ -29,9 +28,7 @@ let passwordChangeRedirected = false;
 let lastLoginTimestamp = 0;
 const LOGIN_GRACE_PERIOD_MS = 10_000; // 10 seconds
 
-const ME_ENDPOINT = environment.apiUrl.endsWith('/api/v1')
-  ? '/api/v1/auth/me'
-  : `${environment.apiUrl}/auth/me`;
+const ME_ENDPOINT = '/api/v1/auth/me';
 
 /**
  * API prefix for matching intercepted requests.

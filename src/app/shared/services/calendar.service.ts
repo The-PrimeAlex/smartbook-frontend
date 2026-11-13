@@ -7,7 +7,6 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
 
 export interface GoogleCalendarEventDto {
@@ -39,7 +38,7 @@ export class CalendarService {
   private readonly authService = inject(AuthService);
 
   private readonly apiBaseUrl =
-    environment.apiUrl;
+    '/api/v1';
 
   getMyBookings(): Observable<unknown> {
     return this.http.get<unknown>(

@@ -27,7 +27,6 @@ import {
   PageBannerComponent,
   IconComponent,
 } from '../../../shared/ui';
-import { environment } from '../../../../environments/environment';
 
 interface Room {
   roomId: string;
@@ -159,7 +158,7 @@ export class CreateBookingComponent implements OnInit {
 
     this.http
       .get<Room[] | { content: Room[] }>(
-        `${environment.apiUrl}/rooms`,
+        '/api/v1/rooms',
       )
       .pipe(
         finalize(
@@ -381,12 +380,12 @@ export class CreateBookingComponent implements OnInit {
 
     this.http
       .get<unknown>(
-        `${environment.apiUrl}/auth/csrf`,
+        '/api/v1/auth/csrf',
       )
       .pipe(
         switchMap(() =>
           this.http.post<BookingResponse>(
-            `${environment.apiUrl}/bookings`,
+            '/api/v1/bookings',
             booking,
           ),
         ),

@@ -16,12 +16,11 @@ import {
   Setting,
   UpdateSettingRequest,
 } from '../models/settings.model';
-import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/settings`;
+  private readonly apiUrl = '/api/v1/settings';
 
   getAllSettings(): Observable<Setting[]> {
     return this.http

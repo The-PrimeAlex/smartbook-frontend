@@ -7,11 +7,10 @@ import {
   PaymentResponse,
   PaymentStatusResponse,
 } from '../models/billing.model';
-import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class BillingService {
-  private readonly baseUrl = environment.apiUrl;
+  private readonly baseUrl = '/api/v1';
 
   constructor(private http: HttpClient) {}
 

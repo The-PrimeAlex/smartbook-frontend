@@ -4,7 +4,6 @@ import {
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 
 export interface PasswordResetRequest {
@@ -24,7 +23,7 @@ export class PasswordResetService {
   private readonly authService =
     inject(AuthService);
 
-  private readonly authEndpoint = `${environment.apiUrl}/auth`;
+  private readonly authEndpoint = '/api/v1/auth';
   private readonly httpOptions = {
     withCredentials: true,
   };

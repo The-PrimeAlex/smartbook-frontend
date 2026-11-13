@@ -79,7 +79,7 @@ export class AuthService {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<AuthResponse>(
-          `${environment.apiUrl}/auth/login`,
+          '/api/v1/auth/login',
           {
             email: credentials.email,
             password: credentials.password,
@@ -153,7 +153,7 @@ export class AuthService {
         this.ensureCsrfToken().pipe(
           switchMap(() =>
             this.http.post<AuthResponse>(
-              `${environment.apiUrl}/auth/refresh`,
+              '/api/v1/auth/refresh',
               {},
               this.httpOptions,
             ),
@@ -177,7 +177,7 @@ export class AuthService {
   logout(): Observable<void> {
     return this.http
       .post<void>(
-        `${environment.apiUrl}/auth/logout`,
+        '/api/v1/auth/logout',
         {},
         this.httpOptions,
       )
@@ -195,7 +195,7 @@ export class AuthService {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<AuthResponse>(
-          `${environment.apiUrl}/auth/change-password`,
+          '/api/v1/auth/change-password',
           request,
           this.httpOptions,
         ),
@@ -246,9 +246,12 @@ export class AuthService {
     // For cross-origin (production), always fetch a fresh token because
     // the backend rotates the CSRF token on every request.
     // A cached token becomes stale after any subsequent GET request.
+    // Use a relative path so the CSRF cookie is set on the same domain
+    // as all other API requests (Cloudflare Pages proxy), avoiding mixed-origin
+    // CSRF validation failures where the cookie domain doesn't match.
     return this.http
       .get<{ token: string }>(
-        `${environment.apiUrl}/auth/csrf`,
+        '/api/v1/auth/csrf',
         {
           withCredentials: true,
         },

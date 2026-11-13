@@ -5,7 +5,6 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../core/auth/auth.service';
 
 export interface RegistrationRequest {
@@ -26,7 +25,7 @@ export class RegistrationRequestsService {
   private readonly http = inject(HttpClient);
   private readonly authService =
     inject(AuthService);
-  private readonly baseUrl = `${environment.apiUrl}/registration-requests/admin`;
+  private readonly baseUrl = '/api/v1/registration-requests/admin';
 
   getRequests(
     status?: string,

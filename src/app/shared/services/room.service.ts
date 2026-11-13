@@ -16,7 +16,6 @@ import {
   MeetingRoom,
   RoomDetails,
 } from '../models/room.model';
-import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
 
 export type CreateRoomRequest = Omit<
@@ -28,7 +27,7 @@ export type CreateRoomRequest = Omit<
 export class RoomService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
-  private readonly apiUrl = `${environment.apiUrl}/rooms`;
+  private readonly apiUrl = '/api/v1/rooms';
 
   getRooms(): Observable<MeetingRoom[]> {
     return this.http
