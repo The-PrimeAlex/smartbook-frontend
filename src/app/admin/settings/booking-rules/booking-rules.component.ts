@@ -4,21 +4,35 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideCalendar } from '@lucide/angular';
+import {
+  LucideCalendar,
+  LucideClock,
+  LucideSave,
+  LucideShieldCheck,
+  LucideTimer,
+} from '@lucide/angular';
 import { SettingsService } from '../../../shared/services/settings.service';
 import { Setting } from '../../../shared/models/settings.model';
-import { PageBannerComponent } from '../../../shared/ui';
+import {
+  PageBannerComponent,
+  IconComponent,
+} from '../../../shared/ui';
 
 @Component({
   selector: 'app-booking-rules',
   standalone: true,
-  imports: [FormsModule, PageBannerComponent],
+  imports: [FormsModule, PageBannerComponent, IconComponent, KeyValuePipe],
   templateUrl: './booking-rules.component.html',
   styleUrl: './booking-rules.component.css',
 })
 export class BookingRulesComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
+  readonly LucideClock = LucideClock;
+  readonly LucideSave = LucideSave;
+  readonly LucideShieldCheck = LucideShieldCheck;
+  readonly LucideTimer = LucideTimer;
   private readonly settingsService = inject(
     SettingsService,
   );
@@ -91,5 +105,51 @@ export class BookingRulesComponent implements OnInit {
       ...v,
       [key]: value,
     }));
+  }
+
+  getGroupIcon(group: string) {
+    switch (group) {
+      case 'duration':
+        return this.LucideClock;
+      case 'scheduling':
+        return this.LucideTimer;
+      case 'policy':
+        return this.LucideShieldCheck;
+      default:
+        return this.LucideCalendar;
+    }
+  }
+
+  getGroupLabel(group: string): string {
+    switch (group) {
+      case 'duration':
+        return 'Duration Limits';
+      case 'scheduling':
+        return 'Scheduling Rules';
+      case 'policy':
+        return 'Booking Policy';
+      default:
+        return 'Other';
+    }
+  }
+
+  getGroupedSettings(): Record<string, Setting[]> {
+    const groups: Record<string, Setting[]> = {};
+    const groupMap: Record<string, string> = {
+      'booking.min_duration_minutes': 'duration',
+      'booking.max_duration_hours': 'duration',
+      'booking.advance_days': 'scheduling',
+      'booking.auto_checkin': 'scheduling',
+      'booking.auto_checkout_overrun_minutes': 'scheduling',
+      'booking.noshow_minutes': 'policy',
+      'booking.require_approval': 'policy',
+      'booking.allow_overlap': 'policy',
+    };
+    this.settings().forEach((s) => {
+      const group = groupMap[s.key] || 'other';
+      if (!groups[group]) groups[group] = [];
+      groups[group].push(s);
+    });
+    return groups;
   }
 }

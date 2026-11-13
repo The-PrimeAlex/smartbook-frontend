@@ -3,7 +3,7 @@
     [icon]="LucideLayoutGrid"
     eyebrow="Settings"
     title="Room Configuration"
-    description="Select a room from the list below to view and edit its configuration details."
+    description="Manage room details, capacity, rates, and status for all meeting rooms."
   ></app-page-banner>
 
   @if (error()) {
@@ -18,357 +18,250 @@
   }
 
   @if (loading()) {
-    <div class="loading-panel">
-      Loading rooms...
+    <div class="loading-grid">
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <div class="room-card-skeleton">
+          <div class="skeleton-header"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line w-70"></div>
+            <div class="skeleton-line w-50"></div>
+          </div>
+        </div>
+      }
     </div>
   } @else {
-    <div class="config-layout">
-      <!-- Left Panel: Room List -->
-      <div class="room-panel">
-        <div class="toolbar">
-          <app-search-box
-            placeholder="Search rooms..."
-            [value]="searchQuery()"
-            (change)="setSearch($event)"
-          ></app-search-box>
-          <span class="room-count"
-            >{{ filteredRooms().length }} of
-            {{ rooms().length }} rooms</span
-          >
-        </div>
+    <!-- Search & Results Bar -->
+    <div class="toolbar">
+      <app-search-box
+        placeholder="Search rooms..."
+        [value]="searchQuery()"
+        (change)="setSearch($event)"
+      ></app-search-box>
+      <span class="room-count">
+        <strong>{{ filteredRooms().length }}</strong>
+        {{ filteredRooms().length === 1 ? 'room' : 'rooms' }}
+      </span>
+    </div>
 
-        @if (rooms().length === 0) {
-          <app-empty-state
-            [icon]="LucideLayoutGrid"
-            title="No Rooms Found"
-            message="No rooms have been created yet. Go to View Rooms to add your first room."
-          ></app-empty-state>
-        } @else if (
-          filteredRooms().length === 0
+    @if (rooms().length === 0) {
+      <app-empty-state
+        [icon]="LucideLayoutGrid"
+        title="No Rooms Found"
+        message="No rooms have been created yet. Go to View Rooms to add your first room."
+      ></app-empty-state>
+    } @else if (filteredRooms().length === 0) {
+      <app-empty-state
+        [icon]="LucideSearch"
+        title="No Matching Rooms"
+        [message]="'No rooms match &quot;' + searchQuery() + '&quot;. Try a different search term.'"
+      ></app-empty-state>
+    } @else {
+      <!-- Room Cards Grid -->
+      <div class="rooms-grid">
+        @for (
+          room of filteredRooms();
+          track room.roomId;
+          let i = $index
         ) {
-          <app-empty-state
-            [icon]="LucideSearch"
-            title="No Matching Rooms"
-            [message]="
-              'No rooms match &quot;' +
-              searchQuery() +
-              '&quot;. Try a different search term.'
-            "
-          ></app-empty-state>
-        } @else {
-          <div class="room-list">
-            <div class="list-header">
-              <span class="col-name"
-                >Room Name</span
-              >
-              <span class="col-type">Type</span>
-              <span class="col-capacity"
-                >Capacity</span
-              >
-              <span class="col-rate"
-                >Hourly Rate</span
-              >
-              <span class="col-status"
-                >Status</span
-              >
+          <article
+            class="room-card"
+            [class.selected]="selectedRoom()?.roomId === room.roomId"
+            (click)="selectRoom(room)"
+            [style.animation-delay]="i * 50 + 'ms'"
+          >
+            <!-- Card Header -->
+            <div class="room-card-header">
+              <div class="room-icon-badge" [class]="getStatusClass(room.status)">
+                <app-icon [icon]="getRoomTypeIcon(room.roomType)" [size]="20"></app-icon>
+              </div>
+              <div class="room-title-block">
+                <h3 class="room-title">{{ room.roomName }}</h3>
+                <span class="room-type-tag">{{ formatRoomType(room.roomType) }}</span>
+              </div>
+              <span class="status-pill" [class]="getStatusClass(room.status)">
+                <span class="status-dot"></span>
+                {{ formatStatus(room.status) }}
+              </span>
             </div>
-            <div class="list-body">
-              @for (
-                room of filteredRooms();
-                track room.roomId;
-                let i = $index
-              ) {
-                <div
-                  class="list-row"
-                  [class.selected]="
-                    selectedRoom()?.roomId ===
-                    room.roomId
-                  "
-                  (click)="selectRoom(room)"
-                  [style.animation-delay]="
-                    i * 50 + 'ms'
-                  "
-                >
-                  <span class="col-name">
-                    <span class="row-icon"
-                      >🏢</span
-                    >
-                    <span class="name-text">
-                      <span class="name">{{
-                        room.roomName
-                      }}</span>
-                      @if (room.description) {
-                        <span
-                          class="description"
-                          >{{
-                            room.description
-                          }}</span
-                        >
-                      }
-                    </span>
-                  </span>
-                  <span class="col-type">
-                    <span class="type-badge">{{
-                      formatRoomType(
-                        room.roomType
-                      )
-                    }}</span>
-                  </span>
-                  <span class="col-capacity">
-                    <span class="icon">👥</span>
-                    {{ room.capacity }}
-                  </span>
-                  <span class="col-rate">
-                    KES
-                    {{
-                      room.hourlyRate.toLocaleString()
-                    }}
-                  </span>
-                  <span class="col-status">
-                    <span
-                      class="status-badge status-{{
-                        room.status.toLowerCase()
-                      }}"
-                    >
-                      <span
-                        class="status-dot"
-                      ></span>
-                      {{
-                        formatStatus(room.status)
-                      }}
-                    </span>
-                  </span>
+
+            <!-- Card Body -->
+            <div class="room-card-body">
+              <div class="room-info-row">
+                <div class="room-info-item">
+                  <app-icon [icon]="LucideUsers" [size]="16"></app-icon>
+                  <span>{{ room.capacity }} seats</span>
                 </div>
+                <div class="room-info-item">
+                  <app-icon [icon]="LucideCheck" [size]="16"></app-icon>
+                  <span>KES {{ room.hourlyRate.toLocaleString() }}/hr</span>
+                </div>
+              </div>
+              @if (room.description) {
+                <p class="room-description">{{ room.description }}</p>
               }
             </div>
-          </div>
+
+            <!-- Card Footer -->
+            <div class="room-card-footer">
+              <span class="edit-hint">Click to configure</span>
+              <app-icon [icon]="LucidePencil" [size]="16"></app-icon>
+            </div>
+          </article>
         }
       </div>
+    }
+  }
 
-      <!-- Right Panel: Room Edit Form -->
-      <div class="edit-panel">
-        @if (selectedRoom()) {
-          <div class="edit-card">
-            <div class="edit-card-header">
-              <div>
-                <span class="section-eyebrow"
-                  >EDIT ROOM</span
-                >
-                <h2>
-                  {{ selectedRoom()!.roomName }}
-                </h2>
-              </div>
-              @if (!editing()) {
-                <button
-                  class="btn-edit"
-                  (click)="startEditing()"
-                >
-                  ✏️ Edit
-                </button>
-              }
-            </div>
+  <!-- Edit Modal Overlay -->
+  @if (selectedRoom()) {
+    <div class="edit-overlay" (click)="closeEditPanel()">
+      <div class="edit-modal" (click)="$event.stopPropagation()">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <div>
+            <span class="modal-eyebrow">CONFIGURE ROOM</span>
+            <h2>{{ selectedRoom()!.roomName }}</h2>
+          </div>
+          <button type="button" class="modal-close" (click)="closeEditPanel()" aria-label="Close">
+            <app-icon [icon]="LucideX" [size]="20"></app-icon>
+          </button>
+        </div>
 
-            @if (!editing()) {
-              <!-- View Mode: Display room details -->
-              <div class="detail-grid">
-                <div class="detail-item">
-                  <span class="detail-label"
-                    >Room Type</span
-                  >
-                  <span class="detail-value">{{
-                    formatRoomType(
-                      selectedRoom()!.roomType
-                    )
-                  }}</span>
+        <!-- Modal Body -->
+        <div class="modal-body">
+          @if (!editing()) {
+            <!-- View Mode -->
+            <div class="detail-grid">
+              <div class="detail-item">
+                <app-icon [icon]="getRoomTypeIcon(selectedRoom()!.roomType)" [size]="18"></app-icon>
+                <div class="detail-text">
+                  <span class="detail-label">Room Type</span>
+                  <span class="detail-value">{{ formatRoomType(selectedRoom()!.roomType) }}</span>
                 </div>
-                <div class="detail-item">
-                  <span class="detail-label"
-                    >Status</span
-                  >
-                  <span
-                    class="status-badge status-{{
-                      selectedRoom()!.status.toLowerCase()
-                    }}"
-                  >
-                    <span
-                      class="status-dot"
-                    ></span>
-                    {{
-                      formatStatus(
-                        selectedRoom()!.status
-                      )
-                    }}
+              </div>
+              <div class="detail-item">
+                <app-icon [icon]="LucideCheck" [size]="18"></app-icon>
+                <div class="detail-text">
+                  <span class="detail-label">Status</span>
+                  <span class="status-pill" [class]="getStatusClass(selectedRoom()!.status)">
+                    <span class="status-dot"></span>
+                    {{ formatStatus(selectedRoom()!.status) }}
                   </span>
                 </div>
-                <div class="detail-item">
-                  <span class="detail-label"
-                    >Capacity</span
-                  >
-                  <span class="detail-value"
-                    >👥
-                    {{ selectedRoom()!.capacity }}
-                    people</span
-                  >
+              </div>
+              <div class="detail-item">
+                <app-icon [icon]="LucideUsers" [size]="18"></app-icon>
+                <div class="detail-text">
+                  <span class="detail-label">Capacity</span>
+                  <span class="detail-value">{{ selectedRoom()!.capacity }} people</span>
                 </div>
-                <div class="detail-item">
-                  <span class="detail-label"
-                    >Hourly Rate</span
-                  >
-                  <span class="detail-value rate"
-                    >KES
-                    {{
-                      selectedRoom()!.hourlyRate.toLocaleString()
-                    }}</span
-                  >
+              </div>
+              <div class="detail-item">
+                <app-icon [icon]="LucideCheck" [size]="18"></app-icon>
+                <div class="detail-text">
+                  <span class="detail-label">Hourly Rate</span>
+                  <span class="detail-value rate">KES {{ selectedRoom()!.hourlyRate.toLocaleString() }}</span>
                 </div>
-                @if (
-                  selectedRoom()!.description
-                ) {
-                  <div
-                    class="detail-item full-width"
-                  >
-                    <span class="detail-label"
-                      >Description</span
-                    >
-                    <span class="detail-value">{{
-                      selectedRoom()!.description
-                    }}</span>
+              </div>
+              @if (selectedRoom()!.description) {
+                <div class="detail-item full-width">
+                  <app-icon [icon]="LucideLayoutGrid" [size]="18"></app-icon>
+                  <div class="detail-text">
+                    <span class="detail-label">Description</span>
+                    <span class="detail-value">{{ selectedRoom()!.description }}</span>
                   </div>
-                }
+                </div>
+              }
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn-primary" (click)="startEditing()">
+                <app-icon [icon]="LucidePencil" [size]="16"></app-icon>
+                Edit Room
+              </button>
+            </div>
+          } @else {
+            <!-- Edit Mode -->
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label class="form-label">Room Name</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  [(ngModel)]="draft().roomName"
+                  placeholder="e.g. Boardroom A"
+                />
               </div>
-            } @else {
-              <!-- Edit Mode: Form fields -->
-              <div class="form-grid">
-                <div
-                  class="form-group full-width"
-                >
-                  <label class="form-label"
-                    >Room Name</label
-                  >
-                  <input
-                    class="form-input"
-                    type="text"
-                    [(ngModel)]="draft().roomName"
-                    placeholder="e.g. Boardroom A"
-                  />
-                </div>
 
-                <div class="form-group">
-                  <label class="form-label"
-                    >Room Type</label
-                  >
-                  <select
-                    class="form-select"
-                    [(ngModel)]="draft().roomType"
-                  >
-                    @for (
-                      type of roomTypes;
-                      track type
-                    ) {
-                      <option [value]="type">
-                        {{ formatRoomType(type) }}
-                      </option>
-                    }
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label"
-                    >Status</label
-                  >
-                  <select
-                    class="form-select"
-                    [(ngModel)]="draft().status"
-                  >
-                    @for (
-                      status of roomStatuses;
-                      track status
-                    ) {
-                      <option [value]="status">
-                        {{ formatStatus(status) }}
-                      </option>
-                    }
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label"
-                    >Capacity</label
-                  >
-                  <input
-                    class="form-input"
-                    type="number"
-                    min="1"
-                    [(ngModel)]="draft().capacity"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label"
-                    >Hourly Rate (KES)</label
-                  >
-                  <input
-                    class="form-input"
-                    type="number"
-                    min="0"
-                    [(ngModel)]="
-                      draft().hourlyRate
-                    "
-                  />
-                </div>
-
-                <div
-                  class="form-group full-width"
-                >
-                  <label class="form-label"
-                    >Description</label
-                  >
-                  <textarea
-                    class="form-textarea"
-                    rows="3"
-                    [(ngModel)]="
-                      draft().description
-                    "
-                    placeholder="Room description..."
-                  ></textarea>
-                </div>
-
-                <div class="form-actions">
-                  <button
-                    class="btn btn-cancel"
-                    (click)="cancelEditing()"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    class="btn btn-save"
-                    (click)="saveRoom()"
-                    [disabled]="saving()"
-                  >
-                    @if (saving()) {
-                      <span
-                        class="spinner"
-                      ></span>
-                      Saving...
-                    } @else {
-                      Save Changes
-                    }
-                  </button>
-                </div>
+              <div class="form-group">
+                <label class="form-label">Room Type</label>
+                <select class="form-select" [(ngModel)]="draft().roomType">
+                  @for (type of roomTypes; track type) {
+                    <option [value]="type">{{ formatRoomType(type) }}</option>
+                  }
+                </select>
               </div>
-            }
-          </div>
-        } @else {
-          <div class="edit-placeholder">
-            <p class="placeholder-icon">👈</p>
-            <h3>Select a Room</h3>
-            <p>
-              Click on a room from the list to
-              view its details and configure its
-              settings.
-            </p>
-          </div>
-        }
+
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select class="form-select" [(ngModel)]="draft().status">
+                  @for (status of roomStatuses; track status) {
+                    <option [value]="status">{{ formatStatus(status) }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Capacity</label>
+                <input
+                  class="form-input"
+                  type="number"
+                  min="1"
+                  [(ngModel)]="draft().capacity"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Hourly Rate (KES)</label>
+                <input
+                  class="form-input"
+                  type="number"
+                  min="0"
+                  [(ngModel)]="draft().hourlyRate"
+                />
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-textarea"
+                  rows="3"
+                  [(ngModel)]="draft().description"
+                  placeholder="Room description..."
+                ></textarea>
+              </div>
+
+              <div class="modal-actions">
+                <button type="button" class="btn btn-ghost" (click)="cancelEditing()">
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="saveRoom()"
+                  [disabled]="saving()"
+                >
+                  @if (saving()) {
+                    <span class="spinner"></span>
+                    Saving...
+                  } @else {
+                    <app-icon [icon]="LucideCheck" [size]="16"></app-icon>
+                    Save Changes
+                  }
+                </button>
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </div>
   }

@@ -159,9 +159,14 @@ export class AdminDashboard implements OnInit {
   readonly incidents = signal<any[]>([]);
   readonly loading = signal(true);
   readonly statsCollapsed = signal(false);
+  readonly quickActionsCollapsed = signal(false);
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);
+  }
+
+  toggleQuickActionsCollapsed(): void {
+    this.quickActionsCollapsed.update((v) => !v);
   }
 
   // Computed stats
@@ -421,6 +426,11 @@ export class AdminDashboard implements OnInit {
       default:
         return '';
     }
+  }
+
+  getLiveStatusCardClass(status: string): string {
+    const cls = this.getLiveStatusClass(status);
+    return cls ? `status-${cls.replace('status-', '')}` : '';
   }
 
   formatDateTime = formatDateTime;

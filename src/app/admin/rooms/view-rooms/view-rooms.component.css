@@ -16,91 +16,32 @@ button:focus-visible {
   outline: 2px solid var(--info);
   outline-offset: 2px;
 }
-/* ── Animations ── */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    max-height: 600px;
-  }
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-/* Float and pulse animations provided
- globally in styles.css */
 
 /* ── Page Container ── */
 .rooms-page {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 24px 20px 40px;
-  animation: fadeIn 400ms ease-out;
+  padding: 24px;
 }
-/* ── Page Banner (global styles from styles.css) ── */
-/* Component-specific banner enhancements */
-.page-banner {
-  animation: bannerFadeIn 400ms ease-out;
-}
-/* ── Overview Stats ── */
+
+/* ── Overview Grid ── */
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
-  animation: fadeUp 400ms ease-out 80ms both;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 .overview-card {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 16px;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
   border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--card-bg);
   box-shadow: var(--card-shadow);
-  transition: all var(--transition);
+  transition: all 250ms ease;
 }
 .overview-card:hover {
   border-color: var(--border-color-hover);
@@ -110,409 +51,410 @@ button:focus-visible {
 .overview-icon {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
   background: var(--brand-accent-light);
   color: var(--brand-accent);
 }
+.overview-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
 .overview-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-.overview-card strong {
-  font-size: 1.375rem;
-  font-weight: 800;
+.overview-value {
+  font-size: 1.75rem;
+  font-weight: 700;
   color: var(--text-primary);
-  line-height: 1;
+  line-height: 1.2;
 }
-/* ── Filters ── */
+
+/* ── Filter Panel ── */
 .filter-panel {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 14px;
-  margin-bottom: 16px;
+  gap: 16px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
   border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--card-bg);
   box-shadow: var(--card-shadow);
-  animation: fadeUp 400ms ease-out 120ms both;
 }
-.filter-options {
+.filter-buttons {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   flex-wrap: wrap;
 }
-.filter-button {
-  padding: 6px 14px;
+.filter-btn {
+  padding: 8px 18px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  background: var(--card-bg);
-  color: var(--neutral-600);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
   font-size: 0.8125rem;
   font-weight: 500;
-  transition: all var(--transition);
+  transition: all 200ms ease;
 }
-.filter-button:hover {
-  background: var(--neutral-50);
-  border-color: var(--border-color-hover);
-  color: var(--text-primary);
+.filter-btn:hover {
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
 }
-.filter-button.active {
-  background: var(--brand-primary);
-  border-color: var(--brand-primary);
-  color: var(--white);
+.filter-btn.active {
+  background: var(--brand-accent);
+  border-color: var(--brand-accent);
+  color: #ffffff;
+  font-weight: 600;
 }
 .results-count {
   font-size: 0.8125rem;
   color: var(--text-secondary);
   white-space: nowrap;
 }
+.results-count strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ── Loading State ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 64px 24px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--brand-accent);
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+}
+
+/* ── State Panels ── */
+.state-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 24px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  text-align: center;
+}
+.state-panel strong {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+.state-panel p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+.state-panel app-icon {
+  color: var(--text-muted);
+}
+.state-error {
+  border-color: var(--danger-bg);
+}
+.state-error strong {
+  color: var(--danger);
+}
+.action-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--brand-accent);
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.action-link:hover {
+  color: var(--brand-accent-dark, var(--brand-accent));
+}
+
 /* ── Rooms Grid ── */
 .rooms-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  animation: fadeUp 400ms ease-out 160ms both;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
+
 /* ── Room Card ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .room-card {
   border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--card-bg);
   box-shadow: var(--card-shadow);
   overflow: hidden;
-  transition: all var(--transition-slow);
-  animation: scaleIn 350ms ease-out both;
+  transition: all 250ms ease;
+  animation: fadeUp 300ms ease-out both;
 }
 .room-card:hover {
   border-color: var(--border-color-hover);
   box-shadow: var(--card-shadow-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 .room-card.expanded {
   border-color: var(--brand-accent);
-  box-shadow: 0 4px 20px rgba(242, 140, 40, 0.12);
-  transform: translateY(-1px);
+  box-shadow: 0 0 0 2px var(--brand-accent-light);
 }
-/* Card header section */
+
+/* Card Header */
 .room-card-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  align-items: flex-start;
+  gap: 14px;
   padding: 16px 20px;
-  transition: background var(--transition);
 }
-.room-card-header:hover {
-  background: var(--neutral-50);
-}
-.room-info {
-  flex: 1;
-  min-width: 0;
-}
-.room-name-row {
+.room-header-left {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
-.room-name {
-  margin: 0;
+.room-icon-badge {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+}
+.room-icon-badge.status-badge.status-active {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+.room-icon-badge.status-badge.status-warning {
+  background: rgba(249, 115, 22, 0.12);
+  color: #f97316;
+}
+.room-icon-badge.status-badge.status-inactive {
+  background: var(--neutral-100);
+  color: var(--text-muted);
+}
+.room-title-block {
+  min-width: 0;
+}
+.room-title {
+  margin: 0 0 4px;
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
-  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.room-meta {
+.room-subtitle {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 6px;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
+  flex-wrap: wrap;
 }
-.room-type-badge {
-  display: inline-flex;
-  align-items: center;
+.room-type-tag {
   padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  background: var(--brand-accent-light);
+  border-radius: var(--radius-full);
+  background: var(--neutral-100);
+  color: var(--text-secondary);
   font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--brand-accent-dark);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
-.meta-sep {
-  color: var(--border-color);
-  user-select: none;
-  font-size: 0.75rem;
+.dot-sep {
+  color: var(--text-muted);
+  font-size: 0.625rem;
 }
-.meta-item {
+.room-capacity {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
+}
+.room-rate {
+  font-weight: 500;
+  color: var(--brand-accent);
+}
+
+/* Status Pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  flex-shrink: 0;
   white-space: nowrap;
 }
-.meta-item svg {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
+.status-pill.status-badge.status-active {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
 }
-/* Status badge - prominent with dot indicator */
-.room-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
-  flex-shrink: 0;
-  letter-spacing: 0.01em;
+.status-pill.status-badge.status-warning {
+  background: rgba(249, 115, 22, 0.15);
+  color: #f97316;
 }
-.room-status::before {
-  width: 7px;
-  height: 7px;
+.status-pill.status-badge.status-inactive {
+  background: var(--neutral-100);
+  color: var(--text-muted);
+}
+.status-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: currentColor;
-  content: '';
-  flex-shrink: 0;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
-}
-.status-active {
-  color: var(--success);
-  background: var(--success-bg);
-}
-.status-warning {
-  color: var(--warning);
-  background: var(--warning-bg);
-}
-.status-inactive {
-  color: var(--text-secondary);
-  background: var(--neutral-100);
-}
-/* Expand button - prominent action */
-.expand-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border: 1.5px solid var(--border-color);
-  border-radius: var(--radius-md);
-  background: var(--card-bg);
-  color: var(--text-primary);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  flex-shrink: 0;
-  transition: all var(--transition);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.expand-button:hover {
-  border-color: var(--brand-accent);
-  color: var(--brand-accent);
-  background: var(--brand-accent-light);
-  box-shadow: 0 2px 8px rgba(242, 140, 40, 0.12);
-  transform: translateY(-1px);
-}
-
-.expand-button:active {
-  transform: translateY(0);
-}
-
-.expand-label {
-  line-height: 1;
-}
-
-.expand-button .chevron {
-  width: 18px;
-  height: 18px;
-  transition: transform 250ms ease;
-}
-
-.expand-button .chevron.open {
-  transform: rotate(180deg);
-}
-
-/* Card footer section */
+/* Card Footer */
 .room-card-footer {
   display: flex;
   align-items: center;
-  padding: 0 20px 12px;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-color);
+  background: var(--neutral-50);
 }
-
-.equipment-count {
+.equipment-info {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
-  padding: 4px 0;
+}
+.expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 200ms ease;
+}
+.expand-btn:hover {
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
+  background: var(--brand-accent-light);
+}
+.expand-text {
+  margin-right: 2px;
+}
+.rotated {
+  transform: rotate(180deg);
+  transition: transform 250ms ease;
 }
 
-.equipment-count svg {
-  width: 14px;
-  height: 14px;
-  color: var(--text-muted);
-}
-
-/* ── Expanded Details (Smooth Animation) ── */
-.room-details-wrapper {
+/* ── Expanded Details ── */
+.room-details-panel {
   max-height: 0;
   overflow: hidden;
-  opacity: 0;
-  transition:
-    max-height 350ms cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 250ms ease;
+  transition: max-height 350ms ease;
 }
-
-.room-details-wrapper.open {
-  max-height: 600px;
-  opacity: 1;
+.room-details-panel.open {
+  max-height: 800px;
 }
-
-.room-details {
+.room-details-panel > * {
+  padding: 16px 20px;
   border-top: 1px solid var(--border-color);
-  padding: var(--space-md);
 }
-
 .room-description {
   margin: 0 0 14px;
   font-size: 0.8125rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* Details grid */
+/* Details Grid */
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
   margin-bottom: 16px;
 }
-
-.detail-item {
+.detail-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--neutral-50);
+  transition: background 200ms ease;
+}
+.detail-block:hover {
+  background: var(--neutral-100);
+}
+.detail-block app-icon {
+  color: var(--brand-accent);
+  flex-shrink: 0;
+}
+.detail-text {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  background: var(--neutral-50);
-  border: 1px solid var(--border-color);
+  gap: 2px;
+  min-width: 0;
 }
-
 .detail-label {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-
 .detail-value {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Equipment Section */
+.equip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
 }
-
-/* Equipment section */
-.equipment-section h4 {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0 0 10px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--neutral-700);
-}
-
-.equipment-section h4 svg {
-  width: 14px;
-  height: 14px;
-  color: var(--brand-accent);
-}
-
-.equipment-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.equipment-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  background: var(--neutral-50);
-  border: 1px solid var(--border-color);
-  transition: all var(--transition);
-  animation: fadeUp 250ms ease-out both;
-}
-
-.equipment-row:hover {
-  background: var(--card-bg);
-  border-color: var(--border-color-hover);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-.equipment-name {
+.equip-loading {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.8125rem;
-  color: var(--neutral-700);
-  font-weight: 500;
-}
-
-.asset-code {
-  padding: 1px 6px;
-  border-radius: 3px;
-  background: var(--neutral-200);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
   color: var(--text-secondary);
 }
-
-.equip-status {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-}
-
-.equip-status-active {
-  color: var(--success);
-  background: var(--success-bg);
-}
-
-.equip-status-out {
-  color: var(--warning);
-  background: var(--warning-bg);
-}
-
-.equip-status-retired {
-  color: var(--text-muted);
-  background: var(--neutral-100);
-}
-
-.equipment-loading {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-}
-
 .mini-spinner {
   width: 14px;
   height: 14px;
@@ -521,11 +463,66 @@ button:focus-visible {
   border-radius: 50%;
   animation: spin 600ms linear infinite;
 }
-
-.no-equipment {
+.equip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.equip-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--neutral-50);
+  animation: fadeUp 200ms ease-out both;
+  transition: background 200ms ease;
+}
+.equip-item:hover {
+  background: var(--neutral-100);
+}
+.equip-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.equip-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.equip-asset {
+  font-size: 0.6875rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-muted);
+}
+.equip-badge {
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+.equip-badge.status-badge.status-active {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+.equip-badge.status-badge.status-warning {
+  background: rgba(249, 115, 22, 0.12);
+  color: #f97316;
+}
+.equip-badge.status-badge.status-inactive {
+  background: var(--neutral-100);
+  color: var(--text-muted);
+}
+.no-equip {
   margin: 0;
-  padding: 12px;
-  border-radius: var(--radius-sm);
+  padding: 14px;
+  border-radius: var(--radius-md);
   background: var(--neutral-50);
   border: 1px dashed var(--border-color);
   font-size: 0.8125rem;
@@ -533,172 +530,112 @@ button:focus-visible {
   text-align: center;
 }
 
-/* ── State Panels ── */
-.state-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: var(--space-xl) var(--space-md);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  background: var(--card-bg);
-  text-align: center;
-  animation: fadeIn 300ms ease-out;
-}
-
-.state-panel strong {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.state-panel p {
-  margin: 0;
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-}
-
-.loading-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--brand-accent);
-  border-radius: 50%;
-  animation: spin 600ms linear infinite;
-}
-
-.state-error {
-  border-color: var(--danger-border);
-  background: var(--danger-bg);
-}
-
-.state-error strong {
-  color: var(--danger);
-}
-
-/* ── Empty State ── */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: var(--space-xl) var(--space-md);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  background: var(--card-bg);
-  text-align: center;
-  animation: fadeIn 300ms ease-out;
-}
-
-.empty-icon {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  margin-bottom: 8px;
-  border-radius: var(--radius-lg);
-  background: var(--neutral-100);
-  color: var(--text-secondary);
-}
-
-.empty-state h3 {
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.empty-state p {
-  margin: 0;
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-}
-
-/* ── Action Button ── */
-.action-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: var(--brand-accent);
-  color: var(--white);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  transition: all var(--transition);
-  box-shadow: 0 2px 8px rgba(242, 140, 40, 0.25);
-}
-
-.action-button:hover {
-  background: var(--brand-accent-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(242, 140, 40, 0.35);
-}
-
 /* ── Responsive ── */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+  .rooms-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
   .overview-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .details-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .page-banner {
-    padding: 24px 20px;
-  }
-}
-
-@media (max-width: 600px) {
-  .rooms-page {
-    padding: 16px 12px 32px;
-  }
-  .page-banner {
-    padding: 20px 16px;
-  }
-  .banner-content {
-    flex-direction: column;
-    text-align: center;
     gap: 12px;
   }
-  .banner-text h1 {
-    font-size: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .rooms-page {
+    padding: 16px;
   }
   .overview-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .overview-card {
+    padding: 18px 12px;
+  }
+  .overview-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .overview-value {
+    font-size: 1.5rem;
   }
   .filter-panel {
     flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-  .filter-options {
-    justify-content: center;
-  }
-  .results-count {
-    text-align: center;
-  }
-  .room-card-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 14px 16px;
-  }
-  .room-name-row {
-    flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
+    gap: 12px;
+    padding: 12px 16px;
   }
-  .room-meta {
-    flex-wrap: wrap;
-  }
-  .expand-button {
-    justify-content: center;
+  .filter-buttons {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
     width: 100%;
   }
+  .rooms-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .room-card-header {
+    padding: 14px 16px;
+  }
+  .room-icon-badge {
+    width: 40px;
+    height: 40px;
+  }
   .room-card-footer {
-    padding: 0 16px 10px;
+    padding: 10px 16px;
+  }
+  .room-details-panel > * {
+    padding: 14px 16px;
   }
   .details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .rooms-page {
+    padding: 12px;
+  }
+  .overview-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .overview-card {
+    padding: 14px 10px;
+  }
+  .overview-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .overview-value {
+    font-size: 1.25rem;
+  }
+  .overview-label {
+    font-size: 0.6875rem;
+  }
+  .filter-panel {
+    padding: 12px;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 0.75rem;
+  }
+  .room-card-header {
+    padding: 12px 14px;
+  }
+  .room-icon-badge {
+    width: 36px;
+    height: 36px;
+  }
+  .room-title {
+    font-size: 0.9375rem;
+  }
+  .room-card-footer {
+    padding: 10px 14px;
+  }
+  .room-details-panel > * {
+    padding: 12px 14px;
   }
 }

@@ -1,4 +1,5 @@
 <div class="equipment-page">
+  <!-- Page Banner -->
   <app-page-banner
     [icon]="LucideWrench"
     eyebrow="Settings"
@@ -9,67 +10,79 @@
       class="btn-refresh"
       type="button"
       (click)="loadAllRooms()"
+      aria-label="Refresh room list"
     >
-      <app-icon
-        [icon]="LucideRefreshCw"
-      ></app-icon>
+      <app-icon [icon]="LucideRefreshCw"></app-icon>
       Refresh
     </button>
   </app-page-banner>
+
+  <!-- Alerts -->
   @if (errorMessage) {
     <div class="alert alert-error" role="alert">
+      <app-icon [icon]="LucideX" [size]="16"></app-icon>
       {{ errorMessage }}
     </div>
   }
   @if (successMessage) {
-    <div
-      class="alert alert-success"
-      role="status"
-    >
+    <div class="alert alert-success" role="status">
+      <app-icon [icon]="LucideCheck" [size]="16"></app-icon>
       {{ successMessage }}
     </div>
   }
-  <!-- Summary Bar -->
-  <div class="summary-bar">
-    <div class="summary-item">
-      <span class="summary-label">Rooms</span>
-      <strong class="summary-value">{{
-        roomCards.length
-      }}</strong>
+
+  <!-- Stats Row -->
+  <div class="stats-row">
+    <div class="stat-block">
+      <div class="stat-icon stat-icon-rooms">
+        <app-icon [icon]="LucideMonitor" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ roomCards.length }}</span>
+        <span class="stat-label">Rooms</span>
+      </div>
     </div>
-    <div class="summary-item">
-      <span class="summary-label"
-        >Total Equipment</span
-      >
-      <strong class="summary-value">{{
-        totalEquipment
-      }}</strong>
+    <div class="stat-block">
+      <div class="stat-icon stat-icon-total">
+        <app-icon [icon]="LucideWrench" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ totalEquipment }}</span>
+        <span class="stat-label">Total Equipment</span>
+      </div>
     </div>
-    <div class="summary-item">
-      <span class="summary-label">Active</span>
-      <strong
-        class="summary-value summary-active"
-        >{{ totalActive }}</strong
-      >
+    <div class="stat-block">
+      <div class="stat-icon stat-icon-active">
+        <app-icon [icon]="LucideCheck" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ totalActive }}</span>
+        <span class="stat-label">Active</span>
+      </div>
     </div>
-    <div class="summary-item">
-      <span class="summary-label"
-        >Out of Service</span
-      >
-      <strong class="summary-value summary-out">{{
-        totalOutOfService
-      }}</strong>
+    <div class="stat-block">
+      <div class="stat-icon stat-icon-out">
+        <app-icon [icon]="LucideX" [size]="18"></app-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ totalOutOfService }}</span>
+        <span class="stat-label">Out of Service</span>
+      </div>
     </div>
-    <div class="summary-filters">
-      <app-search-box
-        placeholder="Search rooms..."
-        [value]="searchTerm"
-        (change)="searchTerm = $event"
-      ></app-search-box>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="filters-bar">
+    <app-search-box
+      placeholder="Search rooms by name or type..."
+      [value]="searchTerm"
+      (change)="searchTerm = $event"
+    ></app-search-box>
+    <div class="filter-group">
       <select
         class="filter-select"
         [(ngModel)]="filterStatus"
-        aria-label="Filter by status"
+        aria-label="Filter by equipment status"
       >
         <option value="ALL">All Statuses</option>
         @for (status of statuses; track status) {
@@ -80,24 +93,25 @@
       </select>
     </div>
   </div>
-  <!-- Room Cards Grid -->
-  @if (loadingRooms) {
+
+  <!-- Loading State -->
+  @if (loadingRooms && !errorMessage) {
     <div class="loading-grid">
       @for (i of [1, 2, 3, 4, 5, 6]; track i) {
         <div class="room-card skeleton">
-          <div
-            class="skeleton-line skeleton-title"
-          ></div>
-          <div
-            class="skeleton-line skeleton-sub"
-          ></div>
-          <div
-            class="skeleton-line skeleton-count"
-          ></div>
+          <div class="skeleton-line skeleton-title"></div>
+          <div class="skeleton-line skeleton-sub"></div>
+          <div class="skeleton-line skeleton-count"></div>
         </div>
       }
     </div>
-  } @else if (filteredRooms.length === 0) {
+  } @else if (errorMessage) {
+    <app-empty-state
+      [icon]="LucideMonitor"
+      title="Failed to load rooms"
+      [message]="errorMessage"
+    ></app-empty-state>
+  } @else if (filteredRooms.length === 0 && !loadingRooms) {
     <app-empty-state
       [icon]="LucideMonitor"
       title="No rooms found"
@@ -108,6 +122,7 @@
       "
     ></app-empty-state>
   } @else {
+    <!-- Room Cards Grid -->
     <div class="room-grid">
       @for (
         card of filteredRooms;
@@ -116,47 +131,31 @@
       ) {
         <div
           class="room-card"
-          [class.expanded]="
-            expandingRoomId === card.room.roomId
-          "
-          [style.animation-delay]="
-            idx * 50 + 'ms'
-          "
+          [class.expanded]="expandingRoomId === card.room.roomId"
+          [style.animation-delay]="idx * 50 + 'ms'"
         >
           <!-- Card Header -->
           <div
             class="card-header"
-            (click)="
-              toggleExpand(card.room.roomId)
-            "
+            (click)="toggleExpand(card.room.roomId)"
+            role="button"
+            [attr.aria-expanded]="expandingRoomId === card.room.roomId"
+            tabindex="0"
+            (keydown.enter)="toggleExpand(card.room.roomId)"
           >
             <div class="card-header-left">
-              <div
-                class="room-icon-badge"
-                aria-hidden="true"
-              >
-                <app-icon
-                  [icon]="LucideMonitor"
-                  [size]="20"
-                ></app-icon>
+              <div class="room-icon-badge">
+                <app-icon [icon]="LucideMonitor" [size]="20"></app-icon>
               </div>
               <div class="room-info">
-                <h3 class="room-name">
-                  {{ card.room.roomName }}
-                </h3>
+                <h3 class="room-name">{{ card.room.roomName }}</h3>
                 <div class="room-meta">
-                  <span class="room-type-badge">{{
-                    card.room.roomType.replace(
-                      '_',
-                      ' '
-                    )
-                  }}</span>
+                  <span class="room-type-badge">
+                    {{ card.room.roomType.replace('_', ' ') }}
+                  </span>
                   <span class="room-capacity">
-                    <app-icon
-                      [icon]="LucideUsers"
-                      [size]="12"
-                    ></app-icon>
-                    {{ card.room.capacity }}
+                    <app-icon [icon]="LucideUsers" [size]="12"></app-icon>
+                    {{ card.room.capacity }} seats
                   </span>
                 </div>
               </div>
@@ -164,55 +163,35 @@
             <div class="card-header-right">
               <span
                 class="equipment-count-badge"
-                [class.has-equipment]="
-                  card.equipment.length > 0
-                "
+                [class.has-equipment]="card.equipment.length > 0"
               >
-                <app-icon
-                  [icon]="LucideWrench"
-                  [size]="14"
-                ></app-icon>
+                <app-icon [icon]="LucideWrench" [size]="14"></app-icon>
                 {{ card.equipment.length }}
               </span>
-              <span
-                class="expand-chevron"
-                aria-hidden="true"
-              >
-                <app-icon
-                  [icon]="LucideChevronDown"
-                  [size]="18"
-                ></app-icon>
+              <span class="expand-chevron">
+                <app-icon [icon]="LucideChevronDown" [size]="18"></app-icon>
               </span>
             </div>
           </div>
-          <!-- Card Body (Equipment List) - Smooth expand/collapse -->
+
+          <!-- Card Body -->
           <div
             class="card-body-wrapper"
-            [class.open]="
-              expandingRoomId === card.room.roomId
-            "
+            [class.open]="expandingRoomId === card.room.roomId"
           >
             <div class="card-body">
               @if (card.loading) {
                 <div class="card-loading">
-                  <span
-                    class="spinner"
-                    aria-hidden="true"
-                  ></span>
-                  <span
-                    >Loading equipment...</span
-                  >
+                  <span class="spinner" aria-hidden="true"></span>
+                  Loading equipment...
                 </div>
-              } @else if (
-                card.equipment.length === 0
-              ) {
+              } @else if (card.equipment.length === 0) {
                 <div class="no-equipment">
-                  <p>
-                    No equipment assigned to this
-                    room yet.
-                  </p>
+                  <app-icon [icon]="LucideWrench" [size]="32"></app-icon>
+                  <p>No equipment assigned to this room yet.</p>
                 </div>
               } @else {
+                <!-- Equipment List -->
                 <div class="equipment-list">
                   @for (
                     item of card.equipment;
@@ -221,96 +200,39 @@
                   ) {
                     <div
                       class="equipment-row"
-                      [style.animation-delay]="
-                        eqIdx * 40 + 'ms'
-                      "
+                      [style.animation-delay]="eqIdx * 40 + 'ms'"
                     >
                       <div class="equipment-info">
-                        <div
-                          class="equipment-icon-sm"
-                          aria-hidden="true"
-                        >
-                          <app-icon
-                            [icon]="LucideWrench"
-                          ></app-icon>
+                        <div class="equipment-icon-wrap">
+                          <app-icon [icon]="LucideWrench" [size]="16"></app-icon>
                         </div>
-                        <div
-                          class="equipment-text"
-                        >
-                          <strong
-                            class="eq-name"
-                            >{{
-                              item.equipmentName
-                            }}</strong
-                          >
-                          <span
-                            class="eq-asset"
-                            >{{
-                              item.assetCode
-                            }}</span
-                          >
+                        <div class="equipment-text">
+                          <strong class="eq-name">{{ item.equipmentName }}</strong>
+                          <span class="eq-asset">{{ item.assetCode }}</span>
                           @if (item.description) {
-                            <span
-                              class="eq-desc"
-                              >{{
-                                item.description
-                              }}</span
-                            >
+                            <span class="eq-desc">{{ item.description }}</span>
                           }
                         </div>
                       </div>
-                      <div
-                        class="equipment-actions"
-                      >
-                        <div class="status-group">
-                          <span
-                            class="status-label"
-                            >Status:</span
-                          >
+                      <div class="equipment-actions">
+                        <div class="status-pill-wrap">
                           <select
                             class="status-select"
-                            [class.status-active]="
-                              item.status ===
-                              'ACTIVE'
-                            "
-                            [class.status-out]="
-                              item.status ===
-                              'OUT_OF_SERVICE'
-                            "
-                            [class.status-retired]="
-                              item.status ===
-                              'RETIRED'
-                            "
+                            [class.status-active]="item.status === 'ACTIVE'"
+                            [class.status-out]="item.status === 'OUT_OF_SERVICE'"
+                            [class.status-retired]="item.status === 'RETIRED'"
                             [value]="item.status"
-                            [attr.aria-label]="
-                              'Status for ' +
-                              item.equipmentName
-                            "
-                            (click)="
-                              $event.stopPropagation()
-                            "
-                            (change)="
-                              changeStatus(
-                                card.room.roomId,
-                                item,
-                                $any(
-                                  $event.target
-                                ).value
-                              )
-                            "
+                            [attr.aria-label]="'Status for ' + item.equipmentName"
+                            (click)="$event.stopPropagation()"
+                            (change)="changeStatus(
+                              card.room.roomId,
+                              item,
+                              $any($event.target).value
+                            )"
                           >
-                            @for (
-                              status of statuses;
-                              track status
-                            ) {
-                              <option
-                                [value]="status"
-                              >
-                                {{
-                                  equipmentStatusLabel(
-                                    status
-                                  )
-                                }}
+                            @for (status of statuses; track status) {
+                              <option [value]="status">
+                                {{ equipmentStatusLabel(status) }}
                               </option>
                             }
                           </select>
@@ -318,163 +240,138 @@
                         <button
                           type="button"
                           class="action-btn remove-btn"
-                          (click)="
-                            removeEquipment(
-                              card.room.roomId,
-                              item
-                            )
-                          "
-                          [attr.aria-label]="
-                            'Remove ' +
-                            item.equipmentName
-                          "
+                          (click)="removeEquipment(card.room.roomId, item)"
+                          [attr.aria-label]="'Remove ' + item.equipmentName"
                         >
-                          <app-icon
-                            [icon]="LucideTrash2"
-                            [size]="14"
-                          ></app-icon>
-                          Remove
+                          <app-icon [icon]="LucideTrash2" [size]="14"></app-icon>
                         </button>
                       </div>
                     </div>
                   }
                 </div>
               }
+
               <!-- Add Equipment Button -->
               <button
                 type="button"
                 class="add-eq-btn"
-                (click)="
-                  toggleAddForm(card.room.roomId)
-                "
+                (click)="openAddModal(card.room.roomId, card.room.roomName)"
               >
-                <app-icon
-                  [icon]="LucidePlus"
-                ></app-icon>
+                <app-icon [icon]="LucidePlus" [size]="16"></app-icon>
                 Add equipment
               </button>
-
-              <!-- Add Equipment Form -->
-              @if (
-                addingRoomId === card.room.roomId
-              ) {
-                <div class="add-form-panel">
-                  <h4>
-                    Add to
-                    {{ card.room.roomName }}
-                  </h4>
-
-                  <form
-                    [formGroup]="equipmentForm"
-                    (ngSubmit)="
-                      addEquipment(
-                        card.room.roomId
-                      )
-                    "
-                  >
-                    <div class="form-grid">
-                      <label class="form-field">
-                        <span
-                          >Equipment name *</span
-                        >
-                        <input
-                          type="text"
-                          formControlName="equipmentName"
-                          placeholder="e.g. Projector"
-                        />
-                        @if (
-                          equipmentForm.controls
-                            .equipmentName
-                            .touched &&
-                          equipmentForm.controls
-                            .equipmentName.invalid
-                        ) {
-                          <small
-                            >Enter an equipment
-                            name.</small
-                          >
-                        }
-                      </label>
-                      <label class="form-field">
-                        <span>Asset code *</span>
-                        <input
-                          type="text"
-                          formControlName="assetCode"
-                          placeholder="e.g. EQ-001"
-                        />
-                        @if (
-                          equipmentForm.controls
-                            .assetCode.touched &&
-                          equipmentForm.controls
-                            .assetCode.invalid
-                        ) {
-                          <small
-                            >Enter an asset
-                            code.</small
-                          >
-                        }
-                      </label>
-                      <label
-                        class="form-field full-width"
-                      >
-                        <span>Description</span>
-                        <textarea
-                          formControlName="description"
-                          rows="2"
-                          placeholder="Describe this equipment"
-                        ></textarea>
-                      </label>
-                      <label class="form-field">
-                        <span>Status</span>
-                        <select
-                          formControlName="status"
-                        >
-                          @for (
-                            status of statuses;
-                            track status
-                          ) {
-                            <option
-                              [value]="status"
-                            >
-                              {{
-                                equipmentStatusLabel(
-                                  status
-                                )
-                              }}
-                            </option>
-                          }
-                        </select>
-                      </label>
-                    </div>
-                    <div class="form-actions">
-                      <button
-                        type="button"
-                        class="btn btn-outline"
-                        (click)="
-                          toggleAddForm(
-                            card.room.roomId
-                          )
-                        "
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        class="btn btn-primary"
-                        [disabled]="
-                          equipmentForm.invalid
-                        "
-                      >
-                        Save equipment
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              }
             </div>
           </div>
         </div>
       }
+    </div>
+  }
+
+  <!-- Add Equipment Modal Dialog -->
+  @if (addModalOpen) {
+    <div class="modal-backdrop" (click)="closeAddModal()"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="add-eq-modal-title">
+      <div class="modal-header">
+        <div class="modal-header-icon">
+          <app-icon [icon]="LucidePlus" [size]="20"></app-icon>
+        </div>
+        <div class="modal-header-text">
+          <h3 id="add-eq-modal-title">Add Equipment</h3>
+          <p>{{ addModalRoomName }}</p>
+        </div>
+        <button
+          type="button"
+          class="modal-close-btn"
+          (click)="closeAddModal()"
+          aria-label="Close dialog"
+        >
+          <app-icon [icon]="LucideX" [size]="20"></app-icon>
+        </button>
+      </div>
+
+      <form [formGroup]="equipmentForm" (ngSubmit)="addEquipment()">
+        <div class="modal-body">
+          <div class="form-row">
+            <label class="form-field">
+              <span>Equipment name <span class="required">*</span></span>
+              <div class="input-wrap">
+                <app-icon [icon]="LucideWrench" [size]="16"></app-icon>
+                <input
+                  type="text"
+                  formControlName="equipmentName"
+                  placeholder="e.g. Projector"
+                  autofocus
+                />
+              </div>
+              @if (
+                equipmentForm.controls.equipmentName.touched &&
+                equipmentForm.controls.equipmentName.invalid
+              ) {
+                <small class="field-error">Enter an equipment name.</small>
+              }
+            </label>
+            <label class="form-field">
+              <span>Asset code <span class="required">*</span></span>
+              <div class="input-wrap">
+                <app-icon [icon]="LucideHash" [size]="16"></app-icon>
+                <input
+                  type="text"
+                  formControlName="assetCode"
+                  placeholder="e.g. EQ-001"
+                />
+              </div>
+              @if (
+                equipmentForm.controls.assetCode.touched &&
+                equipmentForm.controls.assetCode.invalid
+              ) {
+                <small class="field-error">Enter an asset code.</small>
+              }
+            </label>
+          </div>
+
+          <label class="form-field form-field-full">
+            <span>Description</span>
+            <div class="input-wrap">
+              <textarea
+                formControlName="description"
+                rows="2"
+                placeholder="Optional — describe this equipment"
+              ></textarea>
+            </div>
+          </label>
+
+          <label class="form-field">
+            <span>Status</span>
+            <div class="status-select-wrap">
+              <select formControlName="status">
+                @for (status of statuses; track status) {
+                  <option [value]="status">
+                    {{ equipmentStatusLabel(status) }}
+                  </option>
+                }
+              </select>
+            </div>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-ghost"
+            (click)="closeAddModal()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="equipmentForm.invalid"
+          >
+            <app-icon [icon]="LucideCheck" [size]="16"></app-icon>
+            Save equipment
+          </button>
+        </div>
+      </form>
     </div>
   }
 </div>

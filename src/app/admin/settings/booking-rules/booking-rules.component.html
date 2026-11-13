@@ -3,103 +3,142 @@
     [icon]="LucideCalendar"
     eyebrow="Settings"
     title="Booking Rules"
-    description="Configure booking durations, auto check-in, auto-checkout
-      overrun threshold, cooldown periods, and cancellation fees."
+    description="Configure booking durations, scheduling rules, auto check-in,
+      and booking policies."
   ></app-page-banner>
+
   @if (error()) {
     <div class="notice notice-error">
+      <app-icon [icon]="LucideShieldCheck" [size]="18"></app-icon>
       {{ error() }}
     </div>
   }
   @if (saved()) {
     <div class="notice notice-success">
+      <app-icon [icon]="LucideSave" [size]="18"></app-icon>
       Settings saved successfully.
     </div>
   }
+
   @if (loading()) {
-    <div class="loading-panel">
-      Loading settings...
+    <div class="skeleton-grid">
+      @for (group of ['duration', 'scheduling', 'policy']; track group) {
+        <div class="skeleton-group">
+          <div class="skeleton-group-header">
+            <div class="skeleton-icon"></div>
+            <div class="skeleton-title"></div>
+          </div>
+          <div class="skeleton-card-row">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+        </div>
+      }
     </div>
   } @else {
-    <div class="settings-panel">
-      <div class="settings-section">
-        <h2 class="section-title">
-          Booking Policy Rules
-        </h2>
+    @for (
+      entry of getGroupedSettings() | keyvalue;
+      track entry.key
+    ) {
+      @let groupKey = entry.key;
+      @let groupSettings = entry.value;
+      <div class="settings-group">
+        <div class="group-header">
+          <div class="group-icon">
+            <app-icon [icon]="getGroupIcon(groupKey)" [size]="20"></app-icon>
+          </div>
+          <h2 class="group-title">{{ getGroupLabel(groupKey) }}</h2>
+          <span class="group-count">{{ groupSettings.length }} setting{{ groupSettings.length !== 1 ? 's' : '' }}</span>
+        </div>
+
         <div class="settings-grid">
           @for (
-            setting of settings();
+            setting of groupSettings;
             track setting.key
           ) {
             <div class="setting-card">
-              <label class="setting-label">{{
-                setting.label
-              }}</label>
+              <div class="setting-header">
+                <label class="setting-label">{{
+                  setting.label
+                }}</label>
+                @if (!setting.systemDefault) {
+                  <span class="modified-badge">Modified</span>
+                }
+              </div>
               <p class="setting-description">
                 {{ setting.description }}
               </p>
+
               @if (
                 setting.valueType === 'number'
               ) {
-                <input
-                  type="number"
-                  class="setting-input"
-                  [value]="getValue(setting.key)"
-                  (input)="
-                    setValue(
-                      setting.key,
-                      $any($event).target.value
-                    )
-                  "
-                />
+                <div class="input-container">
+                  <input
+                    type="number"
+                    class="setting-input"
+                    [value]="getValue(setting.key)"
+                    (input)="
+                      setValue(
+                        setting.key,
+                        $any($event).target.value
+                      )
+                    "
+                    aria-label="{{ setting.label }}"
+                  />
+                  @if (setting.key.includes('minutes') || setting.key.includes('hours') || setting.key.includes('days')) {
+                    <span class="input-unit">
+                      @if (setting.key.includes('minutes')) {min} @else if (setting.key.includes('hours')) {hrs} @else {days}
+                    </span>
+                  }
+                </div>
               } @else if (
                 setting.valueType === 'boolean'
               ) {
-                <label class="toggle-switch">
-                  <input
-                    type="checkbox"
-                    [checked]="
-                      getValue(setting.key) ===
-                      'true'
-                    "
-                    (change)="
-                      setValue(
-                        setting.key,
-                        $any($event).target
-                          .checked
-                          ? 'true'
-                          : 'false'
-                      )
-                    "
-                  />
-                  <span
-                    class="toggle-slider"
-                  ></span>
-                </label>
-              }
-              @if (!setting.systemDefault) {
-                <span class="modified-badge"
-                  >Modified</span
-                >
+                <div class="toggle-row">
+                  <label class="toggle-switch">
+                    <input
+                      type="checkbox"
+                      [checked]="
+                        getValue(setting.key) ===
+                        'true'
+                      "
+                      (change)="
+                        setValue(
+                          setting.key,
+                          $any($event).target
+                            .checked
+                            ? 'true'
+                            : 'false'
+                        )
+                      "
+                    />
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <span class="toggle-label">
+                    {{ getValue(setting.key) === 'true' ? 'Enabled' : 'Disabled' }}
+                  </span>
+                </div>
               }
             </div>
           }
         </div>
       </div>
-      <div class="save-bar">
-        <button
-          class="btn btn-save"
-          (click)="save()"
-          [disabled]="saving()"
-        >
-          @if (saving()) {
-            <span class="spinner"></span>
-            Saving...
-          } @else {
-            Save Changes
-          }
-        </button>
-      </div>
+    }
+
+    <div class="save-bar">
+      <button
+        class="btn btn-save"
+        (click)="save()"
+        [disabled]="saving()"
+      >
+        @if (saving()) {
+          <span class="spinner"></span>
+          Saving...
+        } @else {
+          <app-icon [icon]="LucideSave" [size]="18"></app-icon>
+          Save Changes
+        }
+      </button>
     </div>
   }
 </div>

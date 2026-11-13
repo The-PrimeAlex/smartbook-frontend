@@ -578,8 +578,7 @@
               [size]="14"
             ></app-icon>
             <span
-              >Min 30 min, max 8 hours per
-              booking</span
+              >Min {{ minDurationMinutes }} min, max {{ maxDurationHours }} hours per booking</span
             >
           </li>
           <li>
@@ -588,7 +587,7 @@
               [size]="14"
             ></app-icon>
             <span
-              >Book up to 30 days in advance</span
+              >Book up to {{ advanceDays }} days in advance</span
             >
           </li>
           <li>
@@ -597,18 +596,7 @@
               [size]="14"
             ></app-icon>
             <span
-              >15 min buffer between
-              bookings</span
-            >
-          </li>
-          <li>
-            <app-icon
-              [icon]="LucideAlertTriangle"
-              [size]="14"
-            ></app-icon>
-            <span
-              >60 min cooldown after active
-              bookings</span
+              >{{ bufferMinutes }} min buffer between bookings</span
             >
           </li>
           <li>
@@ -617,20 +605,49 @@
               [size]="14"
             ></app-icon>
             <span
-              >Cancellation fee applies within 1
-              hour of start</span
+              >Free cancellation {{ cancelHoursBeforeFree }} hour{{ cancelHoursBeforeFree !== 1 ? 's' : '' }} before start</span
+            >
+          </li>
+          @if (cancelFee > 0) {
+            <li>
+              <app-icon
+                [icon]="LucideBan"
+                [size]="14"
+              ></app-icon>
+              <span
+                >Cancellation fee: KSH {{ cancelFee | number: '1.0-2' }} after window</span
+              >
+            </li>
+          }
+          <li>
+            <app-icon
+              [icon]="LucideBan"
+              [size]="14"
+            ></app-icon>
+            <span
+              >No-show fee: KSH {{ noshowFee | number: '1.0-2' }} after {{ noshowMinutes }} min</span
             >
           </li>
           <li>
             <app-icon
-              [icon]="LucideAlertTriangle"
+              [icon]="LucideTrendingUp"
               [size]="14"
             ></app-icon>
             <span
-              >No-show fee of KSH 500 if you don't
-              attend</span
+              >Overrun charged at {{ overrunRateMultiplier }}x hourly rate</span
             >
           </li>
+          @if (requireApproval) {
+            <li>
+              <app-icon
+                [icon]="LucideAlertTriangle"
+                [size]="14"
+              ></app-icon>
+              <span
+                >Bookings require admin approval</span
+              >
+            </li>
+          }
         </ul>
       </div>
     </aside>
@@ -722,8 +739,8 @@
           }
 
           @if (
-            conflictType === 'COOLDOWN' &&
-            conflictCooldownMinutes
+            conflictType === 'OVERRUN' &&
+            conflictOverrunMinutes
           ) {
             <div class="conflict-cooldown-block">
               <div
@@ -735,7 +752,7 @@
                 ></app-icon>
                 <span
                   class="conflict-cooldown-title"
-                  >Cooldown Period</span
+                  >Overrun Threshold</span
                 >
               </div>
               <div
@@ -758,12 +775,12 @@
                 >
                   <span
                     class="conflict-cooldown-label"
-                    >Cooldown duration</span
+                    >Overrun threshold</span
                   >
                   <span
                     class="conflict-cooldown-value"
                     >{{
-                      conflictCooldownMinutes
+                      conflictOverrunMinutes
                     }}
                     minutes</span
                   >

@@ -1,21 +1,23 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
   OnInit,
   inject,
+  signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ActivatedRoute,
   Router,
 } from '@angular/router';
-import { finalize } from 'rxjs';
+import { forkJoin, finalize } from 'rxjs';
 import {
   LucideAlertCircle,
   LucideAlertTriangle,
   LucideArrowDown,
   LucideArrowRight,
+  LucideBan,
   LucideCalendar,
   LucideCalendarCheck,
   LucideCheck,
@@ -28,6 +30,7 @@ import {
   LucideLightbulb,
   LucideMonitor,
   LucideTimer,
+  LucideTrendingUp,
   LucideUser,
   LucideX,
   LucideXCircle,
@@ -36,6 +39,8 @@ import {
 import { BookingService } from '../../../shared/services/booking.service';
 import { MeetingRoom } from '../../../shared/models/room.model';
 import { RoomService } from '../../../shared/services/room.service';
+import { SettingsService } from '../../../shared/services/settings.service';
+import { Setting } from '../../../shared/models/settings.model';
 import {
   PageBannerComponent,
   IconComponent,
@@ -49,6 +54,7 @@ import {
   imports: [
     FormsModule,
     CurrencyPipe,
+    DecimalPipe,
 
     PageBannerComponent,
     IconComponent,
@@ -64,6 +70,9 @@ export class CreateBookingComponent implements OnInit {
   );
   private readonly roomService =
     inject(RoomService);
+  private readonly settingsService = inject(
+    SettingsService,
+  );
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly cdr = inject(
@@ -75,6 +84,7 @@ export class CreateBookingComponent implements OnInit {
     LucideAlertTriangle;
   readonly LucideArrowDown = LucideArrowDown;
   readonly LucideArrowRight = LucideArrowRight;
+  readonly LucideBan = LucideBan;
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCalendarCheck =
     LucideCalendarCheck;
@@ -89,6 +99,7 @@ export class CreateBookingComponent implements OnInit {
   readonly LucideLightbulb = LucideLightbulb;
   readonly LucideMonitor = LucideMonitor;
   readonly LucideTimer = LucideTimer;
+  readonly LucideTrendingUp = LucideTrendingUp;
   readonly LucideUser = LucideUser;
   readonly LucideX = LucideX;
   readonly LucideXCircle = LucideXCircle;
@@ -110,6 +121,10 @@ export class CreateBookingComponent implements OnInit {
   errorMessage = '';
   conflictMessage = '';
 
+  // Booking rules from backend
+  bookingRules = signal<Setting[]>([]);
+  loadingRules = false;
+
   // Conflict modal state
   showConflictModal = false;
   conflictType = '';
@@ -118,10 +133,11 @@ export class CreateBookingComponent implements OnInit {
   conflictStart = '';
   conflictEnd = '';
   conflictAvailableFrom = '';
-  conflictCooldownMinutes: number | null = null;
+  conflictOverrunMinutes: number | null = null;
 
   ngOnInit(): void {
     this.loadRooms();
+    this.loadBookingRules();
 
     // Pre-select room if navigated from Find Rooms
     this.route.queryParams.subscribe((params) => {
@@ -130,6 +146,83 @@ export class CreateBookingComponent implements OnInit {
         this.roomId = roomId;
       }
     });
+  }
+
+  loadBookingRules(): void {
+    this.loadingRules = true;
+    forkJoin({
+      booking: this.settingsService.getSettingsByCategory('booking'),
+      billing: this.settingsService.getSettingsByCategory('billing'),
+      room: this.settingsService.getSettingsByCategory('room'),
+    }).subscribe({
+      next: (result) => {
+        const allSettings = [
+          ...result.booking,
+          ...result.billing,
+          ...result.room,
+        ];
+        this.bookingRules.set(allSettings);
+        this.loadingRules = false;
+      },
+      error: () => {
+        this.loadingRules = false;
+      },
+    });
+  }
+
+  getSettingValue(key: string): string {
+    const setting = this.bookingRules().find(
+      (s: Setting) => s.key === key,
+    );
+    return setting?.value ?? '';
+  }
+
+  getSettingLabel(key: string): string {
+    const setting = this.bookingRules().find(
+      (s: Setting) => s.key === key,
+    );
+    return setting?.label ?? '';
+  }
+
+  get minDurationMinutes(): number {
+    return parseInt(this.getSettingValue('booking.min_duration_minutes')) || 30;
+  }
+
+  get maxDurationHours(): number {
+    return parseInt(this.getSettingValue('booking.max_duration_hours')) || 8;
+  }
+
+  get advanceDays(): number {
+    return parseInt(this.getSettingValue('booking.advance_days')) || 30;
+  }
+
+  get bufferMinutes(): number {
+    return parseInt(this.getSettingValue('room.buffer_minutes')) || 15;
+  }
+
+
+  get cancelHoursBeforeFree(): number {
+    return parseInt(this.getSettingValue('billing.cancel_hours')) || 2;
+  }
+
+  get cancelFee(): number {
+    return parseFloat(this.getSettingValue('billing.cancel_fee')) || 0;
+  }
+
+  get noshowFee(): number {
+    return parseFloat(this.getSettingValue('billing.noshow_fee')) || 500;
+  }
+
+  get noshowMinutes(): number {
+    return parseInt(this.getSettingValue('booking.noshow_minutes')) || 10;
+  }
+
+  get overrunRateMultiplier(): number {
+    return parseFloat(this.getSettingValue('billing.overrun_rate_multiplier')) || 1.5;
+  }
+
+  get requireApproval(): boolean {
+    return this.getSettingValue('booking.require_approval') === 'true';
   }
 
   get today(): string {
@@ -463,8 +556,8 @@ export class CreateBookingComponent implements OnInit {
                 body.conflictingEnd || '';
               this.conflictAvailableFrom =
                 body.availableFrom || '';
-              this.conflictCooldownMinutes =
-                body.cooldownMinutes ?? null;
+              this.conflictOverrunMinutes =
+                body.overrunMinutes ?? null;
               this.conflictMessage =
                 body.message ||
                 'This time slot is already booked.';
@@ -550,8 +643,8 @@ export class CreateBookingComponent implements OnInit {
         return 'Room Already Booked';
       case 'BUFFER':
         return 'Buffer Time Required';
-      case 'COOLDOWN':
-        return 'Room in Cooldown';
+      case 'OVERRUN':
+        return 'Room in Overrun Threshold';
       default:
         return 'Booking Conflict';
     }
@@ -563,8 +656,8 @@ export class CreateBookingComponent implements OnInit {
         return 'This room has an overlapping booking during your requested time.';
       case 'BUFFER':
         return 'A minimum gap is required between bookings for room cleanup.';
-      case 'COOLDOWN':
-        return 'This room is currently in use and needs cooldown time before the next booking.';
+      case 'OVERRUN':
+        return 'This room is currently booked and needs overrun threshold time before the next booking.';
       default:
         return 'This time slot is unavailable.';
     }

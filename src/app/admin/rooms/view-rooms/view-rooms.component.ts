@@ -22,11 +22,9 @@ import { filter } from 'rxjs/operators';
 import {
   LucideCheck,
   LucideChevronDown,
-  LucideMapPin,
   LucideMonitor,
   LucideUsers,
   LucideWrench,
-  LucideX,
 } from '@lucide/angular';
 
 import { RoomService } from '../../../shared/services/room.service';
@@ -39,7 +37,6 @@ import {
 } from '../../../shared/models/room.model';
 import {
   IconComponent,
-  EmptyStateComponent,
   PageBannerComponent,
   type BadgeVariant,
 } from '../../../shared/ui';
@@ -58,9 +55,7 @@ interface RoomCardData {
   standalone: true,
   imports: [
     DecimalPipe,
-
     IconComponent,
-    EmptyStateComponent,
     PageBannerComponent,
   ],
   templateUrl: './view-rooms.component.html',
@@ -75,11 +70,9 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
 
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
-  readonly LucideMapPin = LucideMapPin;
   readonly LucideMonitor = LucideMonitor;
   readonly LucideUsers = LucideUsers;
   readonly LucideWrench = LucideWrench;
-  readonly LucideX = LucideX;
 
   readonly selectedType = signal<
     RoomType | 'ALL'
@@ -265,19 +258,6 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
       expanded: !card.expanded,
     };
     this.roomCards.set(newCards);
-  }
-
-  roomImage(roomType: RoomType): string {
-    switch (roomType) {
-      case 'BOARDROOM':
-        return 'assets/images/rooms/boardroom.jpg';
-
-      case 'VIDEO_CONFERENCE':
-        return 'assets/images/rooms/video-conference.jpg';
-
-      case 'MEETING_SUITE':
-        return 'assets/images/rooms/meeting-suite.jpg';
-    }
   }
 
   roomTypeLabel(type: RoomType): string {

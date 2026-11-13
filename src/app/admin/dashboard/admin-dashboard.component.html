@@ -119,39 +119,56 @@
     </section>
     <!-- Quick Actions -->
     <section class="dashboard-section">
-      <div class="section-header">
-        <h2>Quick Actions</h2>
-      </div>
-      <div class="quick-links-grid">
-        @for (
-          link of quickLinks;
-          track link.label;
-          let i = $index
-        ) {
-          <button
-            class="quick-link-card"
-            [style.animation-delay]="
-              i * 50 + 'ms'
-            "
-            (click)="navigateTo(link.route)"
-          >
-            <div
-              class="quick-link-icon"
-              [style.background]="
-                link.color + '15'
+      <button
+        type="button"
+        class="section-collapse-toggle"
+        (click)="toggleQuickActionsCollapsed()"
+        [attr.aria-expanded]="!quickActionsCollapsed()"
+        aria-label="Toggle Quick Actions"
+      >
+        <span class="section-collapse-title">Quick Actions</span>
+        <app-icon
+          [icon]="LucideChevronDown"
+          [size]="20"
+          class="section-collapse-chevron"
+          [class.rotated]="!quickActionsCollapsed()"
+        ></app-icon>
+      </button>
+      <div
+        class="section-collapse-wrapper"
+        [class.collapsed]="quickActionsCollapsed()"
+      >
+        <div class="quick-links-grid">
+          @for (
+            link of quickLinks;
+            track link.label;
+            let i = $index
+          ) {
+            <button
+              class="quick-link-card"
+              [style.animation-delay]="
+                i * 50 + 'ms'
               "
-              [style.color]="link.color"
+              (click)="navigateTo(link.route)"
             >
-              <app-icon
-                [icon]="link.icon"
-                [size]="24"
-              ></app-icon>
-            </div>
-            <span class="quick-link-label">{{
-              link.label
-            }}</span>
-          </button>
-        }
+              <div
+                class="quick-link-icon"
+                [style.background]="
+                  link.color + '15'
+                "
+                [style.color]="link.color"
+              >
+                <app-icon
+                  [icon]="link.icon"
+                  [size]="24"
+                ></app-icon>
+              </div>
+              <span class="quick-link-label">{{
+                link.label
+              }}</span>
+            </button>
+          }
+        </div>
       </div>
     </section>
     <!-- Two Column Layout: Live Room Status + Recent Bookings -->
@@ -178,6 +195,7 @@
             ) {
               <div
                 class="live-status-card"
+                [class]="getLiveStatusCardClass(room.liveStatus || '')"
                 [style.animation-delay]="
                   i * 50 + 'ms'
                 "

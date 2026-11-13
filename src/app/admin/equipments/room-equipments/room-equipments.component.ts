@@ -14,6 +14,7 @@ import {
 import {
   LucideCheck,
   LucideChevronDown,
+  LucideHash,
   LucideMonitor,
   LucidePlus,
   LucideRefreshCw,
@@ -30,7 +31,7 @@ import {
   RoomEquipmentStatus,
 } from '../../../shared/models/room.model';
 import { RoomEquipmentService } from '../../../shared/services/room-equipments.service';
-import { finalize, forkJoin } from 'rxjs';
+import { finalize, forkJoin, timeout } from 'rxjs';
 import {
   IconComponent,
   EmptyStateComponent,
@@ -66,6 +67,7 @@ export class RoomEquipmentComponent implements OnInit {
   );
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
+  readonly LucideHash = LucideHash;
   readonly LucideMonitor = LucideMonitor;
   readonly LucidePlus = LucidePlus;
   readonly LucideRefreshCw = LucideRefreshCw;
@@ -92,6 +94,11 @@ export class RoomEquipmentComponent implements OnInit {
 
   expandingRoomId: string | null = null;
   addingRoomId: string | null = null;
+
+  // Modal state for add equipment dialog
+  addModalOpen = false;
+  addModalRoomId: string | null = null;
+  addModalRoomName = '';
 
   readonly statuses: RoomEquipmentStatus[] = [
     'ACTIVE',
@@ -196,6 +203,7 @@ export class RoomEquipmentComponent implements OnInit {
     this.roomService
       .getRooms()
       .pipe(
+        timeout(15000),
         finalize(
           () => (this.loadingRooms = false),
         ),
@@ -220,39 +228,39 @@ export class RoomEquipmentComponent implements OnInit {
                 ),
               );
 
-            forkJoin(equipmentRequests).subscribe(
-              {
-                next: (detailsList) => {
-                  detailsList.forEach(
-                    (details, index) => {
-                      const card =
-                        this.roomCards[index];
-                      if (card) {
-                        card.equipment =
-                          details.equipment ?? [];
-                        card.loading = false;
-                      }
-                    },
-                  );
-                },
-                error: (error) => {
-                  this.log.error(
-                    'Failed to load some room equipment:',
-                    error,
-                  );
-                  this.roomCards.forEach(
-                    (card) =>
-                      (card.loading = false),
-                  );
-                },
+            forkJoin(equipmentRequests).subscribe({
+              next: (detailsList) => {
+                detailsList.forEach(
+                  (details, index) => {
+                    const card =
+                      this.roomCards[index];
+                    if (card) {
+                      card.equipment =
+                        details.equipment ?? [];
+                      card.loading = false;
+                    }
+                  },
+                );
               },
-            );
+              error: (error) => {
+                this.log.error(
+                  'Failed to load some room equipment:',
+                  error,
+                );
+                this.roomCards.forEach(
+                  (card) =>
+                    (card.loading = false),
+                );
+              },
+            });
           }
         },
         error: (error) => {
+          this.loadingRooms = false;
           this.errorMessage =
             error.message ||
             'Could not load rooms. Please try again.';
+          this.roomCards = [];
           this.log.error(
             'Failed to load rooms:',
             error,
@@ -294,19 +302,36 @@ export class RoomEquipmentComponent implements OnInit {
         : roomId;
   }
 
-  toggleAddForm(roomId: string): void {
-    if (this.addingRoomId === roomId) {
-      this.addingRoomId = null;
-      this.equipmentForm.reset({
-        equipmentName: '',
-        assetCode: '',
-        description: '',
-        status: 'ACTIVE',
-      });
-    } else {
-      this.addingRoomId = roomId;
+  openAddModal(roomId: string, roomName: string): void {
+    const card = this.roomCards.find(
+      (c) => c.room.roomId === roomId,
+    );
+    // Auto-expand the room card if not already expanded
+    if (card && this.expandingRoomId !== roomId) {
       this.expandingRoomId = roomId;
     }
+
+    this.addModalRoomId = roomId;
+    this.addModalRoomName = roomName;
+    this.equipmentForm.reset({
+      equipmentName: '',
+      assetCode: '',
+      description: '',
+      status: 'ACTIVE',
+    });
+    this.addModalOpen = true;
+  }
+
+  closeAddModal(): void {
+    this.addModalOpen = false;
+    this.addModalRoomId = null;
+    this.addModalRoomName = '';
+    this.equipmentForm.reset({
+      equipmentName: '',
+      assetCode: '',
+      description: '',
+      status: 'ACTIVE',
+    });
   }
 
   getCard(
@@ -317,7 +342,10 @@ export class RoomEquipmentComponent implements OnInit {
     );
   }
 
-  addEquipment(roomId: string): void {
+  addEquipment(): void {
+    if (!this.addModalRoomId) return;
+    const roomId = this.addModalRoomId;
+
     if (this.equipmentForm.invalid) {
       this.equipmentForm.markAllAsTouched();
       return;
@@ -341,17 +369,10 @@ export class RoomEquipmentComponent implements OnInit {
       .addEquipment(roomId, equipment)
       .subscribe({
         next: () => {
-          this.equipmentForm.reset({
-            equipmentName: '',
-            assetCode: '',
-            description: '',
-            status: 'ACTIVE',
-          });
-
-          this.addingRoomId = null;
           this.successMessage =
             'Equipment added successfully.';
           this.loadRoomEquipment(roomId);
+          this.closeAddModal();
         },
         error: (error) => {
           this.errorMessage =

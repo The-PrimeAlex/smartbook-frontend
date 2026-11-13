@@ -169,6 +169,33 @@
 .sidebar.collapsed .brand-link {
   justify-content: center;
 }
+.sidebar.collapsed .brand-copy {
+  display: none;
+}
+.sidebar.collapsed .collapse-button {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  margin: 0 auto;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgb(255 255 255 / 50%);
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+.sidebar.collapsed .collapse-button:hover {
+  background: rgb(242 140 40 / 20%);
+  color: var(--brand-accent);
+  border-color: rgb(242 140 40 / 40%);
+}
 .navigation {
   display: flex;
   flex: 1 1 auto;
@@ -433,6 +460,15 @@ button.menu-item {
 .sidebar.collapsed .menu-section {
   gap: 6px;
 }
+.sidebar.collapsed .section-label {
+  display: none;
+}
+.sidebar.collapsed .menu-label {
+  display: none;
+}
+.sidebar.collapsed .chevron {
+  display: none;
+}
 .sidebar.collapsed .menu-entry {
   width: 100%;
 }
@@ -623,6 +659,9 @@ button.menu-item {
 .sidebar.collapsed .account-summary {
   justify-content: center;
   padding: 0;
+}
+.sidebar.collapsed .account-details {
+  display: none;
 }
 .sidebar.collapsed .account-avatar {
   width: 34px;

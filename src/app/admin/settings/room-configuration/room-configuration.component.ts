@@ -6,8 +6,13 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  LucideCheck,
   LucideLayoutGrid,
+  LucideMonitor,
+  LucidePencil,
   LucideSearch,
+  LucideUsers,
+  LucideX,
 } from '@lucide/angular';
 import {
   RoomService,
@@ -19,6 +24,7 @@ import {
   RoomStatus,
 } from '../../../shared/models/room.model';
 import {
+  IconComponent,
   PageBannerComponent,
   SearchBoxComponent,
   EmptyStateComponent,
@@ -29,6 +35,7 @@ import {
   standalone: true,
   imports: [
     FormsModule,
+    IconComponent,
     PageBannerComponent,
     SearchBoxComponent,
     EmptyStateComponent,
@@ -38,8 +45,13 @@ import {
   styleUrl: './room-configuration.component.css',
 })
 export class RoomConfigurationComponent implements OnInit {
+  readonly LucideCheck = LucideCheck;
   readonly LucideLayoutGrid = LucideLayoutGrid;
+  readonly LucideMonitor = LucideMonitor;
+  readonly LucidePencil = LucidePencil;
   readonly LucideSearch = LucideSearch;
+  readonly LucideUsers = LucideUsers;
+  readonly LucideX = LucideX;
   private readonly roomService =
     inject(RoomService);
 
@@ -214,5 +226,34 @@ export class RoomConfigurationComponent implements OnInit {
       status.charAt(0).toUpperCase() +
       status.slice(1).toLowerCase()
     );
+  }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'status-active';
+      case 'MAINTENANCE':
+        return 'status-warning';
+      case 'RETIRED':
+        return 'status-inactive';
+      default:
+        return '';
+    }
+  }
+
+  getRoomTypeIcon(type: string): typeof LucideMonitor | typeof LucideUsers | typeof LucideLayoutGrid {
+    switch (type) {
+      case 'VIDEO_CONFERENCE':
+        return LucideMonitor;
+      case 'MEETING_SUITE':
+        return LucideUsers;
+      default:
+        return LucideLayoutGrid;
+    }
+  }
+
+  closeEditPanel(): void {
+    this.selectedRoom.set(null);
+    this.editing.set(false);
   }
 }
