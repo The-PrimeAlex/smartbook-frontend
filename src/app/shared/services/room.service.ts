@@ -9,6 +9,7 @@ import {
 import {
   Observable,
   catchError,
+  switchMap,
   throwError,
 } from 'rxjs';
 import {
@@ -16,6 +17,7 @@ import {
   RoomDetails,
 } from '../models/room.model';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../core/auth/auth.service';
 
 export type CreateRoomRequest = Omit<
   MeetingRoom,
@@ -25,6 +27,7 @@ export type CreateRoomRequest = Omit<
 @Injectable({ providedIn: 'root' })
 export class RoomService {
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   private readonly apiUrl = `${environment.apiUrl}/rooms`;
 
   getRooms(): Observable<MeetingRoom[]> {
@@ -36,9 +39,13 @@ export class RoomService {
   createRoom(
     request: CreateRoomRequest,
   ): Observable<MeetingRoom> {
-    return this.http
-      .post<MeetingRoom>(this.apiUrl, request)
-      .pipe(catchError(this.handleError));
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http
+          .post<MeetingRoom>(this.apiUrl, request)
+          .pipe(catchError(this.handleError)),
+      ),
+    );
   }
 
   getRoomDetails(
@@ -55,12 +62,16 @@ export class RoomService {
     roomId: string,
     request: CreateRoomRequest,
   ): Observable<MeetingRoom> {
-    return this.http
-      .put<MeetingRoom>(
-        `${this.apiUrl}/${encodeURIComponent(roomId)}`,
-        request,
-      )
-      .pipe(catchError(this.handleError));
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http
+          .put<MeetingRoom>(
+            `${this.apiUrl}/${encodeURIComponent(roomId)}`,
+            request,
+          )
+          .pipe(catchError(this.handleError)),
+      ),
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

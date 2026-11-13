@@ -9,10 +9,12 @@ import {
   Observable,
   catchError,
   of,
+  switchMap,
   tap,
 } from 'rxjs';
 import { CreateUserRequest } from './add-user/add-user.model';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../core/auth/auth.service';
 
 export interface OrganizationProfile {
   name: string;
@@ -106,6 +108,7 @@ export class UsersService {
     'UsersService',
   );
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
   private users = signal<SmartBookUser[]>([]);
   private loading = signal(false);
 
@@ -142,27 +145,31 @@ export class UsersService {
   deactivateUser(
     userId: string,
   ): Observable<{ message: string }> {
-    return this.http
-      .patch<{ message: string }>(
-        `${environment.apiUrl}/users/${userId}/deactivate`,
-        {},
-      )
-      .pipe(
-        tap(() => {
-          // Update local state
-          this.users.update((users) =>
-            users.map((u) =>
-              u.id === userId
-                ? {
-                    ...u,
-                    status:
-                      'DISABLED' as AccountStatus,
-                  }
-                : u,
-            ),
-          );
-        }),
-      );
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http
+          .patch<{ message: string }>(
+            `${environment.apiUrl}/users/${userId}/deactivate`,
+            {},
+          )
+          .pipe(
+            tap(() => {
+              // Update local state
+              this.users.update((users) =>
+                users.map((u) =>
+                  u.id === userId
+                    ? {
+                        ...u,
+                        status:
+                          'DISABLED' as AccountStatus,
+                      }
+                    : u,
+                ),
+              );
+            }),
+          ),
+      ),
+    );
   }
 
   getMyProfile(): Observable<MyProfile> {
@@ -174,18 +181,26 @@ export class UsersService {
   updateProfile(
     profile: MyProfile,
   ): Observable<void> {
-    return this.http.put<void>(
-      `${environment.apiUrl}/users/me/profile`,
-      profile,
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http.put<void>(
+          `${environment.apiUrl}/users/me/profile`,
+          profile,
+        ),
+      ),
     );
   }
 
   addUser(user: CreateUserRequest) {
-    return this.http
-      .post<{ message: string }>(
-        `${environment.apiUrl}/users`,
-        user,
-      )
-      .pipe(tap(() => this.loadUsers()));
+    return this.authService.ensureCsrfToken().pipe(
+      switchMap(() =>
+        this.http
+          .post<{ message: string }>(
+            `${environment.apiUrl}/users`,
+            user,
+          )
+          .pipe(tap(() => this.loadUsers())),
+      ),
+    );
   }
 }
