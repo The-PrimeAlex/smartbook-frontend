@@ -17,6 +17,7 @@ import {
   LucideChevronDown,
   LucideClock,
   LucideEye,
+  LucideHome,
   LucideRefreshCw,
 } from '@lucide/angular';
 
@@ -69,9 +70,10 @@ export class UpcomingBookingsComponent implements OnInit {
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideEye = LucideEye;
+  readonly LucideHome = LucideHome;
   readonly LucideRefreshCw = LucideRefreshCw;
 
-  readonly statsCollapsed = signal(false);
+  readonly statsCollapsed = signal(true);
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);

@@ -30,9 +30,6 @@
       <div class="stats-bar">
         <app-stat-card
           [icon]="LucideClock"
-          [iconBg]="'rgba(59,130,246,0.12)'"
-          [iconColor]="'var(--info,#3b82f6)'"
-          delay="0s"
         >
           <span stat-value>{{
             totalUsage()
@@ -41,9 +38,6 @@
         </app-stat-card>
         <app-stat-card
           [icon]="LucideClock"
-          [iconBg]="'rgba(245,158,11,0.12)'"
-          [iconColor]="'var(--warning,#f59e0b)'"
-          delay="0.05s"
         >
           <span stat-value>{{
             formatDuration(totalDuration())
@@ -52,9 +46,6 @@
         </app-stat-card>
         <app-stat-card
           [icon]="LucideClock"
-          [iconBg]="'rgba(239,68,68,0.12)'"
-          [iconColor]="'var(--error,#ef4444)'"
-          delay="0.1s"
         >
           <span stat-value>{{
             formatDuration(totalOverrun())
@@ -63,9 +54,6 @@
         </app-stat-card>
         <app-stat-card
           [icon]="LucideClock"
-          [iconBg]="'rgba(139,92,246,0.12)'"
-          [iconColor]="'var(--purple,#8b5cf6)'"
-          delay="0.15s"
         >
           <span stat-value>{{
             autoClosedCount()

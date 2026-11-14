@@ -158,8 +158,8 @@ export class AdminDashboard implements OnInit {
   >([]);
   readonly incidents = signal<any[]>([]);
   readonly loading = signal(true);
-  readonly statsCollapsed = signal(false);
-  readonly quickActionsCollapsed = signal(false);
+  readonly statsCollapsed = signal(true);
+  readonly quickActionsCollapsed = signal(true);
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);

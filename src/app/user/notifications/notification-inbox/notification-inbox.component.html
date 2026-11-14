@@ -9,18 +9,12 @@
   <div class="stats-bar">
     <app-stat-card
       [icon]="LucideBell"
-      [iconBg]="'rgba(59,130,246,0.12)'"
-      [iconColor]="'var(--info,#3b82f6)'"
-      delay="0s"
     >
       <span stat-value>{{ total }}</span>
       <span stat-label>Total</span>
     </app-stat-card>
     <app-stat-card
       [icon]="LucideCircle"
-      [iconBg]="'rgba(245,158,11,0.12)'"
-      [iconColor]="'var(--warning,#f59e0b)'"
-      delay="0.05s"
     >
       <span stat-value>{{ unreadCount }}</span>
       <span stat-label>Unread</span>

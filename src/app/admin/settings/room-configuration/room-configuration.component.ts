@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   OnInit,
   inject,
   signal,
@@ -255,5 +256,13 @@ export class RoomConfigurationComponent implements OnInit {
   closeEditPanel(): void {
     this.selectedRoom.set(null);
     this.editing.set(false);
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event): void {
+    if (this.selectedRoom()) {
+      event.stopPropagation();
+      this.closeEditPanel();
+    }
   }
 }

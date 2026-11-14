@@ -14,6 +14,7 @@ import { finalize } from 'rxjs';
 import {
   LucideBan,
   LucideCalendar,
+  LucideHome,
   LucideRefreshCw,
 } from '@lucide/angular';
 
@@ -104,6 +105,7 @@ export class CancelledBookingsComponent implements OnInit {
 
   readonly LucideCalendar = LucideCalendar;
   readonly LucideBan = LucideBan;
+  readonly LucideHome = LucideHome;
   readonly LucideRefreshCw = LucideRefreshCw;
 
   getBadgeVariant = getBookingBadgeVariant;

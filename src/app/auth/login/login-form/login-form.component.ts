@@ -39,6 +39,7 @@ export class LoginFormComponent {
   readonly loading = signal<boolean>(false);
   readonly errorMessage = signal<string>('');
   readonly showPassword = signal<boolean>(false);
+  readonly inactivityMessage = signal<string>('');
 
   readonly form = new FormGroup({
     email: new FormControl('', {
@@ -55,9 +56,21 @@ export class LoginFormComponent {
   });
 
   constructor() {
+    // Check if the user was auto-logged out due to inactivity
+    const reason = this.route.snapshot.queryParamMap.get('reason');
+    if (reason === 'inactivity') {
+      this.inactivityMessage.set(
+        'You were automatically logged out due to inactivity. Please sign in again.',
+      );
+    }
+
     this.form.valueChanges.subscribe(() => {
       if (this.errorMessage()) {
         this.errorMessage.set('');
+      }
+      // Also clear inactivity message on input
+      if (this.inactivityMessage()) {
+        this.inactivityMessage.set('');
       }
     });
   }

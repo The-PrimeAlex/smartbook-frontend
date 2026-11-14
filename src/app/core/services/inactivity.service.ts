@@ -185,9 +185,9 @@ export class InactivityService {
       'smartbook-session-expired',
       'true',
     );
-    // Redirect to login immediately so the user doesn't see a broken
-    // interface with stale admin/user content and a mismatched sidebar
-    window.location.replace('/login');
+    // Redirect to login with a reason query param so the login page
+    // can show an "auto-logged out due to inactivity" message
+    window.location.replace('/login?reason=inactivity');
   }
 
   /** Bind the back-navigation handler (called only after logout) */

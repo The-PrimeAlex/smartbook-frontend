@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   OnInit,
   inject,
 } from '@angular/core';
@@ -34,6 +35,7 @@ import { RoomEquipmentService } from '../../../shared/services/room-equipments.s
 import { finalize, forkJoin, timeout } from 'rxjs';
 import {
   IconComponent,
+  StatCardComponent,
   EmptyStateComponent,
   SearchBoxComponent,
   PageBannerComponent,
@@ -54,6 +56,7 @@ export interface RoomCardData {
     FormsModule,
 
     IconComponent,
+    StatCardComponent,
     EmptyStateComponent,
     SearchBoxComponent,
     PageBannerComponent,
@@ -326,12 +329,14 @@ export class RoomEquipmentComponent implements OnInit {
     this.addModalOpen = false;
     this.addModalRoomId = null;
     this.addModalRoomName = '';
-    this.equipmentForm.reset({
-      equipmentName: '',
-      assetCode: '',
-      description: '',
-      status: 'ACTIVE',
-    });
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event): void {
+    if (this.addModalOpen) {
+      event.stopPropagation();
+      this.closeAddModal();
+    }
   }
 
   getCard(

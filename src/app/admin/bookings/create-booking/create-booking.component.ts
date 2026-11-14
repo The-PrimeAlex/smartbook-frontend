@@ -12,10 +12,12 @@ import { finalize, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import {
+  LucideAlertTriangle,
   LucideArrowDown,
   LucideArrowRight,
   LucideCalendar,
   LucideCalendarCheck,
+  LucideCheckCircle,
   LucideChevronDown,
   LucideCircleHelp,
   LucideClock,
@@ -61,11 +63,13 @@ export class CreateBookingComponent implements OnInit {
   );
   private readonly http = inject(HttpClient);
 
+  readonly LucideAlertTriangle = LucideAlertTriangle;
   readonly LucideArrowDown = LucideArrowDown;
   readonly LucideArrowRight = LucideArrowRight;
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCalendarCheck =
     LucideCalendarCheck;
+  readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCircleHelp = LucideCircleHelp;
   readonly LucideClock = LucideClock;

@@ -109,46 +109,22 @@
     class="summary-grid"
     aria-label="Booking summary"
   >
-    <article class="summary-card">
-      <span class="summary-label"
-        >Total bookings</span
-      >
-      <strong class="summary-value">{{
-        totalBookings()
-      }}</strong>
-      <span class="summary-detail"
-        >All displayed sources</span
-      >
-    </article>
-    <article class="summary-card">
-      <span class="summary-label"
-        >Today's bookings</span
-      >
-      <strong class="summary-value">{{
-        todayBookings()
-      }}</strong>
-      <span class="summary-detail"
-        >Scheduled for today</span
-      >
-    </article>
-    <article class="summary-card">
-      <span class="summary-label">Confirmed</span>
-      <strong class="summary-value">{{
-        confirmedBookings()
-      }}</strong>
-      <span class="summary-detail"
-        >Confirmed bookings and events</span
-      >
-    </article>
-    <article class="summary-card">
-      <span class="summary-label">Pending</span>
-      <strong class="summary-value">{{
-        pendingBookings()
-      }}</strong>
-      <span class="summary-detail"
-        >Awaiting confirmation</span
-      >
-    </article>
+    <app-stat-card [icon]="LucideCalendar">
+      <span stat-value>{{ totalBookings() }}</span>
+      <span stat-label>Total bookings</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideCalendar">
+      <span stat-value>{{ todayBookings() }}</span>
+      <span stat-label>Today</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideCheckCircle">
+      <span stat-value>{{ confirmedBookings() }}</span>
+      <span stat-label>Confirmed</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideClock">
+      <span stat-value>{{ pendingBookings() }}</span>
+      <span stat-label>Pending</span>
+    </app-stat-card>
   </section>
   <section class="calendar-panel">
     <div class="calendar-toolbar">

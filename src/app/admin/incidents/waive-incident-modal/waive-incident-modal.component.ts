@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   Input,
   Output,
 } from '@angular/core';
@@ -64,5 +65,13 @@ export class WaiveIncidentModalComponent {
 
   onCancel() {
     this.close.emit();
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event) {
+    if (this.visible && this.interactive) {
+      event.stopPropagation();
+      this.close.emit();
+    }
   }
 }

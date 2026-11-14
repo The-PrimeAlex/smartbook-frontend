@@ -801,6 +801,55 @@
                 </div>
               </div>
             </div>
+          } @else if (
+            conflictType === 'BUFFER' &&
+            conflictOverrunMinutes
+          ) {
+            <div class="conflict-cooldown-block">
+              <div
+                class="conflict-cooldown-header"
+              >
+                <app-icon
+                  [icon]="LucideTimer"
+                  [size]="18"
+                ></app-icon>
+                <span
+                  class="conflict-cooldown-title"
+                  >Required Gap</span
+                >
+              </div>
+              <div
+                class="conflict-cooldown-details"
+              >
+                <div
+                  class="conflict-cooldown-row"
+                >
+                  <span
+                    class="conflict-cooldown-label"
+                    >Previous booking ended</span
+                  >
+                  <span
+                    class="conflict-cooldown-value"
+                    >{{ conflictEnd }}</span
+                  >
+                </div>
+                <div
+                  class="conflict-cooldown-row"
+                >
+                  <span
+                    class="conflict-cooldown-label"
+                    >Required gap</span
+                  >
+                  <span
+                    class="conflict-cooldown-value"
+                    >{{
+                      conflictOverrunMinutes
+                    }}
+                    minutes</span
+                  >
+                </div>
+              </div>
+            </div>
           } @else if (conflictAvailableFrom) {
             <div class="conflict-available-block">
               <app-icon

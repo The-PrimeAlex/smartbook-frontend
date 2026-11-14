@@ -14,9 +14,19 @@
       "
       [class.notice-error]="msg.type === 'error'"
     >
-      <span class="notice-icon">{{
-        msg.type === 'success' ? '✓' : '✕'
-      }}</span>
+      @if (msg.type === 'success') {
+        <app-icon
+          [icon]="LucideCheck"
+          [size]="16"
+          class="notice-icon"
+        ></app-icon>
+      } @else {
+        <app-icon
+          [icon]="LucideX"
+          [size]="16"
+          class="notice-icon"
+        ></app-icon>
+      }
       {{ msg.text }}
     </div>
   }

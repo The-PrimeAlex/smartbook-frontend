@@ -137,7 +137,7 @@ export class Dashboard implements OnInit {
     [],
   );
   readonly loading = signal(true);
-  readonly statsCollapsed = signal(false);
+  readonly statsCollapsed = signal(true);
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);

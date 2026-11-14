@@ -12,12 +12,15 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import {
   LucideCalendar,
+  LucideClock,
   LucideLayoutGrid,
   LucideRefreshCw,
   LucideDollarSign,
   LucideAlertCircle,
   LucideCheckCircle,
   LucideChevronDown,
+  LucideTimer,
+  LucideUser,
 } from '@lucide/angular';
 import {
   ReportsAlService,
@@ -67,13 +70,16 @@ export class ReportsAlComponent implements OnInit {
   );
   private readonly route = inject(ActivatedRoute);
 
-  readonly LucideLayoutGrid = LucideLayoutGrid;
-  readonly LucideCalendar = LucideCalendar;
-  readonly LucideDollarSign = LucideDollarSign;
-  readonly LucideRefreshCw = LucideRefreshCw;
   readonly LucideAlertCircle = LucideAlertCircle;
+  readonly LucideCalendar = LucideCalendar;
   readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideChevronDown = LucideChevronDown;
+  readonly LucideClock = LucideClock;
+  readonly LucideDollarSign = LucideDollarSign;
+  readonly LucideLayoutGrid = LucideLayoutGrid;
+  readonly LucideRefreshCw = LucideRefreshCw;
+  readonly LucideTimer = LucideTimer;
+  readonly LucideUser = LucideUser;
 
   readonly activeTab =
     signal<TabMode>('occupancy');

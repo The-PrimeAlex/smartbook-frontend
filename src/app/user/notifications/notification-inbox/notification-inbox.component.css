@@ -3,52 +3,12 @@
   margin: 0 auto;
   padding: 0 24px;
 }
-/* ── Stats bar ── (uses global .stat-card,
-.stat-value, .stat-label) */
+/* ── Stats bar ── */
 .stats-bar {
   display: flex;
   align-items: center;
   gap: 16px;
   margin: 24px 0 20px;
-}
-.stat-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  flex: 1;
-}
-.stat-icon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-}
-.stat-icon svg {
-  width: 20px;
-  height: 20px;
-}
-.stat-icon.total {
-  color: var(--brand-primary);
-  background: rgba(20, 43, 74, 0.08);
-}
-.stat-icon.unread {
-  color: var(--brand-accent);
-  background: rgba(242, 140, 40, 0.1);
-}
-.stat-info {
-  display: flex;
-  flex-direction: column;
-}
-.stat-value {
-  color: var(--text-primary);
-  font-size: 22px;
-  line-height: 1.2;
-}
-.stat-label {
-  color: var(--text-secondary);
-  font-size: 12px;
 }
 .stats-actions {
   flex-shrink: 0;

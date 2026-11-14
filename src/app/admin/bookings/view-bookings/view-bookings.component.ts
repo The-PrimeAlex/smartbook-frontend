@@ -31,6 +31,7 @@ import {
 import { BookingService } from '../../../shared/services/booking.service';
 import {
   IconComponent,
+  StatCardComponent,
   StatusBadgeComponent,
   EmptyStateComponent,
   PageBannerComponent,
@@ -51,6 +52,7 @@ type BookingFilter = 'ALL' | BookingStatus;
     DatePipe,
     CurrencyPipe,
     IconComponent,
+    StatCardComponent,
     StatusBadgeComponent,
     EmptyStateComponent,
     PageBannerComponent,

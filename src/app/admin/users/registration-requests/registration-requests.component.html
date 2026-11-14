@@ -20,27 +20,18 @@
   <div class="stats-bar">
     <app-stat-card
       [icon]="LucideMail"
-      [iconBg]="'var(--brand-accent-bg)'"
-      [iconColor]="'var(--brand-accent)'"
-      delay="0s"
     >
       <span stat-value>{{ totalCount() }}</span>
       <span stat-label>Total Requests</span>
     </app-stat-card>
     <app-stat-card
       [icon]="LucideClock"
-      [iconBg]="'var(--warning-bg)'"
-      [iconColor]="'var(--warning)'"
-      delay="0.05s"
     >
       <span stat-value>{{ pendingCount() }}</span>
       <span stat-label>Pending</span>
     </app-stat-card>
     <app-stat-card
       [icon]="LucideCheckCircle"
-      [iconBg]="'var(--success-bg)'"
-      [iconColor]="'var(--success)'"
-      delay="0.1s"
     >
       <span stat-value>{{
         approvedCount()
@@ -49,9 +40,6 @@
     </app-stat-card>
     <app-stat-card
       [icon]="LucideXCircle"
-      [iconBg]="'var(--danger-bg)'"
-      [iconColor]="'var(--danger)'"
-      delay="0.15s"
     >
       <span stat-value>{{
         rejectedCount()

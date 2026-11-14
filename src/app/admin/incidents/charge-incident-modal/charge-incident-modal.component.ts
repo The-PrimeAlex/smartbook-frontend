@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   Input,
   Output,
   ViewChild,
@@ -80,5 +81,13 @@ export class ChargeIncidentModalComponent {
 
   onCancel() {
     this.close.emit();
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event) {
+    if (this.visible && this.interactive) {
+      event.stopPropagation();
+      this.close.emit();
+    }
   }
 }

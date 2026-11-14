@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   input,
   output,
 } from '@angular/core';
@@ -48,5 +49,11 @@ export class CancelBookingModalComponent {
 
   onCancel(): void {
     this.cancel.emit();
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event) {
+    event.stopPropagation();
+    this.onCancel();
   }
 }

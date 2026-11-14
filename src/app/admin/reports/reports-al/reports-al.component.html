@@ -352,21 +352,29 @@
               </div>
               <div class="card-row-meta">
                 <span class="meta-item">
-                  <span class="meta-icon"
-                    >👤</span
-                  >
+                  <app-icon
+                    [icon]="LucideUser"
+                    [size]="12"
+                    class="meta-icon"
+                  ></app-icon>
                   {{ r.bookerName }}
                 </span>
                 <span class="meta-item">
-                  <span class="meta-icon"
-                    >📅</span
-                  >
+                  <app-icon
+                    [icon]="LucideCalendar"
+                    [size]="12"
+                    class="meta-icon"
+                  ></app-icon>
                   {{
                     r.startTime | date: 'short'
                   }}
                 </span>
                 <span class="meta-item">
-                  <span class="meta-icon">⏱</span>
+                  <app-icon
+                    [icon]="LucideTimer"
+                    [size]="12"
+                    class="meta-icon"
+                  ></app-icon>
                   {{
                     formatMinutesShort(
                       r.durationMinutes
@@ -382,9 +390,11 @@
                       r.overrunMinutes > 0
                     "
                   >
-                    <span class="meta-icon"
-                      >⏲</span
-                    >
+                    <app-icon
+                    [icon]="LucideClock"
+                    [size]="12"
+                    class="meta-icon"
+                  ></app-icon>
                     {{
                       formatMinutesShort(
                         r.actualDurationMinutes

@@ -30,9 +30,6 @@
     <div class="stats-grid">
       <app-stat-card
         [icon]="LucideDollarSign"
-        [iconBg]="'rgba(242,140,40,0.12)'"
-        [iconColor]="'var(--brand-accent)'"
-        delay="0s"
       >
         <span stat-value>{{
           formatCurrency(totalChargesAmount)
@@ -43,9 +40,6 @@
       </app-stat-card>
       <app-stat-card
         [icon]="LucideFileText"
-        [iconBg]="'rgba(59,130,246,0.12)'"
-        [iconColor]="'var(--info)'"
-        delay="0.05s"
       >
         <span stat-value>{{
           totalIncidents
@@ -54,9 +48,6 @@
       </app-stat-card>
       <app-stat-card
         [icon]="LucideCheckCircle2"
-        [iconBg]="'rgba(34,197,94,0.12)'"
-        [iconColor]="'var(--success)'"
-        delay="0.1s"
       >
         <span stat-value>{{
           totalIncidents > 0
@@ -73,9 +64,6 @@
     <div class="stats-grid">
       <app-stat-card
         [icon]="LucideFileText"
-        [iconBg]="'rgba(242,140,40,0.12)'"
-        [iconColor]="'var(--brand-accent)'"
-        delay="0s"
       >
         <span stat-value>{{
           totalIncidents
@@ -84,9 +72,6 @@
       </app-stat-card>
       <app-stat-card
         [icon]="LucideCircleAlert"
-        [iconBg]="'rgba(245,158,11,0.12)'"
-        [iconColor]="'var(--warning)'"
-        delay="0.05s"
       >
         <span stat-value>{{
           pendingActionCount
@@ -95,9 +80,6 @@
       </app-stat-card>
       <app-stat-card
         [icon]="LucideCheckCircle2"
-        [iconBg]="'rgba(34,197,94,0.12)'"
-        [iconColor]="'var(--success)'"
-        delay="0.1s"
       >
         <span stat-value>{{
           verifiedCount
@@ -106,9 +88,6 @@
       </app-stat-card>
       <app-stat-card
         [icon]="LucideX"
-        [iconBg]="'rgba(107,114,128,0.12)'"
-        [iconColor]="'var(--neutral-500)'"
-        delay="0.2s"
       >
         <span stat-value>{{
           rejectedCount

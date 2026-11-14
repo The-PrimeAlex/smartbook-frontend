@@ -7,7 +7,11 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { LucideCalendar } from '@lucide/angular';
+import {
+  LucideCalendar,
+  LucideCheckCircle,
+  LucideClock,
+} from '@lucide/angular';
 import { finalize } from 'rxjs';
 import {
   BookingSyncResult,
@@ -33,7 +37,10 @@ import {
   startOfDay,
   timeKey,
 } from './util/calendar-date-utils';
-import { EmptyStateComponent } from '../../shared/ui';
+import {
+  EmptyStateComponent,
+  StatCardComponent,
+} from '../../shared/ui';
 
 type BookingStatus =
   'Confirmed' | 'Pending' | 'Cancelled';
@@ -54,12 +61,14 @@ interface CalendarDay {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [DatePipe, EmptyStateComponent],
+  imports: [DatePipe, EmptyStateComponent, StatCardComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
 })
 export class CalendarComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
+  readonly LucideCheckCircle = LucideCheckCircle;
+  readonly LucideClock = LucideClock;
   private readonly calendarService = inject(
     CalendarService,
   );

@@ -5,11 +5,13 @@ import {
 import {
   Component,
   computed,
+  HostListener,
   inject,
   signal,
 } from '@angular/core';
 import {
   LucideBuilding,
+  LucideCheck,
   LucideFileText,
   LucideMail,
   LucidePhone,
@@ -62,6 +64,7 @@ export class ViewUsersComponent {
   private usersService = inject(UsersService);
 
   readonly LucideBuilding = LucideBuilding;
+  readonly LucideCheck = LucideCheck;
   readonly LucideFileText = LucideFileText;
   readonly LucideMail = LucideMail;
   readonly LucidePhone = LucidePhone;
@@ -188,6 +191,14 @@ export class ViewUsersComponent {
     this.selectedUser.set(null);
   }
 
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event): void {
+    if (this.selectedUser()) {
+      event.stopPropagation();
+      this.closeProfile();
+    }
+  }
+
   getInitials(user: SmartBookUser): string {
     return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
   }
@@ -203,16 +214,6 @@ export class ViewUsersComponent {
   }
 
   getStatusLabel = getUserStatusLabel;
-
-  getStatusIcon(status: AccountStatus): string {
-    const icons: Record<AccountStatus, string> = {
-      ACTIVE: '✓',
-      DISABLED: '−',
-      PENDING: '◷',
-    };
-
-    return icons[status];
-  }
 
   hasCompanyDetails(
     user: SmartBookUser,

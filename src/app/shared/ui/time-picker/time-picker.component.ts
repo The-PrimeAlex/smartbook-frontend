@@ -48,6 +48,10 @@ export class TimePickerComponent
   selectedHour: number | null = null;
   selectedMinute: number | null = null;
 
+  // Snapshot of the value before opening the dropdown, for Escape/cancel restore
+  private pendingHour: number | null = null;
+  private pendingMinute: number | null = null;
+
   // Typable input state
   inputBuffer = '';
   isTyping = false;
@@ -98,6 +102,7 @@ export class TimePickerComponent
 
   private onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && this.dropdownOpen) {
+      this.restorePending();
       this.dropdownOpen = false;
       this.cdr.detectChanges();
     }
@@ -107,15 +112,31 @@ export class TimePickerComponent
     if (
       !this.el.nativeElement.contains(e.target)
     ) {
+      this.restorePending();
       this.dropdownOpen = false;
       this.cdr.detectChanges();
     }
   };
 
+  private restorePending(): void {
+    if (
+      this.pendingHour !== null &&
+      this.pendingMinute !== null
+    ) {
+      this.selectedHour = this.pendingHour;
+      this.selectedMinute = this.pendingMinute;
+      this.inputBuffer = '';
+      this.isTyping = false;
+    }
+  }
+
   toggleDropdown(): void {
     if (this.disabled) return;
     this.dropdownOpen = !this.dropdownOpen;
     if (this.dropdownOpen) {
+      // Save current value so we can restore on Escape/cancel
+      this.pendingHour = this.selectedHour;
+      this.pendingMinute = this.selectedMinute;
       this.cdr.detectChanges();
     }
   }

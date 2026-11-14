@@ -3,49 +3,12 @@
   max-width: 1280px;
   margin: 0 auto;
 }
-/* ── Stats Grid ── (uses global .stat-card,
-  .stat-value, .stat-label) */
+/* ── Stats Grid ── */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.25rem;
   margin-bottom: 2.5rem;
-}
-.stat-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.25rem;
-  animation: fadeUp 0.4s ease-out both;
-}
-.stat-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-.stat-card:hover .stat-icon {
-  transform: scale(1.08);
-}
-.stat-info {
-  display: flex;
-  flex-direction: column;
-}
-.stat-value {
-  color: var(--text-primary);
-  font-size: 1.625rem;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-.stat-label {
-  color: var(--text-secondary);
-  font-size: 0.8125rem;
-  margin-top: 2px;
 }
 /* ── Filter Bar ── */
 .filter-bar {

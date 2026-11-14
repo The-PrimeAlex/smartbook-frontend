@@ -69,7 +69,7 @@ export class AllInvoicesComponent implements OnInit {
   readonly selectedFilter = signal<string>('ALL');
   readonly searchTerm = signal('');
   readonly sortBy = signal<string>('date-desc'); // date-desc, date-asc, amount-desc, amount-asc, status
-  readonly statsCollapsed = signal(false);
+  readonly statsCollapsed = signal(true);
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);

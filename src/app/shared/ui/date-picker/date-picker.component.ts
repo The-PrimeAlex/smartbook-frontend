@@ -37,6 +37,7 @@ export class DatePickerComponent
 
   private fpInstance: any;
   private _value: string = '';
+  private pendingValue: string = '';
 
   constructor(private el: ElementRef) {}
 
@@ -52,6 +53,17 @@ export class DatePickerComponent
         maxDate: this.max || undefined,
         disableMobile: true,
         animate: true,
+        onOpen: () => {
+          // Save current value so we can restore on Escape/cancel
+          this.pendingValue = this._value;
+        },
+        onClose: () => {
+          // If no date was selected (empty string), restore the original value
+          if (!this.fpInstance.selectedDates.length) {
+            this._value = this.pendingValue;
+            this.onChangeCallback(this.pendingValue);
+          }
+        },
         onChange: ([date], dateStr) => {
           this._value = dateStr;
           this.onChangeCallback(dateStr);

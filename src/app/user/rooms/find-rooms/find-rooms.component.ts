@@ -16,15 +16,19 @@ import {
 } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import {
+  LucideArmchair,
+  LucideBuilding2,
   LucideCalendar,
   LucideCheck,
   LucideChevronDown,
   LucideClock,
   LucideDollarSign,
+  LucideHome,
   LucideMapPin,
   LucideMonitor,
   LucideSearch,
   LucideUsers,
+  LucideVideo,
   LucideX,
 } from '@lucide/angular';
 import { RoomService } from '../../../shared/services/room.service';
@@ -36,7 +40,6 @@ import type {
 } from '../../../shared/models/room.model';
 import {
   PageBannerComponent,
-  StatCardComponent,
   SearchBoxComponent,
   FilterGroupComponent,
   EmptyStateComponent,
@@ -71,7 +74,6 @@ interface RoomCardData {
   standalone: true,
   imports: [
     PageBannerComponent,
-    StatCardComponent,
     SearchBoxComponent,
     FilterGroupComponent,
     EmptyStateComponent,
@@ -88,15 +90,19 @@ export class FindRoomsComponent implements OnDestroy {
   );
   private readonly router = inject(Router);
 
+  readonly LucideArmchair = LucideArmchair;
+  readonly LucideBuilding2 = LucideBuilding2;
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideDollarSign = LucideDollarSign;
+  readonly LucideHome = LucideHome;
   readonly LucideMapPin = LucideMapPin;
   readonly LucideMonitor = LucideMonitor;
   readonly LucideSearch = LucideSearch;
   readonly LucideUsers = LucideUsers;
+  readonly LucideVideo = LucideVideo;
   readonly LucideX = LucideX;
 
   readonly filterTypeOptions: FilterOption[] = [
@@ -113,17 +119,15 @@ export class FindRoomsComponent implements OnDestroy {
   ];
 
   readonly filterStatusOptions: FilterOption[] = [
-    { value: 'all', label: 'All' },
     { value: 'ACTIVE', label: 'Active' },
-    { value: 'INACTIVE', label: 'Inactive' },
   ];
 
   readonly rooms = signal<RoomCardData[]>([]);
   readonly loading = signal(true);
 
   readonly searchQuery = signal('');
-  readonly filterType = signal<string>('all');
-  readonly filterStatus = signal<string>('all');
+  readonly filterType = signal<string>('');
+  readonly filterStatus = signal<string>('');
 
   readonly filteredRooms = computed(() => {
     const query = this.searchQuery()
@@ -145,14 +149,14 @@ export class FindRoomsComponent implements OnDestroy {
       );
     }
 
-    if (typeFilter !== 'all') {
+    if (typeFilter !== '') {
       result = result.filter(
         (card) =>
           card.room.roomType === typeFilter,
       );
     }
 
-    if (statusFilter !== 'all') {
+    if (statusFilter !== '') {
       result = result.filter(
         (card) =>
           card.room.status === statusFilter,
@@ -343,16 +347,16 @@ export class FindRoomsComponent implements OnDestroy {
     }
   }
 
-  getRoomTypeIcon(type: RoomType): string {
+  getRoomTypeIcon(type: RoomType) {
     switch (type) {
       case 'BOARDROOM':
-        return '🏢';
+        return this.LucideBuilding2;
       case 'VIDEO_CONFERENCE':
-        return '📹';
+        return this.LucideVideo;
       case 'MEETING_SUITE':
-        return '🪑';
+        return this.LucideArmchair;
       default:
-        return '🏠';
+        return this.LucideHome;
     }
   }
 

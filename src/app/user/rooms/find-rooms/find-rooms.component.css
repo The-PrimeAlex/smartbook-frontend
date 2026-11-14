@@ -75,37 +75,53 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Search & Filter Section
+   Search & Filter Bar
    ═══════════════════════════════════════════════════════════ */
-.search-filter-section {
+.search-filter-bar {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px;
+  gap: 10px;
+  padding: 14px 16px;
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   animation: fadeUp 400ms ease 200ms both;
 }
 
+.search-row {
+  width: 100%;
+}
+
 .filters-row {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.filter-block {
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
-.filter-label {
-  font-size: 0.75rem;
-  font-weight: 600;
+.reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: transparent;
   color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.reset-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.reset-btn app-icon {
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -818,13 +834,20 @@
   }
 
   /* Search & filters */
-  .search-filter-section {
-    padding: 16px;
-    gap: 14px;
+  .search-filter-bar {
+    padding: 12px;
+    gap: 8px;
   }
 
   .filters-row {
-    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .reset-btn {
+    justify-content: center;
+    padding: 10px 14px;
   }
 
   /* Room grid: single column */
@@ -902,8 +925,13 @@
     font-size: 1.125rem;
   }
 
-  .search-filter-section {
-    padding: 14px;
+  .search-filter-bar {
+    padding: 10px;
+  }
+
+  .reset-btn {
+    padding: 9px 12px;
+    font-size: 0.75rem;
   }
 
   .room-card {

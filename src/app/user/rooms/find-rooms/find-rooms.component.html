@@ -101,29 +101,43 @@
   </div>
 
   <!-- Search & Filters -->
-  <div class="search-filter-section">
-    <app-search-box
-      placeholder="Search rooms by name or description..."
-      [value]="searchQuery()"
-      (change)="searchQuery.set($event)"
-    ></app-search-box>
+  <div class="search-filter-bar">
+    <div class="search-row">
+      <app-search-box
+        placeholder="Search rooms by name or type..."
+        [value]="searchQuery()"
+        (change)="searchQuery.set($event)"
+      ></app-search-box>
+    </div>
     <div class="filters-row">
-      <div class="filter-block">
-        <span class="filter-label">Type</span>
-        <app-filter-group
-          [filters]="filterTypeOptions"
-          [activeFilter]="filterType()"
-          (select)="filterType.set($event)"
-        ></app-filter-group>
-      </div>
-      <div class="filter-block">
-        <span class="filter-label">Status</span>
-        <app-filter-group
-          [filters]="filterStatusOptions"
-          [activeFilter]="filterStatus()"
-          (select)="filterStatus.set($event)"
-        ></app-filter-group>
-      </div>
+      <app-filter-group
+        [filters]="filterTypeOptions"
+        [activeFilter]="filterType()"
+        (select)="filterType.set($event)"
+      ></app-filter-group>
+      <app-filter-group
+        [filters]="filterStatusOptions"
+        [activeFilter]="filterStatus()"
+        (select)="filterStatus.set($event)"
+      ></app-filter-group>
+      @if (
+        searchQuery() ||
+        filterType() !== '' ||
+        filterStatus() !== ''
+      ) {
+        <button
+          class="reset-btn"
+          (click)="
+            searchQuery.set('');
+            filterType.set('');
+            filterStatus.set('')
+          "
+          title="Reset all filters"
+        >
+          <app-icon [icon]="LucideX" [size]="16"></app-icon>
+          Reset
+        </button>
+      }
     </div>
   </div>
 
@@ -138,15 +152,15 @@
       >
       @if (
         searchQuery() ||
-        filterType() !== 'all' ||
-        filterStatus() !== 'all'
+        filterType() !== '' ||
+        filterStatus() !== ''
       ) {
         <button
           class="clear-all-btn"
           (click)="
             searchQuery.set('');
-            filterType.set('all');
-            filterStatus.set('all')
+            filterType.set('');
+            filterStatus.set('')
           "
         >
           <app-icon
@@ -240,11 +254,10 @@
           <!-- Card Top Section -->
           <div class="card-top">
             <div class="room-icon-wrap">
-              {{
-                getRoomTypeIcon(
-                  card.room.roomType
-                )
-              }}
+              <app-icon
+                [icon]="getRoomTypeIcon(card.room.roomType)"
+                [size]="22"
+              ></app-icon>
             </div>
             <div class="card-header-info">
               <div class="card-title-row">

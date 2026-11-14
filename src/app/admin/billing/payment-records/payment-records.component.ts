@@ -52,7 +52,7 @@ export class PaymentRecordsComponent implements OnInit {
   >([]);
   readonly loading = signal(true);
   readonly selectedFilter = signal<string>('ALL');
-  readonly statsCollapsed = signal(false);
+  readonly statsCollapsed = signal(true);
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);

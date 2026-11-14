@@ -40,18 +40,12 @@
   >
     <app-stat-card
       [icon]="LucideCalendar"
-      [iconBg]="'rgba(59,130,246,0.12)'"
-      [iconColor]="'var(--info,#3b82f6)'"
-      delay="0s"
     >
       <span stat-value>{{ totalCount() }}</span>
       <span stat-label>Total</span>
     </app-stat-card>
     <app-stat-card
       [icon]="LucideCheckCircle2"
-      [iconBg]="'rgba(34,197,94,0.12)'"
-      [iconColor]="'var(--success,#22c55e)'"
-      delay="0.05s"
     >
       <span stat-value>{{
         completedCount()
@@ -60,9 +54,6 @@
     </app-stat-card>
     <app-stat-card
       [icon]="LucideXCircle"
-      [iconBg]="'rgba(139,92,246,0.12)'"
-      [iconColor]="'var(--purple,#8b5cf6)'"
-      delay="0.1s"
     >
       <span stat-value>{{ noShowCount() }}</span>
       <span stat-label>No Shows</span>
@@ -115,7 +106,10 @@
                   class="room-icon"
                   aria-hidden="true"
                 >
-                  ⌂
+                  <app-icon
+                    [icon]="LucideHome"
+                    [size]="20"
+                  ></app-icon>
                 </div>
 
                 <div class="booking-title">
@@ -209,9 +203,11 @@
                 'COMPLETED'
               ) {
                 <span class="completed-note">
-                  <span aria-hidden="true"
-                    >✓</span
-                  >
+                  <app-icon
+                    [icon]="LucideCheckCircle2"
+                    [size]="16"
+                    aria-hidden="true"
+                  ></app-icon>
                   Booking completed
                 </span>
               }

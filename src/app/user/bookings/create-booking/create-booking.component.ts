@@ -2,6 +2,7 @@ import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
+  HostListener,
   OnInit,
   inject,
   signal,
@@ -557,7 +558,7 @@ export class CreateBookingComponent implements OnInit {
               this.conflictAvailableFrom =
                 body.availableFrom || '';
               this.conflictOverrunMinutes =
-                body.overrunMinutes ?? null;
+                body.extraMinutes ?? null;
               this.conflictMessage =
                 body.message ||
                 'This time slot is already booked.';
@@ -635,6 +636,14 @@ export class CreateBookingComponent implements OnInit {
 
   closeConflictModal(): void {
     this.showConflictModal = false;
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event): void {
+    if (this.showConflictModal) {
+      event.stopPropagation();
+      this.closeConflictModal();
+    }
   }
 
   get conflictTitle(): string {

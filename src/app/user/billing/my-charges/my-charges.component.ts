@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   OnInit,
   OnDestroy,
   signal,
@@ -71,7 +72,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   bills = signal<Bill[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
-  statsCollapsed = signal(false);
+  statsCollapsed = signal(true);
   private routerSubscription: Subscription | null = null;
 
   toggleStatsCollapsed(): void {
@@ -185,6 +186,14 @@ export class MyChargesComponent implements OnInit, OnDestroy {
     this.showPaymentModal.set(false);
     this.selectedBill.set(null);
     this.mpesaCheckoutRequestId.set(null);
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event): void {
+    if (this.showPaymentModal()) {
+      event.stopPropagation();
+      this.closePaymentModal();
+    }
   }
 
   closePaymentModalIfOverlayClick(

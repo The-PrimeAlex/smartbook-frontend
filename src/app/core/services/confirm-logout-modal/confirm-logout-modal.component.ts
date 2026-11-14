@@ -1,10 +1,11 @@
 import {
   Component,
+  EventEmitter,
+  HostListener,
   Output,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventEmitter } from '@angular/core';
 import {
   LucideClock,
   LucideLogOut,
@@ -41,5 +42,13 @@ export class ConfirmLogoutModalComponent {
   confirm() {
     this.visible.set(false);
     this.confirmed.emit();
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event) {
+    if (this.visible()) {
+      event.stopPropagation();
+      this.hide();
+    }
   }
 }

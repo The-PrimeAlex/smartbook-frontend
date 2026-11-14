@@ -40,9 +40,6 @@
   >
     <app-stat-card
       [icon]="LucideBan"
-      [iconBg]="'rgba(239,68,68,0.12)'"
-      [iconColor]="'var(--error,#ef4444)'"
-      delay="0s"
     >
       <span stat-value>{{ totalCount() }}</span>
       <span stat-label>Cancelled</span>
@@ -96,7 +93,10 @@
                   class="room-icon"
                   aria-hidden="true"
                 >
-                  ⌂
+                  <app-icon
+                    [icon]="LucideHome"
+                    [size]="20"
+                  ></app-icon>
                 </div>
 
                 <div class="booking-title">

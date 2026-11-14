@@ -14,6 +14,7 @@ import { finalize } from 'rxjs';
 import {
   LucideCalendar,
   LucideCheckCircle2,
+  LucideHome,
   LucideRefreshCw,
   LucideXCircle,
 } from '@lucide/angular';
@@ -59,6 +60,7 @@ export class BookingHistoryComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCheckCircle2 =
     LucideCheckCircle2;
+  readonly LucideHome = LucideHome;
   readonly LucideRefreshCw = LucideRefreshCw;
   readonly LucideXCircle = LucideXCircle;
 

@@ -46,9 +46,6 @@
         <div class="stats-row">
           <app-stat-card
             [icon]="LucideMapPin"
-            [iconBg]="'linear-gradient(135deg, #fc8311, #e07a0f)'"
-            [iconColor]="'#ffffff'"
-            delay="0ms"
           >
             <span stat-value>{{
               totalRooms()
@@ -57,9 +54,6 @@
           </app-stat-card>
           <app-stat-card
             [icon]="LucideActivity"
-            [iconBg]="'linear-gradient(135deg, #22c55e, #16a34a)'"
-            [iconColor]="'#ffffff'"
-            delay="50ms"
           >
             <span stat-value>{{
               occupiedRooms()
@@ -68,9 +62,6 @@
           </app-stat-card>
           <app-stat-card
             [icon]="LucideCalendar"
-            [iconBg]="'linear-gradient(135deg, #142b4a, #0d1e35)'"
-            [iconColor]="'#ffffff'"
-            delay="100ms"
           >
             <span stat-value>{{
               totalBookings()
@@ -79,9 +70,6 @@
           </app-stat-card>
           <app-stat-card
             [icon]="LucideUsers"
-            [iconBg]="'linear-gradient(135deg, #3b82f6, #2563eb)'"
-            [iconColor]="'#ffffff'"
-            delay="150ms"
           >
             <span stat-value>{{
               totalUsers()
@@ -92,9 +80,6 @@
           </app-stat-card>
           <app-stat-card
             [icon]="LucideTriangleAlert"
-            [iconBg]="'linear-gradient(135deg, #f59e0b, #d97706)'"
-            [iconColor]="'#ffffff'"
-            delay="200ms"
           >
             <span stat-value>{{
               reportedIncidents()
@@ -105,9 +90,6 @@
           </app-stat-card>
           <app-stat-card
             [icon]="LucideCreditCard"
-            [iconBg]="'linear-gradient(135deg, #8b5cf6, #7c3aed)'"
-            [iconColor]="'#ffffff'"
-            delay="250ms"
           >
             <span stat-value>{{
               formatCurrency(totalRevenue())

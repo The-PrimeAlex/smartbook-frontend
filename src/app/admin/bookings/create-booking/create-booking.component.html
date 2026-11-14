@@ -352,7 +352,11 @@
           class="form-alert success-alert"
           role="status"
         >
-          <span class="alert-symbol">✓</span>
+          <app-icon
+            [icon]="LucideCheckCircle"
+            [size]="16"
+            class="alert-symbol"
+          ></app-icon>
           {{ successMessage }}
         </div>
       }
@@ -362,7 +366,11 @@
           class="form-alert conflict-alert"
           role="alert"
         >
-          <span class="alert-symbol">⚠</span>
+          <app-icon
+            [icon]="LucideAlertTriangle"
+            [size]="16"
+            class="alert-symbol"
+          ></app-icon>
           <div class="alert-content">
             <strong>Room Already Booked</strong>
             <p>{{ conflictMessage }}</p>

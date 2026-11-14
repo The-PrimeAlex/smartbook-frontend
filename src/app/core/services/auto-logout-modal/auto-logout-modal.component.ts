@@ -1,6 +1,7 @@
 import {
   Component,
   computed,
+  HostListener,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -72,5 +73,13 @@ export class AutoLogoutModalComponent {
 
   dismissBackNavigation() {
     this.inactivityService.dismissBackNavigation();
+  }
+
+  @HostListener('window:keydown.escape', ['$event'])
+  onEscapeKey(event: Event) {
+    if (this.backNavWarning()) {
+      event.stopPropagation();
+      this.dismissBackNavigation();
+    }
   }
 }

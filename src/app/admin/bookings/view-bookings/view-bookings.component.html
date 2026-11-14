@@ -50,90 +50,30 @@
   }
   <!-- Stats Grid -->
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon stat-icon-blue">
-        <app-icon
-          [icon]="LucideCalendar"
-          [size]="18"
-        ></app-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">{{
-          totalBookings()
-        }}</span>
-        <span class="stat-label">Total</span>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon stat-icon-amber">
-        <app-icon
-          [icon]="LucideClock"
-          [size]="18"
-        ></app-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">{{
-          pendingCount()
-        }}</span>
-        <span class="stat-label">Pending</span>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon stat-icon-green">
-        <app-icon
-          [icon]="LucideCheckCircle"
-          [size]="18"
-        ></app-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">{{
-          activeCount()
-        }}</span>
-        <span class="stat-label">Active</span>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon stat-icon-teal">
-        <app-icon
-          [icon]="LucideCheckCircle2"
-          [size]="18"
-        ></app-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">{{
-          completedCount()
-        }}</span>
-        <span class="stat-label">Completed</span>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon stat-icon-purple">
-        <app-icon
-          [icon]="LucideXCircle"
-          [size]="18"
-        ></app-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">{{
-          noShowCount()
-        }}</span>
-        <span class="stat-label">No Shows</span>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon stat-icon-red">
-        <app-icon
-          [icon]="LucideBan"
-          [size]="18"
-        ></app-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">{{
-          cancelledCount()
-        }}</span>
-        <span class="stat-label">Cancelled</span>
-      </div>
-    </div>
+    <app-stat-card [icon]="LucideCalendar">
+      <span stat-value>{{ totalBookings() }}</span>
+      <span stat-label>Total</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideClock">
+      <span stat-value>{{ pendingCount() }}</span>
+      <span stat-label>Pending</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideCheckCircle">
+      <span stat-value>{{ activeCount() }}</span>
+      <span stat-label>Active</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideCheckCircle2">
+      <span stat-value>{{ completedCount() }}</span>
+      <span stat-label>Completed</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideXCircle">
+      <span stat-value>{{ noShowCount() }}</span>
+      <span stat-label>No Shows</span>
+    </app-stat-card>
+    <app-stat-card [icon]="LucideBan">
+      <span stat-value>{{ cancelledCount() }}</span>
+      <span stat-label>Cancelled</span>
+    </app-stat-card>
   </div>
   <section class="bookings-section">
     <div class="section-heading">

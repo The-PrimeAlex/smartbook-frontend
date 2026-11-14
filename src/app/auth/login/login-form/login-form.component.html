@@ -12,6 +12,16 @@
       Welcome back. Sign in to manage your
       meetings and workspaces.
     </p>
+
+    @if (inactivityMessage()) {
+      <div
+        class="inactivity-notice"
+        role="alert"
+        aria-live="polite"
+      >
+        {{ inactivityMessage() }}
+      </div>
+    }
     <div class="field">
       <input
         class="login-form-input"
