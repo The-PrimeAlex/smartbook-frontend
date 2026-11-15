@@ -31,7 +31,6 @@ const AUTH_ENDPOINTS = [
   '/api/v1/auth/refresh',
   '/api/v1/auth/logout',
   '/api/v1/auth/csrf',
-  '/api/v1/auth/change-password',
 ];
 
 const MUTATING_METHODS = new Set([
