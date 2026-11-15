@@ -399,12 +399,22 @@ export class CalendarComponent implements OnInit {
           );
         },
         error: (error: unknown) => {
-          this.googleEventsError.set(
-            getErrorMessage(
-              error,
-              'Could not load Google Calendar events. Connect your Google Calendar and try again.',
-            ),
-          );
+          const status = (error as { status?: number })?.status;
+          const message = (error as { error?: string })?.error;
+
+          if (status === 502) {
+            this.googleEventsError.set(
+              message ??
+                'Google Calendar returned an error. Your access may have been revoked — disconnect and reconnect your Google Calendar.',
+            );
+          } else {
+            this.googleEventsError.set(
+              getErrorMessage(
+                error,
+                'Could not load Google Calendar events. Connect your Google Calendar and try again.',
+              ),
+            );
+          }
         },
       });
   }
