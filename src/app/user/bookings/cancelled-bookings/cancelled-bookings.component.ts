@@ -92,7 +92,7 @@ export class CancelledBookingsComponent implements OnInit {
           this.errorMessage.set(
             this.getErrorMessage(
               error,
-              'Unable to load your cancelled bookings.',
+              'We couldn\'t load your cancelled bookings. Please try again in a moment.',
             ),
           );
         },

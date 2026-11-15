@@ -155,7 +155,7 @@ export class NewRoomComponent {
           this.submitting.set(false);
           this.errorMessage.set(
             error.message ||
-              'Unable to create the room.',
+              'We couldn\'t create the room. Please try again in a moment.',
           );
         },
       });

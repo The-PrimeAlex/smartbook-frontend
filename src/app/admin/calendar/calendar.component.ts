@@ -347,7 +347,7 @@ export class CalendarComponent implements OnInit {
           this.bookingsError.set(
             getErrorMessage(
               error,
-              'Could not load SmartBook bookings. Check the bookings API URL.',
+              'We couldn\'t load your bookings. Please try again in a moment.',
             ),
           );
         },
@@ -404,14 +404,13 @@ export class CalendarComponent implements OnInit {
 
           if (status === 502) {
             this.googleEventsError.set(
-              message ??
-                'Google Calendar returned an error. Your access may have been revoked — disconnect and reconnect your Google Calendar.',
+              'We couldn\'t reach Google Calendar. Your connection may have expired — please disconnect and reconnect your Google Calendar to try again.',
             );
           } else {
             this.googleEventsError.set(
               getErrorMessage(
                 error,
-                'Could not load Google Calendar events. Connect your Google Calendar and try again.',
+                'We couldn\'t load Google Calendar events. Make sure your Google Calendar is connected.',
               ),
             );
           }
@@ -435,7 +434,7 @@ export class CalendarComponent implements OnInit {
         next: (response) => {
           if (!response?.authorizationUrl) {
             this.googleConnectionError.set(
-              'The server did not return a Google authorization URL.',
+              'We couldn\'t start the connection to Google Calendar. Please try again.',
             );
             return;
           }
@@ -448,7 +447,7 @@ export class CalendarComponent implements OnInit {
           this.googleConnectionError.set(
             getErrorMessage(
               error,
-              'Could not start Google Calendar connection.',
+              'We couldn\'t connect to Google Calendar. Please check your internet connection and try again.',
             ),
           );
         },
@@ -480,7 +479,7 @@ export class CalendarComponent implements OnInit {
           this.googleSyncError.set(
             getErrorMessage(
               error,
-              'Could not sync SmartBook bookings to Google Calendar.',
+              'We couldn\'t sync your bookings to Google Calendar. Please try again in a moment.',
             ),
           );
         },
@@ -519,7 +518,7 @@ export class CalendarComponent implements OnInit {
           this.googleDisconnectError.set(
             getErrorMessage(
               error,
-              'Could not disconnect Google Calendar.',
+              'We couldn\'t disconnect Google Calendar. Please try again in a moment.',
             ),
           );
         },

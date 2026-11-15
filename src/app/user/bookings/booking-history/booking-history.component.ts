@@ -114,7 +114,7 @@ export class BookingHistoryComponent implements OnInit {
           this.errorMessage.set(
             this.getErrorMessage(
               error,
-              'Unable to load your booking history.',
+              'We couldn\'t load your booking history. Please try again in a moment.',
             ),
           );
         },

@@ -114,7 +114,7 @@ export class ChangePasswordComponent {
             );
           } else {
             this.errorMessage.set(
-              'We could not change your password. Please try again.',
+              'We couldn\'t change your password. Please try again in a moment.',
             );
           }
         },

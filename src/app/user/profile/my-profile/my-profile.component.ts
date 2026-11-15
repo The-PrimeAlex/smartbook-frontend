@@ -141,7 +141,7 @@ export class MyProfileComponent implements OnInit {
           error,
         );
         this.errorMessage.set(
-          'Unable to load your profile. Please try again.',
+          'We couldn\'t load your profile. Please try again in a moment.',
         );
         this.loading.set(false);
       },
@@ -221,7 +221,7 @@ export class MyProfileComponent implements OnInit {
             typeof error.error.message ===
               'string'
               ? error.error.message
-              : 'Unable to update your profile. Please try again.';
+              : 'We couldn\'t update your profile. Please try again in a moment.';
 
           this.errorMessage.set(message);
         },

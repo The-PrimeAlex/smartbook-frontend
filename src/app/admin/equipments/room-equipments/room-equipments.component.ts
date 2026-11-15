@@ -262,7 +262,7 @@ export class RoomEquipmentComponent implements OnInit {
           this.loadingRooms = false;
           this.errorMessage =
             error.message ||
-            'Could not load rooms. Please try again.';
+            'We couldn\'t load rooms. Please try again in a moment.';
           this.roomCards = [];
           this.log.error(
             'Failed to load rooms:',
@@ -383,7 +383,7 @@ export class RoomEquipmentComponent implements OnInit {
           this.errorMessage =
             error.error?.message ||
             error.message ||
-            'Could not add equipment.';
+            'We couldn\'t add equipment. Please try again in a moment.';
         },
       });
   }
@@ -427,7 +427,7 @@ export class RoomEquipmentComponent implements OnInit {
           this.errorMessage =
             error.error?.message ||
             error.message ||
-            'Could not update status.';
+            'We couldn\'t update the status. Please try again in a moment.';
         },
       });
   }
@@ -464,7 +464,7 @@ export class RoomEquipmentComponent implements OnInit {
           this.errorMessage =
             error.error?.message ||
             error.message ||
-            'Could not remove equipment.';
+            'We couldn\'t remove equipment. Please try again in a moment.';
         },
       });
   }

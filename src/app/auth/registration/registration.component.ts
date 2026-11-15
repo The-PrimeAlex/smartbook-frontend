@@ -371,8 +371,8 @@ export class RegistrationRequestComponent {
               });
             }, 100);
           } else {
-            this.errorMessage =
-              'Failed to submit your request. Please try again later.';
+          this.errorMessage =
+              'We couldn\'t submit your registration request. Please try again later.';
           }
         },
       });

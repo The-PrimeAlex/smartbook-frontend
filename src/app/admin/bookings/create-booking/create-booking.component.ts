@@ -192,7 +192,7 @@ export class CreateBookingComponent implements OnInit {
               ? 'Your session has expired. Please sign in again.'
               : error.status === 403
                 ? 'You do not have permission to load rooms.'
-                : 'Unable to load rooms. Please try again.';
+                : 'We couldn\'t load rooms. Please try again in a moment.';
 
           this.log.error(
             'Failed to load rooms:',
@@ -450,7 +450,7 @@ export class CreateBookingComponent implements OnInit {
             this.clearMessages();
             this.errorMessage =
               error.error?.message ||
-              `Unable to create the booking (HTTP ${error.status}). Please try again.`;
+              'We couldn\'t create the booking. Please try again in a moment.';
           }
         },
       });

@@ -171,7 +171,7 @@ export class ReportIncidentComponent implements OnInit {
         error: (err) => {
           this.error.set(
             err.error?.message ||
-              'Failed to report incident. Please try again.',
+              'We couldn\'t report this incident. Please try again in a moment.',
           );
           this.saving.set(false);
         },

@@ -250,7 +250,7 @@ export class AdminIncidentsComponent implements OnInit {
             type: 'error',
             text:
               err.error?.message ||
-              'Failed to verify incident',
+              'We couldn\'t verify this incident. Please try again in a moment.',
           });
           setTimeout(
             () => this.message.set(null),
@@ -332,7 +332,7 @@ export class AdminIncidentsComponent implements OnInit {
             type: 'error',
             text:
               err.error?.message ||
-              'Failed to apply charge',
+              'We couldn\'t apply the charge. Please try again in a moment.',
           });
           setTimeout(
             () => this.message.set(null),
@@ -376,7 +376,7 @@ export class AdminIncidentsComponent implements OnInit {
             type: 'error',
             text:
               err.error?.message ||
-              'Failed to waive charge',
+              'We couldn\'t waive the charge. Please try again in a moment.',
           });
           setTimeout(
             () => this.message.set(null),

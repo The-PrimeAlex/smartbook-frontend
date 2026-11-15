@@ -268,7 +268,7 @@ export class ViewUsersComponent {
           this.deactivating.set(false);
           this.message.set({
             type: 'error',
-            text: 'Failed to deactivate user. Please try again.',
+            text: 'We couldn\'t deactivate this user. Please try again in a moment.',
           });
           setTimeout(
             () => this.message.set(null),

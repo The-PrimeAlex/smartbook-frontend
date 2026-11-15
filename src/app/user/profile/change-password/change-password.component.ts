@@ -130,7 +130,7 @@ export class ChangePasswordComponent {
             typeof error.error.message ===
               'string'
               ? error.error.message
-              : 'Unable to change your password. Check your current password and try again.';
+              : 'We couldn\'t change your password. Please check your current password and try again.';
 
           this.errorMessage.set(message);
         },

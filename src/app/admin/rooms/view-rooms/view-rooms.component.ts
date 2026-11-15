@@ -229,7 +229,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
       error: (error: Error) => {
         this.errorMessage.set(
           error.message ||
-            'Unable to load rooms. Please try again.',
+            'We couldn\'t load rooms. Please try again in a moment.',
         );
         this.loading.set(false);
       },

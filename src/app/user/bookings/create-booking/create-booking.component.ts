@@ -304,7 +304,7 @@ export class CreateBookingComponent implements OnInit {
         },
         error: () => {
           this.errorMessage =
-            'Unable to load rooms. Please try again.';
+            'We couldn\'t load the room list. Please try again in a moment.';
         },
       });
   }
@@ -622,7 +622,7 @@ export class CreateBookingComponent implements OnInit {
                 : (body?.message ?? '')) || '';
             this.errorMessage =
               message ||
-              'Unable to create the booking. Please try again.';
+              'We couldn\'t create your booking. Please try again in a moment.';
           }
         },
       });

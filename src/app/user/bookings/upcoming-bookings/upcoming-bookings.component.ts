@@ -144,7 +144,7 @@ export class UpcomingBookingsComponent implements OnInit {
           this.errorMessage.set(
             this.getErrorMessage(
               error,
-              'Unable to load your bookings.',
+              'We couldn\'t load your bookings. Please try again in a moment.',
             ),
           );
         },
@@ -236,7 +236,7 @@ export class UpcomingBookingsComponent implements OnInit {
           this.errorMessage.set(
             this.getErrorMessage(
               error,
-              'Unable to check out this booking. Please try again.',
+              'We couldn\'t check out this booking. Please try again in a moment.',
             ),
           );
         },
@@ -316,7 +316,7 @@ export class UpcomingBookingsComponent implements OnInit {
           this.errorMessage.set(
             this.getErrorMessage(
               error,
-              'Unable to cancel this booking. Please try again.',
+              'We couldn\'t cancel this booking. Please try again in a moment.',
             ),
           );
         },
@@ -371,7 +371,7 @@ export class UpcomingBookingsComponent implements OnInit {
           this.errorMessage.set(
             this.getErrorMessage(
               error,
-              'Unable to update this booking. Please try again.',
+              'We couldn\'t update this booking. Please try again in a moment.',
             ),
           );
         },

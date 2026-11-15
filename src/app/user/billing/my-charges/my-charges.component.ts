@@ -157,7 +157,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.error.set(
-          'Failed to load your charges',
+          'We couldn\'t load your charges. Please try again in a moment.',
         );
         this.loading.set(false);
         this.log.error(
