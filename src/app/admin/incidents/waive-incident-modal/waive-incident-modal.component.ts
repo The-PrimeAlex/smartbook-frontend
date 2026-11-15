@@ -36,7 +36,7 @@ export class WaiveIncidentModalComponent {
   @Output() submit = new EventEmitter<string>();
 
   protected visible = false;
-  /** Prevents the opening click from immediately closing the modal */
+  // Prevents the opening click from immediately closing the modal
   protected interactive = false;
 
   @Input()

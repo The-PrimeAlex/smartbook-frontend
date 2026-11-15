@@ -15,7 +15,7 @@ export class ThemeService {
   private readonly STORAGE_KEY =
     'smartbook-theme';
 
-  /** Current theme mode stored in localStorage */
+  // Current theme mode stored in localStorage
   private get storedTheme(): ThemeMode | null {
     try {
       return localStorage.getItem(
@@ -26,7 +26,7 @@ export class ThemeService {
     }
   }
 
-  /** Detect system preference for dark mode */
+  // Detect system preference for dark mode
   private get systemPrefersDark(): boolean {
     try {
       return window.matchMedia(
@@ -37,7 +37,7 @@ export class ThemeService {
     }
   }
 
-  /** Initialize theme on service creation */
+  // Initialize theme on service creation
   constructor() {
     const theme = this.storedTheme ?? 'light';
     this.applyTheme(theme);
@@ -60,26 +60,26 @@ export class ThemeService {
     }
   }
 
-  /** Get the current theme mode */
+  // Get the current theme mode
   get currentTheme(): ThemeMode {
     return (this.document.documentElement.getAttribute(
       'data-theme',
     ) ?? 'light') as ThemeMode;
   }
 
-  /** Check if dark mode is currently active */
+  // Check if dark mode is currently active
   get isDark(): boolean {
     return this.currentTheme === 'dark';
   }
 
-  /** Toggle between light and dark mode */
+  // Toggle between light and dark mode
   toggle(): ThemeMode {
     const next = this.isDark ? 'light' : 'dark';
     this.setTheme(next);
     return next;
   }
 
-  /** Set a specific theme mode */
+  // Set a specific theme mode
   setTheme(theme: ThemeMode): void {
     this.applyTheme(theme);
     try {
@@ -92,7 +92,7 @@ export class ThemeService {
     }
   }
 
-  /** Apply theme to the document */
+  // Apply theme to the document
   private applyTheme(theme: ThemeMode): void {
     this.document.documentElement.setAttribute(
       'data-theme',

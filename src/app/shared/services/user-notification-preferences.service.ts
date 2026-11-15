@@ -20,10 +20,7 @@ export class UserNotificationPreferencesService {
   private readonly authService = inject(AuthService);
   private readonly baseUrl = '/api/v1/notifications/me/preferences';
 
-  /**
-   * Get the authenticated user's notification preferences.
-   * Seeds defaults (all enabled) if no preferences exist yet.
-   */
+  // Get the authenticated user's notification preferences
   getPreferences(): Observable<UserNotificationPreferences> {
     return this.http
       .get<Record<string, boolean>>(this.baseUrl)
@@ -43,9 +40,7 @@ export class UserNotificationPreferencesService {
       );
   }
 
-  /**
-   * Update a single notification preference.
-   */
+  // Update a single notification preference
   updatePreference(
     key: string,
     enabled: boolean,
@@ -65,9 +60,7 @@ export class UserNotificationPreferencesService {
       );
   }
 
-  /**
-   * Bulk update notification preferences.
-   */
+  // Bulk update notification preferences
   bulkUpdatePreferences(
     preferences: UserNotificationPreferences,
   ): Observable<void> {

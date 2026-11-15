@@ -1,6 +1,6 @@
 import { BadgeVariant } from '../../ui/status-badge/status-badge.component';
 
-/** Maps bill/payment status strings to BadgeVariant values. */
+// Maps bill/payment status strings to BadgeVariant values
 export function getBillBadgeVariant(
   status: string,
 ): BadgeVariant {
@@ -20,7 +20,7 @@ export function getBillBadgeVariant(
   }
 }
 
-/** Maps payment record status strings to BadgeVariant values. */
+// Maps payment record status strings to BadgeVariant values
 export function getPaymentBadgeVariant(
   status: string,
 ): BadgeVariant {
@@ -38,7 +38,7 @@ export function getPaymentBadgeVariant(
   }
 }
 
-/** Maps booking status strings to BadgeVariant values. */
+// Maps booking status strings to BadgeVariant values
 export function getBookingBadgeVariant(
   status: string,
 ): BadgeVariant {
@@ -59,7 +59,7 @@ export function getBookingBadgeVariant(
   }
 }
 
-/** Maps incident status strings to BadgeVariant values. */
+// Maps incident status strings to BadgeVariant values
 export function getIncidentBadgeVariant(
   status: string,
 ): BadgeVariant {
@@ -81,7 +81,7 @@ export function getIncidentBadgeVariant(
   }
 }
 
-/** Maps user account status strings to BadgeVariant values. */
+// Maps user account status strings to BadgeVariant values
 export function getUserBadgeVariant(
   status: string,
 ): BadgeVariant {
@@ -101,7 +101,7 @@ export function getUserBadgeVariant(
   }
 }
 
-/** Maps registration request status strings to BadgeVariant values. */
+// Maps registration request status strings to BadgeVariant values
 export function getRegistrationBadgeVariant(
   status: string,
 ): BadgeVariant {

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-/** Extracts a human-readable error message from an HttpErrorResponse. */
+// Extracts a human-readable error message from an HttpErrorResponse
 export function getErrorMessage(
   error: unknown,
   fallback: string,

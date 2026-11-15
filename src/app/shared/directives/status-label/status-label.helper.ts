@@ -1,7 +1,7 @@
 import { BookingStatus } from '../../models/booking.model';
 import { RoomStatus } from '../../models/room.model';
 
-/** Maps booking status enums to display labels. */
+// Maps booking status enums to display labels
 export function getBookingStatusLabel(
   status: string,
 ): string {
@@ -16,7 +16,7 @@ export function getBookingStatusLabel(
   return labels[status] || status;
 }
 
-/** Maps bill status strings to display labels. */
+// Maps bill status strings to display labels
 export function getBillStatusLabel(
   status: string,
 ): string {
@@ -36,7 +36,7 @@ export function getBillStatusLabel(
   }
 }
 
-/** Maps incident status strings to display labels. */
+// Maps incident status strings to display labels
 export function getIncidentStatusLabel(
   status: string,
 ): string {
@@ -58,7 +58,7 @@ export function getIncidentStatusLabel(
   }
 }
 
-/** Maps user account status strings to display labels. */
+// Maps user account status strings to display labels
 export function getUserStatusLabel(
   status: string,
 ): string {
@@ -72,7 +72,7 @@ export function getUserStatusLabel(
   return labels[status] || status;
 }
 
-/** Maps registration request status strings to display labels. */
+// Maps registration request status strings to display labels
 export function getRegistrationStatusLabel(
   status: string,
 ): string {
@@ -88,7 +88,7 @@ export function getRegistrationStatusLabel(
   }
 }
 
-/** Maps room status enums to display labels. */
+// Maps room status enums to display labels
 export function getRoomStatusLabel(
   status: string,
 ): string {
@@ -104,7 +104,7 @@ export function getRoomStatusLabel(
   }
 }
 
-/** Maps equipment status strings to display labels. */
+// Maps equipment status strings to display labels
 export function getEquipmentStatusLabel(
   status: string,
 ): string {
@@ -122,7 +122,7 @@ export function getEquipmentStatusLabel(
   }
 }
 
-/** Maps payment status strings to display labels. */
+// Maps payment status strings to display labels
 export function getPaymentStatusLabel(
   status: string,
 ): string {

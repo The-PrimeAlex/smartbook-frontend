@@ -8,13 +8,7 @@ import { inject } from '@angular/core';
 import { map, of } from 'rxjs';
 import { AuthService } from './auth.service';
 
-/**
- * Restores the session from localStorage synchronously before any guard
- * checks the in-memory token. On page refresh, Angular recreates the
- * AuthService with null signals, so we must repopulate them from localStorage
- * before the CanMatch guard runs — otherwise the guard sees no token and
- * redirects to /login before restoreSession() ever gets a chance.
- */
+// Restores session from localStorage before any guard checks the in-memory token
 let sessionRestoredFromLocalStorage = false;
 export function restoreSessionOnce(authService: AuthService): void {
   if (sessionRestoredFromLocalStorage) return;
@@ -43,10 +37,7 @@ export function restoreSessionOnce(authService: AuthService): void {
   }
 }
 
-/**
- * Shared logic for checking authentication and roles.
- * Used by both authGuard (CanActivate) and authMatchGuard (CanMatch).
- */
+// Shared logic for checking authentication and roles
 function checkAuth(authService: AuthService, router: Router, route: Route, stateUrl: string): boolean | import('@angular/router').UrlTree {
   // If the session was expired by auto-logout, redirect to login immediately
   if (
@@ -82,11 +73,7 @@ function checkAuth(authService: AuthService, router: Router, route: Route, state
   return true;
 }
 
-/**
- * CanMatch guard — runs BEFORE CanActivate and before lazy-loading child routes.
- * Prevents unauthenticated users from even starting to load protected route trees.
- * This eliminates the flash of loading content before redirect.
- */
+// CanMatch guard — runs before CanActivate and before lazy-loading child routes
 export const authMatchGuard: CanMatchFn = (
   route,
 ) => {
@@ -102,10 +89,7 @@ export const authMatchGuard: CanMatchFn = (
   return result === true ? of(true) : of(result);
 };
 
-/**
- * CanActivate guard — runs after CanMatch, validates the full session.
- * Restores session from localStorage if needed, then checks auth and roles.
- */
+// CanActivate guard — runs after CanMatch, validates the full session
 export const authGuard: CanActivateFn = (
   route,
   state,

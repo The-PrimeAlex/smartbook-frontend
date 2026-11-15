@@ -41,7 +41,7 @@ export class AuditLogsComponent implements OnInit {
     Record<string, string>
   >({});
 
-  /** Modified settings sorted by updatedAt descending (most recent first) */
+  // Modified settings sorted by updatedAt descending (most recent first)
   get sortedModifiedSettings() {
     return [...this.allSettings()].sort(
       (a, b) =>

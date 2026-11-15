@@ -345,10 +345,7 @@ export class RoomMonitoringAlComponent
     }
   }
 
-  /**
-   * Calculate time remaining for an active booking.
-   * Returns positive minutes remaining, or negative if overrunning.
-   */
+  // Calculate time remaining for an active booking
   getTimeRemaining(
     record: RoomMonitoringRecordAl,
   ): number | null {
@@ -362,9 +359,7 @@ export class RoomMonitoringAlComponent
     return diff;
   }
 
-  /**
-   * Format time remaining as a human-readable string.
-   */
+  // Format time remaining as a human-readable string
   formatTimeRemaining(
     record: RoomMonitoringRecordAl,
   ): string {
@@ -385,9 +380,7 @@ export class RoomMonitoringAlComponent
     return 'Ending now';
   }
 
-  /**
-   * Get CSS class for time remaining indicator.
-   */
+  // Get CSS class for time remaining indicator
   getTimeRemainingClass(
     record: RoomMonitoringRecordAl,
   ): string {
@@ -398,9 +391,7 @@ export class RoomMonitoringAlComponent
     return 'time-danger';
   }
 
-  /**
-   * Format status for display (e.g., POTENTIAL_NO_SHOW → Potential No-Show)
-   */
+  // Format status for display (e.g., POTENTIAL_NO_SHOW → Potential No-Show)
   formatStatus(status: string | null): string {
     if (!status) return '—';
     switch (status) {
@@ -429,9 +420,7 @@ export class RoomMonitoringAlComponent
     }
   }
 
-  /**
-   * Get CSS class for room card based on status
-   */
+  // Get CSS class for room card based on status
   getRoomCardClass(
     record: RoomMonitoringRecordAl,
   ): string {

@@ -373,9 +373,7 @@ export class FindRoomsComponent implements OnDestroy {
     }
   }
 
-  /**
-   * Group schedule bookings by date for timeline display.
-   */
+  // Group schedule bookings by date for timeline display
   getScheduleByDate(
     bookings: ScheduleBooking[],
   ): {
@@ -403,9 +401,7 @@ export class FindRoomsComponent implements OnDestroy {
     );
   }
 
-  /**
-   * Format a time string for display (e.g., "9:00 AM").
-   */
+  // Format a time string for display (e.g., "9:00 AM")
   formatTime(timeStr: string): string {
     return new Date(timeStr).toLocaleTimeString(
       'en-US',
@@ -417,9 +413,7 @@ export class FindRoomsComponent implements OnDestroy {
     );
   }
 
-  /**
-   * Get CSS class for booking status in timeline.
-   */
+  // Get CSS class for booking status in timeline
   getBookingStatusClass(status: string): string {
     switch (status) {
       case 'PENDING':
@@ -435,8 +429,6 @@ export class FindRoomsComponent implements OnDestroy {
     }
   }
 
-  /**
-   * Get label for booking status.
-   */
+  // Get label for booking status
   getBookingStatusLabel = getBookingStatusLabel;
 }

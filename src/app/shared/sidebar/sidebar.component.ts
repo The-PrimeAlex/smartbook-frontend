@@ -239,12 +239,12 @@ export class SidebarComponent {
     }
   }
 
-  /** Exposed for the main-layout hamburger button to open the mobile drawer */
+  // Exposed for the main-layout hamburger button to open the mobile drawer
   toggleMobileOpen(): void {
     this.mobileOpen.update((val) => !val);
   }
 
-  /** Exposed for the main-layout to close the mobile drawer */
+  // Exposed for the main-layout to close the mobile drawer
   closeMobile(): void {
     this.mobileOpen.set(false);
   }

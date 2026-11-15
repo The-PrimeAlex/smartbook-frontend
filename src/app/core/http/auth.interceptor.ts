@@ -13,36 +13,19 @@ import {
 } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
-/**
- * Guard to prevent infinite redirect loops when the user must change their password.
- * Once we've redirected, suppress further password_change_required interceptions.
- */
+// Prevents infinite redirect loops when password change is required
 let passwordChangeRedirected = false;
 
-/**
- * Timestamp of the last successful login.
- * Used to create a grace period after login where transient 401 errors on /me
- * are ignored — the Neon database may still be waking up from auto-pause,
- * causing the first /me request to fail even though the login succeeded.
- */
+// Grace period after login: ignore /me 401s while Neon DB wakes up
 let lastLoginTimestamp = 0;
-const LOGIN_GRACE_PERIOD_MS = 10_000; // 10 seconds
+const LOGIN_GRACE_PERIOD_MS = 10_000;
 
 const ME_ENDPOINT = '/api/v1/auth/me';
 
-/**
- * API prefix for matching intercepted requests.
- * In production, requests use relative paths (/api/v1) proxied by Cloudflare Pages,
- * so we always check for the relative /api prefix regardless of the environment.apiUrl value.
- */
+// Relative /api prefix matches both proxied and direct requests
 const API_PREFIX = '/api';
 
-/**
- * Auth endpoint paths for checking if a request should skip the auth token.
- * Uses relative paths since all services use relative paths in production.
- * AuthService uses environment.apiUrl (full Azure URL), so we also check
- * against the full URL patterns in isAuthEndpoint.
- */
+// Auth endpoints skip the Bearer token; AuthService uses full URLs in prod
 const AUTH_ENDPOINTS = [
   '/api/v1/auth/login',
   '/api/v1/auth/refresh',
@@ -58,27 +41,14 @@ const MUTATING_METHODS = new Set([
   'delete',
 ]);
 
-/**
- * Guard to prevent multiple concurrent refresh+retry cycles.
- * When one request triggers a token refresh, all other pending 401s
- * must wait for that refresh to complete instead of each triggering
- * their own refresh attempt — this prevents infinite retry loops.
- */
+// Prevents multiple concurrent refresh+retry cycles
 let refreshInProgress = false;
 
-/**
- * Safety timeout (in ms) to reset refreshInProgress if the retry
- * pipeline hangs without completing. This prevents the flag from
- * staying true forever and blocking all subsequent 401 handling.
- */
+// Safety timeout resets refreshInProgress if the retry pipeline hangs
 const REFRESH_TIMEOUT_MS = 15_000;
 let refreshTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-/**
- * Read the CSRF token value.
- * For cross-origin requests (production), reads from AuthService memory store.
- * For same-origin requests (local dev), reads from document.cookie.
- */
+// Cross-origin: read from memory store. Same-origin: read from cookie.
 function readCsrfToken(
   authService: AuthService,
 ): string | null {
@@ -412,20 +382,12 @@ export const authInterceptor: HttpInterceptorFn =
     );
   };
 
-/**
- * Reset the password change redirect guard.
- * Call this after a successful login or password change so the interceptor
- * can catch password_change_required again on a future session if needed.
- */
+// Reset password change redirect guard after successful login
 export function resetPasswordChangeRedirected(): void {
   passwordChangeRedirected = false;
 }
 
-/**
- * Call this after a successful login to start the grace period.
- * During the grace period, 401 errors on /me are ignored to prevent
- * immediate logout when the Neon database is waking up from auto-pause.
- */
+// Set login timestamp to start the grace period for /me 401s
 export function setLastLoginTimestamp(): void {
   lastLoginTimestamp = Date.now();
 }

@@ -13,13 +13,13 @@ import {
 } from 'rxjs';
 
 export interface InactivityState {
-  /** Whether the warning modal is currently visible */
+  // Whether the warning modal is currently visible
   warningVisible: boolean;
-  /** Seconds remaining before auto-logout (counting down from grace period) */
+  // Seconds remaining before auto-logout
   secondsRemaining: number;
-  /** Whether the user has been logged out due to inactivity */
+  // Whether the user has been logged out due to inactivity
   loggedOut: boolean;
-  /** Whether the back-navigation warning modal is visible */
+  // Whether the back-navigation warning modal is visible
   backNavWarning: boolean;
 }
 
@@ -29,16 +29,16 @@ export class InactivityService {
   private readonly authService =
     inject(AuthService);
 
-  /** Total inactivity time before showing the warning (10 minutes = 600000ms) */
+  // Total inactivity time before showing the warning (10 min)
   private readonly inactivityTimeout =
     10 * 60 * 1000;
-  /** Grace period after warning before actual logout (60 seconds) */
+  // Grace period after warning before actual logout (60s)
   private readonly gracePeriod = 60;
 
-  /** Track the last activity timestamp */
+  // Track the last activity timestamp
   private lastActivity = Date.now();
 
-  /** Timer interval IDs for cleanup */
+  // Timer interval IDs for cleanup
   private checkIntervalId: ReturnType<
     typeof setInterval
   > | null = null;
@@ -46,7 +46,7 @@ export class InactivityService {
     typeof setInterval
   > | null = null;
 
-  /** State signal for the UI */
+  // State signal for the UI
   private readonly state =
     signal<InactivityState>({
       warningVisible: false,
@@ -55,16 +55,16 @@ export class InactivityService {
       backNavWarning: false,
     });
 
-  /** Subject for countdown ticks */
+  // Subject for countdown ticks
   private readonly countdown$ =
     new Subject<number>();
 
-  /** Observable for countdown ticks */
+  // Observable for countdown ticks
   get countdownObservable(): Observable<number> {
     return this.countdown$.asObservable();
   }
 
-  /** Current state as readonly signal */
+  // Current state as readonly signal
   readonly stateSignal = this.state.asReadonly();
 
   constructor() {
@@ -88,7 +88,7 @@ export class InactivityService {
     });
   }
 
-  /** Bind global activity event listeners */
+  // Bind global activity event listeners
   private bindActivityListeners() {
     const events = [
       'mousedown',
@@ -111,7 +111,7 @@ export class InactivityService {
     }
   }
 
-  /** Called on every user activity event */
+  // Called on every user activity event
   private onActivity() {
     const now = Date.now();
     this.lastActivity = now;
@@ -122,7 +122,7 @@ export class InactivityService {
     }
   }
 
-  /** Start the inactivity monitoring loop */
+  // Start the inactivity monitoring loop
   private startMonitoring() {
     this.checkIntervalId = setInterval(() => {
       if (
@@ -140,7 +140,7 @@ export class InactivityService {
     }, 1000);
   }
 
-  /** Show the warning modal and start the countdown */
+  // Show the warning modal and start the countdown
   private showWarning() {
     this.state.set({
       warningVisible: true,
@@ -152,7 +152,7 @@ export class InactivityService {
     this.startCountdown();
   }
 
-  /** Start the countdown timer */
+  // Start the countdown timer
   private startCountdown() {
     let remaining = this.gracePeriod;
 
@@ -170,7 +170,7 @@ export class InactivityService {
     }, 1000);
   }
 
-  /** Perform the actual logout */
+  // Perform the actual logout
   private performLogout() {
     this.stopMonitoring();
     this.authService.clearLocalAuth();
@@ -190,7 +190,7 @@ export class InactivityService {
     window.location.replace('/login?reason=inactivity');
   }
 
-  /** Bind the back-navigation handler (called only after logout) */
+  // Bind the back-navigation handler (called only after logout)
   private bindBackNavigationHandler() {
     window.addEventListener('popstate', () => {
       // When the user presses back after logout, prevent navigation and show warning
@@ -210,7 +210,7 @@ export class InactivityService {
     });
   }
 
-  /** Confirm the back navigation and proceed to login */
+  // Confirm the back navigation and proceed to login
   confirmBackNavigation() {
     this.state.set({
       warningVisible: false,
@@ -221,7 +221,7 @@ export class InactivityService {
     window.location.replace('/login');
   }
 
-  /** Dismiss the back navigation warning and redirect to login */
+  // Dismiss the back navigation warning and redirect to login
   dismissBackNavigation() {
     // Instead of letting the user stay on a stale page, force a hard redirect to login.
     // This prevents the back button from restoring a previous authenticated page from history.
@@ -236,7 +236,7 @@ export class InactivityService {
     window.location.replace('/login');
   }
 
-  /** Reset all timers and state (called when user stays or becomes active) */
+  // Reset all timers and state (called when user stays or becomes active)
   stay() {
     this.stopMonitoring();
     this.lastActivity = Date.now();
@@ -261,7 +261,7 @@ export class InactivityService {
     this.startMonitoring();
   }
 
-  /** Stop all timers */
+  // Stop all timers
   private stopMonitoring() {
     if (this.checkIntervalId !== null) {
       clearInterval(this.checkIntervalId);
@@ -273,7 +273,7 @@ export class InactivityService {
     }
   }
 
-  /** Cleanup on destroy */
+  // Cleanup on destroy
   destroy() {
     this.stopMonitoring();
     this.countdown$.complete();

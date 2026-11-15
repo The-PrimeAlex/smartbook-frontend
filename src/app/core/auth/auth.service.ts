@@ -42,7 +42,7 @@ export class AuthService {
   private refreshInFlight$: Observable<AuthResponse> | null =
     null;
 
-  /** CSRF token stored in memory for cross-origin requests. */
+  // CSRF token in memory for cross-origin requests
   private csrfToken = signal<string | null>(null);
 
   // Visual & Reactive Anchors
@@ -72,7 +72,7 @@ export class AuthService {
     );
   }
 
-  /** Ensures the backend drops the CSRF cookie *before* transmitting the credentials */
+  // Fetches CSRF cookie before sending credentials
   login(
     credentials: LoginRequest,
   ): Observable<CurrentUser> {
@@ -105,7 +105,7 @@ export class AuthService {
     );
   }
 
-  /** Main entry guard method checking localStorage first */
+  // Restores session from localStorage; fetches CSRF lazily in prod
   restoreSession(): Observable<boolean> {
     // If the session was expired by auto-logout, don't restore
     if (
@@ -118,17 +118,12 @@ export class AuthService {
     }
     // Restore from localStorage first (survives page refresh)
     if (this.restoreFromLocalStorage()) {
-      // After restoring from localStorage, try to fetch a fresh CSRF token for cross-origin requests.
-      // The in-memory CSRF token is lost on page refresh, so we need to get a new one.
-      // However, if the CSRF fetch fails (e.g., Neon database sleeping, network hiccup),
-      // we do NOT clear the session — the user still has a valid access token, so GET requests
-      // will work normally. The CSRF token will be fetched lazily before the first mutating
-      // request via ensureCsrfToken() in the auth interceptor.
+      // CSRF fetch failure doesn't clear the session — user has a valid token.
+      // Mutating requests will fetch CSRF lazily via ensureCsrfToken().
       if (environment.production) {
         this.ensureCsrfToken().subscribe({
           error: () => {
-            // CSRF fetch failed — the session is still valid for GET requests.
-            // Mutating requests will fetch a fresh CSRF token before execution.
+            // CSRF fetch failed — session still valid for GET requests
           },
         });
       }
@@ -145,8 +140,7 @@ export class AuthService {
     );
   }
 
-  /** Single execution token synchronization path */
-
+  // shareReplay ensures only one refresh request runs at a time
   refreshAccessToken(): Observable<AuthResponse> {
     if (!this.refreshInFlight$) {
       this.refreshInFlight$ =
@@ -214,22 +208,13 @@ export class AuthService {
     localStorage.removeItem(LS_USER);
   }
 
-  /**
-   * Returns the stored CSRF token for cross-origin requests.
-   */
+  // Returns the stored CSRF token for the interceptor to attach
   getCsrfToken(): string | null {
     return this.csrfToken();
   }
 
-  /**
-   * Fetches and stores the CSRF token.
-   * For same-origin (local dev), the cookie is available in document.cookie.
-   * For cross-origin (production), the token is stored in memory.
-   *
-   * In production (cross-origin), the backend rotates the CSRF token on every request,
-   * so we must always fetch a fresh token before mutating requests to ensure it matches
-   * the current cookie value.
-   */
+  // Always fetches fresh CSRF in prod because backend rotates on every request.
+  // In dev (same-origin), reuses the cookie if it exists.
   public ensureCsrfToken(): Observable<void> {
     // For same-origin, check if cookie already exists
     if (!environment.production) {
@@ -243,12 +228,8 @@ export class AuthService {
       }
     }
 
-    // For cross-origin (production), always fetch a fresh token because
-    // the backend rotates the CSRF token on every request.
-    // A cached token becomes stale after any subsequent GET request.
-    // Use a relative path so the CSRF cookie is set on the same domain
-    // as all other API requests (Cloudflare Pages proxy), avoiding mixed-origin
-    // CSRF validation failures where the cookie domain doesn't match.
+    // Always fetch fresh token in prod — backend rotates on every request.
+    // Use relative path so CSRF cookie matches the Cloudflare Pages proxy domain.
     return this.http
       .get<{ token: string }>(
         '/api/v1/auth/csrf',
@@ -283,7 +264,7 @@ export class AuthService {
     );
   }
 
-  /** Restore session from localStorage on page load */
+  // Reads token and user from localStorage to survive page refresh
   private restoreFromLocalStorage(): boolean {
     const token = localStorage.getItem(
       LS_ACCESS_TOKEN,

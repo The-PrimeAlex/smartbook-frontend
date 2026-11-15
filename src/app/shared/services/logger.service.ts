@@ -26,11 +26,7 @@ export class LoggerService {
   }
 }
 
-/**
- * Convenience function to get a logger instance with a namespace prefix.
- * Usage: const log = createLogger('MyComponent');
- *        log.error('something failed', err);
- */
+// Convenience function to get a logger instance with a namespace prefix
 export function createLogger(namespace: string) {
   const logger = inject(LoggerService);
   return {

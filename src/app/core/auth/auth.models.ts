@@ -9,9 +9,9 @@ export interface CurrentUser {
   firstName: string;
   lastName: string;
   email: string;
-  /** Roles are returned without the Spring ROLE_ prefix. */
+  // Roles are returned without the Spring ROLE_ prefix
   roles: string[];
-  /** True when the user must replace their temporary password. */
+  // True when the user must replace their temporary password
   mustChangePassword: boolean;
 }
 

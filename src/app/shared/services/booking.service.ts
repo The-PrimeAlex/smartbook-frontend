@@ -48,10 +48,7 @@ export class BookingService {
     );
   }
 
-  /**
-   * Get bookings for a specific room within a date range (default: today to +7 days).
-   * Used by the Find a Room page to display a schedule timeline.
-   */
+  // Get bookings for a specific room within a date range
   getRoomSchedule(
     roomId: string,
   ): Observable<Booking[]> {
@@ -81,9 +78,7 @@ export class BookingService {
     );
   }
 
-  /**
-   * Owner: confirm a pending booking or check in to a confirmed booking.
-   */
+  // Owner: confirm a pending booking or check in to a confirmed booking
   updateBookingStatus(
     bookingId: string,
     request: UpdateBookingStatusRequest,
@@ -98,9 +93,7 @@ export class BookingService {
     );
   }
 
-  /**
-   * Owner: cancel their own booking.
-   */
+  // Owner: cancel their own booking
   cancelBooking(
     bookingId: string,
     request: CancelBookingRequest,
