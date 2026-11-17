@@ -201,15 +201,21 @@ export class MyChargesComponent implements OnInit, OnDestroy {
 
     // Validate phone number for M-Pesa
     if (this.paymentMethod() === 'MPESA') {
-      const phone = this.phoneNumber().trim();
+      let phone = this.phoneNumber().trim();
       if (!phone) {
         this.paymentError.set('Please enter your M-Pesa phone number.');
         return;
       }
+      // Normalize phone number: convert 07/01 format to 254 format
+      if (phone.match(/^0[17]\d{8}$/)) {
+        phone = '254' + phone.substring(1);
+      }
       if (!phone.match(/^254\d{9}$/)) {
-        this.paymentError.set('Invalid phone number. Use format: 254XXXXXXXXX');
+        this.paymentError.set('Invalid phone number. Use format: 07XXXXXXXXX, 01XXXXXXXXX, or 254XXXXXXXXX');
         return;
       }
+      // Update the phone number in the request with the normalized value
+      this.phoneNumber.set(phone);
     }
 
     const request: PaymentRequest = {
@@ -253,12 +259,27 @@ export class MyChargesComponent implements OnInit, OnDestroy {
     });
   }
 
+  private pollCount = 0;
+  readonly maxPollCount = 40; // 40 polls * 3s = 2 minutes max
+
   startPolling(): void {
-    // Poll every 3 seconds for up to 2 minutes
-    this.pollSubscription = interval(3000).subscribe({
+    this.pollCount = 0;
+    // Poll every 5 seconds for up to 2 minutes (40 polls max)
+    this.pollSubscription = interval(5000).subscribe({
       next: () => {
+        this.pollCount++;
         const checkoutId = this.mpesaCheckoutRequestId();
         if (!checkoutId) return;
+
+        // Stop after max polls
+        if (this.pollCount >= this.maxPollCount) {
+          this.stopPolling();
+          this.paymentWaiting.set(false);
+          this.paymentError.set(
+            'Payment confirmation timed out. Check your M-Pesa SIM toolkit. If payment was successful, it will be reflected in your charges.',
+          );
+          return;
+        }
 
         this.billingService.queryMpesaPaymentStatus(checkoutId).subscribe({
           next: (status) => {
@@ -281,17 +302,6 @@ export class MyChargesComponent implements OnInit, OnDestroy {
         });
       },
     });
-
-    // Auto-stop after 2 minutes (40 polls)
-    setTimeout(() => {
-      if (this.pollSubscription) {
-        this.stopPolling();
-        this.paymentWaiting.set(false);
-        this.paymentError.set(
-          'Payment timed out. Please check your M-Pesa SIM toolkit for confirmation.',
-        );
-      }
-    }, 120000);
   }
 
   stopPolling(): void {
