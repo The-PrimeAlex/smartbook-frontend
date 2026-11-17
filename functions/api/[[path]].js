@@ -52,7 +52,7 @@ export const onRequest = async ({ request, next, context }) => {
     resHeaders.set('Access-Control-Allow-Credentials', 'true');
     resHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     resHeaders.set('Access-Control-Allow-Headers', '*');
-    resHeaders.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
+    resHeaders.set('Access-Control-Expose-Headers', 'X-XSRF-TOKEN');
     resHeaders.set('Cache-Control', 'no-store');
 
     // Copy safe headers from backend response
@@ -68,6 +68,12 @@ export const onRequest = async ({ request, next, context }) => {
     if (setCookies && setCookies.length > 0) {
       for (const cookie of setCookies) {
         resHeaders.append('Set-Cookie', cookie);
+        // Extract XSRF-TOKEN value and expose it via a custom header
+        // because Set-Cookie is a restricted header not accessible to JavaScript
+        const csrfMatch = cookie.match(/^XSRF-TOKEN=([^;]+)/);
+        if (csrfMatch && csrfMatch[1]) {
+          resHeaders.set('X-XSRF-TOKEN', csrfMatch[1]);
+        }
       }
     }
 
