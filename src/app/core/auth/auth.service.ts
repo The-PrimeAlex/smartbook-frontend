@@ -193,16 +193,22 @@ export class AuthService {
       }
     }
 
-    // Fetch and cache the CSRF token for cross-origin use.
-    // Use relative path so CSRF cookie matches the Cloudflare Pages proxy domain.
+    // Fetch the CSRF endpoint to trigger the backend to set the XSRF-TOKEN cookie.
+    // The backend returns an empty body but sets the cookie correctly.
+    // We read the token from the cookie after the response.
     return this.http
-      .get<{ token: string }>('/api/v1/auth/csrf', {
+      .get('/api/v1/auth/csrf', {
         withCredentials: true,
+        observe: 'response',
       })
       .pipe(
-        tap((response) => {
-          // Store the token in memory for cross-origin use
-          this.csrfToken.set(response.token);
+        tap(() => {
+          // Extract the CSRF token from the cookie
+          // The backend sets it as XSRF-TOKEN=<value>; Path=/; Secure; SameSite=None
+          const cookieMatch = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+          if (cookieMatch && cookieMatch[1]) {
+            this.csrfToken.set(cookieMatch[1]);
+          }
         }),
         map(() => void 0),
       );
