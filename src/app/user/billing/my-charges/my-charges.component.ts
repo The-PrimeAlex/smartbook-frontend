@@ -211,6 +211,21 @@ export class MyChargesComponent implements OnInit, OnDestroy {
     const bill = this.selectedBill();
     if (!bill) return;
 
+    // Validate phone number for M-Pesa
+    if (this.paymentMethod() === 'MPESA') {
+      const phone = this.phoneNumber().trim();
+      if (!phone) {
+        this.paymentError.set('Please enter your M-Pesa phone number.');
+        return;
+      }
+      if (!phone.match(/^254\d{9}$/)) {
+        this.paymentError.set(
+          'Invalid phone number. Use format: 254XXXXXXXXX',
+        );
+        return;
+      }
+    }
+
     const request: PaymentRequest = {
       paymentMethod: this.paymentMethod(),
       amount: this.paymentAmount(),
@@ -246,8 +261,9 @@ export class MyChargesComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.paying.set(false);
+          const serverMsg = err.error?.error || err.error?.message;
           this.paymentError.set(
-            'Payment failed. Please try again.',
+            serverMsg || 'Payment failed. Please try again.',
           );
           this.log.error('Payment error:', err);
         },

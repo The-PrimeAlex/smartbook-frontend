@@ -478,6 +478,16 @@ export class CreateBookingComponent implements OnInit {
       return;
     }
 
+    // Check minimum duration from settings
+    const durationMin = Math.round(
+      (end.getTime() - start.getTime()) / 60000,
+    );
+    if (durationMin < this.minDurationMinutes) {
+      this.errorMessage =
+        `Your booking must be at least ${this.minDurationMinutes} minutes long. Please adjust your meeting time.`;
+      return;
+    }
+
     // All validation passed — now clear messages and submit
     this.clearMessages();
     this.saving = true;
@@ -519,6 +529,20 @@ export class CreateBookingComponent implements OnInit {
 
           // If the request was cancelled (e.g., navigation away), ignore it
           if (error?.name === 'HttpFailure' && error?.status === 0) {
+            return;
+          }
+
+          if (error?.status === 400) {
+            // Validation error from backend (e.g., minimum duration)
+            this.clearMessages();
+            const body = error?.error;
+            const message =
+              (typeof body === 'string'
+                ? body
+                : (body?.message ?? '')) || '';
+            this.errorMessage =
+              message ||
+              'Please check your booking details and try again.';
             return;
           }
 
