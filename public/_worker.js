@@ -49,7 +49,7 @@ export async function fetch(request) {
   } catch (err) {
     // Backend unreachable — return 502
     const errHeaders = corsHeaders(url.origin);
-    errHeaders['Content-Type'] = 'application/json';
+    errHeaders.set('Content-Type', 'application/json');
     return new Response(
       JSON.stringify({ error: 'Backend unavailable', message: err.message }),
       { status: 502, headers: errHeaders }
@@ -57,8 +57,8 @@ export async function fetch(request) {
   }
 
   // Build response headers with CORS
-  const respHeaders = new Headers();
-  // Copy Set-Cookie headers from backend response
+  const respHeaders = corsHeaders(url.origin);
+  // Copy backend response headers
   for (const [key, value] of response.headers.entries()) {
     if (key.toLowerCase() === 'set-cookie') {
       respHeaders.append('Set-Cookie', value);
@@ -66,8 +66,6 @@ export async function fetch(request) {
       respHeaders.set(key, value);
     }
   }
-  // Add CORS headers
-  Object.entries(corsHeaders(url.origin)).forEach(([k, v]) => respHeaders.set(k, v));
   respHeaders.set('Cache-Control', 'no-store');
 
   return new Response(response.body, {
@@ -77,14 +75,14 @@ export async function fetch(request) {
   });
 }
 
-// CORS headers helper
+// CORS headers helper — returns a Headers object for use in Response
 function corsHeaders(origin) {
-  return {
-    'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': '*',
-    'Access-Control-Expose-Headers': 'Set-Cookie, X-XSRF-TOKEN',
-    'Access-Control-Max-Age': '86400',
-  };
+  const headers = new Headers();
+  headers.set('Access-Control-Allow-Origin', origin);
+  headers.set('Access-Control-Allow-Credentials', 'true');
+  headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  headers.set('Access-Control-Allow-Headers', '*');
+  headers.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
+  headers.set('Access-Control-Max-Age', '86400');
+  return headers;
 }
