@@ -262,10 +262,12 @@ export class MyChargesComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.paying.set(false);
           const serverMsg = err.error?.error || err.error?.message;
+          const statusText = err.status ? ` (${err.status})` : '';
           this.paymentError.set(
-            serverMsg || 'Payment failed. Please try again.',
+            serverMsg || `Payment failed${statusText}. Please try again.`,
           );
           this.log.error('Payment error:', err);
+          this.log.error('Payment error body:', err.error);
         },
       });
   }
