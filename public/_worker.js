@@ -1,5 +1,5 @@
 // Cloudflare Pages Worker that proxies /api/* requests to the Azure backend.
-// Uses a minimal approach to avoid Cloudflare Worker runtime crashes (Error 1019).
+// Deployed: 2026-11-17 — fixed corsHeaders to return Headers instance.
 const BACKEND = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
 export async function fetch(request) {
