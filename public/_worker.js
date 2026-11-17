@@ -1,9 +1,6 @@
 // Cloudflare Pages Worker that proxies /api/* requests to the Azure backend.
-// Deployed alongside _routes.json on Cloudflare Pages.
-// Without this worker, /api/* requests in production fail because
-// Cloudflare Pages has no backend server to handle them.
-
-const BACKEND_URL = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
+// Uses a minimal approach to avoid Cloudflare Worker runtime crashes (Error 1019).
+const BACKEND = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
 export async function fetch(request) {
   const url = new URL(request.url);
@@ -13,83 +10,81 @@ export async function fetch(request) {
     return await fetch(request);
   }
 
-  // Build the backend URL, preserving path and query string
-  const backendUrl = `${BACKEND_URL}${url.pathname}${url.search}`;
+  // Build the backend URL
+  const backendUrl = BACKEND + url.pathname + url.search;
 
-  // Forward all headers from the original request
-  const headers = new Headers(request.headers);
-  // Remove Cloudflare-added headers that confuse the backend
-  headers.delete('cf-connecting-ip');
-  headers.delete('cf-ipcountry');
-  headers.delete('cf-ray');
-  headers.delete('cf-visitor');
-  // Set Host header so the backend knows the real target
-  headers.set('Host', new URL(BACKEND_URL).host);
-  // Forward the Cloudflare IP for rate limiting
-  headers.set('X-Forwarded-For', request.headers.get('cf-connecting-ip') || '');
-
-  // Handle preflight OPTIONS requests before creating the proxied request
+  // Handle preflight OPTIONS requests
   if (request.method === 'OPTIONS') {
-    const corsHeaders = new Headers();
-    corsHeaders.set('Access-Control-Allow-Origin', url.origin);
-    corsHeaders.set('Access-Control-Allow-Credentials', 'true');
-    corsHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-    corsHeaders.set('Access-Control-Allow-Headers', '*');
-    corsHeaders.set('Access-Control-Max-Age', '86400');
-    return new Response(null, { status: 204, headers: corsHeaders });
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders(url.origin),
+    });
   }
 
-  // Clone the request so we can read the body without consuming the original
-  const clonedRequest = request.clone();
-  let body = null;
+  // Build headers for the proxied request — manually copy only the ones we need
+  const proxiedHeaders = new Headers();
+  proxiedHeaders.set('Content-Type', request.headers.get('Content-Type') || 'application/json');
+  proxiedHeaders.set('Authorization', request.headers.get('Authorization') || '');
+  proxiedHeaders.set('X-XSRF-TOKEN', request.headers.get('X-XSRF-TOKEN') || '');
+  proxiedHeaders.set('Cookie', request.headers.get('Cookie') || '');
+  proxiedHeaders.set('Accept', request.headers.get('Accept') || '*/*');
+  proxiedHeaders.set('Host', new URL(BACKEND).host);
+  proxiedHeaders.set('X-Forwarded-For', request.headers.get('cf-connecting-ip') || '');
+
+  // Forward the request body for POST/PUT/PATCH/DELETE
+  let body = undefined;
   if (request.method !== 'GET' && request.method !== 'HEAD') {
-    try {
-      body = await clonedRequest.arrayBuffer();
-    } catch (e) {
-      // If body can't be read, proceed without it (GET/HEAD fallback)
-    }
+    body = request.body;
   }
 
-  const proxiedRequest = new Request(backendUrl, {
-    method: request.method,
-    headers: headers,
-    body: body,
-    redirect: 'follow',
-  });
-
-  // Send the request to the Azure backend
+  // Send to Azure backend
   let response;
   try {
-    response = await fetch(proxiedRequest);
-  } catch (error) {
-    // If the backend is unreachable, return 502 with error details
-    const errorHeaders = new Headers();
-    errorHeaders.set('Content-Type', 'application/json');
-    errorHeaders.set('Access-Control-Allow-Origin', url.origin);
-    errorHeaders.set('Access-Control-Allow-Credentials', 'true');
+    response = await fetch(backendUrl, {
+      method: request.method,
+      headers: proxiedHeaders,
+      body: body,
+      redirect: 'follow',
+    });
+  } catch (err) {
+    // Backend unreachable — return 502
+    const errHeaders = corsHeaders(url.origin);
+    errHeaders['Content-Type'] = 'application/json';
     return new Response(
-      JSON.stringify({ error: 'Backend unavailable', message: error.message }),
-      { status: 502, headers: errorHeaders }
+      JSON.stringify({ error: 'Backend unavailable', message: err.message }),
+      { status: 502, headers: errHeaders }
     );
   }
 
-  // Build the response with CORS headers
-  const responseHeaders = new Headers(response.headers);
+  // Build response headers with CORS
+  const respHeaders = new Headers();
+  // Copy Set-Cookie headers from backend response
+  for (const [key, value] of response.headers.entries()) {
+    if (key.toLowerCase() === 'set-cookie') {
+      respHeaders.append('Set-Cookie', value);
+    } else {
+      respHeaders.set(key, value);
+    }
+  }
+  // Add CORS headers
+  Object.entries(corsHeaders(url.origin)).forEach(([k, v]) => respHeaders.set(k, v));
+  respHeaders.set('Cache-Control', 'no-store');
 
-  // Allow the Cloudflare Pages origin
-  responseHeaders.set('Access-Control-Allow-Origin', url.origin);
-  responseHeaders.set('Access-Control-Allow-Credentials', 'true');
-  responseHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-  responseHeaders.set('Access-Control-Allow-Headers', '*');
-  // Expose Set-Cookie so the browser stores CSRF and refresh cookies
-  responseHeaders.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
-  // Prevent Cloudflare from caching API responses
-  responseHeaders.set('Cache-Control', 'no-store');
-
-  // Return the backend response with CORS headers
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
-    headers: responseHeaders,
+    headers: respHeaders,
   });
+}
+
+// CORS headers helper
+function corsHeaders(origin) {
+  return {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Expose-Headers': 'Set-Cookie, X-XSRF-TOKEN',
+    'Access-Control-Max-Age': '86400',
+  };
 }
