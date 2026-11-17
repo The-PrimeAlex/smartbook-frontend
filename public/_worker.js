@@ -1,101 +1,95 @@
-// Cloudflare Pages Worker that proxies /api/* requests to the Azure backend.
-// Deployed: 2026-11-17 — fixed corsHeaders to return Headers instance.
+// Cloudflare Pages Worker — proxies /api/* to Azure backend.
+// Minimal implementation to avoid Error 1019 runtime crashes.
 const BACKEND =
   'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
 export async function fetch(request) {
   const url = new URL(request.url);
 
-  // Only proxy /api/* requests; let Cloudflare serve static files normally
+  // Only proxy /api/* requests
   if (!url.pathname.startsWith('/api/')) {
     return await fetch(request);
   }
 
-  // Build the backend URL
   const backendUrl = BACKEND + url.pathname + url.search;
 
-  // Handle preflight OPTIONS requests
+  // Handle preflight OPTIONS
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
-      headers: corsHeaders(url.origin),
+      headers: {
+        'Access-Control-Allow-Origin': url.origin,
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Max-Age': '86400',
+      },
     });
   }
 
-  // Build headers for the proxied request — manually copy only the ones we need
-  const proxiedHeaders = new Headers();
-  proxiedHeaders.set(
-    'Content-Type',
-    request.headers.get('Content-Type') || 'application/json',
-  );
-  proxiedHeaders.set(
-    'Authorization',
-    request.headers.get('Authorization') || '',
-  );
-  proxiedHeaders.set('X-XSRF-TOKEN', request.headers.get('X-XSRF-TOKEN') || '');
-  proxiedHeaders.set('Cookie', request.headers.get('Cookie') || '');
-  proxiedHeaders.set('Accept', request.headers.get('Accept') || '*/*');
-  proxiedHeaders.set('Host', new URL(BACKEND).host);
-  proxiedHeaders.set(
-    'X-Forwarded-For',
-    request.headers.get('cf-connecting-ip') || '',
-  );
-
-  // Forward the request body for POST/PUT/PATCH/DELETE
-  let body = undefined;
-  if (request.method !== 'GET' && request.method !== 'HEAD') {
-    body = request.body;
+  // Build proxied headers — only the ones the backend needs
+  const headers = {};
+  if (request.headers.get('Content-Type')) {
+    headers['Content-Type'] = request.headers.get('Content-Type');
   }
+  if (request.headers.get('Authorization')) {
+    headers['Authorization'] = request.headers.get('Authorization');
+  }
+  if (request.headers.get('X-XSRF-TOKEN')) {
+    headers['X-XSRF-TOKEN'] = request.headers.get('X-XSRF-TOKEN');
+  }
+  if (request.headers.get('Cookie')) {
+    headers['Cookie'] = request.headers.get('Cookie');
+  }
+  headers['Host'] = new URL(BACKEND).host;
+  headers['X-Forwarded-For'] = request.headers.get('cf-connecting-ip') || '';
 
-  // Send to Azure backend
-  let response;
   try {
-    response = await fetch(backendUrl, {
+    const response = await fetch(backendUrl, {
       method: request.method,
-      headers: proxiedHeaders,
-      body: body,
+      headers: headers,
+      body: request.method === 'GET' || request.method === 'HEAD' ? null : request.body,
       redirect: 'follow',
     });
+
+    // Build response with CORS — use plain object for headers to avoid Headers iteration crash
+    const resHeaders = {
+      'Access-Control-Allow-Origin': url.origin,
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Expose-Headers': 'Set-Cookie, X-XSRF-TOKEN',
+      'Cache-Control': 'no-store',
+    };
+
+    // Copy only safe headers from backend response — avoid iterating all headers
+    const contentType = response.headers.get('Content-Type');
+    if (contentType) resHeaders['Content-Type'] = contentType;
+
+    const contentLength = response.headers.get('Content-Length');
+    if (contentLength) resHeaders['Content-Length'] = contentLength;
+
+    // Copy Set-Cookie headers individually
+    const setCookie = response.headers.get('Set-Cookie');
+    if (setCookie) resHeaders['Set-Cookie'] = setCookie;
+
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: resHeaders,
+    });
   } catch (err) {
-    // Backend unreachable — return 502
-    const errHeaders = corsHeaders(url.origin);
-    errHeaders.set('Content-Type', 'application/json');
+    // Backend unreachable
     return new Response(
       JSON.stringify({ error: 'Backend unavailable', message: err.message }),
-      { status: 502, headers: errHeaders },
+      {
+        status: 502,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': url.origin,
+          'Access-Control-Allow-Credentials': 'true',
+        },
+      },
     );
   }
-
-  // Build response headers with CORS
-  const respHeaders = corsHeaders(url.origin);
-  // Copy backend response headers
-  for (const [key, value] of response.headers.entries()) {
-    if (key.toLowerCase() === 'set-cookie') {
-      respHeaders.append('Set-Cookie', value);
-    } else {
-      respHeaders.set(key, value);
-    }
-  }
-  respHeaders.set('Cache-Control', 'no-store');
-
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers: respHeaders,
-  });
-}
-
-// CORS headers helper — returns a Headers object for use in Response
-function corsHeaders(origin) {
-  const headers = new Headers();
-  headers.set('Access-Control-Allow-Origin', origin);
-  headers.set('Access-Control-Allow-Credentials', 'true');
-  headers.set(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-  );
-  headers.set('Access-Control-Allow-Headers', '*');
-  headers.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
-  headers.set('Access-Control-Max-Age', '86400');
-  return headers;
 }
