@@ -193,24 +193,19 @@ export class AuthService {
       }
     }
 
-    // Fetch the CSRF endpoint to trigger the backend to set the XSRF-TOKEN cookie.
-    // The backend returns an empty body but sets the cookie correctly.
-    // We extract the token from the X-XSRF-TOKEN response header because Set-Cookie
-    // is a restricted header not accessible to JavaScript in cross-origin requests.
-    // The Cloudflare proxy extracts the token from Set-Cookie and exposes it as
-    // X-XSRF-TOKEN header so the frontend can read it.
+    // Fetch the CSRF endpoint. The backend returns { token: "..." } in the JSON body
+    // and also sets the XSRF-TOKEN cookie. We read the token from the body first
+    // (most reliable), then fall back to the X-XSRF-TOKEN header (Cloudflare proxy),
+    // and finally to document.cookie (same-origin dev).
     return this.http
-      .get('/api/v1/auth/csrf', {
+      .get<{ token: string }>('/api/v1/auth/csrf', {
         withCredentials: true,
-        observe: 'response',
       })
       .pipe(
-        tap((httpResponse) => {
-          // Try to extract the CSRF token from the X-XSRF-TOKEN response header first.
-          // The Cloudflare Pages proxy sets this header from the Set-Cookie value.
-          const tokenFromHeader = httpResponse.headers.get('X-XSRF-TOKEN');
-          if (tokenFromHeader) {
-            this.csrfToken.set(tokenFromHeader);
+        tap((body) => {
+          // Primary: read token from JSON response body
+          if (body && body.token) {
+            this.csrfToken.set(body.token);
             return;
           }
           // Fallback: read from document.cookie (works in same-origin dev)
