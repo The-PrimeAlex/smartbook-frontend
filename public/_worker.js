@@ -39,10 +39,15 @@ export async function fetch(request) {
     return new Response(null, { status: 204, headers: corsHeaders });
   }
 
-  // Create the proxied request — clone body for POST/PUT/PATCH/DELETE
+  // Clone the request so we can read the body without consuming the original
+  const clonedRequest = request.clone();
   let body = null;
-  if (request.method !== 'GET' && request.method !== 'HEAD' && request.method !== 'OPTIONS') {
-    body = await request.clone().arrayBuffer();
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    try {
+      body = await clonedRequest.arrayBuffer();
+    } catch (e) {
+      // If body can't be read, proceed without it (GET/HEAD fallback)
+    }
   }
 
   const proxiedRequest = new Request(backendUrl, {
@@ -78,6 +83,8 @@ export async function fetch(request) {
   responseHeaders.set('Access-Control-Allow-Headers', '*');
   // Expose Set-Cookie so the browser stores CSRF and refresh cookies
   responseHeaders.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
+  // Prevent Cloudflare from caching API responses
+  responseHeaders.set('Cache-Control', 'no-store');
 
   // Return the backend response with CORS headers
   return new Response(response.body, {
