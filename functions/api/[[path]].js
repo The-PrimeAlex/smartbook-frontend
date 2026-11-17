@@ -45,25 +45,31 @@ export const onRequest = async ({ request, next, context }) => {
       redirect: 'follow',
     });
 
-    // Build response headers with CORS
-    const resHeaders = {
-      'Access-Control-Allow-Origin': url.origin,
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': '*',
-      'Access-Control-Expose-Headers': 'Set-Cookie, X-XSRF-TOKEN',
-      'Cache-Control': 'no-store',
-    };
+    // Build response headers with CORS using Headers instance
+    // to properly support multiple Set-Cookie headers
+    const resHeaders = new Headers();
+    resHeaders.set('Access-Control-Allow-Origin', url.origin);
+    resHeaders.set('Access-Control-Allow-Credentials', 'true');
+    resHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    resHeaders.set('Access-Control-Allow-Headers', '*');
+    resHeaders.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
+    resHeaders.set('Cache-Control', 'no-store');
 
     // Copy safe headers from backend response
     const contentType = response.headers.get('Content-Type');
-    if (contentType) resHeaders['Content-Type'] = contentType;
+    if (contentType) resHeaders.set('Content-Type', contentType);
 
     const contentLength = response.headers.get('Content-Length');
-    if (contentLength) resHeaders['Content-Length'] = contentLength;
+    if (contentLength) resHeaders.set('Content-Length', contentLength);
 
-    const setCookie = response.headers.get('Set-Cookie');
-    if (setCookie) resHeaders['Set-Cookie'] = setCookie;
+    // Use getSetCookie() to properly handle multiple Set-Cookie headers
+    // get() returns a comma-joined string which corrupts cookie values
+    const setCookies = response.headers.getSetCookie();
+    if (setCookies && setCookies.length > 0) {
+      for (const cookie of setCookies) {
+        resHeaders.append('Set-Cookie', cookie);
+      }
+    }
 
     return new Response(response.body, {
       status: response.status,
