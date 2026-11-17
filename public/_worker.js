@@ -10,7 +10,7 @@ export async function fetch(request) {
 
   // Only proxy /api/* requests; let Cloudflare serve static files normally
   if (!url.pathname.startsWith('/api/')) {
-    return fetch(request);
+    return await fetch(request);
   }
 
   // Build the backend URL, preserving path and query string
@@ -28,11 +28,27 @@ export async function fetch(request) {
   // Forward the Cloudflare IP for rate limiting
   headers.set('X-Forwarded-For', request.headers.get('cf-connecting-ip') || '');
 
-  // Create the proxied request
+  // Handle preflight OPTIONS requests before creating the proxied request
+  if (request.method === 'OPTIONS') {
+    const corsHeaders = new Headers();
+    corsHeaders.set('Access-Control-Allow-Origin', url.origin);
+    corsHeaders.set('Access-Control-Allow-Credentials', 'true');
+    corsHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    corsHeaders.set('Access-Control-Allow-Headers', '*');
+    corsHeaders.set('Access-Control-Max-Age', '86400');
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
+  // Create the proxied request — clone body for POST/PUT/PATCH/DELETE
+  let body = null;
+  if (request.method !== 'GET' && request.method !== 'HEAD' && request.method !== 'OPTIONS') {
+    body = await request.clone().arrayBuffer();
+  }
+
   const proxiedRequest = new Request(backendUrl, {
     method: request.method,
     headers: headers,
-    body: request.body,
+    body: body,
     redirect: 'follow',
   });
 
@@ -62,14 +78,6 @@ export async function fetch(request) {
   responseHeaders.set('Access-Control-Allow-Headers', '*');
   // Expose Set-Cookie so the browser stores CSRF and refresh cookies
   responseHeaders.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
-
-  // Handle preflight OPTIONS requests
-  if (request.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: responseHeaders,
-    });
-  }
 
   // Return the backend response with CORS headers
   return new Response(response.body, {
