@@ -1,94 +1,87 @@
-/**
- * Cloudflare Pages Function to proxy /api/* requests to the Azure backend.
- *
- * File: functions/api/[[path]].js
- * Matches: /api/v1/auth/login, /api/v1/rooms, /api/v1/auth/csrf, etc.
- *
- * Cloudflare Pages uses [[path]] syntax for catch-all routes.
- * The _routes.json in the build output ensures /api/* is routed to functions.
- */
+// Cloudflare Pages Function — proxies /api/* requests to the Azure backend.
+// Uses [[path]] catch-all to match any path under /api/
+const BACKEND = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
-export async function onRequest(context) {
+export const onRequest = async ({ request, next, context }) => {
+  const url = new URL(request.url);
+  const backendUrl = BACKEND + url.pathname + url.search;
+
+  // Handle preflight OPTIONS requests
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': url.origin,
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Max-Age': '86400',
+      },
+    });
+  }
+
+  // Build headers for the proxied request
+  const headers = {};
+  if (request.headers.get('Content-Type')) {
+    headers['Content-Type'] = request.headers.get('Content-Type');
+  }
+  if (request.headers.get('Authorization')) {
+    headers['Authorization'] = request.headers.get('Authorization');
+  }
+  if (request.headers.get('X-XSRF-TOKEN')) {
+    headers['X-XSRF-TOKEN'] = request.headers.get('X-XSRF-TOKEN');
+  }
+  if (request.headers.get('Cookie')) {
+    headers['Cookie'] = request.headers.get('Cookie');
+  }
+  headers['Host'] = new URL(BACKEND).host;
+  headers['X-Forwarded-For'] = request.headers.get('cf-connecting-ip') || '';
+
   try {
-    const backendUrl =
-      'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
+    const response = await fetch(backendUrl, {
+      method: request.method,
+      headers: headers,
+      body: request.method === 'GET' || request.method === 'HEAD' ? null : request.body,
+      redirect: 'follow',
+    });
 
-    // Extract the full path from the request URL (e.g., /api/v1/auth/login)
-    const url = new URL(context.request.url);
-    const apiPath = url.pathname;
-    const targetUrl = backendUrl + apiPath + url.search;
-
-    // Build headers to forward, preserving cookies and CSRF tokens
-    const headers = new Headers(context.request.headers);
-    headers.delete('host');
-    headers.set('host', new URL(targetUrl).host);
-    headers.delete('content-length');
-
-    // Handle preflight OPTIONS requests early
-    if (context.request.method === 'OPTIONS') {
-      return new Response(null, {
-        status: 204,
-        headers: {
-          'Access-Control-Allow-Origin':
-            context.request.headers.get('origin') || '',
-          'Access-Control-Allow-Credentials': 'true',
-          'Access-Control-Allow-Methods':
-            'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Max-Age': '86400',
-        },
-      });
-    }
-
-    // Build fetch options - only include body for methods that have one
-    const fetchOptions = {
-      method: context.request.method,
-      headers,
+    // Build response headers with CORS
+    const resHeaders = {
+      'Access-Control-Allow-Origin': url.origin,
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Expose-Headers': 'Set-Cookie, X-XSRF-TOKEN',
+      'Cache-Control': 'no-store',
     };
 
-    if (context.request.method !== 'GET' && context.request.method !== 'HEAD') {
-      try {
-        fetchOptions.body = await context.request.arrayBuffer();
-      } catch (e) {
-        console.error('Failed to read request body:', e);
-      }
-    }
+    // Copy safe headers from backend response
+    const contentType = response.headers.get('Content-Type');
+    if (contentType) resHeaders['Content-Type'] = contentType;
 
-    // Forward the request to the Azure backend
-    const response = await fetch(targetUrl, fetchOptions);
+    const contentLength = response.headers.get('Content-Length');
+    if (contentLength) resHeaders['Content-Length'] = contentLength;
 
-    // Clone the response and add CORS-safe headers
-    const responseHeaders = new Headers(response.headers);
-    const origin = context.request.headers.get('origin') || '';
-    responseHeaders.set('Access-Control-Allow-Origin', origin);
-    responseHeaders.set('Access-Control-Allow-Credentials', 'true');
-    responseHeaders.set(
-      'Access-Control-Expose-Headers',
-      'Set-Cookie, X-XSRF-TOKEN',
-    );
+    const setCookie = response.headers.get('Set-Cookie');
+    if (setCookie) resHeaders['Set-Cookie'] = setCookie;
 
-    // Return the response with the original body stream
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
-      headers: responseHeaders,
+      headers: resHeaders,
     });
-  } catch (error) {
-    console.error('Proxy error:', error);
-    const origin = context.request.headers.get('origin') || '';
+  } catch (err) {
+    // Backend unreachable
     return new Response(
-      JSON.stringify({
-        error: 'Proxy error',
-        message: error.message,
-      }),
+      JSON.stringify({ error: 'Backend unavailable', message: err.message }),
       {
-        status: 500,
+        status: 502,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': origin,
+          'Access-Control-Allow-Origin': url.origin,
           'Access-Control-Allow-Credentials': 'true',
         },
-      },
+      }
     );
   }
-}
+};
