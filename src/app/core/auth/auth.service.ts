@@ -213,10 +213,16 @@ export class AuthService {
     return this.csrfToken();
   }
 
-  // Always fetches fresh CSRF in prod because backend rotates on every request.
-  // In dev (same-origin), reuses the cookie if it exists.
+  // Returns cached CSRF token if available; fetches once and caches.
+  // The backend no longer rotates the CSRF token (NoRotationCsrfTokenRequestHandler),
+  // so a single fetch is sufficient for the entire session.
   public ensureCsrfToken(): Observable<void> {
-    // For same-origin, check if cookie already exists
+    // Reuse cached token if already fetched
+    if (this.csrfToken() !== null) {
+      return of(void 0);
+    }
+
+    // For same-origin dev, check if cookie already exists
     if (!environment.production) {
       const hasCsrfCookie = document.cookie
         .split(';')
@@ -228,7 +234,7 @@ export class AuthService {
       }
     }
 
-    // Always fetch fresh token in prod — backend rotates on every request.
+    // Fetch and cache the CSRF token for cross-origin use.
     // Use relative path so CSRF cookie matches the Cloudflare Pages proxy domain.
     return this.http
       .get<{ token: string }>(
