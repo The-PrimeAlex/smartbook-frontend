@@ -2,9 +2,7 @@ import { BookingStatus } from '../../models/booking.model';
 import { RoomStatus } from '../../models/room.model';
 
 // Maps booking status enums to display labels
-export function getBookingStatusLabel(
-  status: string,
-): string {
+export function getBookingStatusLabel(status: string): string {
   const labels: Record<string, string> = {
     PENDING: 'Pending',
     CONFIRMED: 'Confirmed',
@@ -17,9 +15,7 @@ export function getBookingStatusLabel(
 }
 
 // Maps bill status strings to display labels
-export function getBillStatusLabel(
-  status: string,
-): string {
+export function getBillStatusLabel(status: string): string {
   switch (status) {
     case 'PAID':
       return 'Paid';
@@ -37,9 +33,7 @@ export function getBillStatusLabel(
 }
 
 // Maps incident status strings to display labels
-export function getIncidentStatusLabel(
-  status: string,
-): string {
+export function getIncidentStatusLabel(status: string): string {
   switch (status) {
     case 'REPORTED':
       return 'Reported';
@@ -59,9 +53,7 @@ export function getIncidentStatusLabel(
 }
 
 // Maps user account status strings to display labels
-export function getUserStatusLabel(
-  status: string,
-): string {
+export function getUserStatusLabel(status: string): string {
   const labels: Record<string, string> = {
     ACTIVE: 'Active',
     PENDING: 'Pending',
@@ -73,9 +65,7 @@ export function getUserStatusLabel(
 }
 
 // Maps registration request status strings to display labels
-export function getRegistrationStatusLabel(
-  status: string,
-): string {
+export function getRegistrationStatusLabel(status: string): string {
   switch (status) {
     case 'PENDING':
       return 'Pending';
@@ -89,9 +79,7 @@ export function getRegistrationStatusLabel(
 }
 
 // Maps room status enums to display labels
-export function getRoomStatusLabel(
-  status: string,
-): string {
+export function getRoomStatusLabel(status: string): string {
   switch (status) {
     case 'ACTIVE':
       return 'Active';
@@ -105,9 +93,7 @@ export function getRoomStatusLabel(
 }
 
 // Maps equipment status strings to display labels
-export function getEquipmentStatusLabel(
-  status: string,
-): string {
+export function getEquipmentStatusLabel(status: string): string {
   switch (status) {
     case 'ACTIVE':
       return 'Active';
@@ -123,9 +109,7 @@ export function getEquipmentStatusLabel(
 }
 
 // Maps payment status strings to display labels
-export function getPaymentStatusLabel(
-  status: string,
-): string {
+export function getPaymentStatusLabel(status: string): string {
   switch (status) {
     case 'SUCCESS':
       return 'Success';

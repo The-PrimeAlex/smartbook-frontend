@@ -1,15 +1,7 @@
-import {
-  Component,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
-import {
-  Router,
-  RouterLink,
-  ActivatedRoute,
-} from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import {
   LucideAlertTriangle,
   LucideCalendar,
@@ -62,11 +54,9 @@ import {
   styleUrl: './admin-incidents.component.css',
 })
 export class AdminIncidentsComponent implements OnInit {
-  readonly LucideAlertTriangle =
-    LucideAlertTriangle;
+  readonly LucideAlertTriangle = LucideAlertTriangle;
   readonly LucideCalendar = LucideCalendar;
-  readonly LucideCheckCircle2 =
-    LucideCheckCircle2;
+  readonly LucideCheckCircle2 = LucideCheckCircle2;
   readonly LucideCircleAlert = LucideCircleAlert;
   readonly LucideDollarSign = LucideDollarSign;
   readonly LucideFileText = LucideFileText;
@@ -93,11 +83,8 @@ export class AdminIncidentsComponent implements OnInit {
 
   // Side panel
   showSidePanel = signal(false);
-  sidePanelMode = signal<'charge' | 'waive'>(
-    'charge',
-  );
-  selectedIncident =
-    signal<IncidentResponse | null>(null);
+  sidePanelMode = signal<'charge' | 'waive'>('charge');
+  selectedIncident = signal<IncidentResponse | null>(null);
   chargeAmount = signal('');
   chargeReason = signal('');
   waiveReason = signal('');
@@ -110,30 +97,23 @@ export class AdminIncidentsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isDamagePage.set(
-      this.router.url ===
-        '/admin/incidents/damage',
-    );
+    this.isDamagePage.set(this.router.url === '/admin/incidents/damage');
     this.load();
   }
 
   load() {
     this.loading.set(true);
     const status =
-      this.filterStatus() === 'all'
-        ? undefined
-        : this.filterStatus();
-    this.incidentsService
-      .getAllIncidents(status)
-      .subscribe({
-        next: (data) => {
-          this.incidents.set(data);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.loading.set(false);
-        },
-      });
+      this.filterStatus() === 'all' ? undefined : this.filterStatus();
+    this.incidentsService.getAllIncidents(status).subscribe({
+      next: (data) => {
+        this.incidents.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
+    });
   }
 
   onFilterChange() {
@@ -224,49 +204,37 @@ export class AdminIncidentsComponent implements OnInit {
     }
   }
 
-  canTakeAction(
-    incident: IncidentResponse,
-  ): boolean {
+  canTakeAction(incident: IncidentResponse): boolean {
     return incident.incidentStatus === 'REPORTED';
   }
 
   verifyIncident(incident: IncidentResponse) {
-    this.incidentsService
-      .verifyIncident(incident.incidentId)
-      .subscribe({
-        next: () => {
-          this.message.set({
-            type: 'success',
-            text: 'Incident verified',
-          });
-          this.load();
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
-        },
-        error: (err) => {
-          this.message.set({
-            type: 'error',
-            text:
-              err.error?.message ||
-              'We couldn\'t verify this incident. Please try again in a moment.',
-          });
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
-        },
-      });
+    this.incidentsService.verifyIncident(incident.incidentId).subscribe({
+      next: () => {
+        this.message.set({
+          type: 'success',
+          text: 'Incident verified',
+        });
+        this.load();
+        setTimeout(() => this.message.set(null), 4000);
+      },
+      error: (err) => {
+        this.message.set({
+          type: 'error',
+          text:
+            err.error?.message ||
+            "We couldn't verify this incident. Please try again in a moment.",
+        });
+        setTimeout(() => this.message.set(null), 4000);
+      },
+    });
   }
 
   openChargePanel(incident: IncidentResponse) {
     this.selectedIncident.set(incident);
     this.sidePanelMode.set('charge');
     this.chargeAmount.set(
-      incident.chargeAmount
-        ? incident.chargeAmount.toString()
-        : '',
+      incident.chargeAmount ? incident.chargeAmount.toString() : '',
     );
     this.chargeReason.set('');
     this.showSidePanel.set(true);
@@ -300,18 +268,12 @@ export class AdminIncidentsComponent implements OnInit {
 
     this.processing.set(true);
     const request: IncidentActionRequest = {
-      chargeAmount: parseFloat(
-        this.chargeAmount(),
-      ),
-      reason:
-        this.chargeReason() || 'Incident charge',
+      chargeAmount: parseFloat(this.chargeAmount()),
+      reason: this.chargeReason() || 'Incident charge',
     };
 
     this.incidentsService
-      .chargeIncident(
-        incident.incidentId,
-        request,
-      )
+      .chargeIncident(incident.incidentId, request)
       .subscribe({
         next: () => {
           this.showSidePanel.set(false);
@@ -321,10 +283,7 @@ export class AdminIncidentsComponent implements OnInit {
             text: 'Charge applied successfully',
           });
           this.load();
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
+          setTimeout(() => this.message.set(null), 4000);
         },
         error: (err) => {
           this.processing.set(false);
@@ -332,12 +291,9 @@ export class AdminIncidentsComponent implements OnInit {
             type: 'error',
             text:
               err.error?.message ||
-              'We couldn\'t apply the charge. Please try again in a moment.',
+              "We couldn't apply the charge. Please try again in a moment.",
           });
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
+          setTimeout(() => this.message.set(null), 4000);
         },
       });
   }
@@ -349,9 +305,7 @@ export class AdminIncidentsComponent implements OnInit {
     this.processing.set(true);
     const request: IncidentActionRequest = {
       chargeAmount: 0,
-      reason:
-        this.waiveReason() ||
-        'Charge waived by admin',
+      reason: this.waiveReason() || 'Charge waived by admin',
     };
 
     this.incidentsService
@@ -365,10 +319,7 @@ export class AdminIncidentsComponent implements OnInit {
             text: 'Charge waived successfully',
           });
           this.load();
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
+          setTimeout(() => this.message.set(null), 4000);
         },
         error: (err) => {
           this.processing.set(false);
@@ -376,12 +327,9 @@ export class AdminIncidentsComponent implements OnInit {
             type: 'error',
             text:
               err.error?.message ||
-              'We couldn\'t waive the charge. Please try again in a moment.',
+              "We couldn't waive the charge. Please try again in a moment.",
           });
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
+          setTimeout(() => this.message.set(null), 4000);
         },
       });
   }

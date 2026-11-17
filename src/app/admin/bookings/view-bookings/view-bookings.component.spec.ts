@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ViewBookingsComponent } from './view-bookings.component.css';
 
 describe('ViewBookingsComponent', () => {
@@ -13,9 +10,7 @@ describe('ViewBookingsComponent', () => {
       imports: [ViewBookingsComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      ViewBookingsComponent,
-    );
+    fixture = TestBed.createComponent(ViewBookingsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

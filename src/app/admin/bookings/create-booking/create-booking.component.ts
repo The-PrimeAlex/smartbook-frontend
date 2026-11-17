@@ -1,13 +1,6 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { createLogger } from '../../../shared/services/logger.service';
-import {
-  Component,
-  OnInit,
-  inject,
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { finalize, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
@@ -25,10 +18,7 @@ import {
   LucideMonitor,
 } from '@lucide/angular';
 
-import {
-  PageBannerComponent,
-  IconComponent,
-} from '../../../shared/ui';
+import { PageBannerComponent, IconComponent } from '../../../shared/ui';
 
 interface Room {
   roomId: string;
@@ -47,28 +37,19 @@ interface BookingResponse {
 @Component({
   selector: 'app-create-booking',
   standalone: true,
-  imports: [
-    FormsModule,
-    CurrencyPipe,
-
-    PageBannerComponent,
-    IconComponent,
-  ],
+  imports: [FormsModule, CurrencyPipe, PageBannerComponent, IconComponent],
   templateUrl: './create-booking.component.html',
   styleUrl: './create-booking.component.css',
 })
 export class CreateBookingComponent implements OnInit {
-  private readonly log = createLogger(
-    'CreateBooking',
-  );
+  private readonly log = createLogger('CreateBooking');
   private readonly http = inject(HttpClient);
 
   readonly LucideAlertTriangle = LucideAlertTriangle;
   readonly LucideArrowDown = LucideArrowDown;
   readonly LucideArrowRight = LucideArrowRight;
   readonly LucideCalendar = LucideCalendar;
-  readonly LucideCalendarCheck =
-    LucideCalendarCheck;
+  readonly LucideCalendarCheck = LucideCalendarCheck;
   readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCircleHelp = LucideCircleHelp;
@@ -107,24 +88,15 @@ export class CreateBookingComponent implements OnInit {
 
   private formatDate(date: Date): string {
     const year = date.getFullYear();
-    const month = String(
-      date.getMonth() + 1,
-    ).padStart(2, '0');
-    const day = String(date.getDate()).padStart(
-      2,
-      '0',
-    );
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
 
   private formatTime(date: Date): string {
-    const hours = String(
-      date.getHours(),
-    ).padStart(2, '0');
-    const minutes = String(
-      date.getMinutes(),
-    ).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
 
     return `${hours}:${minutes}`;
   }
@@ -137,21 +109,11 @@ export class CreateBookingComponent implements OnInit {
     return this.formatTime(date);
   }
 
-  private addHours(
-    time: string,
-    hoursToAdd: number,
-  ): string {
-    const [hours, minutes] = time
-      .split(':')
-      .map(Number);
+  private addHours(time: string, hoursToAdd: number): string {
+    const [hours, minutes] = time.split(':').map(Number);
     const date = new Date();
 
-    date.setHours(
-      hours + hoursToAdd,
-      minutes,
-      0,
-      0,
-    );
+    date.setHours(hours + hoursToAdd, minutes, 0, 0);
 
     return this.formatTime(date);
   }
@@ -161,14 +123,8 @@ export class CreateBookingComponent implements OnInit {
     this.errorMessage = '';
 
     this.http
-      .get<Room[] | { content: Room[] }>(
-        '/api/v1/rooms',
-      )
-      .pipe(
-        finalize(
-          () => (this.loadingRooms = false),
-        ),
-      )
+      .get<Room[] | { content: Room[] }>('/api/v1/rooms')
+      .pipe(finalize(() => (this.loadingRooms = false)))
       .subscribe({
         next: (response) => {
           const roomList = Array.isArray(response)
@@ -176,9 +132,7 @@ export class CreateBookingComponent implements OnInit {
             : (response.content ?? []);
 
           this.rooms = roomList.filter(
-            (room) =>
-              !room.status ||
-              room.status === 'ACTIVE',
+            (room) => !room.status || room.status === 'ACTIVE',
           );
 
           if (this.rooms.length === 0) {
@@ -192,12 +146,9 @@ export class CreateBookingComponent implements OnInit {
               ? 'Your session has expired. Please sign in again.'
               : error.status === 403
                 ? 'You do not have permission to load rooms.'
-                : 'We couldn\'t load rooms. Please try again in a moment.';
+                : "We couldn't load rooms. Please try again in a moment.";
 
-          this.log.error(
-            'Failed to load rooms:',
-            error,
-          );
+          this.log.error('Failed to load rooms:', error);
         },
       });
   }
@@ -222,52 +173,35 @@ export class CreateBookingComponent implements OnInit {
     this.clearMessages();
   }
 
-  private combineDateAndTime(
-    date: string,
-    time: string,
-  ): Date | null {
+  private combineDateAndTime(date: string, time: string): Date | null {
     if (!date || !time) {
       return null;
     }
 
     const result = new Date(`${date}T${time}:00`);
 
-    return Number.isNaN(result.getTime())
-      ? null
-      : result;
+    return Number.isNaN(result.getTime()) ? null : result;
   }
 
   get startDateTime(): Date | null {
-    return this.combineDateAndTime(
-      this.startDate,
-      this.startTime,
-    );
+    return this.combineDateAndTime(this.startDate, this.startTime);
   }
 
   get endDateTime(): Date | null {
-    return this.combineDateAndTime(
-      this.endDate,
-      this.endTime,
-    );
+    return this.combineDateAndTime(this.endDate, this.endTime);
   }
 
   get invalidDateRange(): boolean {
     const start = this.startDateTime;
     const end = this.endDateTime;
 
-    return (
-      !!start &&
-      !!end &&
-      end.getTime() <= start.getTime()
-    );
+    return !!start && !!end && end.getTime() <= start.getTime();
   }
 
   get startIsInPast(): boolean {
     const start = this.startDateTime;
 
-    return (
-      !!start && start.getTime() <= Date.now()
-    );
+    return !!start && start.getTime() <= Date.now();
   }
 
   get durationMinutes(): number {
@@ -278,9 +212,7 @@ export class CreateBookingComponent implements OnInit {
       return 0;
     }
 
-    return Math.round(
-      (end.getTime() - start.getTime()) / 60000,
-    );
+    return Math.round((end.getTime() - start.getTime()) / 60000);
   }
 
   get durationLabel(): string {
@@ -305,9 +237,7 @@ export class CreateBookingComponent implements OnInit {
   }
 
   get selectedRoom(): Room | undefined {
-    return this.rooms.find(
-      (room) => room.roomId === this.roomId,
-    );
+    return this.rooms.find((room) => room.roomId === this.roomId);
   }
 
   private clearMessages(): void {
@@ -324,29 +254,21 @@ export class CreateBookingComponent implements OnInit {
     this.clearMessages();
 
     if (!this.roomId) {
-      this.errorMessage =
-        'Please select a meeting room.';
+      this.errorMessage = 'Please select a meeting room.';
       return;
     }
 
     if (!this.meetingTitle.trim()) {
-      this.errorMessage =
-        'Please enter a meeting title.';
+      this.errorMessage = 'Please enter a meeting title.';
       return;
     }
 
     if (!this.purpose.trim()) {
-      this.errorMessage =
-        'Please describe the purpose of the meeting.';
+      this.errorMessage = 'Please describe the purpose of the meeting.';
       return;
     }
 
-    if (
-      !this.startDate ||
-      !this.startTime ||
-      !this.endDate ||
-      !this.endTime
-    ) {
+    if (!this.startDate || !this.startTime || !this.endDate || !this.endTime) {
       this.errorMessage =
         'Please select both the start and end dates and times.';
       return;
@@ -356,8 +278,7 @@ export class CreateBookingComponent implements OnInit {
     const end = this.endDateTime;
 
     if (!start || !end) {
-      this.errorMessage =
-        'Please enter valid dates and times.';
+      this.errorMessage = 'Please enter valid dates and times.';
       return;
     }
 
@@ -383,22 +304,16 @@ export class CreateBookingComponent implements OnInit {
     this.saving = true;
 
     this.http
-      .get<unknown>(
-        '/api/v1/auth/csrf',
-      )
+      .get<unknown>('/api/v1/auth/csrf')
       .pipe(
         switchMap(() =>
-          this.http.post<BookingResponse>(
-            '/api/v1/bookings',
-            booking,
-          ),
+          this.http.post<BookingResponse>('/api/v1/bookings', booking),
         ),
       )
       .subscribe({
         next: () => {
           this.saving = false;
-          this.successMessage =
-            'Your booking has been submitted successfully.';
+          this.successMessage = 'Your booking has been submitted successfully.';
 
           this.meetingTitle = '';
           this.purpose = '';
@@ -407,10 +322,7 @@ export class CreateBookingComponent implements OnInit {
           this.startDate = this.getToday();
           this.endDate = this.getToday();
           this.startTime = this.getNextHour();
-          this.endTime = this.addHours(
-            this.startTime,
-            1,
-          );
+          this.endTime = this.addHours(this.startTime, 1);
         },
         error: (error: HttpErrorResponse) => {
           this.saving = false;
@@ -426,16 +338,12 @@ export class CreateBookingComponent implements OnInit {
             this.clearMessages();
             const body = error?.error;
             const message =
-              (typeof body === 'string'
-                ? body
-                : (body?.message ?? '')) || '';
+              (typeof body === 'string' ? body : (body?.message ?? '')) || '';
             this.conflictMessage =
               message ||
               'This time slot is already booked. Please choose a different time.';
             setTimeout(() => {
-              const el = document.querySelector(
-                '.conflict-alert',
-              );
+              const el = document.querySelector('.conflict-alert');
               if (el)
                 el.scrollIntoView({
                   behavior: 'smooth',
@@ -450,7 +358,7 @@ export class CreateBookingComponent implements OnInit {
             this.clearMessages();
             this.errorMessage =
               error.error?.message ||
-              'We couldn\'t create the booking. Please try again in a moment.';
+              "We couldn't create the booking. Please try again in a moment.";
           }
         },
       });

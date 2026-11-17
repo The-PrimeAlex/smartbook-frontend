@@ -1,10 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { createLogger } from '../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -63,56 +57,35 @@ import {
   styleUrl: './dashboard.component.css',
 })
 export class Dashboard implements OnInit {
-  private readonly log = createLogger(
-    'UserDashboard',
-  );
-  private readonly authService =
-    inject(AuthService);
-  private readonly bookingService = inject(
-    BookingService,
-  );
-  private readonly billingService = inject(
-    BillingService,
-  );
-  private readonly notificationService = inject(
-    NotificationService,
-  );
+  private readonly log = createLogger('UserDashboard');
+  private readonly authService = inject(AuthService);
+  private readonly bookingService = inject(BookingService);
+  private readonly billingService = inject(BillingService);
+  private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
 
-  protected readonly LucideCalendar =
-    LucideCalendar;
-  protected readonly LucideCreditCard =
-    LucideCreditCard;
-  protected readonly LucideFileText =
-    LucideFileText;
-  protected readonly LucideLayoutDashboard =
-    LucideLayoutDashboard;
+  protected readonly LucideCalendar = LucideCalendar;
+  protected readonly LucideCreditCard = LucideCreditCard;
+  protected readonly LucideFileText = LucideFileText;
+  protected readonly LucideLayoutDashboard = LucideLayoutDashboard;
   protected readonly LucideMapPin = LucideMapPin;
   protected readonly LucideMail = LucideMail;
-  protected readonly LucideMapPinned =
-    LucideMapPinned;
+  protected readonly LucideMapPinned = LucideMapPinned;
   protected readonly LucideBell = LucideBell;
   protected readonly LucideClock = LucideClock;
-  protected readonly LucideShieldCheck =
-    LucideShieldCheck;
+  protected readonly LucideShieldCheck = LucideShieldCheck;
   protected readonly LucideUsers = LucideUsers;
   protected readonly LucideSearch = LucideSearch;
-  protected readonly LucideSettings =
-    LucideSettings;
+  protected readonly LucideSettings = LucideSettings;
   protected readonly LucideX = LucideX;
-  protected readonly LucideChevronDown =
-    LucideChevronDown;
+  protected readonly LucideChevronDown = LucideChevronDown;
 
-  readonly currentUser =
-    this.authService.currentUser;
+  readonly currentUser = this.authService.currentUser;
 
   readonly fullName = computed(() => {
     const user = this.currentUser();
     if (!user) return 'Account';
-    return (
-      `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() ||
-      'Account'
-    );
+    return `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() || 'Account';
   });
 
   readonly initials = computed(() => {
@@ -124,18 +97,12 @@ export class Dashboard implements OnInit {
     );
   });
 
-  readonly email = computed(
-    () =>
-      this.currentUser()?.email ??
-      'Not available',
-  );
+  readonly email = computed(() => this.currentUser()?.email ?? 'Not available');
 
   // Data signals
   readonly bookings = signal<Booking[]>([]);
   readonly bills = signal<Bill[]>([]);
-  readonly notifications = signal<Notification[]>(
-    [],
-  );
+  readonly notifications = signal<Notification[]>([]);
   readonly loading = signal(true);
   readonly statsCollapsed = signal(true);
 
@@ -151,33 +118,20 @@ export class Dashboard implements OnInit {
         const startTime = new Date(b.startTime);
         return (
           startTime >= now &&
-          [
-            'PENDING',
-            'CONFIRMED',
-            'CHECKED_IN',
-          ].includes(b.bookingStatus)
+          ['PENDING', 'CONFIRMED', 'CHECKED_IN'].includes(b.bookingStatus)
         );
       })
       .sort(
         (a, b) =>
-          new Date(a.startTime).getTime() -
-          new Date(b.startTime).getTime(),
+          new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
       )
       .slice(0, 5);
   });
 
   readonly unpaidBills = computed(() => {
     return this.bills()
-      .filter(
-        (b) =>
-          b.billStatus !== 'PAID' &&
-          b.billStatus !== 'VOID',
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.dueAt).getTime() -
-          new Date(b.dueAt).getTime(),
-      )
+      .filter((b) => b.billStatus !== 'PAID' && b.billStatus !== 'VOID')
+      .sort((a, b) => new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime())
       .slice(0, 5);
   });
 
@@ -185,40 +139,24 @@ export class Dashboard implements OnInit {
     return this.notifications()
       .sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() -
-          new Date(a.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
       .slice(0, 5);
   });
 
   readonly unreadCount = computed(
-    () =>
-      this.notifications().filter(
-        (n) => !n.isRead,
-      ).length,
+    () => this.notifications().filter((n) => !n.isRead).length,
   );
 
-  readonly upcomingCount = computed(
-    () => this.upcomingBookings().length,
-  );
+  readonly upcomingCount = computed(() => this.upcomingBookings().length);
 
   readonly totalOutstanding = computed(() => {
     return this.bills()
-      .filter(
-        (b) =>
-          b.billStatus !== 'PAID' &&
-          b.billStatus !== 'VOID',
-      )
-      .reduce(
-        (sum, b) =>
-          sum + (b.totalAmount - b.amountPaid),
-        0,
-      );
+      .filter((b) => b.billStatus !== 'PAID' && b.billStatus !== 'VOID')
+      .reduce((sum, b) => sum + (b.totalAmount - b.amountPaid), 0);
   });
 
-  readonly totalBookings = computed(
-    () => this.bookings().length,
-  );
+  readonly totalBookings = computed(() => this.bookings().length);
 
   // Quick links
   readonly quickLinks = [
@@ -279,28 +217,21 @@ export class Dashboard implements OnInit {
           return of([]);
         }),
       ),
-      notifications: this.notificationService
-        .getNotifications(false)
-        .pipe(
-          catchError((err) => {
-            this.log.error('Error loading notifications:', err);
-            return of([]);
-          }),
-        ),
+      notifications: this.notificationService.getNotifications(false).pipe(
+        catchError((err) => {
+          this.log.error('Error loading notifications:', err);
+          return of([]);
+        }),
+      ),
     }).subscribe({
       next: (data) => {
         this.bookings.set(data.bookings);
         this.bills.set(data.bills);
-        this.notifications.set(
-          data.notifications,
-        );
+        this.notifications.set(data.notifications);
         this.loading.set(false);
       },
       error: (err) => {
-        this.log.error(
-          'Error loading dashboard data:',
-          err,
-        );
+        this.log.error('Error loading dashboard data:', err);
         this.loading.set(false);
       },
     });
@@ -348,9 +279,7 @@ export class Dashboard implements OnInit {
 
   getBillStatusLabel = getBillStatusLabel;
 
-  getNotificationIconClass(
-    eventType: string,
-  ): string {
+  getNotificationIconClass(eventType: string): string {
     switch (eventType) {
       case 'AUTO_CHECK_IN':
         return 'icon-checkin';
@@ -372,16 +301,14 @@ export class Dashboard implements OnInit {
   timeUntil(dateStr: string): string {
     const now = new Date();
     const target = new Date(dateStr);
-    const diffMs =
-      target.getTime() - now.getTime();
+    const diffMs = target.getTime() - now.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffMins < 1) return 'Starting now';
     if (diffMins < 60) return `In ${diffMins}m`;
-    if (diffHours < 24)
-      return `In ${diffHours}h ${diffMins % 60}m`;
+    if (diffHours < 24) return `In ${diffHours}h ${diffMins % 60}m`;
     return `In ${diffDays}d ${diffHours % 24}h`;
   }
 }

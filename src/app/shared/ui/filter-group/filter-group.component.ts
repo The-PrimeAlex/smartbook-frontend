@@ -1,8 +1,4 @@
-import {
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 export interface FilterOption {
   value: string;
@@ -14,16 +10,11 @@ export interface FilterOption {
   standalone: true,
   template: `
     <div class="filter-group" [class]="class()">
-      @for (
-        filter of filters();
-        track filter.value
-      ) {
+      @for (filter of filters(); track filter.value) {
         <button
           type="button"
           class="filter-btn"
-          [class.active]="
-            activeFilter() === filter.value
-          "
+          [class.active]="activeFilter() === filter.value"
           (click)="select.emit(filter.value)"
         >
           {{ filter.label }}

@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoomMonitoringAlComponent } from './room-monitoring-al.component.css';
 
 describe('RoomMonitoringAlComponent', () => {
@@ -13,9 +10,7 @@ describe('RoomMonitoringAlComponent', () => {
       imports: [RoomMonitoringAlComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      RoomMonitoringAlComponent,
-    );
+    fixture = TestBed.createComponent(RoomMonitoringAlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -10,41 +10,20 @@
   --t: var(--text-primary);
   --m: var(--text-secondary);
   --ok: var(--info);
-  --okb: linear-gradient(
-    135deg,
-    var(--info-bg),
-    var(--info-bg)
-  );
+  --okb: linear-gradient(135deg, var(--info-bg), var(--info-bg));
   --by: var(--warning);
-  --byb: linear-gradient(
-    135deg,
-    var(--warning-bg),
-    var(--warning-bg)
-  );
+  --byb: linear-gradient(135deg, var(--warning-bg), var(--warning-bg));
   --er: var(--danger);
-  --erb: linear-gradient(
-    135deg,
-    var(--danger-bg),
-    var(--danger-bg)
-  );
+  --erb: linear-gradient(135deg, var(--danger-bg), var(--danger-bg));
   --gr: var(--success);
-  --grb: linear-gradient(
-    135deg,
-    var(--success-bg),
-    var(--success-bg)
-  );
+  --grb: linear-gradient(135deg, var(--success-bg), var(--success-bg));
   --mt: var(--text-secondary);
-  --mtb: linear-gradient(
-    135deg,
-    var(--neutral-100),
-    var(--neutral-200)
-  );
+  --mtb: linear-gradient(135deg, var(--neutral-100), var(--neutral-200));
   display: block;
   min-height: 100%;
   color: var(--t);
   background: var(--app-layout-bg);
-  font-family:
-    Inter, 'Segoe UI', Arial, sans-serif;
+  font-family: Inter, 'Segoe UI', Arial, sans-serif;
   animation: fi 500ms ease both;
 }
 @keyframes fi {
@@ -174,11 +153,7 @@ button:focus-visible {
     transparent 1.5px
   );
   background-size: 16px 16px;
-  mask-image: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.5) 0%,
-    transparent 80%
-  );
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.5) 0%, transparent 80%);
   -webkit-mask-image: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.5) 0%,
@@ -229,11 +204,7 @@ button:focus-visible {
   width: 20px;
   height: 2px;
   border-radius: 99px;
-  background: linear-gradient(
-    90deg,
-    var(--brand-accent),
-    #ffd27a
-  );
+  background: linear-gradient(90deg, var(--brand-accent), #ffd27a);
   content: '';
 }
 .calendar-subtitle {
@@ -258,17 +229,12 @@ button:focus-visible {
   color: var(--w);
   font-weight: 750;
   font-size: 0.88rem;
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .btn-google,
 .btn-sync,
 .btn-disconnect {
-  background: linear-gradient(
-    135deg,
-    var(--o),
-    var(--od)
-  );
+  background: linear-gradient(135deg, var(--o), var(--od));
   box-shadow:
     0 4px 12px rgb(242 140 40 / 30%),
     inset 0 1px 0 rgb(255 255 255 / 20%);
@@ -287,11 +253,7 @@ button:focus-visible {
   transform: translateY(0);
 }
 .btn-disconnect {
-  background: linear-gradient(
-    135deg,
-    var(--er),
-    var(--er)
-  );
+  background: linear-gradient(135deg, var(--er), var(--er));
   box-shadow:
     0 4px 12px rgb(239 68 68 / 20%),
     inset 0 1px 0 rgb(255 255 255 / 15%);
@@ -310,8 +272,7 @@ button:focus-visible {
   color: var(--w);
   font-size: 0.82rem;
   font-weight: 700;
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .btn-small:hover:not(:disabled) {
   background: rgb(255 255 255 / 20);
@@ -415,8 +376,7 @@ button:focus-visible {
   color: var(--t);
   font-size: 0.82rem;
   font-weight: 700;
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .filter-chip::before {
   position: absolute;
@@ -443,11 +403,7 @@ button:focus-visible {
 .filter-chip.active {
   border-color: transparent;
   color: var(--white);
-  background: linear-gradient(
-    135deg,
-    var(--n),
-    var(--nl)
-  );
+  background: linear-gradient(135deg, var(--n), var(--nl));
   box-shadow:
     0 4px 12px var(--card-shadow),
     inset 0 1px 0 rgb(255 255 255 / 10%);
@@ -473,21 +429,14 @@ button:focus-visible {
 /* ── Modern calendar grid ── */
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(
-    7,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   border: 1px solid var(--border-color);
   border-radius: 16px;
   overflow: hidden;
 }
 .weekday-heading {
   padding: 14px 6px;
-  background: linear-gradient(
-    135deg,
-    var(--nd),
-    var(--n)
-  );
+  background: linear-gradient(135deg, var(--nd), var(--n));
   color: var(--white);
   font-size: 0.72rem;
   font-weight: 800;
@@ -527,21 +476,13 @@ button:focus-visible {
   color: var(--text-secondary);
 }
 .calendar-day.today {
-  background: linear-gradient(
-    135deg,
-    rgb(242 140 40 / 8%),
-    var(--ol)
-  );
+  background: linear-gradient(135deg, rgb(242 140 40 / 8%), var(--ol));
   box-shadow: inset 0 0 0 2px var(--o);
 }
 .calendar-day.selected {
   outline: 2px solid var(--o);
   outline-offset: -2px;
-  background: linear-gradient(
-    135deg,
-    rgb(242 140 40 / 12%),
-    var(--ol)
-  );
+  background: linear-gradient(135deg, rgb(242 140 40 / 12%), var(--ol));
 }
 .day-number {
   display: grid;
@@ -554,11 +495,7 @@ button:focus-visible {
   transition: all 200ms;
 }
 .calendar-day.today .day-number {
-  background: linear-gradient(
-    135deg,
-    var(--o),
-    var(--od)
-  );
+  background: linear-gradient(135deg, var(--o), var(--od));
   color: var(--white);
   box-shadow: 0 2px 8px rgb(242 140 40 / 30%);
 }
@@ -589,10 +526,7 @@ button:focus-visible {
 /* ── Week grid ── */
 .week-grid {
   display: grid;
-  grid-template-columns: repeat(
-    7,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 12px;
 }
 .week-day {
@@ -608,8 +542,7 @@ button:focus-visible {
   border-radius: 14px;
   background: var(--card-bg);
   color: var(--t);
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .week-day::before {
   position: absolute;
@@ -618,11 +551,7 @@ button:focus-visible {
   width: 4px;
   height: 100%;
   content: '';
-  background: linear-gradient(
-    180deg,
-    var(--o),
-    #ffd27a
-  );
+  background: linear-gradient(180deg, var(--o), #ffd27a);
   opacity: 0;
   transition: opacity 200ms;
   border-radius: 0 4px 0 0;
@@ -637,19 +566,11 @@ button:focus-visible {
 }
 .week-day.today {
   border-color: var(--o);
-  background: linear-gradient(
-    135deg,
-    rgb(242 140 40 / 8%),
-    var(--ol)
-  );
+  background: linear-gradient(135deg, rgb(242 140 40 / 8%), var(--ol));
 }
 .week-day.selected {
   border-color: var(--n);
-  background: linear-gradient(
-    135deg,
-    var(--n),
-    var(--nl)
-  );
+  background: linear-gradient(135deg, var(--n), var(--nl));
   color: var(--white);
 }
 .week-day.selected .week-day-name {
@@ -684,11 +605,7 @@ button:focus-visible {
 .agenda-count {
   padding: 7px 14px;
   border-radius: 999px;
-  background: linear-gradient(
-    135deg,
-    var(--ol),
-    var(--brand-accent-light)
-  );
+  background: linear-gradient(135deg, var(--ol), var(--brand-accent-light));
   color: var(--od);
   font-size: 0.78rem;
   font-weight: 800;
@@ -741,11 +658,7 @@ button:focus-visible {
   width: 3px;
   height: 100%;
   border-radius: 3px;
-  background: linear-gradient(
-    180deg,
-    var(--o),
-    #ffd27a
-  );
+  background: linear-gradient(180deg, var(--o), #ffd27a);
   opacity: 0;
   transition: opacity 200ms;
 }
@@ -806,47 +719,27 @@ button:focus-visible {
 }
 .status-confirmed {
   color: var(--success);
-  background: linear-gradient(
-    135deg,
-    var(--success-bg),
-    var(--success-bg)
-  );
+  background: linear-gradient(135deg, var(--success-bg), var(--success-bg));
   border-color: var(--success-border);
 }
 .status-pending {
   color: var(--warning);
-  background: linear-gradient(
-    135deg,
-    var(--warning-bg),
-    var(--warning-bg)
-  );
+  background: linear-gradient(135deg, var(--warning-bg), var(--warning-bg));
   border-color: var(--warning-border);
 }
 .status-cancelled {
   color: var(--danger);
-  background: linear-gradient(
-    135deg,
-    var(--danger-bg),
-    var(--danger-bg)
-  );
+  background: linear-gradient(135deg, var(--danger-bg), var(--danger-bg));
   border-color: var(--danger-border);
 }
 .source-pill {
   color: var(--text-secondary);
-  background: linear-gradient(
-    135deg,
-    var(--neutral-100),
-    var(--neutral-200)
-  );
+  background: linear-gradient(135deg, var(--neutral-100), var(--neutral-200));
   border-color: var(--border-color);
 }
 .source-google {
   color: var(--info);
-  background: linear-gradient(
-    135deg,
-    var(--info-bg),
-    var(--info-bg)
-  );
+  background: linear-gradient(135deg, var(--info-bg), var(--info-bg));
   border-color: var(--info-border);
 }
 .event-link {
@@ -859,8 +752,7 @@ button:focus-visible {
   white-space: nowrap;
   padding: 6px 12px;
   border-radius: 8px;
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .event-link:hover {
   background: var(--ol);
@@ -919,10 +811,7 @@ button:focus-visible {
     padding: 14px;
   }
   .calendar-grid {
-    grid-template-columns: repeat(
-      7,
-      minmax(0, 1fr)
-    );
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
   .weekday-heading {
     padding: 8px 2px;
@@ -944,10 +833,7 @@ button:focus-visible {
     font-size: 8px;
   }
   .week-grid {
-    grid-template-columns: repeat(
-      7,
-      minmax(0, 1fr)
-    );
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 3px;
   }
   .week-day {

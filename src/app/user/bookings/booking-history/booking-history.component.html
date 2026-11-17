@@ -5,18 +5,9 @@
     title="Booking History"
     description="View your past completed bookings and no-show records."
   >
-    <button
-      type="button"
-      [disabled]="loading()"
-      (click)="loadBookings()"
-    >
-      <app-icon
-        [icon]="LucideRefreshCw"
-        [size]="14"
-      ></app-icon>
-      {{
-        loading() ? 'Refreshing...' : 'Refresh'
-      }}
+    <button type="button" [disabled]="loading()" (click)="loadBookings()">
+      <app-icon [icon]="LucideRefreshCw" [size]="14"></app-icon>
+      {{ loading() ? 'Refreshing...' : 'Refresh' }}
     </button>
   </app-page-banner>
 
@@ -34,27 +25,16 @@
     </div>
   }
 
-  <section
-    class="stats-grid"
-    aria-label="Booking statistics"
-  >
-    <app-stat-card
-      [icon]="LucideCalendar"
-    >
+  <section class="stats-grid" aria-label="Booking statistics">
+    <app-stat-card [icon]="LucideCalendar">
       <span stat-value>{{ totalCount() }}</span>
       <span stat-label>Total</span>
     </app-stat-card>
-    <app-stat-card
-      [icon]="LucideCheckCircle2"
-    >
-      <span stat-value>{{
-        completedCount()
-      }}</span>
+    <app-stat-card [icon]="LucideCheckCircle2">
+      <span stat-value>{{ completedCount() }}</span>
       <span stat-label>Completed</span>
     </app-stat-card>
-    <app-stat-card
-      [icon]="LucideXCircle"
-    >
+    <app-stat-card [icon]="LucideXCircle">
       <span stat-value>{{ noShowCount() }}</span>
       <span stat-label>No Shows</span>
     </app-stat-card>
@@ -64,27 +44,18 @@
     <div class="section-heading">
       <div>
         <h2>Your past reservations</h2>
-        <p>
-          Completed bookings and no-show records.
-        </p>
+        <p>Completed bookings and no-show records.</p>
       </div>
 
       <span class="result-count">
         {{ historyBookings().length }}
-        {{
-          historyBookings().length === 1
-            ? 'booking'
-            : 'bookings'
-        }}
+        {{ historyBookings().length === 1 ? 'booking' : 'bookings' }}
       </span>
     </div>
 
     @if (loading() && bookings().length === 0) {
       <div class="state-panel" role="status">
-        <span
-          class="loading-spinner"
-          aria-hidden="true"
-        ></span>
+        <span class="loading-spinner" aria-hidden="true"></span>
         <p>Loading your booking history...</p>
       </div>
     } @else if (historyBookings().length === 0) {
@@ -95,84 +66,47 @@
       ></app-empty-state>
     } @else {
       <div class="booking-list">
-        @for (
-          booking of historyBookings();
-          track booking.bookingId
-        ) {
+        @for (booking of historyBookings(); track booking.bookingId) {
           <article class="booking-card">
             <div class="booking-main">
               <div class="booking-title-row">
-                <div
-                  class="room-icon"
-                  aria-hidden="true"
-                >
-                  <app-icon
-                    [icon]="LucideHome"
-                    [size]="20"
-                  ></app-icon>
+                <div class="room-icon" aria-hidden="true">
+                  <app-icon [icon]="LucideHome" [size]="20"></app-icon>
                 </div>
 
                 <div class="booking-title">
                   <h3>{{ booking.roomName }}</h3>
                   <p class="booking-reference">
-                    Booking #{{
-                      booking.bookingId
-                    }}
+                    Booking #{{ booking.bookingId }}
                   </p>
                 </div>
 
                 <app-status-badge
-                  [label]="
-                    statusLabel(
-                      booking.bookingStatus
-                    )
-                  "
-                  [variant]="
-                    getBadgeVariant(
-                      booking.bookingStatus
-                    )
-                  "
+                  [label]="statusLabel(booking.bookingStatus)"
+                  [variant]="getBadgeVariant(booking.bookingStatus)"
                 ></app-status-badge>
               </div>
 
               <div class="booking-details">
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >Start time</span
-                  >
+                  <span class="detail-label">Start time</span>
                   <span class="detail-value">
-                    {{
-                      booking.startTime
-                        | date: 'medium'
-                    }}
+                    {{ booking.startTime | date: 'medium' }}
                   </span>
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >End time</span
-                  >
+                  <span class="detail-label">End time</span>
                   <span class="detail-value">
-                    {{
-                      booking.endTime
-                        | date: 'medium'
-                    }}
+                    {{ booking.endTime | date: 'medium' }}
                   </span>
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >Hourly rate</span
-                  >
+                  <span class="detail-label">Hourly rate</span>
                   <span class="detail-value">
-                    @if (
-                      booking.bookedHourlyRate !==
-                      null
-                    ) {
-                      {{
-                        booking.bookedHourlyRate
-                          | currency
-                      }}
+                    @if (booking.bookedHourlyRate !== null) {
+                      {{ booking.bookedHourlyRate | currency }}
                     } @else {
                       Not specified
                     }
@@ -180,28 +114,19 @@
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >Booked by</span
-                  >
-                  <span class="detail-value">{{
-                    booking.userName
-                  }}</span>
+                  <span class="detail-label">Booked by</span>
+                  <span class="detail-value">{{ booking.userName }}</span>
                 </div>
               </div>
 
               <div class="purpose-block">
-                <span class="detail-label"
-                  >Purpose</span
-                >
+                <span class="detail-label">Purpose</span>
                 <p>{{ booking.purpose }}</p>
               </div>
             </div>
 
             <div class="booking-actions">
-              @if (
-                booking.bookingStatus ===
-                'COMPLETED'
-              ) {
+              @if (booking.bookingStatus === 'COMPLETED') {
                 <span class="completed-note">
                   <app-icon
                     [icon]="LucideCheckCircle2"
@@ -212,13 +137,9 @@
                 </span>
               }
 
-              @if (
-                booking.bookingStatus ===
-                'NO_SHOW'
-              ) {
+              @if (booking.bookingStatus === 'NO_SHOW') {
                 <span class="terminal-note">
-                  This booking was marked as a
-                  no-show.
+                  This booking was marked as a no-show.
                 </span>
               }
             </div>

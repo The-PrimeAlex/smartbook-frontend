@@ -12,9 +12,7 @@
     </div>
   }
   @if (saved()) {
-    <div class="notice notice-success">
-      Room updated successfully.
-    </div>
+    <div class="notice notice-success">Room updated successfully.</div>
   }
 
   @if (loading()) {
@@ -53,16 +51,16 @@
       <app-empty-state
         [icon]="LucideSearch"
         title="No Matching Rooms"
-        [message]="'No rooms match &quot;' + searchQuery() + '&quot;. Try a different search term.'"
+        [message]="
+          'No rooms match &quot;' +
+          searchQuery() +
+          '&quot;. Try a different search term.'
+        "
       ></app-empty-state>
     } @else {
       <!-- Room Cards Grid -->
       <div class="rooms-grid">
-        @for (
-          room of filteredRooms();
-          track room.roomId;
-          let i = $index
-        ) {
+        @for (room of filteredRooms(); track room.roomId; let i = $index) {
           <article
             class="room-card"
             [class.selected]="selectedRoom()?.roomId === room.roomId"
@@ -71,12 +69,20 @@
           >
             <!-- Card Header -->
             <div class="room-card-header">
-              <div class="room-icon-badge" [class]="getStatusClass(room.status)">
-                <app-icon [icon]="getRoomTypeIcon(room.roomType)" [size]="20"></app-icon>
+              <div
+                class="room-icon-badge"
+                [class]="getStatusClass(room.status)"
+              >
+                <app-icon
+                  [icon]="getRoomTypeIcon(room.roomType)"
+                  [size]="20"
+                ></app-icon>
               </div>
               <div class="room-title-block">
                 <h3 class="room-title">{{ room.roomName }}</h3>
-                <span class="room-type-tag">{{ formatRoomType(room.roomType) }}</span>
+                <span class="room-type-tag">{{
+                  formatRoomType(room.roomType)
+                }}</span>
               </div>
               <span class="status-pill" [class]="getStatusClass(room.status)">
                 <span class="status-dot"></span>
@@ -122,7 +128,12 @@
             <span class="modal-eyebrow">CONFIGURE ROOM</span>
             <h2>{{ selectedRoom()!.roomName }}</h2>
           </div>
-          <button type="button" class="modal-close" (click)="closeEditPanel()" aria-label="Close">
+          <button
+            type="button"
+            class="modal-close"
+            (click)="closeEditPanel()"
+            aria-label="Close"
+          >
             <app-icon [icon]="LucideX" [size]="20"></app-icon>
           </button>
         </div>
@@ -133,17 +144,25 @@
             <!-- View Mode -->
             <div class="detail-grid">
               <div class="detail-item">
-                <app-icon [icon]="getRoomTypeIcon(selectedRoom()!.roomType)" [size]="18"></app-icon>
+                <app-icon
+                  [icon]="getRoomTypeIcon(selectedRoom()!.roomType)"
+                  [size]="18"
+                ></app-icon>
                 <div class="detail-text">
                   <span class="detail-label">Room Type</span>
-                  <span class="detail-value">{{ formatRoomType(selectedRoom()!.roomType) }}</span>
+                  <span class="detail-value">{{
+                    formatRoomType(selectedRoom()!.roomType)
+                  }}</span>
                 </div>
               </div>
               <div class="detail-item">
                 <app-icon [icon]="LucideCheck" [size]="18"></app-icon>
                 <div class="detail-text">
                   <span class="detail-label">Status</span>
-                  <span class="status-pill" [class]="getStatusClass(selectedRoom()!.status)">
+                  <span
+                    class="status-pill"
+                    [class]="getStatusClass(selectedRoom()!.status)"
+                  >
                     <span class="status-dot"></span>
                     {{ formatStatus(selectedRoom()!.status) }}
                   </span>
@@ -153,14 +172,18 @@
                 <app-icon [icon]="LucideUsers" [size]="18"></app-icon>
                 <div class="detail-text">
                   <span class="detail-label">Capacity</span>
-                  <span class="detail-value">{{ selectedRoom()!.capacity }} people</span>
+                  <span class="detail-value"
+                    >{{ selectedRoom()!.capacity }} people</span
+                  >
                 </div>
               </div>
               <div class="detail-item">
                 <app-icon [icon]="LucideCheck" [size]="18"></app-icon>
                 <div class="detail-text">
                   <span class="detail-label">Hourly Rate</span>
-                  <span class="detail-value rate">KES {{ selectedRoom()!.hourlyRate.toLocaleString() }}</span>
+                  <span class="detail-value rate"
+                    >KES {{ selectedRoom()!.hourlyRate.toLocaleString() }}</span
+                  >
                 </div>
               </div>
               @if (selectedRoom()!.description) {
@@ -168,13 +191,19 @@
                   <app-icon [icon]="LucideLayoutGrid" [size]="18"></app-icon>
                   <div class="detail-text">
                     <span class="detail-label">Description</span>
-                    <span class="detail-value">{{ selectedRoom()!.description }}</span>
+                    <span class="detail-value">{{
+                      selectedRoom()!.description
+                    }}</span>
                   </div>
                 </div>
               }
             </div>
             <div class="modal-actions">
-              <button type="button" class="btn btn-primary" (click)="startEditing()">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="startEditing()"
+              >
                 <app-icon [icon]="LucidePencil" [size]="16"></app-icon>
                 Edit Room
               </button>
@@ -241,7 +270,11 @@
               </div>
 
               <div class="modal-actions">
-                <button type="button" class="btn btn-ghost" (click)="cancelEditing()">
+                <button
+                  type="button"
+                  class="btn btn-ghost"
+                  (click)="cancelEditing()"
+                >
                   Cancel
                 </button>
                 <button

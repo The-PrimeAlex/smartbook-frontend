@@ -1,9 +1,4 @@
-import {
-  Component,
-  computed,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs';
 import {
@@ -39,8 +34,7 @@ import { formatDateTime } from '../../../shared/directives';
   styleUrl: './usage-charges.component.css',
 })
 export class UsageChargesComponent implements OnInit {
-  readonly LucideAlertTriangle =
-    LucideAlertTriangle;
+  readonly LucideAlertTriangle = LucideAlertTriangle;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideUser = LucideUser;
@@ -53,31 +47,18 @@ export class UsageChargesComponent implements OnInit {
     this.statsCollapsed.update((v) => !v);
   }
 
-  readonly totalUsage = computed(
-    () => this.usage().length,
-  );
+  readonly totalUsage = computed(() => this.usage().length);
   readonly totalDuration = computed(() =>
-    this.usage().reduce(
-      (sum, u) =>
-        sum + (u.actualDurationMinutes || 0),
-      0,
-    ),
+    this.usage().reduce((sum, u) => sum + (u.actualDurationMinutes || 0), 0),
   );
   readonly totalOverrun = computed(() =>
-    this.usage().reduce(
-      (sum, u) => sum + (u.overrunMinutes || 0),
-      0,
-    ),
+    this.usage().reduce((sum, u) => sum + (u.overrunMinutes || 0), 0),
   );
   readonly autoClosedCount = computed(
-    () =>
-      this.usage().filter((u) => u.autoClosed)
-        .length,
+    () => this.usage().filter((u) => u.autoClosed).length,
   );
 
-  constructor(
-    private billingService: AdminBillingService,
-  ) {}
+  constructor(private billingService: AdminBillingService) {}
 
   ngOnInit(): void {
     this.loadUsage();
@@ -87,9 +68,7 @@ export class UsageChargesComponent implements OnInit {
     this.loading.set(true);
     this.billingService
       .getAllUsage()
-      .pipe(
-        finalize(() => this.loading.set(false)),
-      )
+      .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (data) => this.usage.set(data),
         error: () => this.loading.set(false),
@@ -103,6 +82,5 @@ export class UsageChargesComponent implements OnInit {
     return h > 0 ? `${h}h ${m}m` : `${m}m`;
   }
 
-  formatDateTime = (v: string | null) =>
-    v ? formatDateTime(v) : '—';
+  formatDateTime = (v: string | null) => (v ? formatDateTime(v) : '—');
 }

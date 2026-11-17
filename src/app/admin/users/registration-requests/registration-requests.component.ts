@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  signal,
-  computed,
-} from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   RegistrationRequestsService,
@@ -49,14 +44,11 @@ import {
     FilterGroupComponent,
     PageBannerComponent,
   ],
-  templateUrl:
-    './registration-requests.component.html',
-  styleUrl:
-    './registration-requests.component.css',
+  templateUrl: './registration-requests.component.html',
+  styleUrl: './registration-requests.component.css',
 })
 export class RegistrationRequestsComponent implements OnInit {
-  private readonly service =
-    new RegistrationRequestsService();
+  private readonly service = new RegistrationRequestsService();
 
   readonly LucideMail = LucideMail;
   readonly LucideClock = LucideClock;
@@ -88,26 +80,15 @@ export class RegistrationRequestsComponent implements OnInit {
     return all.filter((r) => r.status === filter);
   });
 
-  totalCount = computed(
-    () => this.requests().length,
-  );
+  totalCount = computed(() => this.requests().length);
   pendingCount = computed(
-    () =>
-      this.requests().filter(
-        (r) => r.status === 'PENDING',
-      ).length,
+    () => this.requests().filter((r) => r.status === 'PENDING').length,
   );
   approvedCount = computed(
-    () =>
-      this.requests().filter(
-        (r) => r.status === 'APPROVED',
-      ).length,
+    () => this.requests().filter((r) => r.status === 'APPROVED').length,
   );
   rejectedCount = computed(
-    () =>
-      this.requests().filter(
-        (r) => r.status === 'REJECTED',
-      ).length,
+    () => this.requests().filter((r) => r.status === 'REJECTED').length,
   );
 
   ngOnInit() {
@@ -117,9 +98,7 @@ export class RegistrationRequestsComponent implements OnInit {
   loadRequests() {
     this.loading.set(true);
     const filter =
-      this.selectedFilter() === 'ALL'
-        ? undefined
-        : this.selectedFilter();
+      this.selectedFilter() === 'ALL' ? undefined : this.selectedFilter();
     this.service.getRequests(filter).subscribe({
       next: (data) => {
         this.requests.set(data);
@@ -139,58 +118,48 @@ export class RegistrationRequestsComponent implements OnInit {
 
   approveRequest(request: RegistrationRequest) {
     this.processingId.set(request.requestId);
-    this.service
-      .approveRequest(request.requestId)
-      .subscribe({
-        next: () => {
-          this.requests.update((reqs) =>
-            reqs.map((r) =>
-              r.requestId === request.requestId
-                ? { ...r, status: 'APPROVED' }
-                : r,
-            ),
-          );
-          this.successMessage.set(
-            `Request approved for ${request.firstName} ${request.lastName}`,
-          );
-          this.processingId.set(null);
-          setTimeout(
-            () => this.successMessage.set(''),
-            3000,
-          );
-        },
-        error: () => {
-          this.processingId.set(null);
-        },
-      });
+    this.service.approveRequest(request.requestId).subscribe({
+      next: () => {
+        this.requests.update((reqs) =>
+          reqs.map((r) =>
+            r.requestId === request.requestId
+              ? { ...r, status: 'APPROVED' }
+              : r,
+          ),
+        );
+        this.successMessage.set(
+          `Request approved for ${request.firstName} ${request.lastName}`,
+        );
+        this.processingId.set(null);
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: () => {
+        this.processingId.set(null);
+      },
+    });
   }
 
   rejectRequest(request: RegistrationRequest) {
     this.processingId.set(request.requestId);
-    this.service
-      .rejectRequest(request.requestId)
-      .subscribe({
-        next: () => {
-          this.requests.update((reqs) =>
-            reqs.map((r) =>
-              r.requestId === request.requestId
-                ? { ...r, status: 'REJECTED' }
-                : r,
-            ),
-          );
-          this.successMessage.set(
-            `Request rejected for ${request.firstName} ${request.lastName}`,
-          );
-          this.processingId.set(null);
-          setTimeout(
-            () => this.successMessage.set(''),
-            3000,
-          );
-        },
-        error: () => {
-          this.processingId.set(null);
-        },
-      });
+    this.service.rejectRequest(request.requestId).subscribe({
+      next: () => {
+        this.requests.update((reqs) =>
+          reqs.map((r) =>
+            r.requestId === request.requestId
+              ? { ...r, status: 'REJECTED' }
+              : r,
+          ),
+        );
+        this.successMessage.set(
+          `Request rejected for ${request.firstName} ${request.lastName}`,
+        );
+        this.processingId.set(null);
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: () => {
+        this.processingId.set(null);
+      },
+    });
   }
 
   getStatusClass(status: string): string {

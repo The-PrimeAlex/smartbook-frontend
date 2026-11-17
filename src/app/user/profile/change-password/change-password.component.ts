@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../../shared/ui';
-import {
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -17,23 +13,15 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { PageBannerComponent } from '../../../shared/ui';
 import { resetPasswordChangeRedirected } from '../../../core/http/auth.interceptor';
 
-function passwordsMatch(
-  control: AbstractControl,
-): ValidationErrors | null {
-  const newPassword = control.get(
-    'newPassword',
-  )?.value;
-  const confirmPassword = control.get(
-    'confirmPassword',
-  )?.value;
+function passwordsMatch(control: AbstractControl): ValidationErrors | null {
+  const newPassword = control.get('newPassword')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
 
   if (!newPassword || !confirmPassword) {
     return null;
   }
 
-  return newPassword === confirmPassword
-    ? null
-    : { passwordsMismatch: true };
+  return newPassword === confirmPassword ? null : { passwordsMismatch: true };
 }
 
 @Component({
@@ -50,8 +38,7 @@ function passwordsMatch(
   styleUrl: './change-password.component.css',
 })
 export class ChangePasswordComponent {
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
 
   readonly LucideLock = LucideLock;
@@ -64,27 +51,14 @@ export class ChangePasswordComponent {
   readonly showNewPassword = signal(false);
   readonly showConfirmPassword = signal(false);
 
-  readonly passwordForm =
-    this.fb.nonNullable.group(
-      {
-        currentPassword: [
-          '',
-          Validators.required,
-        ],
-        newPassword: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(12),
-          ],
-        ],
-        confirmPassword: [
-          '',
-          Validators.required,
-        ],
-      },
-      { validators: passwordsMatch },
-    );
+  readonly passwordForm = this.fb.nonNullable.group(
+    {
+      currentPassword: ['', Validators.required],
+      newPassword: ['', [Validators.required, Validators.minLength(12)]],
+      confirmPassword: ['', Validators.required],
+    },
+    { validators: passwordsMatch },
+  );
 
   changePassword(): void {
     this.successMessage.set('');
@@ -95,8 +69,7 @@ export class ChangePasswordComponent {
       return;
     }
 
-    const { currentPassword, newPassword } =
-      this.passwordForm.getRawValue();
+    const { currentPassword, newPassword } = this.passwordForm.getRawValue();
 
     this.loading.set(true);
 
@@ -127,10 +100,9 @@ export class ChangePasswordComponent {
             typeof error.error === 'object' &&
             error.error !== null &&
             'message' in error.error &&
-            typeof error.error.message ===
-              'string'
+            typeof error.error.message === 'string'
               ? error.error.message
-              : 'We couldn\'t change your password. Please check your current password and try again.';
+              : "We couldn't change your password. Please check your current password and try again.";
 
           this.errorMessage.set(message);
         },

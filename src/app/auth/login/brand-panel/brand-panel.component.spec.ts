@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrandPanelComponent } from './brand-panel.component';
 
 describe('BrandPanelComponent', () => {
@@ -13,9 +10,7 @@ describe('BrandPanelComponent', () => {
       imports: [BrandPanelComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      BrandPanelComponent,
-    );
+    fixture = TestBed.createComponent(BrandPanelComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

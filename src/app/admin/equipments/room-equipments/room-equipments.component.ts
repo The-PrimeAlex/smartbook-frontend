@@ -1,9 +1,4 @@
-import {
-  Component,
-  HostListener,
-  OnInit,
-  inject,
-} from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { createLogger } from '../../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import {
@@ -65,9 +60,7 @@ export interface RoomCardData {
   styleUrl: './room-equipments.component.css',
 })
 export class RoomEquipmentComponent implements OnInit {
-  private readonly log = createLogger(
-    'RoomEquipments',
-  );
+  private readonly log = createLogger('RoomEquipments');
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideHash = LucideHash;
@@ -80,11 +73,8 @@ export class RoomEquipmentComponent implements OnInit {
   readonly LucideX = LucideX;
 
   private readonly fb = inject(FormBuilder);
-  private readonly roomService =
-    inject(RoomService);
-  private readonly equipmentService = inject(
-    RoomEquipmentService,
-  );
+  private readonly roomService = inject(RoomService);
+  private readonly equipmentService = inject(RoomEquipmentService);
 
   roomCards: RoomCardData[] = [];
 
@@ -109,31 +99,12 @@ export class RoomEquipmentComponent implements OnInit {
     'RETIRED',
   ];
 
-  readonly equipmentForm =
-    this.fb.nonNullable.group({
-      equipmentName: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(100),
-        ],
-      ],
-      assetCode: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(50),
-        ],
-      ],
-      description: [
-        '',
-        [Validators.maxLength(500)],
-      ],
-      status: [
-        'ACTIVE' as RoomEquipmentStatus,
-        Validators.required,
-      ],
-    });
+  readonly equipmentForm = this.fb.nonNullable.group({
+    equipmentName: ['', [Validators.required, Validators.maxLength(100)]],
+    assetCode: ['', [Validators.required, Validators.maxLength(50)]],
+    description: ['', [Validators.maxLength(500)]],
+    status: ['ACTIVE' as RoomEquipmentStatus, Validators.required],
+  });
 
   ngOnInit(): void {
     this.loadAllRooms();
@@ -143,27 +114,19 @@ export class RoomEquipmentComponent implements OnInit {
     let result = this.roomCards;
 
     // Apply search filter
-    const query = this.searchTerm
-      .trim()
-      .toLowerCase();
+    const query = this.searchTerm.trim().toLowerCase();
     if (query) {
       result = result.filter(
         (card) =>
-          card.room.roomName
-            .toLowerCase()
-            .includes(query) ||
-          card.room.roomType
-            .toLowerCase()
-            .includes(query),
+          card.room.roomName.toLowerCase().includes(query) ||
+          card.room.roomType.toLowerCase().includes(query),
       );
     }
 
     // Apply status filter
     if (this.filterStatus !== 'ALL') {
       result = result.filter((card) =>
-        card.equipment.some(
-          (eq) => eq.status === this.filterStatus,
-        ),
+        card.equipment.some((eq) => eq.status === this.filterStatus),
       );
     }
 
@@ -171,19 +134,13 @@ export class RoomEquipmentComponent implements OnInit {
   }
 
   get totalEquipment(): number {
-    return this.roomCards.reduce(
-      (sum, card) => sum + card.equipment.length,
-      0,
-    );
+    return this.roomCards.reduce((sum, card) => sum + card.equipment.length, 0);
   }
 
   get totalActive(): number {
     return this.roomCards.reduce(
       (sum, card) =>
-        sum +
-        card.equipment.filter(
-          (eq) => eq.status === 'ACTIVE',
-        ).length,
+        sum + card.equipment.filter((eq) => eq.status === 'ACTIVE').length,
       0,
     );
   }
@@ -192,9 +149,7 @@ export class RoomEquipmentComponent implements OnInit {
     return this.roomCards.reduce(
       (sum, card) =>
         sum +
-        card.equipment.filter(
-          (eq) => eq.status === 'OUT_OF_SERVICE',
-        ).length,
+        card.equipment.filter((eq) => eq.status === 'OUT_OF_SERVICE').length,
       0,
     );
   }
@@ -207,53 +162,36 @@ export class RoomEquipmentComponent implements OnInit {
       .getRooms()
       .pipe(
         timeout(15000),
-        finalize(
-          () => (this.loadingRooms = false),
-        ),
+        finalize(() => (this.loadingRooms = false)),
       )
       .subscribe({
         next: (rooms) => {
           const roomList = rooms ?? [];
-          this.roomCards = roomList.map(
-            (room) => ({
-              room,
-              equipment: [] as RoomEquipment[],
-              loading: true,
-            }),
-          );
+          this.roomCards = roomList.map((room) => ({
+            room,
+            equipment: [] as RoomEquipment[],
+            loading: true,
+          }));
 
           // Eagerly load equipment for all rooms in parallel
           if (roomList.length > 0) {
-            const equipmentRequests =
-              roomList.map((room) =>
-                this.roomService.getRoomDetails(
-                  room.roomId,
-                ),
-              );
+            const equipmentRequests = roomList.map((room) =>
+              this.roomService.getRoomDetails(room.roomId),
+            );
 
             forkJoin(equipmentRequests).subscribe({
               next: (detailsList) => {
-                detailsList.forEach(
-                  (details, index) => {
-                    const card =
-                      this.roomCards[index];
-                    if (card) {
-                      card.equipment =
-                        details.equipment ?? [];
-                      card.loading = false;
-                    }
-                  },
-                );
+                detailsList.forEach((details, index) => {
+                  const card = this.roomCards[index];
+                  if (card) {
+                    card.equipment = details.equipment ?? [];
+                    card.loading = false;
+                  }
+                });
               },
               error: (error) => {
-                this.log.error(
-                  'Failed to load some room equipment:',
-                  error,
-                );
-                this.roomCards.forEach(
-                  (card) =>
-                    (card.loading = false),
-                );
+                this.log.error('Failed to load some room equipment:', error);
+                this.roomCards.forEach((card) => (card.loading = false));
               },
             });
           }
@@ -262,53 +200,37 @@ export class RoomEquipmentComponent implements OnInit {
           this.loadingRooms = false;
           this.errorMessage =
             error.message ||
-            'We couldn\'t load rooms. Please try again in a moment.';
+            "We couldn't load rooms. Please try again in a moment.";
           this.roomCards = [];
-          this.log.error(
-            'Failed to load rooms:',
-            error,
-          );
+          this.log.error('Failed to load rooms:', error);
         },
       });
   }
 
   loadRoomEquipment(roomId: string): void {
-    const card = this.roomCards.find(
-      (c) => c.room.roomId === roomId,
-    );
+    const card = this.roomCards.find((c) => c.room.roomId === roomId);
     if (!card) return;
 
     card.loading = true;
 
-    this.roomService
-      .getRoomDetails(roomId)
-      .subscribe({
-        next: (details) => {
-          card.equipment =
-            details.equipment ?? [];
-          card.loading = false;
-        },
-        error: (error) => {
-          this.log.error(
-            `Failed to load equipment for room ${roomId}:`,
-            error,
-          );
-          card.loading = false;
-        },
-      });
+    this.roomService.getRoomDetails(roomId).subscribe({
+      next: (details) => {
+        card.equipment = details.equipment ?? [];
+        card.loading = false;
+      },
+      error: (error) => {
+        this.log.error(`Failed to load equipment for room ${roomId}:`, error);
+        card.loading = false;
+      },
+    });
   }
 
   toggleExpand(roomId: string): void {
-    this.expandingRoomId =
-      this.expandingRoomId === roomId
-        ? null
-        : roomId;
+    this.expandingRoomId = this.expandingRoomId === roomId ? null : roomId;
   }
 
   openAddModal(roomId: string, roomName: string): void {
-    const card = this.roomCards.find(
-      (c) => c.room.roomId === roomId,
-    );
+    const card = this.roomCards.find((c) => c.room.roomId === roomId);
     // Auto-expand the room card if not already expanded
     if (card && this.expandingRoomId !== roomId) {
       this.expandingRoomId = roomId;
@@ -339,12 +261,8 @@ export class RoomEquipmentComponent implements OnInit {
     }
   }
 
-  getCard(
-    roomId: string,
-  ): RoomCardData | undefined {
-    return this.roomCards.find(
-      (c) => c.room.roomId === roomId,
-    );
+  getCard(roomId: string): RoomCardData | undefined {
+    return this.roomCards.find((c) => c.room.roomId === roomId);
   }
 
   addEquipment(): void {
@@ -356,12 +274,10 @@ export class RoomEquipmentComponent implements OnInit {
       return;
     }
 
-    const formValue =
-      this.equipmentForm.getRawValue();
+    const formValue = this.equipmentForm.getRawValue();
 
     const equipment: RoomEquipment = {
-      equipmentName:
-        formValue.equipmentName.trim(),
+      equipmentName: formValue.equipmentName.trim(),
       assetCode: formValue.assetCode.trim(),
       description: formValue.description.trim(),
       status: formValue.status,
@@ -370,22 +286,19 @@ export class RoomEquipmentComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.equipmentService
-      .addEquipment(roomId, equipment)
-      .subscribe({
-        next: () => {
-          this.successMessage =
-            'Equipment added successfully.';
-          this.loadRoomEquipment(roomId);
-          this.closeAddModal();
-        },
-        error: (error) => {
-          this.errorMessage =
-            error.error?.message ||
-            error.message ||
-            'We couldn\'t add equipment. Please try again in a moment.';
-        },
-      });
+    this.equipmentService.addEquipment(roomId, equipment).subscribe({
+      next: () => {
+        this.successMessage = 'Equipment added successfully.';
+        this.loadRoomEquipment(roomId);
+        this.closeAddModal();
+      },
+      error: (error) => {
+        this.errorMessage =
+          error.error?.message ||
+          error.message ||
+          "We couldn't add equipment. Please try again in a moment.";
+      },
+    });
   }
 
   changeStatus(
@@ -393,17 +306,12 @@ export class RoomEquipmentComponent implements OnInit {
     equipment: RoomEquipment,
     newStatus: string,
   ): void {
-    if (
-      !this.statuses.includes(
-        newStatus as RoomEquipmentStatus,
-      )
-    ) {
+    if (!this.statuses.includes(newStatus as RoomEquipmentStatus)) {
       return;
     }
 
     const previousStatus = equipment.status;
-    const status =
-      newStatus as RoomEquipmentStatus;
+    const status = newStatus as RoomEquipmentStatus;
 
     if (status === previousStatus) return;
 
@@ -411,15 +319,10 @@ export class RoomEquipmentComponent implements OnInit {
     this.successMessage = '';
 
     this.equipmentService
-      .updateStatus(
-        roomId,
-        equipment.assetCode,
-        status,
-      )
+      .updateStatus(roomId, equipment.assetCode, status)
       .subscribe({
         next: () => {
-          this.successMessage =
-            'Equipment status updated.';
+          this.successMessage = 'Equipment status updated.';
           this.loadRoomEquipment(roomId);
         },
         error: (error) => {
@@ -427,18 +330,13 @@ export class RoomEquipmentComponent implements OnInit {
           this.errorMessage =
             error.error?.message ||
             error.message ||
-            'We couldn\'t update the status. Please try again in a moment.';
+            "We couldn't update the status. Please try again in a moment.";
         },
       });
   }
 
-  removeEquipment(
-    roomId: string,
-    equipment: RoomEquipment,
-  ): void {
-    const card = this.roomCards.find(
-      (c) => c.room.roomId === roomId,
-    );
+  removeEquipment(roomId: string, equipment: RoomEquipment): void {
+    const card = this.roomCards.find((c) => c.room.roomId === roomId);
 
     const confirmed = window.confirm(
       `Remove "${equipment.equipmentName}" from ${card?.room.roomName}?`,
@@ -450,28 +348,22 @@ export class RoomEquipmentComponent implements OnInit {
     this.successMessage = '';
 
     this.equipmentService
-      .removeEquipment(
-        roomId,
-        equipment.assetCode,
-      )
+      .removeEquipment(roomId, equipment.assetCode)
       .subscribe({
         next: () => {
-          this.successMessage =
-            'Equipment removed successfully.';
+          this.successMessage = 'Equipment removed successfully.';
           this.loadRoomEquipment(roomId);
         },
         error: (error) => {
           this.errorMessage =
             error.error?.message ||
             error.message ||
-            'We couldn\'t remove equipment. Please try again in a moment.';
+            "We couldn't remove equipment. Please try again in a moment.";
         },
       });
   }
 
-  equipmentStatusLabel(
-    status: RoomEquipmentStatus,
-  ): string {
+  equipmentStatusLabel(status: RoomEquipmentStatus): string {
     switch (status) {
       case 'ACTIVE':
         return 'Active';

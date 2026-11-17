@@ -99,22 +99,14 @@
       <app-icon [icon]="LucideMonitor" [size]="48"></app-icon>
       <strong>Failed to load rooms</strong>
       <p>{{ errorMessage() }}</p>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="loadRooms()"
-      >
+      <button type="button" class="btn btn-primary" (click)="loadRooms()">
         Try again
       </button>
     </div>
   } @else if (filteredCards().length > 0) {
     <!-- Rooms Grid -->
     <div class="rooms-grid">
-      @for (
-        card of filteredCards();
-        track card.room.roomId;
-        let idx = $index
-      ) {
+      @for (card of filteredCards(); track card.room.roomId; let idx = $index) {
         @let room = card.room;
         <article
           class="room-card"
@@ -124,7 +116,10 @@
           <!-- Card Header -->
           <div class="room-card-header">
             <div class="room-header-left">
-              <div class="room-icon-badge" [class]="getStatusClass(room.status)">
+              <div
+                class="room-icon-badge"
+                [class]="getStatusClass(room.status)"
+              >
                 <app-icon [icon]="LucideMonitor" [size]="20"></app-icon>
               </div>
               <div class="room-title-block">
@@ -145,10 +140,7 @@
                 </div>
               </div>
             </div>
-            <span
-              class="status-pill"
-              [class]="getStatusClass(room.status)"
-            >
+            <span class="status-pill" [class]="getStatusClass(room.status)">
               <span class="status-dot"></span>
               {{ roomStatusLabel(room.status) }}
             </span>
@@ -178,10 +170,7 @@
           </div>
 
           <!-- Expanded Details -->
-          <div
-            class="room-details-panel"
-            [class.open]="card.expanded"
-          >
+          <div class="room-details-panel" [class.open]="card.expanded">
             @if (room.description) {
               <p class="room-description">
                 {{ room.description }}
@@ -194,27 +183,25 @@
                 <app-icon [icon]="LucideUsers" [size]="16"></app-icon>
                 <div class="detail-text">
                   <span class="detail-label">Capacity</span>
-                  <span class="detail-value"
-                    >{{ room.capacity }} people</span
-                  >
+                  <span class="detail-value">{{ room.capacity }} people</span>
                 </div>
               </div>
               <div class="detail-block">
                 <app-icon [icon]="LucideMonitor" [size]="16"></app-icon>
                 <div class="detail-text">
                   <span class="detail-label">Type</span>
-                  <span class="detail-value"
-                    >{{ roomTypeLabel(room.roomType) }}</span
-                  >
+                  <span class="detail-value">{{
+                    roomTypeLabel(room.roomType)
+                  }}</span>
                 </div>
               </div>
               <div class="detail-block">
                 <app-icon [icon]="LucideCheck" [size]="16"></app-icon>
                 <div class="detail-text">
                   <span class="detail-label">Status</span>
-                  <span class="detail-value"
-                    >{{ roomStatusLabel(room.status) }}</span
-                  >
+                  <span class="detail-value">{{
+                    roomStatusLabel(room.status)
+                  }}</span>
                 </div>
               </div>
               <div class="detail-block">
@@ -222,8 +209,7 @@
                 <div class="detail-text">
                   <span class="detail-label">Rate</span>
                   <span class="detail-value"
-                    >KES
-                    {{ room.hourlyRate | number: '1.0-2' }}</span
+                    >KES {{ room.hourlyRate | number: '1.0-2' }}</span
                   >
                 </div>
               </div>
@@ -252,12 +238,8 @@
                       [style.animation-delay]="eqIdx * 50 + 'ms'"
                     >
                       <div class="equip-info">
-                        <span class="equip-name"
-                          >{{ item.equipmentName }}</span
-                        >
-                        <span class="equip-asset"
-                          >{{ item.assetCode }}</span
-                        >
+                        <span class="equip-name">{{ item.equipmentName }}</span>
+                        <span class="equip-asset">{{ item.assetCode }}</span>
                       </div>
                       <span
                         class="equip-badge"
@@ -269,9 +251,7 @@
                   }
                 </div>
               } @else {
-                <p class="no-equip">
-                  No equipment assigned to this room.
-                </p>
+                <p class="no-equip">No equipment assigned to this room.</p>
               }
             </div>
           </div>
@@ -284,13 +264,9 @@
       <strong>No rooms found</strong>
       <p>
         Try adjusting your filter or
-        <button
-          type="button"
-          class="action-link"
-          (click)="clearFilters()"
-        >
-          show all rooms
-        </button>.
+        <button type="button" class="action-link" (click)="clearFilters()">
+          show all rooms</button
+        >.
       </p>
     </div>
   }

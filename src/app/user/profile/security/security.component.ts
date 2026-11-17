@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../../shared/ui';
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   LucideCheck,
@@ -25,23 +20,16 @@ import { PageBannerComponent } from '../../../shared/ui';
 @Component({
   selector: 'app-security',
   standalone: true,
-  imports: [
-    CommonModule,
-
-    PageBannerComponent,
-    IconComponent,
-  ],
+  imports: [CommonModule, PageBannerComponent, IconComponent],
   templateUrl: './security.component.html',
   styleUrl: './security.component.css',
 })
 export class SecurityComponent implements OnInit {
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   readonly LucideCheck = LucideCheck;
-  readonly LucideCheckCircle2 =
-    LucideCheckCircle2;
+  readonly LucideCheckCircle2 = LucideCheckCircle2;
   readonly LucideClock = LucideClock;
   readonly LucideFileText = LucideFileText;
   readonly LucideLock = LucideLock;
@@ -67,9 +55,7 @@ export class SecurityComponent implements OnInit {
   }
 
   goToChangePassword(): void {
-    this.router.navigate([
-      '/app/profile/password',
-    ]);
+    this.router.navigate(['/app/profile/password']);
   }
 
   goToProfile(): void {

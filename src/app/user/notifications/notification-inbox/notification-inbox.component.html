@@ -7,15 +7,11 @@
   ></app-page-banner>
 
   <div class="stats-bar">
-    <app-stat-card
-      [icon]="LucideBell"
-    >
+    <app-stat-card [icon]="LucideBell">
       <span stat-value>{{ total }}</span>
       <span stat-label>Total</span>
     </app-stat-card>
-    <app-stat-card
-      [icon]="LucideCircle"
-    >
+    <app-stat-card [icon]="LucideCircle">
       <span stat-value>{{ unreadCount }}</span>
       <span stat-label>Unread</span>
     </app-stat-card>
@@ -23,15 +19,9 @@
       <button
         class="btn-mark-all"
         (click)="markAllRead()"
-        [disabled]="
-          unreadCount === 0 || markingAll()
-        "
+        [disabled]="unreadCount === 0 || markingAll()"
       >
-        {{
-          markingAll()
-            ? 'Marking...'
-            : 'Mark all read'
-        }}
+        {{ markingAll() ? 'Marking...' : 'Mark all read' }}
       </button>
     </div>
   </div>
@@ -47,26 +37,15 @@
         <div class="skeleton-card">
           <div class="skeleton-icon"></div>
           <div class="skeleton-lines">
-            <div
-              class="skeleton-line"
-              style="width: 60%"
-            ></div>
-            <div
-              class="skeleton-line"
-              style="width: 90%"
-            ></div>
-            <div
-              class="skeleton-line"
-              style="width: 40%"
-            ></div>
+            <div class="skeleton-line" style="width: 60%"></div>
+            <div class="skeleton-line" style="width: 90%"></div>
+            <div class="skeleton-line" style="width: 40%"></div>
           </div>
         </div>
       }
     </div>
   }
-  @if (
-    !loading() && notifications().length === 0
-  ) {
+  @if (!loading() && notifications().length === 0) {
     <app-empty-state
       [icon]="LucideBell"
       title="No notifications yet"
@@ -86,35 +65,22 @@
           class="notification-card"
           [class.unread]="!notification.isRead"
           [class.read]="notification.isRead"
-          [style.animation-delay]="
-            idx * 40 + 'ms'
-          "
+          [style.animation-delay]="idx * 40 + 'ms'"
         >
           <div class="notification-header">
             <div
               class="notification-icon {{
-                getEventTypeClass(
-                  notification.eventType
-                )
+                getEventTypeClass(notification.eventType)
               }}"
             >
-              @if (
-                notification.eventType ===
-                'AUTO_CHECK_IN'
-              ) {
-              } @else if (
-                notification.eventType ===
-                'OVERRUN'
-              ) {
+              @if (notification.eventType === 'AUTO_CHECK_IN') {
+              } @else if (notification.eventType === 'OVERRUN') {
                 <app-icon
                   [icon]="LucideClock"
                   [size]="24"
                   [strokeWidth]="2"
                 ></app-icon>
-              } @else if (
-                notification.eventType ===
-                'BOOKING_CONFLICT'
-              ) {
+              } @else if (notification.eventType === 'BOOKING_CONFLICT') {
               } @else {
                 <app-icon
                   [icon]="LucideCircle"
@@ -129,16 +95,10 @@
               </h3>
               <span
                 class="event-badge {{
-                  getEventTypeClass(
-                    notification.eventType
-                  )
+                  getEventTypeClass(notification.eventType)
                 }}"
               >
-                {{
-                  getEventTypeLabel(
-                    notification.eventType
-                  )
-                }}
+                {{ getEventTypeLabel(notification.eventType) }}
               </span>
             </div>
             <div class="notification-time-area">

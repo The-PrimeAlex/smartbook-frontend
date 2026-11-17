@@ -1,18 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { createLogger } from '../../../shared/services/logger.service';
 import { IconComponent } from '../../../shared/ui';
-import {
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import {
   LucideBuilding2,
   LucideCheckCircle2,
@@ -23,10 +14,7 @@ import {
   LucideUser,
   LucideXCircle,
 } from '@lucide/angular';
-import {
-  UsersService,
-  MyProfile,
-} from '../../../admin/users/users.service';
+import { UsersService, MyProfile } from '../../../admin/users/users.service';
 import { PageBannerComponent } from '../../../shared/ui';
 
 @Component({
@@ -43,15 +31,12 @@ import { PageBannerComponent } from '../../../shared/ui';
   styleUrl: './my-profile.component.css',
 })
 export class MyProfileComponent implements OnInit {
-  private readonly log =
-    createLogger('MyProfile');
-  private readonly usersService =
-    inject(UsersService);
+  private readonly log = createLogger('MyProfile');
+  private readonly usersService = inject(UsersService);
   private readonly fb = inject(FormBuilder);
 
   readonly LucideBuilding2 = LucideBuilding2;
-  readonly LucideCheckCircle2 =
-    LucideCheckCircle2;
+  readonly LucideCheckCircle2 = LucideCheckCircle2;
   readonly LucideFileText = LucideFileText;
   readonly LucideMail = LucideMail;
   readonly LucidePencil = LucidePencil;
@@ -59,9 +44,7 @@ export class MyProfileComponent implements OnInit {
   readonly LucideUser = LucideUser;
   readonly LucideXCircle = LucideXCircle;
 
-  readonly profile = signal<MyProfile | null>(
-    null,
-  );
+  readonly profile = signal<MyProfile | null>(null);
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly errorMessage = signal('');
@@ -84,35 +67,15 @@ export class MyProfileComponent implements OnInit {
     return `${user.firstName?.charAt(0) ?? ''}${user.lastName?.charAt(0) ?? ''}`.toUpperCase();
   });
 
-  readonly profileForm =
-    this.fb.nonNullable.group({
-      firstName: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(100),
-        ],
-      ],
-      lastName: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(100),
-        ],
-      ],
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email,
-          Validators.maxLength(200),
-        ],
-      ],
-      phoneNumber: [
-        '',
-        [Validators.maxLength(20)],
-      ],
-    });
+  readonly profileForm = this.fb.nonNullable.group({
+    firstName: ['', [Validators.required, Validators.maxLength(100)]],
+    lastName: ['', [Validators.required, Validators.maxLength(100)]],
+    email: [
+      '',
+      [Validators.required, Validators.email, Validators.maxLength(200)],
+    ],
+    phoneNumber: ['', [Validators.maxLength(20)]],
+  });
 
   ngOnInit(): void {
     this.loadProfile();
@@ -136,12 +99,9 @@ export class MyProfileComponent implements OnInit {
         this.loading.set(false);
       },
       error: (error) => {
-        this.log.error(
-          'Failed to load profile:',
-          error,
-        );
+        this.log.error('Failed to load profile:', error);
         this.errorMessage.set(
-          'We couldn\'t load your profile. Please try again in a moment.',
+          "We couldn't load your profile. Please try again in a moment.",
         );
         this.loading.set(false);
       },
@@ -188,43 +148,34 @@ export class MyProfileComponent implements OnInit {
     const updatedProfile: MyProfile = {
       ...this.profile()!,
       ...this.profileForm.getRawValue(),
-      organization:
-        this.profile()?.organization ?? null,
+      organization: this.profile()?.organization ?? null,
     };
 
     this.saving.set(true);
 
-    this.usersService
-      .updateProfile(updatedProfile)
-      .subscribe({
-        next: () => {
-          this.profile.set(updatedProfile);
-          this.saving.set(false);
-          this.editing.set(false);
-          this.successMessage.set(
-            'Your profile has been updated successfully.',
-          );
-        },
-        error: (error) => {
-          this.log.error(
-            'Failed to update profile:',
-            error,
-          );
-          this.saving.set(false);
-          const message =
-            typeof error === 'object' &&
-            error !== null &&
-            'error' in error &&
-            typeof error.error === 'object' &&
-            error.error !== null &&
-            'message' in error.error &&
-            typeof error.error.message ===
-              'string'
-              ? error.error.message
-              : 'We couldn\'t update your profile. Please try again in a moment.';
+    this.usersService.updateProfile(updatedProfile).subscribe({
+      next: () => {
+        this.profile.set(updatedProfile);
+        this.saving.set(false);
+        this.editing.set(false);
+        this.successMessage.set('Your profile has been updated successfully.');
+      },
+      error: (error) => {
+        this.log.error('Failed to update profile:', error);
+        this.saving.set(false);
+        const message =
+          typeof error === 'object' &&
+          error !== null &&
+          'error' in error &&
+          typeof error.error === 'object' &&
+          error.error !== null &&
+          'message' in error.error &&
+          typeof error.error.message === 'string'
+            ? error.error.message
+            : "We couldn't update your profile. Please try again in a moment.";
 
-          this.errorMessage.set(message);
-        },
-      });
+        this.errorMessage.set(message);
+      },
+    });
   }
 }

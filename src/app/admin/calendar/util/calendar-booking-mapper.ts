@@ -5,19 +5,10 @@ import {
   BookingSyncResult,
   GoogleCalendarEventDto,
 } from '../../../shared/services/calendar.service';
-import {
-  dateKey,
-  parseDate,
-  timeKey,
-} from './calendar-date-utils';
+import { dateKey, parseDate, timeKey } from './calendar-date-utils';
 
-type BookingStatus =
-  'Confirmed' | 'Pending' | 'Cancelled';
-type RoomType =
-  | 'All Rooms'
-  | 'Boardroom'
-  | 'Meeting Room'
-  | 'Video Suite';
+type BookingStatus = 'Confirmed' | 'Pending' | 'Cancelled';
+type RoomType = 'All Rooms' | 'Boardroom' | 'Meeting Room' | 'Video Suite';
 
 export interface CalendarBooking {
   id: string;
@@ -38,35 +29,20 @@ export interface RawBooking {
   [key: string]: unknown;
 }
 
-export function extractBookingArray(
-  response: unknown,
-): RawBooking[] {
+export function extractBookingArray(response: unknown): RawBooking[] {
   if (Array.isArray(response)) {
     return response.filter(
-      (item): item is RawBooking =>
-        typeof item === 'object' && item !== null,
+      (item): item is RawBooking => typeof item === 'object' && item !== null,
     );
   }
-  if (
-    typeof response === 'object' &&
-    response !== null
-  ) {
-    const obj = response as Record<
-      string,
-      unknown
-    >;
-    for (const key of [
-      'bookings',
-      'content',
-      'data',
-      'items',
-    ]) {
+  if (typeof response === 'object' && response !== null) {
+    const obj = response as Record<string, unknown>;
+    for (const key of ['bookings', 'content', 'data', 'items']) {
       const value = obj[key];
       if (Array.isArray(value)) {
         return value.filter(
           (item): item is RawBooking =>
-            typeof item === 'object' &&
-            item !== null,
+            typeof item === 'object' && item !== null,
         );
       }
     }
@@ -96,67 +72,32 @@ export function mapSmartBookBooking(
     return null;
   }
 
-  const roomObject = asObject(
-    firstValue(raw, ['room']),
-  );
+  const roomObject = asObject(firstValue(raw, ['room']));
   const room =
     firstString(raw, ['roomName', 'room_name']) ??
-    firstString(roomObject, [
-      'roomName',
-      'name',
-      'title',
-    ]) ??
+    firstString(roomObject, ['roomName', 'name', 'title']) ??
     'Room not specified';
 
   const purpose =
-    firstString(raw, [
-      'purpose',
-      'title',
-      'description',
-      'bookingPurpose',
-    ]) ?? 'Room reservation';
+    firstString(raw, ['purpose', 'title', 'description', 'bookingPurpose']) ??
+    'Room reservation';
 
   const customerObject = asObject(
-    firstValue(raw, [
-      'user',
-      'customer',
-      'bookedBy',
-    ]),
+    firstValue(raw, ['user', 'customer', 'bookedBy']),
   );
   const customerName =
-    firstString(raw, [
-      'customerName',
-      'userName',
-      'fullName',
-    ]) ??
-    firstString(customerObject, [
-      'fullName',
-      'name',
-      'username',
-      'email',
-    ]) ??
+    firstString(raw, ['customerName', 'userName', 'fullName']) ??
+    firstString(customerObject, ['fullName', 'name', 'username', 'email']) ??
     'SmartBook customer';
 
   const customerId =
-    firstString(raw, [
-      'customerId',
-      'userId',
-      'bookedById',
-    ]) ??
-    firstString(customerObject, [
-      'userId',
-      'id',
-    ]) ??
+    firstString(raw, ['customerId', 'userId', 'bookedById']) ??
+    firstString(customerObject, ['userId', 'id']) ??
     '';
 
   const statusValue =
-    firstString(raw, [
-      'bookingStatus',
-      'status',
-    ]) ?? 'PENDING';
-  const id =
-    firstString(raw, ['bookingId', 'id']) ??
-    `booking-${index}`;
+    firstString(raw, ['bookingStatus', 'status']) ?? 'PENDING';
+  const id = firstString(raw, ['bookingId', 'id']) ?? `booking-${index}`;
 
   return {
     id,
@@ -178,17 +119,11 @@ export function mapGoogleEvent(
 ): CalendarBooking | null {
   const start = parseDate(event.start);
   const end = parseDate(event.end);
-  if (
-    !start ||
-    !end ||
-    event.status === 'cancelled'
-  ) {
+  if (!start || !end || event.status === 'cancelled') {
     return null;
   }
-  const room =
-    event.location?.trim() || 'Google Calendar';
-  const title =
-    event.summary?.trim() || 'Calendar event';
+  const room = event.location?.trim() || 'Google Calendar';
+  const title = event.summary?.trim() || 'Calendar event';
 
   return {
     id: event.id,
@@ -198,21 +133,15 @@ export function mapGoogleEvent(
     room,
     roomType: inferRoomType(room),
     date: dateKey(start),
-    startTime: event.allDay
-      ? '00:00'
-      : timeKey(start),
-    endTime: event.allDay
-      ? '23:59'
-      : timeKey(end),
+    startTime: event.allDay ? '00:00' : timeKey(start),
+    endTime: event.allDay ? '23:59' : timeKey(end),
     status: 'Confirmed',
     source: 'GOOGLE',
     eventUrl: event.htmlLink,
   };
 }
 
-export function formatSyncResult(
-  result: BookingSyncResult,
-): string {
+export function formatSyncResult(result: BookingSyncResult): string {
   if (result.message) {
     return result.message;
   }
@@ -223,14 +152,8 @@ export function formatSyncResult(
   return `Sync complete: ${created} created, ${alreadySynced} already synced, ${skipped} skipped, ${failed} failed.`;
 }
 
-export function getErrorMessage(
-  error: unknown,
-  fallback: string,
-): string {
-  if (
-    typeof error === 'object' &&
-    error !== null
-  ) {
+export function getErrorMessage(error: unknown, fallback: string): string {
+  if (typeof error === 'object' && error !== null) {
     const candidate = error as {
       error?: { message?: unknown } | string;
       message?: unknown;
@@ -254,14 +177,9 @@ export function getErrorMessage(
 
 // --- Private helpers ---
 
-function mapBookingStatus(
-  value: string,
-): BookingStatus {
+function mapBookingStatus(value: string): BookingStatus {
   const status = value.trim().toUpperCase();
-  if (
-    status === 'CANCELLED' ||
-    status === 'NO_SHOW'
-  ) {
+  if (status === 'CANCELLED' || status === 'NO_SHOW') {
     return 'Cancelled';
   }
   if (status === 'PENDING') {
@@ -274,10 +192,7 @@ function inferRoomType(
   roomName: string,
 ): Exclude<RoomType, 'All Rooms'> | null {
   const name = roomName.toLowerCase();
-  if (
-    name.includes('boardroom') ||
-    name.includes('board room')
-  ) {
+  if (name.includes('boardroom') || name.includes('board room')) {
     return 'Boardroom';
   }
   if (
@@ -287,36 +202,23 @@ function inferRoomType(
   ) {
     return 'Video Suite';
   }
-  if (
-    name.includes('meeting') ||
-    name.includes('conference')
-  ) {
+  if (name.includes('meeting') || name.includes('conference')) {
     return 'Meeting Room';
   }
   return null;
 }
 
-function firstValue(
-  object: RawBooking,
-  keys: string[],
-): unknown {
+function firstValue(object: RawBooking, keys: string[]): unknown {
   for (const key of keys) {
     const value = object[key];
-    if (
-      value !== null &&
-      value !== undefined &&
-      value !== ''
-    ) {
+    if (value !== null && value !== undefined && value !== '') {
       return value;
     }
   }
   return undefined;
 }
 
-function firstString(
-  object: RawBooking,
-  keys: string[],
-): string | null {
+function firstString(object: RawBooking, keys: string[]): string | null {
   const value = firstValue(object, keys);
   if (typeof value === 'string' && value.trim()) {
     return value.trim();
@@ -328,8 +230,7 @@ function firstString(
 }
 
 function asObject(value: unknown): RawBooking {
-  return typeof value === 'object' &&
-    value !== null
+  return typeof value === 'object' && value !== null
     ? (value as RawBooking)
     : {};
 }

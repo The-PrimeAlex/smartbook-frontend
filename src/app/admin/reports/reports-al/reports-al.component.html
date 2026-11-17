@@ -14,10 +14,7 @@
       [class.active]="activeTab() === 'occupancy'"
       (click)="selectTab('occupancy')"
     >
-      <app-icon
-        [icon]="LucideLayoutGrid"
-        [size]="18"
-      ></app-icon>
+      <app-icon [icon]="LucideLayoutGrid" [size]="18"></app-icon>
       Occupancy
     </button>
     <button
@@ -26,10 +23,7 @@
       [class.active]="activeTab() === 'bookings'"
       (click)="selectTab('bookings')"
     >
-      <app-icon
-        [icon]="LucideCalendar"
-        [size]="18"
-      ></app-icon>
+      <app-icon [icon]="LucideCalendar" [size]="18"></app-icon>
       Bookings
     </button>
     <button
@@ -38,10 +32,7 @@
       [class.active]="activeTab() === 'revenue'"
       (click)="selectTab('revenue')"
     >
-      <app-icon
-        [icon]="LucideDollarSign"
-        [size]="18"
-      ></app-icon>
+      <app-icon [icon]="LucideDollarSign" [size]="18"></app-icon>
       Revenue
     </button>
     <button
@@ -52,10 +43,7 @@
       [disabled]="loading()"
       aria-label="Refresh data"
     >
-      <app-icon
-        [icon]="LucideRefreshCw"
-        [size]="16"
-      ></app-icon>
+      <app-icon [icon]="LucideRefreshCw" [size]="16"></app-icon>
     </button>
   </nav>
   <!-- ═══════════════════════════════════════════════════════ -->
@@ -66,45 +54,30 @@
       <!-- Stats Bar -->
       <div class="stats-bar">
         <div class="stat-item">
-          <span class="stat-number">{{
-            totalRooms()
-          }}</span>
+          <span class="stat-number">{{ totalRooms() }}</span>
           <span class="stat-label">Rooms</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">{{
-            totalBookings()
-          }}</span>
+          <span class="stat-number">{{ totalBookings() }}</span>
           <span class="stat-label">Bookings</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">{{
-            totalCheckedIn()
-          }}</span>
-          <span class="stat-label"
-            >Checked In</span
-          >
+          <span class="stat-number">{{ totalCheckedIn() }}</span>
+          <span class="stat-label">Checked In</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">{{
-            totalNoShows()
-          }}</span>
+          <span class="stat-number">{{ totalNoShows() }}</span>
           <span class="stat-label">No-Shows</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item stat-highlight">
           <span class="stat-number"
-            >{{
-              calculateAvgOccupancy()
-                | number: '1.1-1'
-            }}%</span
+            >{{ calculateAvgOccupancy() | number: '1.1-1' }}%</span
           >
-          <span class="stat-label"
-            >Avg Occupancy</span
-          >
+          <span class="stat-label">Avg Occupancy</span>
         </div>
       </div>
       <!-- Card List -->
@@ -115,42 +88,24 @@
       } @else if (errorMessage()) {
         <div class="state-panel state-error">
           <p>{{ errorMessage() }}</p>
-          <button
-            type="button"
-            class="reset-button"
-            (click)="refresh()"
-          >
+          <button type="button" class="reset-button" (click)="refresh()">
             Try Again
           </button>
         </div>
       } @else if (occupancyRecords().length) {
         <div class="card-list">
-          @for (
-            r of occupancyRecords();
-            track r.roomName
-          ) {
+          @for (r of occupancyRecords(); track r.roomName) {
             <div class="card-row">
               <div class="card-row-header">
-                <span class="card-row-title">{{
-                  r.roomName
-                }}</span>
+                <span class="card-row-title">{{ r.roomName }}</span>
                 <span
                   class="occupancy-badge"
                   [style.background]="
-                    getOccupancyRateColor(
-                      r.occupancyRate
-                    ) + '1a'
+                    getOccupancyRateColor(r.occupancyRate) + '1a'
                   "
-                  [style.color]="
-                    getOccupancyRateColor(
-                      r.occupancyRate
-                    )
-                  "
+                  [style.color]="getOccupancyRateColor(r.occupancyRate)"
                 >
-                  {{
-                    r.occupancyRate
-                      | number: '1.1-1'
-                  }}%
+                  {{ r.occupancyRate | number: '1.1-1' }}%
                 </span>
               </div>
               <div class="card-row-bar">
@@ -159,71 +114,41 @@
                   [style.width]="
                     (r.occupancyRate || 0) > 100
                       ? 100
-                      : (r.occupancyRate || 0) +
-                        '%'
+                      : (r.occupancyRate || 0) + '%'
                   "
-                  [style.background]="
-                    getOccupancyRateColor(
-                      r.occupancyRate
-                    )
-                  "
+                  [style.background]="getOccupancyRateColor(r.occupancyRate)"
                 ></div>
               </div>
               <div class="card-row-metrics">
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Bookings</span
-                  >
-                  <span class="metric-value">{{
-                    r.totalBookings
+                  <span class="metric-label">Bookings</span>
+                  <span class="metric-value">{{ r.totalBookings }}</span>
+                </div>
+                <div class="metric-chip">
+                  <span class="metric-label">Checked In</span>
+                  <span class="metric-value" style="color: var(--gr)">{{
+                    r.checkedInBookings
                   }}</span>
                 </div>
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Checked In</span
-                  >
-                  <span
-                    class="metric-value"
-                    style="color: var(--gr)"
-                    >{{
-                      r.checkedInBookings
-                    }}</span
-                  >
-                </div>
-                <div class="metric-chip">
-                  <span class="metric-label"
-                    >No-Shows</span
-                  >
+                  <span class="metric-label">No-Shows</span>
                   <span
                     class="metric-value"
                     [style.color]="
-                      r.noShowBookings &&
-                      r.noShowBookings > 0
+                      r.noShowBookings && r.noShowBookings > 0
                         ? 'var(--er)'
                         : 'var(--m)'
                     "
-                    >{{
-                      r.noShowBookings || 0
-                    }}</span
+                    >{{ r.noShowBookings || 0 }}</span
                   >
                 </div>
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Booked</span
-                  >
-                  <span class="metric-value"
-                    >{{
-                      r.totalHoursBooked
-                    }}h</span
-                  >
+                  <span class="metric-label">Booked</span>
+                  <span class="metric-value">{{ r.totalHoursBooked }}h</span>
                 </div>
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Used</span
-                  >
-                  <span class="metric-value"
-                    >{{ r.totalHoursUsed }}h</span
-                  >
+                  <span class="metric-label">Used</span>
+                  <span class="metric-value">{{ r.totalHoursUsed }}h</span>
                 </div>
               </div>
             </div>
@@ -246,9 +171,7 @@
       <!-- Stats Bar -->
       <div class="stats-bar">
         <div class="stat-item">
-          <span class="stat-number">{{
-            bookingRecords().length
-          }}</span>
+          <span class="stat-number">{{ bookingRecords().length }}</span>
           <span class="stat-label">Total</span>
         </div>
         <div class="stat-divider"></div>
@@ -256,15 +179,11 @@
           <span class="stat-number">{{
             formatMinutes(bookingAvgDuration())
           }}</span>
-          <span class="stat-label"
-            >Avg Duration</span
-          >
+          <span class="stat-label">Avg Duration</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">{{
-            bookingOverrunCount()
-          }}</span>
+          <span class="stat-number">{{ bookingOverrunCount() }}</span>
           <span class="stat-label">Overruns</span>
         </div>
         <div class="stat-divider"></div>
@@ -273,9 +192,7 @@
             <span class="stat-number">{{
               formatMinutes(bookingAvgOverrun())
             }}</span>
-            <span class="stat-label"
-              >Avg Overrun</span
-            >
+            <span class="stat-label">Avg Overrun</span>
           </div>
           <div class="stat-divider"></div>
         }
@@ -283,25 +200,13 @@
       <!-- Status Pills -->
       @if (bookingStatusBreakdown().length) {
         <div class="status-pills">
-          @for (
-            s of bookingStatusBreakdown();
-            track s.label
-          ) {
+          @for (s of bookingStatusBreakdown(); track s.label) {
             <div class="status-pill">
-              <span
-                class="status-pill-dot"
-                [style.background]="s.color"
-              ></span>
-              <span class="status-pill-label">{{
-                s.label
-              }}</span>
-              <span class="status-pill-count">{{
-                s.count
-              }}</span>
+              <span class="status-pill-dot" [style.background]="s.color"></span>
+              <span class="status-pill-label">{{ s.label }}</span>
+              <span class="status-pill-count">{{ s.count }}</span>
               <span class="status-pill-pct"
-                >{{
-                  s.percentage | number: '1.0-0'
-                }}%</span
+                >{{ s.percentage | number: '1.0-0' }}%</span
               >
             </div>
           }
@@ -315,37 +220,22 @@
       } @else if (errorMessage()) {
         <div class="state-panel state-error">
           <p>{{ errorMessage() }}</p>
-          <button
-            type="button"
-            class="reset-button"
-            (click)="refresh()"
-          >
+          <button type="button" class="reset-button" (click)="refresh()">
             Try Again
           </button>
         </div>
       } @else if (bookingRecords().length) {
         <div class="card-list">
-          @for (
-            r of bookingRecords();
-            track r.bookingId
-          ) {
+          @for (r of bookingRecords(); track r.bookingId) {
             <div class="card-row">
               <div class="card-row-header">
                 <div class="card-row-left">
-                  <span class="card-row-title">{{
-                    r.roomName
-                  }}</span>
-                  <span class="card-row-sub">{{
-                    r.purpose
-                  }}</span>
+                  <span class="card-row-title">{{ r.roomName }}</span>
+                  <span class="card-row-sub">{{ r.purpose }}</span>
                 </div>
                 <span
                   class="status-badge"
-                  [class]="
-                    statusBadgeClass(
-                      r.bookingStatus
-                    )
-                  "
+                  [class]="statusBadgeClass(r.bookingStatus)"
                 >
                   {{ r.bookingStatus }}
                 </span>
@@ -365,9 +255,7 @@
                     [size]="12"
                     class="meta-icon"
                   ></app-icon>
-                  {{
-                    r.startTime | date: 'short'
-                  }}
+                  {{ r.startTime | date: 'short' }}
                 </span>
                 <span class="meta-item">
                   <app-icon
@@ -375,41 +263,23 @@
                     [size]="12"
                     class="meta-icon"
                   ></app-icon>
-                  {{
-                    formatMinutesShort(
-                      r.durationMinutes
-                    )
-                  }}
+                  {{ formatMinutesShort(r.durationMinutes) }}
                   planned
                 </span>
                 @if (r.actualDurationMinutes) {
                   <span
                     class="meta-item"
-                    [class.meta-warn]="
-                      r.overrunMinutes &&
-                      r.overrunMinutes > 0
-                    "
+                    [class.meta-warn]="r.overrunMinutes && r.overrunMinutes > 0"
                   >
                     <app-icon
-                    [icon]="LucideClock"
-                    [size]="12"
-                    class="meta-icon"
-                  ></app-icon>
-                    {{
-                      formatMinutesShort(
-                        r.actualDurationMinutes
-                      )
-                    }}
+                      [icon]="LucideClock"
+                      [size]="12"
+                      class="meta-icon"
+                    ></app-icon>
+                    {{ formatMinutesShort(r.actualDurationMinutes) }}
                     actual
-                    @if (
-                      r.overrunMinutes &&
-                      r.overrunMinutes > 0
-                    ) {
-                      <span class="overrun-tag"
-                        >+{{
-                          r.overrunMinutes
-                        }}m</span
-                      >
+                    @if (r.overrunMinutes && r.overrunMinutes > 0) {
+                      <span class="overrun-tag">+{{ r.overrunMinutes }}m</span>
                     }
                   </span>
                 }
@@ -434,46 +304,25 @@
       <!-- Revenue Header -->
       <div class="revenue-header">
         <div class="revenue-total">
-          <span class="revenue-total-label"
-            >Total Revenue</span
-          >
+          <span class="revenue-total-label">Total Revenue</span>
           <span class="revenue-total-amount">{{
             formatKsh(totalRevenue())
           }}</span>
         </div>
         <div class="revenue-meta">
           <div class="revenue-meta-item">
-            <span
-              class="revenue-meta-dot"
-              style="background: #10b981"
-            ></span>
-            <span class="revenue-meta-label"
-              >Paid</span
-            >
-            <span class="revenue-meta-value">{{
-              paidCount()
-            }}</span>
+            <span class="revenue-meta-dot" style="background: #10b981"></span>
+            <span class="revenue-meta-label">Paid</span>
+            <span class="revenue-meta-value">{{ paidCount() }}</span>
           </div>
           <div class="revenue-meta-item">
-            <span
-              class="revenue-meta-dot"
-              style="background: #f59e0b"
-            ></span>
-            <span class="revenue-meta-label"
-              >Unpaid</span
-            >
-            <span class="revenue-meta-value">{{
-              unpaidCount()
-            }}</span>
+            <span class="revenue-meta-dot" style="background: #f59e0b"></span>
+            <span class="revenue-meta-label">Unpaid</span>
+            <span class="revenue-meta-value">{{ unpaidCount() }}</span>
           </div>
           <div class="revenue-meta-item">
-            <span
-              class="revenue-meta-dot"
-              style="background: #ef4444"
-            ></span>
-            <span class="revenue-meta-label"
-              >Extra Fees</span
-            >
+            <span class="revenue-meta-dot" style="background: #ef4444"></span>
+            <span class="revenue-meta-label">Extra Fees</span>
             <span class="revenue-meta-value">{{
               formatKsh(
                 totalCancellationRevenue() +
@@ -491,28 +340,16 @@
           class="sources-toggle"
           (click)="toggleRevenueSources()"
         >
-          <span class="sources-toggle-label"
-            >Revenue Sources</span
-          >
+          <span class="sources-toggle-label">Revenue Sources</span>
           <app-icon
             [icon]="LucideChevronDown"
             [size]="16"
-            [class.rotated]="
-              revenueSourcesExpanded()
-            "
+            [class.rotated]="revenueSourcesExpanded()"
           ></app-icon>
         </button>
-        <div
-          class="sources-body"
-          [class.expanded]="
-            revenueSourcesExpanded()
-          "
-        >
+        <div class="sources-body" [class.expanded]="revenueSourcesExpanded()">
           <div class="sources-body-inner">
-            <div
-              class="source-item"
-              style="--source-color: #3b82f6"
-            >
+            <div class="source-item" style="--source-color: #3b82f6">
               <div class="source-bar">
                 <div
                   class="source-bar-fill"
@@ -531,9 +368,7 @@
                 ></div>
               </div>
               <div class="source-info">
-                <span class="source-label"
-                  >Room Charges</span
-                >
+                <span class="source-label">Room Charges</span>
                 <span class="source-value">{{
                   formatKsh(
                     totalRevenue() -
@@ -547,137 +382,89 @@
               </div>
             </div>
             @if (totalOverrunRevenue() > 0) {
-              <div
-                class="source-item"
-                style="--source-color: #f59e0b"
-              >
+              <div class="source-item" style="--source-color: #f59e0b">
                 <div class="source-bar">
                   <div
                     class="source-bar-fill"
                     [style.width]="
-                      (totalOverrunRevenue() /
-                        totalRevenue()) *
-                        100 +
-                      '%'
+                      (totalOverrunRevenue() / totalRevenue()) * 100 + '%'
                     "
                   ></div>
                 </div>
                 <div class="source-info">
-                  <span class="source-label"
-                    >Overrun</span
-                  >
+                  <span class="source-label">Overrun</span>
                   <span class="source-value">{{
-                    formatKsh(
-                      totalOverrunRevenue()
-                    )
+                    formatKsh(totalOverrunRevenue())
                   }}</span>
                 </div>
               </div>
             }
             @if (totalCancellationRevenue() > 0) {
-              <div
-                class="source-item"
-                style="--source-color: #ef4444"
-              >
+              <div class="source-item" style="--source-color: #ef4444">
                 <div class="source-bar">
                   <div
                     class="source-bar-fill"
                     [style.width]="
-                      (totalCancellationRevenue() /
-                        totalRevenue()) *
-                        100 +
-                      '%'
+                      (totalCancellationRevenue() / totalRevenue()) * 100 + '%'
                     "
                   ></div>
                 </div>
                 <div class="source-info">
-                  <span class="source-label"
-                    >Cancellation</span
-                  >
+                  <span class="source-label">Cancellation</span>
                   <span class="source-value">{{
-                    formatKsh(
-                      totalCancellationRevenue()
-                    )
+                    formatKsh(totalCancellationRevenue())
                   }}</span>
                 </div>
               </div>
             }
             @if (totalNoShowRevenue() > 0) {
-              <div
-                class="source-item"
-                style="--source-color: #8b5cf6"
-              >
+              <div class="source-item" style="--source-color: #8b5cf6">
                 <div class="source-bar">
                   <div
                     class="source-bar-fill"
                     [style.width]="
-                      (totalNoShowRevenue() /
-                        totalRevenue()) *
-                        100 +
-                      '%'
+                      (totalNoShowRevenue() / totalRevenue()) * 100 + '%'
                     "
                   ></div>
                 </div>
                 <div class="source-info">
-                  <span class="source-label"
-                    >No-Show</span
-                  >
+                  <span class="source-label">No-Show</span>
                   <span class="source-value">{{
-                    formatKsh(
-                      totalNoShowRevenue()
-                    )
+                    formatKsh(totalNoShowRevenue())
                   }}</span>
                 </div>
               </div>
             }
             @if (totalIncidentRevenue() > 0) {
-              <div
-                class="source-item"
-                style="--source-color: #06b6d4"
-              >
+              <div class="source-item" style="--source-color: #06b6d4">
                 <div class="source-bar">
                   <div
                     class="source-bar-fill"
                     [style.width]="
-                      (totalIncidentRevenue() /
-                        totalRevenue()) *
-                        100 +
-                      '%'
+                      (totalIncidentRevenue() / totalRevenue()) * 100 + '%'
                     "
                   ></div>
                 </div>
                 <div class="source-info">
-                  <span class="source-label"
-                    >Incidents</span
-                  >
+                  <span class="source-label">Incidents</span>
                   <span class="source-value">{{
-                    formatKsh(
-                      totalIncidentRevenue()
-                    )
+                    formatKsh(totalIncidentRevenue())
                   }}</span>
                 </div>
               </div>
             }
             @if (totalTaxRevenue() > 0) {
-              <div
-                class="source-item"
-                style="--source-color: #6b7280"
-              >
+              <div class="source-item" style="--source-color: #6b7280">
                 <div class="source-bar">
                   <div
                     class="source-bar-fill"
                     [style.width]="
-                      (totalTaxRevenue() /
-                        totalRevenue()) *
-                        100 +
-                      '%'
+                      (totalTaxRevenue() / totalRevenue()) * 100 + '%'
                     "
                   ></div>
                 </div>
                 <div class="source-info">
-                  <span class="source-label"
-                    >Tax</span
-                  >
+                  <span class="source-label">Tax</span>
                   <span class="source-value">{{
                     formatKsh(totalTaxRevenue())
                   }}</span>
@@ -695,45 +482,28 @@
       } @else if (errorMessage()) {
         <div class="state-panel state-error">
           <p>{{ errorMessage() }}</p>
-          <button
-            type="button"
-            class="reset-button"
-            (click)="refresh()"
-          >
+          <button type="button" class="reset-button" (click)="refresh()">
             Try Again
           </button>
         </div>
       } @else if (getRevenueWithBills().length) {
         <div class="card-list">
-          @for (
-            r of getRevenueWithBills();
-            track r.bookingId
-          ) {
+          @for (r of getRevenueWithBills(); track r.bookingId) {
             <div class="card-row">
               <div class="card-row-header">
                 <div class="card-row-left">
-                  <span class="card-row-title">{{
-                    r.roomName
-                  }}</span>
+                  <span class="card-row-title">{{ r.roomName }}</span>
                   <span class="card-row-sub"
-                    >{{ r.purpose }} ·
-                    {{ r.bookerName }}</span
+                    >{{ r.purpose }} · {{ r.bookerName }}</span
                   >
                 </div>
                 <div class="revenue-total-block">
-                  <span
-                    class="revenue-total-amount"
-                    >{{
-                      formatKsh(r.totalAmount)
-                    }}</span
-                  >
+                  <span class="revenue-total-amount">{{
+                    formatKsh(r.totalAmount)
+                  }}</span>
                   <span
                     class="status-badge"
-                    [class]="
-                      statusBadgeClass(
-                        r.billStatus
-                      )
-                    "
+                    [class]="statusBadgeClass(r.billStatus)"
                   >
                     {{ r.billStatus || '—' }}
                   </span>
@@ -741,104 +511,54 @@
               </div>
               <div class="card-row-metrics">
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Rate</span
-                  >
+                  <span class="metric-label">Rate</span>
                   <span class="metric-value"
-                    >{{
-                      formatKsh(
-                        r.bookedHourlyRate
-                      )
-                    }}<span class="unit-suffix"
-                      >/hr</span
-                    ></span
+                    >{{ formatKsh(r.bookedHourlyRate)
+                    }}<span class="unit-suffix">/hr</span></span
                   >
                 </div>
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Duration</span
-                  >
+                  <span class="metric-label">Duration</span>
                   <span class="metric-value">{{
-                    formatMinutesShort(
-                      r.durationMinutes
-                    )
+                    formatMinutesShort(r.durationMinutes)
                   }}</span>
                 </div>
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Subtotal</span
-                  >
-                  <span class="metric-value">{{
-                    formatKsh(r.subtotal)
-                  }}</span>
+                  <span class="metric-label">Subtotal</span>
+                  <span class="metric-value">{{ formatKsh(r.subtotal) }}</span>
                 </div>
                 <div class="metric-chip">
-                  <span class="metric-label"
-                    >Tax</span
-                  >
-                  <span class="metric-value">{{
-                    formatKsh(r.taxAmount)
-                  }}</span>
+                  <span class="metric-label">Tax</span>
+                  <span class="metric-value">{{ formatKsh(r.taxAmount) }}</span>
                 </div>
-                @if (
-                  r.overrunMinutes &&
-                  r.overrunMinutes > 0
-                ) {
-                  <div
-                    class="metric-chip chip-warn"
-                  >
-                    <span class="metric-label"
-                      >Overrun</span
-                    >
+                @if (r.overrunMinutes && r.overrunMinutes > 0) {
+                  <div class="metric-chip chip-warn">
+                    <span class="metric-label">Overrun</span>
                     <span class="metric-value"
                       >+{{ r.overrunMinutes }}m ·
-                      {{
-                        formatKsh(
-                          r.overrunCharge || 0
-                        )
-                      }}</span
+                      {{ formatKsh(r.overrunCharge || 0) }}</span
                     >
                   </div>
                 }
-                @if (
-                  r.cancellationFee &&
-                  r.cancellationFee > 0
-                ) {
-                  <div
-                    class="metric-chip chip-alert"
-                  >
-                    <span class="metric-label"
-                      >Cancellation</span
-                    >
+                @if (r.cancellationFee && r.cancellationFee > 0) {
+                  <div class="metric-chip chip-alert">
+                    <span class="metric-label">Cancellation</span>
                     <span class="metric-value">{{
                       formatKsh(r.cancellationFee)
                     }}</span>
                   </div>
                 }
-                @if (
-                  r.noShowFee && r.noShowFee > 0
-                ) {
-                  <div
-                    class="metric-chip chip-alert"
-                  >
-                    <span class="metric-label"
-                      >No-Show</span
-                    >
+                @if (r.noShowFee && r.noShowFee > 0) {
+                  <div class="metric-chip chip-alert">
+                    <span class="metric-label">No-Show</span>
                     <span class="metric-value">{{
                       formatKsh(r.noShowFee)
                     }}</span>
                   </div>
                 }
-                @if (
-                  r.incidentFee &&
-                  r.incidentFee > 0
-                ) {
-                  <div
-                    class="metric-chip chip-warn"
-                  >
-                    <span class="metric-label"
-                      >Incident</span
-                    >
+                @if (r.incidentFee && r.incidentFee > 0) {
+                  <div class="metric-chip chip-warn">
+                    <span class="metric-label">Incident</span>
                     <span class="metric-value">{{
                       formatKsh(r.incidentFee)
                     }}</span>

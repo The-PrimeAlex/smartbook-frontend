@@ -1,9 +1,4 @@
-import {
-  computed,
-  inject,
-  Injectable,
-  signal,
-} from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -34,27 +29,18 @@ const LS_USER = 'smartbook_user';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  private readonly accessTokenState = signal<
-    string | null
-  >(null);
-  private readonly currentUserState =
-    signal<CurrentUser | null>(null);
-  private refreshInFlight$: Observable<AuthResponse> | null =
-    null;
+  private readonly accessTokenState = signal<string | null>(null);
+  private readonly currentUserState = signal<CurrentUser | null>(null);
+  private refreshInFlight$: Observable<AuthResponse> | null = null;
 
   // CSRF token in memory for cross-origin requests
   private csrfToken = signal<string | null>(null);
 
   // Visual & Reactive Anchors
-  readonly currentUser =
-    this.currentUserState.asReadonly();
-  readonly isAuthenticated = computed(
-    () => this.accessTokenState() !== null,
-  );
+  readonly currentUser = this.currentUserState.asReadonly();
+  readonly isAuthenticated = computed(() => this.accessTokenState() !== null);
 
-  readonly accessToken$ = toObservable(
-    this.accessTokenState,
-  );
+  readonly accessToken$ = toObservable(this.accessTokenState);
 
   private readonly httpOptions = {
     withCredentials: true,
@@ -65,17 +51,11 @@ export class AuthService {
   }
 
   hasRole(role: string): boolean {
-    return (
-      this.currentUserState()?.roles.includes(
-        role,
-      ) ?? false
-    );
+    return this.currentUserState()?.roles.includes(role) ?? false;
   }
 
   // Fetches CSRF cookie before sending credentials
-  login(
-    credentials: LoginRequest,
-  ): Observable<CurrentUser> {
+  login(credentials: LoginRequest): Observable<CurrentUser> {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<AuthResponse>(
@@ -90,9 +70,7 @@ export class AuthService {
       tap((response) => {
         this.applyAuthResponse(response);
         // Clear any auto-logout session-expired flag on successful login
-        sessionStorage.removeItem(
-          'smartbook-session-expired',
-        );
+        sessionStorage.removeItem('smartbook-session-expired');
         // Reset the password change redirect guard so the interceptor
         // can catch password_change_required again if needed
         resetPasswordChangeRedirected();
@@ -108,11 +86,7 @@ export class AuthService {
   // Restores session from localStorage; fetches CSRF lazily in prod
   restoreSession(): Observable<boolean> {
     // If the session was expired by auto-logout, don't restore
-    if (
-      sessionStorage.getItem(
-        'smartbook-session-expired',
-      ) === 'true'
-    ) {
+    if (sessionStorage.getItem('smartbook-session-expired') === 'true') {
       this.clearLocalAuth();
       return of(false);
     }
@@ -143,26 +117,23 @@ export class AuthService {
   // shareReplay ensures only one refresh request runs at a time
   refreshAccessToken(): Observable<AuthResponse> {
     if (!this.refreshInFlight$) {
-      this.refreshInFlight$ =
-        this.ensureCsrfToken().pipe(
-          switchMap(() =>
-            this.http.post<AuthResponse>(
-              '/api/v1/auth/refresh',
-              {},
-              this.httpOptions,
-            ),
+      this.refreshInFlight$ = this.ensureCsrfToken().pipe(
+        switchMap(() =>
+          this.http.post<AuthResponse>(
+            '/api/v1/auth/refresh',
+            {},
+            this.httpOptions,
           ),
-          tap((response) =>
-            this.applyAuthResponse(response),
-          ),
-          finalize(() => {
-            this.refreshInFlight$ = null;
-          }),
-          shareReplay({
-            bufferSize: 1,
-            refCount: false,
-          }),
-        );
+        ),
+        tap((response) => this.applyAuthResponse(response)),
+        finalize(() => {
+          this.refreshInFlight$ = null;
+        }),
+        shareReplay({
+          bufferSize: 1,
+          refCount: false,
+        }),
+      );
     }
 
     return this.refreshInFlight$;
@@ -170,22 +141,14 @@ export class AuthService {
 
   logout(): Observable<void> {
     return this.http
-      .post<void>(
-        '/api/v1/auth/logout',
-        {},
-        this.httpOptions,
-      )
+      .post<void>('/api/v1/auth/logout', {}, this.httpOptions)
       .pipe(
-        catchError((error) =>
-          throwError(() => error),
-        ),
+        catchError((error) => throwError(() => error)),
         finalize(() => this.clearLocalAuth()),
       );
   }
 
-  changePassword(
-    request: ChangePasswordRequest,
-  ): Observable<AuthResponse> {
+  changePassword(request: ChangePasswordRequest): Observable<AuthResponse> {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<AuthResponse>(
@@ -194,9 +157,7 @@ export class AuthService {
           this.httpOptions,
         ),
       ),
-      tap((response) =>
-        this.applyAuthResponse(response),
-      ),
+      tap((response) => this.applyAuthResponse(response)),
     );
   }
 
@@ -226,9 +187,7 @@ export class AuthService {
     if (!environment.production) {
       const hasCsrfCookie = document.cookie
         .split(';')
-        .some((cookie) =>
-          cookie.trim().startsWith('XSRF-TOKEN='),
-        );
+        .some((cookie) => cookie.trim().startsWith('XSRF-TOKEN='));
       if (hasCsrfCookie) {
         return of(void 0);
       }
@@ -237,12 +196,9 @@ export class AuthService {
     // Fetch and cache the CSRF token for cross-origin use.
     // Use relative path so CSRF cookie matches the Cloudflare Pages proxy domain.
     return this.http
-      .get<{ token: string }>(
-        '/api/v1/auth/csrf',
-        {
-          withCredentials: true,
-        },
-      )
+      .get<{ token: string }>('/api/v1/auth/csrf', {
+        withCredentials: true,
+      })
       .pipe(
         tap((response) => {
           // Store the token in memory for cross-origin use
@@ -252,36 +208,21 @@ export class AuthService {
       );
   }
 
-  applyAuthResponse(
-    response: AuthResponse,
-  ): void {
-    this.accessTokenState.set(
-      response.accessToken,
-    );
+  applyAuthResponse(response: AuthResponse): void {
+    this.accessTokenState.set(response.accessToken);
     this.currentUserState.set(response.user);
     // Persist to localStorage so page refresh restores the session
-    localStorage.setItem(
-      LS_ACCESS_TOKEN,
-      response.accessToken,
-    );
-    localStorage.setItem(
-      LS_USER,
-      JSON.stringify(response.user),
-    );
+    localStorage.setItem(LS_ACCESS_TOKEN, response.accessToken);
+    localStorage.setItem(LS_USER, JSON.stringify(response.user));
   }
 
   // Reads token and user from localStorage to survive page refresh
   private restoreFromLocalStorage(): boolean {
-    const token = localStorage.getItem(
-      LS_ACCESS_TOKEN,
-    );
-    const userJson =
-      localStorage.getItem(LS_USER);
+    const token = localStorage.getItem(LS_ACCESS_TOKEN);
+    const userJson = localStorage.getItem(LS_USER);
     if (token && userJson) {
       try {
-        const user = JSON.parse(
-          userJson,
-        ) as CurrentUser;
+        const user = JSON.parse(userJson) as CurrentUser;
         this.accessTokenState.set(token);
         this.currentUserState.set(user);
         return true;

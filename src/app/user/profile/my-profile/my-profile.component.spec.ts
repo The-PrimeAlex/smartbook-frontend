@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MyProfileComponent } from './my-profile.component.css';
 
 describe('MyProfileComponent', () => {
@@ -13,9 +10,7 @@ describe('MyProfileComponent', () => {
       imports: [MyProfileComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      MyProfileComponent,
-    );
+    fixture = TestBed.createComponent(MyProfileComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

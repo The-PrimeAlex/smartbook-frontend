@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component.css';
 
 describe('DashboardComponent', () => {
@@ -13,9 +10,7 @@ describe('DashboardComponent', () => {
       imports: [DashboardComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      DashboardComponent,
-    );
+    fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

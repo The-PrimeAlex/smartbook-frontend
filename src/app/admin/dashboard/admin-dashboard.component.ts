@@ -1,10 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { createLogger } from '../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -35,10 +29,7 @@ import { RoomService } from '../../shared/services/room.service';
 import { MeetingRoom } from '../../shared/models/room.model';
 import { BookingService } from '../../shared/services/booking.service';
 import { Booking } from '../../shared/models/booking.model';
-import {
-  UsersService,
-  SmartBookUser,
-} from '../users/users.service';
+import { UsersService, SmartBookUser } from '../users/users.service';
 import {
   RoomMonitoringAlService,
   RoomMonitoringRecordAl,
@@ -82,80 +73,48 @@ export interface QuickAction {
   styleUrl: './admin-dashboard.component.css',
 })
 export class AdminDashboard implements OnInit {
-  private readonly log = createLogger(
-    'AdminDashboard',
-  );
-  private readonly authService =
-    inject(AuthService);
-  private readonly roomService =
-    inject(RoomService);
-  private readonly bookingService = inject(
-    BookingService,
-  );
-  private readonly usersService =
-    inject(UsersService);
-  private readonly monitoringService = inject(
-    RoomMonitoringAlService,
-  );
-  private readonly reportsService = inject(
-    ReportsAlService,
-  );
-  private readonly incidentsService = inject(
-    IncidentsService,
-  );
+  private readonly log = createLogger('AdminDashboard');
+  private readonly authService = inject(AuthService);
+  private readonly roomService = inject(RoomService);
+  private readonly bookingService = inject(BookingService);
+  private readonly usersService = inject(UsersService);
+  private readonly monitoringService = inject(RoomMonitoringAlService);
+  private readonly reportsService = inject(ReportsAlService);
+  private readonly incidentsService = inject(IncidentsService);
   private readonly router = inject(Router);
 
-  protected readonly LucideCalendar =
-    LucideCalendar;
-  protected readonly LucideCreditCard =
-    LucideCreditCard;
-  protected readonly LucideTriangleAlert =
-    LucideTriangleAlert;
-  protected readonly LucideLayoutDashboard =
-    LucideLayoutDashboard;
+  protected readonly LucideCalendar = LucideCalendar;
+  protected readonly LucideCreditCard = LucideCreditCard;
+  protected readonly LucideTriangleAlert = LucideTriangleAlert;
+  protected readonly LucideLayoutDashboard = LucideLayoutDashboard;
   protected readonly LucideMapPin = LucideMapPin;
   protected readonly LucideBell = LucideBell;
   protected readonly LucideClock = LucideClock;
   protected readonly LucideUsers = LucideUsers;
   protected readonly LucideSearch = LucideSearch;
-  protected readonly LucideSettings =
-    LucideSettings;
-  protected readonly LucideMonitor =
-    LucideMonitor;
-  protected readonly LucideFileText =
-    LucideFileText;
-  protected readonly LucideTrendingUp =
-    LucideTrendingUp;
-  protected readonly LucideShieldCheck =
-    LucideShieldCheck;
+  protected readonly LucideSettings = LucideSettings;
+  protected readonly LucideMonitor = LucideMonitor;
+  protected readonly LucideFileText = LucideFileText;
+  protected readonly LucideTrendingUp = LucideTrendingUp;
+  protected readonly LucideShieldCheck = LucideShieldCheck;
   protected readonly LucidePlus = LucidePlus;
-  protected readonly LucideActivity =
-    LucideActivity;
-  protected readonly LucideChevronDown =
-    LucideChevronDown;
+  protected readonly LucideActivity = LucideActivity;
+  protected readonly LucideChevronDown = LucideChevronDown;
 
-  readonly currentUser =
-    this.authService.currentUser;
+  readonly currentUser = this.authService.currentUser;
 
   readonly fullName = computed(() => {
     const user = this.currentUser();
     if (!user) return 'Admin';
-    return (
-      `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() ||
-      'Admin'
-    );
+    return `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() || 'Admin';
   });
 
   // Data signals
   readonly rooms = signal<MeetingRoom[]>([]);
   readonly bookings = signal<Booking[]>([]);
   readonly users = signal<SmartBookUser[]>([]);
-  readonly liveStatus = signal<
-    RoomMonitoringRecordAl[]
-  >([]);
-  readonly revenueReports = signal<
-    RevenueReportAl[]
-  >([]);
+  readonly liveStatus = signal<RoomMonitoringRecordAl[]>([]);
+  readonly revenueReports = signal<RevenueReportAl[]>([]);
   readonly incidents = signal<any[]>([]);
   readonly loading = signal(true);
   readonly statsCollapsed = signal(true);
@@ -170,70 +129,38 @@ export class AdminDashboard implements OnInit {
   }
 
   // Computed stats
-  readonly totalRooms = computed(
-    () => this.rooms().length,
-  );
+  readonly totalRooms = computed(() => this.rooms().length);
   readonly activeRooms = computed(
-    () =>
-      this.rooms().filter(
-        (r) => r.status === 'ACTIVE',
-      ).length,
+    () => this.rooms().filter((r) => r.status === 'ACTIVE').length,
   );
   readonly maintenanceRooms = computed(
-    () =>
-      this.rooms().filter(
-        (r) => r.status === 'MAINTENANCE',
-      ).length,
+    () => this.rooms().filter((r) => r.status === 'MAINTENANCE').length,
   );
   readonly totalCapacity = computed(() =>
-    this.rooms().reduce(
-      (sum, r) => sum + (r.capacity || 0),
-      0,
-    ),
+    this.rooms().reduce((sum, r) => sum + (r.capacity || 0), 0),
   );
 
-  readonly totalBookings = computed(
-    () => this.bookings().length,
-  );
+  readonly totalBookings = computed(() => this.bookings().length);
   readonly confirmedBookings = computed(
-    () =>
-      this.bookings().filter(
-        (b) => b.bookingStatus === 'CONFIRMED',
-      ).length,
+    () => this.bookings().filter((b) => b.bookingStatus === 'CONFIRMED').length,
   );
   readonly pendingBookings = computed(
-    () =>
-      this.bookings().filter(
-        (b) => b.bookingStatus === 'PENDING',
-      ).length,
+    () => this.bookings().filter((b) => b.bookingStatus === 'PENDING').length,
   );
   readonly checkedInBookings = computed(
     () =>
-      this.bookings().filter(
-        (b) => b.bookingStatus === 'CHECKED_IN',
-      ).length,
+      this.bookings().filter((b) => b.bookingStatus === 'CHECKED_IN').length,
   );
   readonly noShowBookings = computed(
-    () =>
-      this.bookings().filter(
-        (b) => b.bookingStatus === 'NO_SHOW',
-      ).length,
+    () => this.bookings().filter((b) => b.bookingStatus === 'NO_SHOW').length,
   );
 
-  readonly totalUsers = computed(
-    () => this.users().length,
-  );
+  readonly totalUsers = computed(() => this.users().length);
   readonly activeUsers = computed(
-    () =>
-      this.users().filter(
-        (u) => u.status === 'ACTIVE',
-      ).length,
+    () => this.users().filter((u) => u.status === 'ACTIVE').length,
   );
   readonly adminUsers = computed(
-    () =>
-      this.users().filter((u) =>
-        u.roles?.includes('ADMIN'),
-      ).length,
+    () => this.users().filter((u) => u.roles?.includes('ADMIN')).length,
   );
 
   readonly totalRevenue = computed(() => {
@@ -243,27 +170,17 @@ export class AdminDashboard implements OnInit {
     );
   });
 
-  readonly totalIncidents = computed(
-    () => this.incidents().length,
-  );
+  readonly totalIncidents = computed(() => this.incidents().length);
   readonly reportedIncidents = computed(
     () =>
-      this.incidents().filter(
-        (i) => i.incidentStatus === 'REPORTED',
-      ).length,
+      this.incidents().filter((i) => i.incidentStatus === 'REPORTED').length,
   );
 
   readonly occupiedRooms = computed(
-    () =>
-      this.liveStatus().filter(
-        (r) => r.liveStatus === 'OCCUPIED',
-      ).length,
+    () => this.liveStatus().filter((r) => r.liveStatus === 'OCCUPIED').length,
   );
   readonly overrunRooms = computed(
-    () =>
-      this.liveStatus().filter(
-        (r) => r.liveStatus === 'OVERRUN',
-      ).length,
+    () => this.liveStatus().filter((r) => r.liveStatus === 'OVERRUN').length,
   );
 
   readonly recentBookings = computed(() => {
@@ -369,20 +286,13 @@ export class AdminDashboard implements OnInit {
         this.rooms.set(data.rooms);
         this.bookings.set(data.bookings);
         this.liveStatus.set(data.liveStatus);
-        this.revenueReports.set(
-          data.revenueReports,
-        );
+        this.revenueReports.set(data.revenueReports);
         this.incidents.set(data.incidents);
-        this.users.set(
-          this.usersService.readOnlyUsers() ?? [],
-        );
+        this.users.set(this.usersService.readOnlyUsers() ?? []);
         this.loading.set(false);
       },
       error: (err) => {
-        this.log.error(
-          'Error loading admin dashboard data:',
-          err,
-        );
+        this.log.error('Error loading admin dashboard data:', err);
         this.loading.set(false);
       },
     });
@@ -440,16 +350,14 @@ export class AdminDashboard implements OnInit {
   timeUntil(dateStr: string): string {
     const now = new Date();
     const target = new Date(dateStr);
-    const diffMs =
-      target.getTime() - now.getTime();
+    const diffMs = target.getTime() - now.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffMins < 1) return 'Starting now';
     if (diffMins < 60) return `In ${diffMins}m`;
-    if (diffHours < 24)
-      return `In ${diffHours}h ${diffMins % 60}m`;
+    if (diffHours < 24) return `In ${diffHours}h ${diffMins % 60}m`;
     return `In ${diffDays}d ${diffHours % 24}h`;
   }
 }

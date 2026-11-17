@@ -67,8 +67,7 @@ import {
   styleUrl: './my-charges.component.css',
 })
 export class MyChargesComponent implements OnInit, OnDestroy {
-  private readonly log =
-    createLogger('MyCharges');
+  private readonly log = createLogger('MyCharges');
   bills = signal<Bill[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -89,8 +88,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   readonly LucideFileText = LucideFileText;
   readonly LucideLoader = LucideLoader;
   readonly LucideSmartphone = LucideSmartphone;
-  readonly LucideTriangleAlert =
-    LucideTriangleAlert;
+  readonly LucideTriangleAlert = LucideTriangleAlert;
   readonly LucideX = LucideX;
   readonly LucideXCircle = LucideXCircle;
 
@@ -112,11 +110,8 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   paymentSuccess = signal(false);
   paymentError = signal<string | null>(null);
   paymentWaiting = signal(false); // Waiting for M-Pesa confirmation
-  mpesaCheckoutRequestId = signal<string | null>(
-    null,
-  );
-  private pollSubscription: Subscription | null =
-    null;
+  mpesaCheckoutRequestId = signal<string | null>(null);
+  private pollSubscription: Subscription | null = null;
 
   filterStatus = signal('ALL');
 
@@ -157,22 +152,17 @@ export class MyChargesComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.error.set(
-          'We couldn\'t load your charges. Please try again in a moment.',
+          "We couldn't load your charges. Please try again in a moment.",
         );
         this.loading.set(false);
-        this.log.error(
-          'Error loading bills:',
-          err,
-        );
+        this.log.error('Error loading bills:', err);
       },
     });
   }
 
   openPayment(bill: Bill): void {
     this.selectedBill.set(bill);
-    this.paymentAmount.set(
-      bill.totalAmount - bill.amountPaid,
-    );
+    this.paymentAmount.set(bill.totalAmount - bill.amountPaid);
     this.paymentMethod.set('MPESA');
     this.phoneNumber.set('');
     this.transactionReference.set('');
@@ -196,9 +186,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
     }
   }
 
-  closePaymentModalIfOverlayClick(
-    event: MouseEvent,
-  ): void {
+  closePaymentModalIfOverlayClick(event: MouseEvent): void {
     if (event.target === event.currentTarget) {
       this.closePaymentModal();
     }
@@ -219,9 +207,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
         return;
       }
       if (!phone.match(/^254\d{9}$/)) {
-        this.paymentError.set(
-          'Invalid phone number. Use format: 254XXXXXXXXX',
-        );
+        this.paymentError.set('Invalid phone number. Use format: 254XXXXXXXXX');
         return;
       }
     }
@@ -229,89 +215,70 @@ export class MyChargesComponent implements OnInit, OnDestroy {
     const request: PaymentRequest = {
       paymentMethod: this.paymentMethod(),
       amount: this.paymentAmount(),
-      transactionReference:
-        this.transactionReference(),
+      transactionReference: this.transactionReference(),
       phoneNumber: this.phoneNumber(),
     };
 
     this.paying.set(true);
     this.paymentError.set(null);
 
-    this.billingService
-      .createPayment(bill.billId, request)
-      .subscribe({
-        next: (response: PaymentResponse) => {
-          this.paying.set(false);
+    this.billingService.createPayment(bill.billId, request).subscribe({
+      next: (response: PaymentResponse) => {
+        this.paying.set(false);
 
-          // For M-Pesa, start polling for payment status
-          if (
-            request.paymentMethod === 'MPESA' &&
-            response.transactionReference
-          ) {
-            this.mpesaCheckoutRequestId.set(
-              response.transactionReference,
-            );
-            this.paymentWaiting.set(true);
-            this.startPolling();
-          } else {
-            // For other methods, show success immediately
-            this.paymentSuccess.set(true);
-            this.loadBills();
-          }
-        },
-        error: (err) => {
-          this.paying.set(false);
-          const serverMsg = err.error?.error || err.error?.message;
-          const statusText = err.status ? ` (${err.status})` : '';
-          this.paymentError.set(
-            serverMsg || `Payment failed${statusText}. Please try again.`,
-          );
-          this.log.error('Payment error:', err);
-          this.log.error('Payment error body:', err.error);
-        },
-      });
+        // For M-Pesa, start polling for payment status
+        if (
+          request.paymentMethod === 'MPESA' &&
+          response.transactionReference
+        ) {
+          this.mpesaCheckoutRequestId.set(response.transactionReference);
+          this.paymentWaiting.set(true);
+          this.startPolling();
+        } else {
+          // For other methods, show success immediately
+          this.paymentSuccess.set(true);
+          this.loadBills();
+        }
+      },
+      error: (err) => {
+        this.paying.set(false);
+        const serverMsg = err.error?.error || err.error?.message;
+        const statusText = err.status ? ` (${err.status})` : '';
+        this.paymentError.set(
+          serverMsg || `Payment failed${statusText}. Please try again.`,
+        );
+        this.log.error('Payment error:', err);
+        this.log.error('Payment error body:', err.error);
+      },
+    });
   }
 
   startPolling(): void {
     // Poll every 3 seconds for up to 2 minutes
-    this.pollSubscription = interval(
-      3000,
-    ).subscribe({
+    this.pollSubscription = interval(3000).subscribe({
       next: () => {
-        const checkoutId =
-          this.mpesaCheckoutRequestId();
+        const checkoutId = this.mpesaCheckoutRequestId();
         if (!checkoutId) return;
 
-        this.billingService
-          .queryMpesaPaymentStatus(checkoutId)
-          .subscribe({
-            next: (status) => {
-              if (
-                status.paymentStatus === 'SUCCESS'
-              ) {
-                this.stopPolling();
-                this.paymentWaiting.set(false);
-                this.paymentSuccess.set(true);
-                this.loadBills();
-              } else if (
-                status.paymentStatus === 'FAILED'
-              ) {
-                this.stopPolling();
-                this.paymentWaiting.set(false);
-                this.paymentError.set(
-                  'Payment was declined. Please try again.',
-                );
-              }
-              // If still PENDING, keep polling
-            },
-            error: (err) => {
-              // Ignore polling errors — keep trying
-              this.log.error(
-                'Polling error:',
-                err,
-              );
-            },
-          });
+        this.billingService.queryMpesaPaymentStatus(checkoutId).subscribe({
+          next: (status) => {
+            if (status.paymentStatus === 'SUCCESS') {
+              this.stopPolling();
+              this.paymentWaiting.set(false);
+              this.paymentSuccess.set(true);
+              this.loadBills();
+            } else if (status.paymentStatus === 'FAILED') {
+              this.stopPolling();
+              this.paymentWaiting.set(false);
+              this.paymentError.set('Payment was declined. Please try again.');
+            }
+            // If still PENDING, keep polling
+          },
+          error: (err) => {
+            // Ignore polling errors — keep trying
+            this.log.error('Polling error:', err);
+          },
+        });
       },
     });
 
@@ -335,33 +302,24 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   }
 
   get filteredBills(): Bill[] {
-    if (this.filterStatus() === 'ALL')
-      return this.bills();
-    return this.bills().filter(
-      (b) => b.billStatus === this.filterStatus(),
-    );
+    if (this.filterStatus() === 'ALL') return this.bills();
+    return this.bills().filter((b) => b.billStatus === this.filterStatus());
   }
 
   get totalOutstanding(): number {
     return this.bills().reduce(
-      (sum, b) =>
-        sum + (b.totalAmount - b.amountPaid),
+      (sum, b) => sum + (b.totalAmount - b.amountPaid),
       0,
     );
   }
 
   get totalPaid(): number {
-    return this.bills().reduce(
-      (sum, b) => sum + b.amountPaid,
-      0,
-    );
+    return this.bills().reduce((sum, b) => sum + b.amountPaid, 0);
   }
 
   get unpaidCount(): number {
     return this.bills().filter(
-      (b) =>
-        b.billStatus !== 'PAID' &&
-        b.billStatus !== 'VOID',
+      (b) => b.billStatus !== 'PAID' && b.billStatus !== 'VOID',
     ).length;
   }
 

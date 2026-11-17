@@ -3,64 +3,37 @@
 
 export function dateKey(date: Date): string {
   const year = date.getFullYear();
-  const month = String(
-    date.getMonth() + 1,
-  ).padStart(2, '0');
-  const day = String(date.getDate()).padStart(
-    2,
-    '0',
-  );
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
 export function timeKey(date: Date): string {
-  const hours = String(date.getHours()).padStart(
-    2,
-    '0',
-  );
-  const minutes = String(
-    date.getMinutes(),
-  ).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
   return `${hours}:${minutes}`;
 }
 
 export function startOfDay(date: Date): Date {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-  );
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-export function parseDate(
-  value: unknown,
-): Date | null {
-  if (
-    typeof value !== 'string' &&
-    typeof value !== 'number'
-  ) {
+export function parseDate(value: unknown): Date | null {
+  if (typeof value !== 'string' && typeof value !== 'number') {
     return null;
   }
   const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? null
-    : date;
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
-export function formatTime12Hour(
-  time: string,
-): string {
+export function formatTime12Hour(time: string): string {
   if (!time) {
     return '';
   }
-  const [hoursText, minutesText] =
-    time.split(':');
+  const [hoursText, minutesText] = time.split(':');
   const hours = Number(hoursText);
   const minutes = Number(minutesText);
-  if (
-    !Number.isFinite(hours) ||
-    !Number.isFinite(minutes)
-  ) {
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) {
     return time;
   }
   const date = new Date();
@@ -71,27 +44,15 @@ export function formatTime12Hour(
   });
 }
 
-export function previousMonthDate(
-  date: Date,
-): Date {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth() - 1,
-    date.getDate(),
-  );
+export function previousMonthDate(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
 }
 
 export function nextMonthDate(date: Date): Date {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    date.getDate(),
-  );
+  return new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
 }
 
-export function previousWeekDate(
-  date: Date,
-): Date {
+export function previousWeekDate(date: Date): Date {
   const result = new Date(date);
   result.setDate(result.getDate() - 7);
   return result;

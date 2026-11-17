@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -60,27 +57,15 @@ export class ReportsAlService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = '/api/v1/admin/reports';
 
-  getOccupancyReports(): Observable<
-    OccupancyReportAl[]
-  > {
-    return this.http.get<OccupancyReportAl[]>(
-      `${this.apiUrl}/occupancy`,
-    );
+  getOccupancyReports(): Observable<OccupancyReportAl[]> {
+    return this.http.get<OccupancyReportAl[]>(`${this.apiUrl}/occupancy`);
   }
 
-  getBookingReports(): Observable<
-    BookingReportAl[]
-  > {
-    return this.http.get<BookingReportAl[]>(
-      `${this.apiUrl}/bookings`,
-    );
+  getBookingReports(): Observable<BookingReportAl[]> {
+    return this.http.get<BookingReportAl[]>(`${this.apiUrl}/bookings`);
   }
 
-  getRevenueReports(): Observable<
-    RevenueReportAl[]
-  > {
-    return this.http.get<RevenueReportAl[]>(
-      `${this.apiUrl}/revenue`,
-    );
+  getRevenueReports(): Observable<RevenueReportAl[]> {
+    return this.http.get<RevenueReportAl[]>(`${this.apiUrl}/revenue`);
   }
 }

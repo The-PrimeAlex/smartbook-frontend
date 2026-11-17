@@ -9,9 +9,7 @@
   @if (message(); as msg) {
     <div
       class="notice"
-      [class.notice-success]="
-        msg.type === 'success'
-      "
+      [class.notice-success]="msg.type === 'success'"
       [class.notice-error]="msg.type === 'error'"
     >
       @if (msg.type === 'success') {
@@ -21,11 +19,7 @@
           class="notice-icon"
         ></app-icon>
       } @else {
-        <app-icon
-          [icon]="LucideX"
-          [size]="16"
-          class="notice-icon"
-        ></app-icon>
+        <app-icon [icon]="LucideX" [size]="16" class="notice-icon"></app-icon>
       }
       {{ msg.text }}
     </div>
@@ -40,11 +34,7 @@
 
       <span class="results-count">
         {{ filteredUsers().length }}
-        {{
-          filteredUsers().length === 1
-            ? 'user'
-            : 'users'
-        }}
+        {{ filteredUsers().length === 1 ? 'user' : 'users' }}
       </span>
     </div>
 
@@ -54,39 +44,23 @@
         [value]="searchTerm()"
         (change)="onSearchChange($event)"
       ></app-search-box>
-      <button
-        type="button"
-        class="reset-button"
-        (click)="clearFilters()"
-      >
+      <button type="button" class="reset-button" (click)="clearFilters()">
         Reset filters
       </button>
     </div>
 
-    <nav
-      class="filter-list"
-      aria-label="Filter users"
-    >
-      @for (
-        filter of filters;
-        track filter.value
-      ) {
+    <nav class="filter-list" aria-label="Filter users">
+      @for (filter of filters; track filter.value) {
         <button
           type="button"
           class="filter-button"
-          [class.active]="
-            activeFilter() === filter.value
-          "
-          [attr.aria-pressed]="
-            activeFilter() === filter.value
-          "
+          [class.active]="activeFilter() === filter.value"
+          [attr.aria-pressed]="activeFilter() === filter.value"
           (click)="setFilter(filter.value)"
         >
           {{ filter.label }}
           @if (filter.value === 'ALL') {
-            <span class="filter-count">{{
-              users()?.length
-            }}</span>
+            <span class="filter-count">{{ users()?.length }}</span>
           }
         </button>
       }
@@ -94,27 +68,17 @@
 
     @if (filteredUsers().length > 0) {
       <div class="users-grid">
-        @for (
-          user of filteredUsers();
-          track user.id
-        ) {
+        @for (user of filteredUsers(); track user.id) {
           <article
             class="user-card"
             [class.admin-card]="isAdminUser(user)"
-            [class.tenant-card]="
-              !isAdminUser(user)
-            "
+            [class.tenant-card]="!isAdminUser(user)"
           >
             <div class="card-accent"></div>
 
             <div class="card-top">
               <div class="identity">
-                <div
-                  class="avatar"
-                  [class.admin-avatar]="
-                    isAdminUser(user)
-                  "
-                >
+                <div class="avatar" [class.admin-avatar]="isAdminUser(user)">
                   {{ getInitials(user) }}
                 </div>
 
@@ -126,19 +90,10 @@
                 </div>
               </div>
 
-              <span
-                class="role-badge"
-                [class.admin-role]="
-                  isAdminUser(user)
-                "
-              >
+              <span class="role-badge" [class.admin-role]="isAdminUser(user)">
                 @if (isAdminUser(user)) {
                 } @else {}
-                {{
-                  isAdminUser(user)
-                    ? 'Admin'
-                    : 'Tenant'
-                }}
+                {{ isAdminUser(user) ? 'Admin' : 'Tenant' }}
               </span>
             </div>
 
@@ -146,10 +101,7 @@
 
             <div class="card-details">
               <div class="detail-row">
-                <span
-                  class="detail-icon"
-                  aria-hidden="true"
-                >
+                <span class="detail-icon" aria-hidden="true">
                   <app-icon
                     [icon]="LucideMail"
                     [size]="24"
@@ -157,21 +109,13 @@
                   ></app-icon>
                 </span>
                 <div class="detail-copy">
-                  <span class="detail-label"
-                    >Email address</span
-                  >
-                  <span
-                    class="detail-value break-value"
-                    >{{ user.email }}</span
-                  >
+                  <span class="detail-label">Email address</span>
+                  <span class="detail-value break-value">{{ user.email }}</span>
                 </div>
               </div>
 
               <div class="detail-row">
-                <span
-                  class="detail-icon"
-                  aria-hidden="true"
-                >
+                <span class="detail-icon" aria-hidden="true">
                   <app-icon
                     [icon]="LucidePhone"
                     [size]="24"
@@ -179,21 +123,14 @@
                   ></app-icon>
                 </span>
                 <div class="detail-copy">
-                  <span class="detail-label"
-                    >Phone number</span
-                  >
-                  <span class="detail-value">{{
-                    user.phoneNumber
-                  }}</span>
+                  <span class="detail-label">Phone number</span>
+                  <span class="detail-value">{{ user.phoneNumber }}</span>
                 </div>
               </div>
 
               @if (hasCompanyDetails(user)) {
                 <div class="detail-row">
-                  <span
-                    class="detail-icon company-icon"
-                    aria-hidden="true"
-                  >
+                  <span class="detail-icon company-icon" aria-hidden="true">
                     <app-icon
                       [icon]="LucideBuilding"
                       [size]="24"
@@ -201,26 +138,16 @@
                     ></app-icon>
                   </span>
                   <div class="detail-copy">
-                    <span class="detail-label"
-                      >Company</span
-                    >
+                    <span class="detail-label">Company</span>
                     <span class="detail-value">
-                      {{
-                        user.companyName ||
-                          'Not provided'
-                      }}
+                      {{ user.companyName || 'Not provided' }}
                     </span>
                   </div>
                 </div>
 
                 @if (user.registrationNumber) {
-                  <div
-                    class="detail-row compact-detail"
-                  >
-                    <span
-                      class="detail-icon"
-                      aria-hidden="true"
-                    >
+                  <div class="detail-row compact-detail">
+                    <span class="detail-icon" aria-hidden="true">
                       <app-icon
                         [icon]="LucideFileText"
                         [size]="24"
@@ -228,15 +155,10 @@
                       ></app-icon>
                     </span>
                     <div class="detail-copy">
-                      <span class="detail-label"
-                        >Registration number</span
-                      >
-                      <span
-                        class="detail-value"
-                        >{{
-                          user.registrationNumber
-                        }}</span
-                      >
+                      <span class="detail-label">Registration number</span>
+                      <span class="detail-value">{{
+                        user.registrationNumber
+                      }}</span>
                     </div>
                   </div>
                 }
@@ -246,20 +168,13 @@
             <div class="card-footer">
               <div class="footer-meta">
                 <app-status-badge
-                  [label]="
-                    getStatusLabel(user.status)
-                  "
-                  [variant]="
-                    getBadgeVariant(user.status)
-                  "
+                  [label]="getStatusLabel(user.status)"
+                  [variant]="getBadgeVariant(user.status)"
                 ></app-status-badge>
 
                 <span class="created-date">
                   Joined
-                  {{
-                    user.createdAt
-                      | date: 'd MMM yyyy'
-                  }}
+                  {{ user.createdAt | date: 'd MMM yyyy' }}
                 </span>
               </div>
 
@@ -268,10 +183,7 @@
                   type="button"
                   class="view-profile-button"
                   (click)="openProfile(user)"
-                  [attr.aria-label]="
-                    'View profile for ' +
-                    getFullName(user)
-                  "
+                  [attr.aria-label]="'View profile for ' + getFullName(user)"
                 >
                   View profile
                 </button>
@@ -280,13 +192,8 @@
                   <button
                     type="button"
                     class="deactivate-button"
-                    (click)="
-                      openDeactivateConfirm(user)
-                    "
-                    [attr.aria-label]="
-                      'Deactivate ' +
-                      getFullName(user)
-                    "
+                    (click)="openDeactivateConfirm(user)"
+                    [attr.aria-label]="'Deactivate ' + getFullName(user)"
                   >
                     Deactivate
                   </button>
@@ -307,11 +214,7 @@
         title="No users found"
         message="Try another search term or change your selected filter."
       >
-        <button
-          type="button"
-          class="empty-reset"
-          (click)="clearFilters()"
-        >
+        <button type="button" class="empty-reset" (click)="clearFilters()">
           Clear filters
         </button>
       </app-empty-state>
@@ -320,26 +223,16 @@
 </section>
 
 @if (deactivateConfirm(); as user) {
-  <div
-    class="modal-backdrop"
-    (click)="closeDeactivateConfirm()"
-  >
-    <div
-      class="deactivate-modal"
-      (click)="$event.stopPropagation()"
-    >
+  <div class="modal-backdrop" (click)="closeDeactivateConfirm()">
+    <div class="deactivate-modal" (click)="$event.stopPropagation()">
       <div class="deactivate-icon">
-        <app-icon
-          [icon]="LucideTriangleAlert"
-          [size]="24"
-        ></app-icon>
+        <app-icon [icon]="LucideTriangleAlert" [size]="24"></app-icon>
       </div>
       <h3>Deactivate user</h3>
       <p>
         Are you sure you want to deactivate
         <strong>{{ getFullName(user) }}</strong
-        >? This user will no longer be able to log
-        in.
+        >? This user will no longer be able to log in.
       </p>
       <div class="deactivate-actions">
         <button
@@ -367,10 +260,7 @@
 }
 
 @if (selectedUser(); as user) {
-  <div
-    class="modal-backdrop"
-    (click)="closeProfile()"
-  >
+  <div class="modal-backdrop" (click)="closeProfile()">
     <section
       class="profile-modal"
       [class.admin-profile]="isAdminUser(user)"
@@ -384,14 +274,9 @@
 
       <header class="modal-header">
         <div>
-          <span class="modal-eyebrow"
-            >USER DIRECTORY</span
-          >
+          <span class="modal-eyebrow">USER DIRECTORY</span>
           <h2 id="profile-title">User profile</h2>
-          <p>
-            Account information and registration
-            details.
-          </p>
+          <p>Account information and registration details.</p>
         </div>
 
         <button
@@ -405,31 +290,19 @@
       </header>
 
       <div class="profile-identity">
-        <div
-          class="profile-avatar"
-          [class.admin-avatar]="isAdminUser(user)"
-        >
+        <div class="profile-avatar" [class.admin-avatar]="isAdminUser(user)">
           {{ getInitials(user) }}
         </div>
         <div class="profile-name">
           <h3>{{ getFullName(user) }}</h3>
           <p>{{ user.email }}</p>
           <div class="profile-badges">
-            <span
-              class="role-badge"
-              [class.admin-role]="
-                isAdminUser(user)
-              "
-            >
+            <span class="role-badge" [class.admin-role]="isAdminUser(user)">
               {{ getRoleLabel(user.roles) }}
             </span>
             <app-status-badge
-              [label]="
-                getStatusLabel(user.status)
-              "
-              [variant]="
-                getBadgeVariant(user.status)
-              "
+              [label]="getStatusLabel(user.status)"
+              [variant]="getBadgeVariant(user.status)"
             ></app-status-badge>
           </div>
         </div>
@@ -448,66 +321,43 @@
           </div>
           <div class="profile-field">
             <span>Email address</span>
-            <strong class="break-value">{{
-              user.email
-            }}</strong>
+            <strong class="break-value">{{ user.email }}</strong>
           </div>
           <div class="profile-field">
             <span>Phone number</span>
-            <strong>{{
-              user.phoneNumber
-            }}</strong>
+            <strong>{{ user.phoneNumber }}</strong>
           </div>
           <div class="profile-field">
             <span>Account status</span>
-            <strong>{{
-              getStatusLabel(user.status)
-            }}</strong>
+            <strong>{{ getStatusLabel(user.status) }}</strong>
           </div>
           <div class="profile-field">
             <span>Created at</span>
-            <strong>{{
-              user.createdAt
-                | date: 'd MMM yyyy, h:mm a'
-            }}</strong>
+            <strong>{{ user.createdAt | date: 'd MMM yyyy, h:mm a' }}</strong>
           </div>
           <div class="profile-field">
             <span>Role(s)</span>
-            <strong>{{
-              getRoleLabel(user.roles)
-            }}</strong>
+            <strong>{{ getRoleLabel(user.roles) }}</strong>
           </div>
         </div>
       </div>
 
       @if (hasCompanyDetails(user)) {
-        <div
-          class="profile-section company-profile-section"
-        >
+        <div class="profile-section company-profile-section">
           <h4>Company information</h4>
           <div class="profile-fields">
             <div class="profile-field">
               <span>Company name</span>
-              <strong>{{
-                user.companyName || 'Not provided'
-              }}</strong>
+              <strong>{{ user.companyName || 'Not provided' }}</strong>
             </div>
             <div class="profile-field">
               <span>Registration number</span>
-              <strong>{{
-                user.registrationNumber ||
-                  'Not provided'
-              }}</strong>
+              <strong>{{ user.registrationNumber || 'Not provided' }}</strong>
             </div>
             <div class="profile-field full-field">
-              <span
-                >Registration contact email</span
-              >
+              <span>Registration contact email</span>
               <strong class="break-value">
-                {{
-                  user.registrationContactEmail ||
-                    'Not provided'
-                }}
+                {{ user.registrationContactEmail || 'Not provided' }}
               </strong>
             </div>
           </div>
@@ -523,11 +373,7 @@
           ></app-icon>
           Read-only profile
         </span>
-        <button
-          type="button"
-          class="modal-done"
-          (click)="closeProfile()"
-        >
+        <button type="button" class="modal-done" (click)="closeProfile()">
           Done
         </button>
       </footer>

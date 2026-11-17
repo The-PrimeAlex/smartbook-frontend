@@ -104,11 +104,7 @@
   } @else {
     <!-- Room Cards Grid -->
     <div class="room-grid">
-      @for (
-        card of filteredRooms;
-        track card.room.roomId;
-        let idx = $index
-      ) {
+      @for (card of filteredRooms; track card.room.roomId; let idx = $index) {
         <div
           class="room-card"
           [class.expanded]="expandingRoomId === card.room.roomId"
@@ -184,10 +180,15 @@
                     >
                       <div class="equipment-info">
                         <div class="equipment-icon-wrap">
-                          <app-icon [icon]="LucideWrench" [size]="16"></app-icon>
+                          <app-icon
+                            [icon]="LucideWrench"
+                            [size]="16"
+                          ></app-icon>
                         </div>
                         <div class="equipment-text">
-                          <strong class="eq-name">{{ item.equipmentName }}</strong>
+                          <strong class="eq-name">{{
+                            item.equipmentName
+                          }}</strong>
                           <span class="eq-asset">{{ item.assetCode }}</span>
                           @if (item.description) {
                             <span class="eq-desc">{{ item.description }}</span>
@@ -199,16 +200,22 @@
                           <select
                             class="status-select"
                             [class.status-active]="item.status === 'ACTIVE'"
-                            [class.status-out]="item.status === 'OUT_OF_SERVICE'"
+                            [class.status-out]="
+                              item.status === 'OUT_OF_SERVICE'
+                            "
                             [class.status-retired]="item.status === 'RETIRED'"
                             [value]="item.status"
-                            [attr.aria-label]="'Status for ' + item.equipmentName"
+                            [attr.aria-label]="
+                              'Status for ' + item.equipmentName
+                            "
                             (click)="$event.stopPropagation()"
-                            (change)="changeStatus(
-                              card.room.roomId,
-                              item,
-                              $any($event.target).value
-                            )"
+                            (change)="
+                              changeStatus(
+                                card.room.roomId,
+                                item,
+                                $any($event.target).value
+                              )
+                            "
                           >
                             @for (status of statuses; track status) {
                               <option [value]="status">
@@ -223,7 +230,10 @@
                           (click)="removeEquipment(card.room.roomId, item)"
                           [attr.aria-label]="'Remove ' + item.equipmentName"
                         >
-                          <app-icon [icon]="LucideTrash2" [size]="14"></app-icon>
+                          <app-icon
+                            [icon]="LucideTrash2"
+                            [size]="14"
+                          ></app-icon>
                         </button>
                       </div>
                     </div>
@@ -250,7 +260,12 @@
   <!-- Add Equipment Modal Dialog -->
   @if (addModalOpen) {
     <div class="modal-backdrop" (click)="closeAddModal()"></div>
-    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="add-eq-modal-title">
+    <div
+      class="modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-eq-modal-title"
+    >
       <div class="modal-header">
         <div class="modal-header-icon">
           <app-icon [icon]="LucidePlus" [size]="20"></app-icon>
@@ -335,11 +350,7 @@
         </div>
 
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-ghost"
-            (click)="closeAddModal()"
-          >
+          <button type="button" class="btn btn-ghost" (click)="closeAddModal()">
             Cancel
           </button>
           <button

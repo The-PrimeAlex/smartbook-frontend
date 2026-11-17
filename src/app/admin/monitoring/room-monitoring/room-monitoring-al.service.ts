@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -37,33 +34,19 @@ export class RoomMonitoringAlService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = '/api/v1/admin/monitoring';
 
-  getLiveRoomStatus(): Observable<
-    RoomMonitoringRecordAl[]
-  > {
-    return this.http.get<
-      RoomMonitoringRecordAl[]
-    >(`${this.apiUrl}/live`);
+  getLiveRoomStatus(): Observable<RoomMonitoringRecordAl[]> {
+    return this.http.get<RoomMonitoringRecordAl[]>(`${this.apiUrl}/live`);
   }
 
-  getNoShows(): Observable<
-    RoomMonitoringRecordAl[]
-  > {
-    return this.http.get<
-      RoomMonitoringRecordAl[]
-    >(`${this.apiUrl}/no-shows`);
+  getNoShows(): Observable<RoomMonitoringRecordAl[]> {
+    return this.http.get<RoomMonitoringRecordAl[]>(`${this.apiUrl}/no-shows`);
   }
 
-  getOverruns(): Observable<
-    RoomMonitoringRecordAl[]
-  > {
-    return this.http.get<
-      RoomMonitoringRecordAl[]
-    >(`${this.apiUrl}/overruns`);
+  getOverruns(): Observable<RoomMonitoringRecordAl[]> {
+    return this.http.get<RoomMonitoringRecordAl[]>(`${this.apiUrl}/overruns`);
   }
 
-  getRoomBookings(
-    roomId: string,
-  ): Observable<RoomBookingRecordAl[]> {
+  getRoomBookings(roomId: string): Observable<RoomBookingRecordAl[]> {
     return this.http.get<RoomBookingRecordAl[]>(
       `${this.apiUrl}/room/${roomId}/bookings`,
     );

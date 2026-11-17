@@ -1,8 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
 
 import { AuthService } from '../../core/auth/auth.service';
@@ -25,57 +22,40 @@ export class BookingService {
   private readonly userBookingsUrl = `${this.apiUrl}/bookings`;
 
   getAllBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(
-      this.adminBookingsUrl,
-    );
+    return this.http.get<Booking[]>(this.adminBookingsUrl);
   }
 
   getPendingBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(
-      `${this.adminBookingsUrl}/pending`,
-    );
+    return this.http.get<Booking[]>(`${this.adminBookingsUrl}/pending`);
   }
 
   getBookingHistory(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(
-      `${this.adminBookingsUrl}/history`,
-    );
+    return this.http.get<Booking[]>(`${this.adminBookingsUrl}/history`);
   }
 
   getMyBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(
-      `${this.userBookingsUrl}/me`,
-    );
+    return this.http.get<Booking[]>(`${this.userBookingsUrl}/me`);
   }
 
   // Get bookings for a specific room within a date range
-  getRoomSchedule(
-    roomId: string,
-  ): Observable<Booking[]> {
+  getRoomSchedule(roomId: string): Observable<Booking[]> {
     return this.http.get<Booking[]>(
       `${this.userBookingsUrl}/room/${encodeURIComponent(roomId)}/schedule`,
     );
   }
 
-  getBooking(
-    bookingId: string,
-  ): Observable<Booking> {
+  getBooking(bookingId: string): Observable<Booking> {
     return this.http.get<Booking>(
       `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}`,
     );
   }
 
-  createBooking(
-    request: CreateBookingRequest,
-  ): Observable<Booking> {
-    return this.authService.ensureCsrfToken().pipe(
-      switchMap(() =>
-        this.http.post<Booking>(
-          this.userBookingsUrl,
-          request,
-        ),
-      ),
-    );
+  createBooking(request: CreateBookingRequest): Observable<Booking> {
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() => this.http.post<Booking>(this.userBookingsUrl, request)),
+      );
   }
 
   // Owner: confirm a pending booking or check in to a confirmed booking
@@ -83,14 +63,16 @@ export class BookingService {
     bookingId: string,
     request: UpdateBookingStatusRequest,
   ): Observable<Booking> {
-    return this.authService.ensureCsrfToken().pipe(
-      switchMap(() =>
-        this.http.patch<Booking>(
-          `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/status`,
-          request,
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.patch<Booking>(
+            `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/status`,
+            request,
+          ),
         ),
-      ),
-    );
+      );
   }
 
   // Owner: cancel their own booking
@@ -98,27 +80,28 @@ export class BookingService {
     bookingId: string,
     request: CancelBookingRequest,
   ): Observable<Booking> {
-    return this.authService.ensureCsrfToken().pipe(
-      switchMap(() =>
-        this.http.patch<Booking>(
-          `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/cancel`,
-          request,
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.patch<Booking>(
+            `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/cancel`,
+            request,
+          ),
         ),
-      ),
-    );
+      );
   }
 
-
-  checkoutBooking(
-    bookingId: string,
-  ): Observable<Booking> {
-    return this.authService.ensureCsrfToken().pipe(
-      switchMap(() =>
-        this.http.patch<Booking>(
-          `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/checkout`,
-          {},
+  checkoutBooking(bookingId: string): Observable<Booking> {
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.patch<Booking>(
+            `${this.userBookingsUrl}/${encodeURIComponent(bookingId)}/checkout`,
+            {},
+          ),
         ),
-      ),
-    );
+      );
   }
 }

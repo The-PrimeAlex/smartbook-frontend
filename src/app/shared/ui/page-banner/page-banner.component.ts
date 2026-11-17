@@ -6,10 +6,7 @@ import { LucideDynamicIcon } from '@lucide/angular';
   standalone: true,
   imports: [LucideDynamicIcon],
   template: `
-    <header
-      class="app-page-banner"
-      [attr.data-deco]="deco()"
-    >
+    <header class="app-page-banner" [attr.data-deco]="deco()">
       <div class="banner-deco-lines"></div>
       <div class="banner-deco-dots"></div>
       <div class="banner-deco-corner"></div>
@@ -27,9 +24,7 @@ import { LucideDynamicIcon } from '@lucide/angular';
         }
         <div class="banner-heading-text">
           @if (eyebrow()) {
-            <span class="eyebrow">{{
-              eyebrow()
-            }}</span>
+            <span class="eyebrow">{{ eyebrow() }}</span>
           }
           <h1>{{ title() }}</h1>
           @if (description()) {
@@ -63,10 +58,7 @@ import { LucideDynamicIcon } from '@lucide/angular';
       flex-wrap: wrap;
       gap: 20px;
       background: var(--banner-bg, #142b4a);
-      box-shadow: var(
-        --banner-shadow,
-        0 8px 24px rgba(20, 33, 61, 0.1)
-      );
+      box-shadow: var(--banner-shadow, 0 8px 24px rgba(20, 33, 61, 0.1));
       animation: bannerFadeIn 600ms ease both;
     }
 
@@ -184,48 +176,39 @@ import { LucideDynamicIcon } from '@lucide/angular';
     }
 
     /* Deco variant: shift decorations based on data-deco */
-    .app-page-banner[data-deco='b']
-      .banner-deco-lines::before {
+    .app-page-banner[data-deco='b'] .banner-deco-lines::before {
       right: 10%;
       opacity: 0.3;
     }
-    .app-page-banner[data-deco='b']
-      .banner-deco-lines::after {
+    .app-page-banner[data-deco='b'] .banner-deco-lines::after {
       right: 25%;
       opacity: 0.22;
     }
-    .app-page-banner[data-deco='b']
-      .banner-deco-corner {
+    .app-page-banner[data-deco='b'] .banner-deco-corner {
       opacity: 0.15;
     }
 
-    .app-page-banner[data-deco='c']
-      .banner-deco-lines::before {
+    .app-page-banner[data-deco='c'] .banner-deco-lines::before {
       right: 30%;
       opacity: 0.2;
     }
-    .app-page-banner[data-deco='c']
-      .banner-deco-lines::after {
+    .app-page-banner[data-deco='c'] .banner-deco-lines::after {
       right: 45%;
       opacity: 0.14;
     }
-    .app-page-banner[data-deco='c']
-      .banner-deco-corner {
+    .app-page-banner[data-deco='c'] .banner-deco-corner {
       opacity: 0.08;
     }
 
-    .app-page-banner[data-deco='d']
-      .banner-deco-lines::before {
+    .app-page-banner[data-deco='d'] .banner-deco-lines::before {
       right: 15%;
       opacity: 0.28;
     }
-    .app-page-banner[data-deco='d']
-      .banner-deco-lines::after {
+    .app-page-banner[data-deco='d'] .banner-deco-lines::after {
       right: 30%;
       opacity: 0.2;
     }
-    .app-page-banner[data-deco='d']
-      .banner-deco-corner {
+    .app-page-banner[data-deco='d'] .banner-deco-corner {
       opacity: 0.13;
     }
 
@@ -287,21 +270,14 @@ import { LucideDynamicIcon } from '@lucide/angular';
       width: 20px;
       height: 2px;
       border-radius: 99px;
-      background: linear-gradient(
-        90deg,
-        var(--brand-accent, #f28c28),
-        #ffd27a
-      );
+      background: linear-gradient(90deg, var(--brand-accent, #f28c28), #ffd27a);
       content: '';
     }
 
     .banner-subtitle {
       margin: 4px 0 0;
       font-size: 0.875rem;
-      color: var(
-        --banner-subtitle-color,
-        rgba(255, 255, 255, 0.72)
-      );
+      color: var(--banner-subtitle-color, rgba(255, 255, 255, 0.72));
       line-height: 1.5;
     }
 
@@ -341,24 +317,17 @@ import { LucideDynamicIcon } from '@lucide/angular';
       transition: transform 500ms ease;
     }
 
-    .banner-actions
-      ::ng-deep
-      button:hover:not(:disabled) {
+    .banner-actions ::ng-deep button:hover:not(:disabled) {
       border-color: rgba(255, 255, 255, 0.3);
       color: #fff;
       background: rgba(255, 255, 255, 0.06);
     }
 
-    .banner-actions
-      ::ng-deep
-      button:hover:not(:disabled)
-      svg {
+    .banner-actions ::ng-deep button:hover:not(:disabled) svg {
       transform: rotate(180deg);
     }
 
-    .banner-actions
-      ::ng-deep
-      button:active:not(:disabled) {
+    .banner-actions ::ng-deep button:active:not(:disabled) {
       background: rgba(255, 255, 255, 0.1);
     }
 
@@ -368,10 +337,7 @@ import { LucideDynamicIcon } from '@lucide/angular';
       opacity: 0.5;
     }
 
-    .banner-actions
-      ::ng-deep
-      button:disabled
-      svg {
+    .banner-actions ::ng-deep button:disabled svg {
       animation: refreshSpin 0.8s linear infinite;
     }
 
@@ -384,11 +350,8 @@ import { LucideDynamicIcon } from '@lucide/angular';
       }
     }
 
-    .banner-actions
-      ::ng-deep
-      button:focus-visible {
-      outline: 2px solid
-        var(--brand-accent, #f28c28);
+    .banner-actions ::ng-deep button:focus-visible {
+      outline: 2px solid var(--brand-accent, #f28c28);
       outline-offset: 2px;
     }
 

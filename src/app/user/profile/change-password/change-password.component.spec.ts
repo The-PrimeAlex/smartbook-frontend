@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangePasswordComponent } from '../../../auth/change-password/change-password.component.css';
 
 describe('ChangePasswordComponent', () => {
@@ -13,9 +10,7 @@ describe('ChangePasswordComponent', () => {
       imports: [ChangePasswordComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      ChangePasswordComponent,
-    );
+    fixture = TestBed.createComponent(ChangePasswordComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

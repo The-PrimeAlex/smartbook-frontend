@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -15,10 +10,7 @@ import {
 } from '@lucide/angular';
 import { SettingsService } from '../../../shared/services/settings.service';
 import { Setting } from '../../../shared/models/settings.model';
-import {
-  PageBannerComponent,
-  IconComponent,
-} from '../../../shared/ui';
+import { PageBannerComponent, IconComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-booking-rules',
@@ -33,17 +25,13 @@ export class BookingRulesComponent implements OnInit {
   readonly LucideSave = LucideSave;
   readonly LucideShieldCheck = LucideShieldCheck;
   readonly LucideTimer = LucideTimer;
-  private readonly settingsService = inject(
-    SettingsService,
-  );
+  private readonly settingsService = inject(SettingsService);
   readonly settings = signal<Setting[]>([]);
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly saved = signal(false);
   readonly error = signal('');
-  readonly formValues = signal<
-    Record<string, string>
-  >({});
+  readonly formValues = signal<Record<string, string>>({});
 
   ngOnInit(): void {
     this.load();
@@ -52,24 +40,19 @@ export class BookingRulesComponent implements OnInit {
   load(): void {
     this.loading.set(true);
     this.error.set('');
-    this.settingsService
-      .getSettingsByCategory('booking')
-      .subscribe({
-        next: (settings) => {
-          this.settings.set(settings);
-          const values: Record<string, string> =
-            {};
-          settings.forEach(
-            (s) => (values[s.key] = s.value),
-          );
-          this.formValues.set(values);
-          this.loading.set(false);
-        },
-        error: (e: Error) => {
-          this.error.set(e.message);
-          this.loading.set(false);
-        },
-      });
+    this.settingsService.getSettingsByCategory('booking').subscribe({
+      next: (settings) => {
+        this.settings.set(settings);
+        const values: Record<string, string> = {};
+        settings.forEach((s) => (values[s.key] = s.value));
+        this.formValues.set(values);
+        this.loading.set(false);
+      },
+      error: (e: Error) => {
+        this.error.set(e.message);
+        this.loading.set(false);
+      },
+    });
   }
 
   save(): void {
@@ -79,22 +62,17 @@ export class BookingRulesComponent implements OnInit {
       key: s.key,
       value: this.formValues()[s.key] ?? s.value,
     }));
-    this.settingsService
-      .bulkUpdateSettings(updates)
-      .subscribe({
-        next: () => {
-          this.saved.set(true);
-          this.saving.set(false);
-          setTimeout(
-            () => this.saved.set(false),
-            3000,
-          );
-        },
-        error: (e: Error) => {
-          this.error.set(e.message);
-          this.saving.set(false);
-        },
-      });
+    this.settingsService.bulkUpdateSettings(updates).subscribe({
+      next: () => {
+        this.saved.set(true);
+        this.saving.set(false);
+        setTimeout(() => this.saved.set(false), 3000);
+      },
+      error: (e: Error) => {
+        this.error.set(e.message);
+        this.saving.set(false);
+      },
+    });
   }
 
   getValue(key: string): string {

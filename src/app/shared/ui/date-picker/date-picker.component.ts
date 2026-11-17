@@ -6,10 +6,7 @@ import {
   OnDestroy,
   ElementRef,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import flatpickr from 'flatpickr';
 
 @Component({
@@ -20,16 +17,12 @@ import flatpickr from 'flatpickr';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(
-        () => DatePickerComponent,
-      ),
+      useExisting: forwardRef(() => DatePickerComponent),
       multi: true,
     },
   ],
 })
-export class DatePickerComponent
-  implements OnInit, OnDestroy
-{
+export class DatePickerComponent implements OnInit, OnDestroy {
   @Input() min: string = '';
   @Input() max: string = '';
   @Input() placeholder: string = 'Select date';
@@ -42,58 +35,43 @@ export class DatePickerComponent
   constructor(private el: ElementRef) {}
 
   ngOnInit() {
-    this.fpInstance = flatpickr(
-      this.el.nativeElement.querySelector(
-        'input',
-      ),
-      {
-        mode: 'single',
-        dateFormat: 'Y-m-d',
-        minDate: this.min || undefined,
-        maxDate: this.max || undefined,
-        disableMobile: true,
-        animate: true,
-        onOpen: () => {
-          // Save current value so we can restore on Escape/cancel
-          this.pendingValue = this._value;
-        },
-        onClose: () => {
-          // If no date was selected (empty string), restore the original value
-          if (!this.fpInstance.selectedDates.length) {
-            this._value = this.pendingValue;
-            this.onChangeCallback(this.pendingValue);
-          }
-        },
-        onChange: ([date], dateStr) => {
-          this._value = dateStr;
-          this.onChangeCallback(dateStr);
-        },
+    this.fpInstance = flatpickr(this.el.nativeElement.querySelector('input'), {
+      mode: 'single',
+      dateFormat: 'Y-m-d',
+      minDate: this.min || undefined,
+      maxDate: this.max || undefined,
+      disableMobile: true,
+      animate: true,
+      onOpen: () => {
+        // Save current value so we can restore on Escape/cancel
+        this.pendingValue = this._value;
       },
-    );
+      onClose: () => {
+        // If no date was selected (empty string), restore the original value
+        if (!this.fpInstance.selectedDates.length) {
+          this._value = this.pendingValue;
+          this.onChangeCallback(this.pendingValue);
+        }
+      },
+      onChange: ([date], dateStr) => {
+        this._value = dateStr;
+        this.onChangeCallback(dateStr);
+      },
+    });
 
     // Escape key to close calendar
-    document.addEventListener(
-      'keydown',
-      this.onKeyDown,
-    );
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   ngOnDestroy() {
     if (this.fpInstance) {
       this.fpInstance.destroy();
     }
-    document.removeEventListener(
-      'keydown',
-      this.onKeyDown,
-    );
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   private onKeyDown = (e: KeyboardEvent) => {
-    if (
-      e.key === 'Escape' &&
-      this.fpInstance &&
-      this.fpInstance.isOpen
-    ) {
+    if (e.key === 'Escape' && this.fpInstance && this.fpInstance.isOpen) {
       this.fpInstance.close();
     }
   };

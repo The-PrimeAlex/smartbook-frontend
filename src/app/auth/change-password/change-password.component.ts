@@ -1,8 +1,4 @@
-import {
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -22,8 +18,7 @@ import { resetPasswordChangeRedirected } from '../../core/http/auth.interceptor'
   styleUrl: './change-password.component.css',
 })
 export class ChangePasswordComponent {
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   readonly loading = signal(false);
@@ -37,10 +32,7 @@ export class ChangePasswordComponent {
     }),
     newPassword: new FormControl('', {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.minLength(12),
-      ],
+      validators: [Validators.required, Validators.minLength(12)],
     }),
     confirmPassword: new FormControl('', {
       nonNullable: true,
@@ -58,19 +50,14 @@ export class ChangePasswordComponent {
       return;
     }
 
-    const {
-      currentPassword,
-      newPassword,
-      confirmPassword,
-    } = this.form.getRawValue();
+    const { currentPassword, newPassword, confirmPassword } =
+      this.form.getRawValue();
 
     this.errorMessage.set('');
     this.successMessage.set('');
 
     if (newPassword !== confirmPassword) {
-      this.errorMessage.set(
-        'The new passwords do not match.',
-      );
+      this.errorMessage.set('The new passwords do not match.');
       return;
     }
 
@@ -88,23 +75,16 @@ export class ChangePasswordComponent {
         currentPassword,
         newPassword,
       })
-      .pipe(
-        finalize(() => this.loading.set(false)),
-      )
+      .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (response) => {
           // The backend returns a new access token with mustChangePassword = false.
           // The auth service already applied the response (stored token + user).
           resetPasswordChangeRedirected();
-          this.successMessage.set(
-            'Password changed successfully.',
-          );
-          void this.router.navigateByUrl(
-            '/dashboard',
-            {
-              replaceUrl: true,
-            },
-          );
+          this.successMessage.set('Password changed successfully.');
+          void this.router.navigateByUrl('/dashboard', {
+            replaceUrl: true,
+          });
         },
         error: (error) => {
           if (error.status === 400) {
@@ -114,7 +94,7 @@ export class ChangePasswordComponent {
             );
           } else {
             this.errorMessage.set(
-              'We couldn\'t change your password. Please try again in a moment.',
+              "We couldn't change your password. Please try again in a moment.",
             );
           }
         },

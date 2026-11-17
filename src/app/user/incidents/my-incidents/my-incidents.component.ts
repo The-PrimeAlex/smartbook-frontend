@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { IconComponent } from '../../../shared/ui';
 import { RouterLink } from '@angular/router';
 import {
@@ -62,8 +58,7 @@ export class MyIncidentsComponent implements OnInit {
   readonly LucideClock = LucideClock;
   readonly LucideFileText = LucideFileText;
   readonly LucideHome = LucideHome;
-  readonly LucideTriangleAlert =
-    LucideTriangleAlert;
+  readonly LucideTriangleAlert = LucideTriangleAlert;
 
   readonly filterOptions: FilterOption[] = [
     { value: 'all', label: 'All' },
@@ -72,9 +67,7 @@ export class MyIncidentsComponent implements OnInit {
     { value: 'REJECTED', label: 'Rejected' },
   ];
 
-  constructor(
-    private incidentsService: IncidentsService,
-  ) {}
+  constructor(private incidentsService: IncidentsService) {}
 
   ngOnInit() {
     this.load();
@@ -82,26 +75,21 @@ export class MyIncidentsComponent implements OnInit {
 
   load() {
     this.loading.set(true);
-    this.incidentsService
-      .getMyIncidents()
-      .subscribe({
-        next: (data) => {
-          this.incidents.set(data);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.loading.set(false);
-        },
-      });
+    this.incidentsService.getMyIncidents().subscribe({
+      next: (data) => {
+        this.incidents.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
+    });
   }
 
   get filteredIncidents() {
     const all = this.incidents();
     if (this.filterStatus() === 'all') return all;
-    return all.filter(
-      (i) =>
-        i.incidentStatus === this.filterStatus(),
-    );
+    return all.filter((i) => i.incidentStatus === this.filterStatus());
   }
 
   get totalIncidents() {
@@ -109,21 +97,18 @@ export class MyIncidentsComponent implements OnInit {
   }
 
   get reportedCount() {
-    return this.incidents().filter(
-      (i) => i.incidentStatus === 'REPORTED',
-    ).length;
+    return this.incidents().filter((i) => i.incidentStatus === 'REPORTED')
+      .length;
   }
 
   get verifiedCount() {
-    return this.incidents().filter(
-      (i) => i.incidentStatus === 'VERIFIED',
-    ).length;
+    return this.incidents().filter((i) => i.incidentStatus === 'VERIFIED')
+      .length;
   }
 
   get rejectedCount() {
-    return this.incidents().filter(
-      (i) => i.incidentStatus === 'REJECTED',
-    ).length;
+    return this.incidents().filter((i) => i.incidentStatus === 'REJECTED')
+      .length;
   }
 
   getStatusLabel = getIncidentStatusLabel;
@@ -152,14 +137,11 @@ export class MyIncidentsComponent implements OnInit {
   isWaived(incident: IncidentResponse): boolean {
     return (
       incident.incidentStatus === 'VERIFIED' &&
-      (incident.chargeAmount === null ||
-        incident.chargeAmount === 0)
+      (incident.chargeAmount === null || incident.chargeAmount === 0)
     );
   }
 
-  getChargeLabel(
-    incident: IncidentResponse,
-  ): string {
+  getChargeLabel(incident: IncidentResponse): string {
     if (this.isCharged(incident)) {
       return `Charged — KES ${incident.chargeAmount}`;
     } else if (this.isWaived(incident)) {

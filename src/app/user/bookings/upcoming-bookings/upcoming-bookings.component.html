@@ -5,18 +5,9 @@
     title="Upcoming Bookings"
     description="View and manage your upcoming reservations — confirm, check in, and check out."
   >
-    <button
-      type="button"
-      [disabled]="loading()"
-      (click)="loadBookings()"
-    >
-      <app-icon
-        [icon]="LucideRefreshCw"
-        [size]="14"
-      ></app-icon>
-      {{
-        loading() ? 'Refreshing...' : 'Refresh'
-      }}
+    <button type="button" [disabled]="loading()" (click)="loadBookings()">
+      <app-icon [icon]="LucideRefreshCw" [size]="14"></app-icon>
+      {{ loading() ? 'Refreshing...' : 'Refresh' }}
     </button>
   </app-page-banner>
 
@@ -35,10 +26,7 @@
   }
 
   @if (successMessage()) {
-    <div
-      class="alert alert-success"
-      role="status"
-    >
+    <div class="alert alert-success" role="status">
       <span>{{ successMessage() }}</span>
       <button
         type="button"
@@ -59,9 +47,7 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title"
-        >Booking Summary</span
-      >
+      <span class="stats-toggle-title">Booking Summary</span>
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -69,44 +55,22 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div
-      class="stats-row-wrapper"
-      [class.collapsed]="statsCollapsed()"
-    >
-      <section
-        class="stats-grid"
-        aria-label="Booking statistics"
-      >
-        <app-stat-card
-          [icon]="LucideCalendar"
-        >
-          <span stat-value>{{
-            totalCount()
-          }}</span>
+    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
+      <section class="stats-grid" aria-label="Booking statistics">
+        <app-stat-card [icon]="LucideCalendar">
+          <span stat-value>{{ totalCount() }}</span>
           <span stat-label>Upcoming</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideClock"
-        >
-          <span stat-value>{{
-            pendingCount()
-          }}</span>
+        <app-stat-card [icon]="LucideClock">
+          <span stat-value>{{ pendingCount() }}</span>
           <span stat-label>Pending</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideCheckCircle"
-        >
-          <span stat-value>{{
-            confirmedCount()
-          }}</span>
+        <app-stat-card [icon]="LucideCheckCircle">
+          <span stat-value>{{ confirmedCount() }}</span>
           <span stat-label>Confirmed</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideEye"
-        >
-          <span stat-value>{{
-            checkedInCount()
-          }}</span>
+        <app-stat-card [icon]="LucideEye">
+          <span stat-value>{{ checkedInCount() }}</span>
           <span stat-label>Checked In</span>
         </app-stat-card>
       </section>
@@ -117,28 +81,18 @@
     <div class="section-heading">
       <div>
         <h2>Your upcoming reservations</h2>
-        <p>
-          Bookings that are pending, confirmed, or
-          currently checked in.
-        </p>
+        <p>Bookings that are pending, confirmed, or currently checked in.</p>
       </div>
 
       <span class="result-count">
         {{ upcomingBookings().length }}
-        {{
-          upcomingBookings().length === 1
-            ? 'booking'
-            : 'bookings'
-        }}
+        {{ upcomingBookings().length === 1 ? 'booking' : 'bookings' }}
       </span>
     </div>
 
     @if (loading() && bookings().length === 0) {
       <div class="state-panel" role="status">
-        <span
-          class="loading-spinner"
-          aria-hidden="true"
-        ></span>
+        <span class="loading-spinner" aria-hidden="true"></span>
         <p>Loading your bookings...</p>
       </div>
     } @else if (upcomingBookings().length === 0) {
@@ -150,84 +104,47 @@
       </app-empty-state>
     } @else {
       <div class="booking-list">
-        @for (
-          booking of upcomingBookings();
-          track booking.bookingId
-        ) {
+        @for (booking of upcomingBookings(); track booking.bookingId) {
           <article class="booking-card">
             <div class="booking-main">
               <div class="booking-title-row">
-                <div
-                  class="room-icon"
-                  aria-hidden="true"
-                >
-                  <app-icon
-                    [icon]="LucideHome"
-                    [size]="20"
-                  ></app-icon>
+                <div class="room-icon" aria-hidden="true">
+                  <app-icon [icon]="LucideHome" [size]="20"></app-icon>
                 </div>
 
                 <div class="booking-title">
                   <h3>{{ booking.roomName }}</h3>
                   <p class="booking-reference">
-                    Booking #{{
-                      booking.bookingId
-                    }}
+                    Booking #{{ booking.bookingId }}
                   </p>
                 </div>
 
                 <app-status-badge
-                  [label]="
-                    statusLabel(
-                      booking.bookingStatus
-                    )
-                  "
-                  [variant]="
-                    getBadgeVariant(
-                      booking.bookingStatus
-                    )
-                  "
+                  [label]="statusLabel(booking.bookingStatus)"
+                  [variant]="getBadgeVariant(booking.bookingStatus)"
                 ></app-status-badge>
               </div>
 
               <div class="booking-details">
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >Start time</span
-                  >
+                  <span class="detail-label">Start time</span>
                   <span class="detail-value">
-                    {{
-                      booking.startTime
-                        | date: 'medium'
-                    }}
+                    {{ booking.startTime | date: 'medium' }}
                   </span>
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >End time</span
-                  >
+                  <span class="detail-label">End time</span>
                   <span class="detail-value">
-                    {{
-                      booking.endTime
-                        | date: 'medium'
-                    }}
+                    {{ booking.endTime | date: 'medium' }}
                   </span>
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >Hourly rate</span
-                  >
+                  <span class="detail-label">Hourly rate</span>
                   <span class="detail-value">
-                    @if (
-                      booking.bookedHourlyRate !==
-                      null
-                    ) {
-                      {{
-                        booking.bookedHourlyRate
-                          | currency
-                      }}
+                    @if (booking.bookedHourlyRate !== null) {
+                      {{ booking.bookedHourlyRate | currency }}
                     } @else {
                       Not specified
                     }
@@ -235,19 +152,13 @@
                 </div>
 
                 <div class="detail-item">
-                  <span class="detail-label"
-                    >Booked by</span
-                  >
-                  <span class="detail-value">{{
-                    booking.userName
-                  }}</span>
+                  <span class="detail-label">Booked by</span>
+                  <span class="detail-value">{{ booking.userName }}</span>
                 </div>
               </div>
 
               <div class="purpose-block">
-                <span class="detail-label"
-                  >Purpose</span
-                >
+                <span class="detail-label">Purpose</span>
                 <p>{{ booking.purpose }}</p>
               </div>
             </div>
@@ -257,20 +168,10 @@
                 <button
                   type="button"
                   class="btn btn-success"
-                  [disabled]="
-                    isProcessing(
-                      booking.bookingId
-                    )
-                  "
-                  (click)="
-                    confirmBooking(booking)
-                  "
+                  [disabled]="isProcessing(booking.bookingId)"
+                  (click)="confirmBooking(booking)"
                 >
-                  @if (
-                    isProcessing(
-                      booking.bookingId
-                    )
-                  ) {
+                  @if (isProcessing(booking.bookingId)) {
                     Processing...
                   } @else {
                     Confirm Booking
@@ -282,20 +183,10 @@
                 <button
                   type="button"
                   class="btn btn-success"
-                  [disabled]="
-                    isProcessing(
-                      booking.bookingId
-                    )
-                  "
-                  (click)="
-                    checkInBooking(booking)
-                  "
+                  [disabled]="isProcessing(booking.bookingId)"
+                  (click)="checkInBooking(booking)"
                 >
-                  @if (
-                    isProcessing(
-                      booking.bookingId
-                    )
-                  ) {
+                  @if (isProcessing(booking.bookingId)) {
                     Processing...
                   } @else {
                     Check In
@@ -307,20 +198,10 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  [disabled]="
-                    isProcessing(
-                      booking.bookingId
-                    )
-                  "
-                  (click)="
-                    checkOutBooking(booking)
-                  "
+                  [disabled]="isProcessing(booking.bookingId)"
+                  (click)="checkOutBooking(booking)"
                 >
-                  @if (
-                    isProcessing(
-                      booking.bookingId
-                    )
-                  ) {
+                  @if (isProcessing(booking.bookingId)) {
                     Checking out...
                   } @else {
                     Check Out
@@ -332,11 +213,7 @@
                 <button
                   type="button"
                   class="btn btn-danger-outline"
-                  [disabled]="
-                    isProcessing(
-                      booking.bookingId
-                    )
-                  "
+                  [disabled]="isProcessing(booking.bookingId)"
                   (click)="cancelBooking(booking)"
                 >
                   Cancel Booking

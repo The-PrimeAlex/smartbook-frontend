@@ -7,10 +7,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import {
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs';
 import {
@@ -53,15 +50,11 @@ interface CountryOption {
   styleUrl: './registration.component.css',
 })
 export class RegistrationRequestComponent {
-  private readonly log = createLogger(
-    'Registration',
-  );
-  private readonly formBuilder =
-    inject(FormBuilder);
+  private readonly log = createLogger('Registration');
+  private readonly formBuilder = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   readonly LucideArrowLeft = LucideArrowLeft;
   readonly LucideArrowRight = LucideArrowRight;
@@ -79,144 +72,98 @@ export class RegistrationRequestComponent {
   modalTitle = '';
   modalMessage = '';
 
-  readonly countries: CountryOption[] =
-    this.buildCountries();
+  readonly countries: CountryOption[] = this.buildCountries();
   countryDropdownOpen = false;
   countrySearch = '';
 
-  readonly registrationForm =
-    this.formBuilder.nonNullable.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: [
-        '',
-        [Validators.required, Validators.email],
-      ],
-      countryIsoCode: [
-        'KE' as CountryCode,
+  readonly registrationForm = this.formBuilder.nonNullable.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    countryIsoCode: ['KE' as CountryCode, Validators.required],
+    phoneNumber: [
+      '',
+      [
         Validators.required,
+        Validators.pattern(/^[0-9]+$/),
+        (control: AbstractControl): ValidationErrors | null => {
+          const phoneNumber = String(control.value ?? '').trim();
+          if (!phoneNumber) {
+            return null;
+          }
+          const selectedCountry =
+            this.registrationForm?.get('countryIsoCode')?.value ?? 'KE';
+          try {
+            return isValidPhoneNumber(phoneNumber, selectedCountry)
+              ? null
+              : { invalidPhone: true };
+          } catch {
+            return { invalidPhone: true };
+          }
+        },
       ],
-      phoneNumber: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[0-9]+$/),
-          (
-            control: AbstractControl,
-          ): ValidationErrors | null => {
-            const phoneNumber = String(
-              control.value ?? '',
-            ).trim();
-            if (!phoneNumber) {
-              return null;
-            }
-            const selectedCountry =
-              this.registrationForm?.get(
-                'countryIsoCode',
-              )?.value ?? 'KE';
-            try {
-              return isValidPhoneNumber(
-                phoneNumber,
-                selectedCountry,
-              )
-                ? null
-                : { invalidPhone: true };
-            } catch {
-              return { invalidPhone: true };
-            }
-          },
-        ],
-      ],
-      companyName: ['', Validators.required],
-      registrationNumber: [''],
-      contactEmail: [
-        '',
-        [Validators.required, Validators.email],
-      ],
-    });
+    ],
+    companyName: ['', Validators.required],
+    registrationNumber: [''],
+    contactEmail: ['', [Validators.required, Validators.email]],
+  });
 
   constructor() {
-    this.registrationForm
-      .get('countryIsoCode')
-      ?.valueChanges.subscribe(() => {
-        this.registrationForm
-          .get('phoneNumber')
-          ?.updateValueAndValidity({
-            emitEvent: false,
-          });
+    this.registrationForm.get('countryIsoCode')?.valueChanges.subscribe(() => {
+      this.registrationForm.get('phoneNumber')?.updateValueAndValidity({
+        emitEvent: false,
       });
+    });
   }
 
-  get selectedCountry():
-    CountryOption | undefined {
+  get selectedCountry(): CountryOption | undefined {
     const selectedCountryCode =
-      this.registrationForm.get(
-        'countryIsoCode',
-      )?.value;
+      this.registrationForm.get('countryIsoCode')?.value;
     return this.countries.find(
-      (country) =>
-        country.countryCode ===
-        selectedCountryCode,
+      (country) => country.countryCode === selectedCountryCode,
     );
   }
 
   get filteredCountries(): CountryOption[] {
-    const searchTerm = this.countrySearch
-      .trim()
-      .toLowerCase();
+    const searchTerm = this.countrySearch.trim().toLowerCase();
     if (!searchTerm) {
       return this.countries;
     }
-    const normalizedSearchTerm =
-      searchTerm.replace(/\s/g, '');
+    const normalizedSearchTerm = searchTerm.replace(/\s/g, '');
     return this.countries.filter(
       (country) =>
-        country.countryName
-          .toLowerCase()
-          .includes(searchTerm) ||
-        country.countryCode
-          .toLowerCase()
-          .includes(searchTerm) ||
-        country.callingCode.includes(
-          normalizedSearchTerm,
-        ),
+        country.countryName.toLowerCase().includes(searchTerm) ||
+        country.countryCode.toLowerCase().includes(searchTerm) ||
+        country.callingCode.includes(normalizedSearchTerm),
     );
   }
 
   toggleCountryDropdown(): void {
-    this.countryDropdownOpen =
-      !this.countryDropdownOpen;
+    this.countryDropdownOpen = !this.countryDropdownOpen;
     if (this.countryDropdownOpen) {
       this.countrySearch = '';
     }
   }
 
   selectCountry(country: CountryOption): void {
-    this.registrationForm
-      .get('countryIsoCode')
-      ?.setValue(country.countryCode);
+    this.registrationForm.get('countryIsoCode')?.setValue(country.countryCode);
     this.countryDropdownOpen = false;
     this.countrySearch = '';
-    this.registrationForm
-      .get('phoneNumber')
-      ?.markAsTouched();
+    this.registrationForm.get('phoneNumber')?.markAsTouched();
   }
 
   onCountrySearch(searchTerm: string): void {
     this.countrySearch = searchTerm;
   }
 
-  onCountrySearchKeydown(
-    event: KeyboardEvent,
-  ): void {
+  onCountrySearchKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       this.countryDropdownOpen = false;
       this.countrySearch = '';
     }
     if (event.key === 'Enter') {
       event.preventDefault();
-      const firstMatchingCountry =
-        this.filteredCountries[0];
+      const firstMatchingCountry = this.filteredCountries[0];
       if (firstMatchingCountry) {
         this.selectCountry(firstMatchingCountry);
       }
@@ -224,8 +171,7 @@ export class RegistrationRequestComponent {
   }
 
   onPhoneInput(phoneNumber: string): void {
-    const digitsOnlyPhoneNumber =
-      phoneNumber.replace(/\D/g, '');
+    const digitsOnlyPhoneNumber = phoneNumber.replace(/\D/g, '');
     if (phoneNumber !== digitsOnlyPhoneNumber) {
       this.registrationForm
         .get('phoneNumber')
@@ -236,37 +182,26 @@ export class RegistrationRequestComponent {
   }
 
   private buildCountries(): CountryOption[] {
-    const countryNames = new Intl.DisplayNames(
-      ['en'],
-      {
-        type: 'region',
-      },
-    );
+    const countryNames = new Intl.DisplayNames(['en'], {
+      type: 'region',
+    });
     return getCountries()
       .map((countryCode): CountryOption => ({
         countryCode,
-        countryName:
-          countryNames.of(countryCode) ??
-          countryCode,
+        countryName: countryNames.of(countryCode) ?? countryCode,
         callingCode: `+${getCountryCallingCode(countryCode)}`,
         flag: this.getCountryFlag(countryCode),
       }))
       .sort((firstCountry, secondCountry) =>
-        firstCountry.countryName.localeCompare(
-          secondCountry.countryName,
-        ),
+        firstCountry.countryName.localeCompare(secondCountry.countryName),
       );
   }
 
-  private getCountryFlag(
-    countryCode: string,
-  ): string {
+  private getCountryFlag(countryCode: string): string {
     return countryCode
       .toUpperCase()
       .replace(/[A-Z]/g, (character) =>
-        String.fromCodePoint(
-          character.charCodeAt(0) + 127397,
-        ),
+        String.fromCodePoint(character.charCodeAt(0) + 127397),
       );
   }
 
@@ -281,8 +216,7 @@ export class RegistrationRequestComponent {
 
     this.loading = true;
 
-    const formValue =
-      this.registrationForm.getRawValue();
+    const formValue = this.registrationForm.getRawValue();
     const body = {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
@@ -291,20 +225,14 @@ export class RegistrationRequestComponent {
         `${getCountryCallingCode(formValue.countryIsoCode as CountryCode)}` +
         formValue.phoneNumber,
       companyName: formValue.companyName,
-      registrationNumber:
-        formValue.registrationNumber || null,
+      registrationNumber: formValue.registrationNumber || null,
       contactEmail: formValue.contactEmail,
     };
 
     this.authService
       .ensureCsrfToken()
       .pipe(
-        switchMap(() =>
-          this.http.post(
-            '/api/v1/registration-requests',
-            body,
-          ),
-        ),
+        switchMap(() => this.http.post('/api/v1/registration-requests', body)),
       )
       .subscribe({
         next: () => {
@@ -330,28 +258,20 @@ export class RegistrationRequestComponent {
           }, 100);
         },
         error: (err) => {
-          this.log.error(
-            'Registration request error:',
-            err,
-          );
+          this.log.error('Registration request error:', err);
           this.loading = false;
           this.submitted = false;
           if (err.status === 409) {
             const serverError = err.error?.error;
-            if (
-              serverError ===
-              'email_already_registered'
-            ) {
+            if (serverError === 'email_already_registered') {
               this.modalType = 'pending';
-              this.modalTitle =
-                'Account Already Exists';
+              this.modalTitle = 'Account Already Exists';
               this.modalMessage =
                 'An account is already registered with this email address. Please log in to access your account, or use the forgot password option if you need to reset your password.';
               this.showModal = true;
             } else {
               this.modalType = 'pending';
-              this.modalTitle =
-                'Registration Request Pending';
+              this.modalTitle = 'Registration Request Pending';
               this.modalMessage =
                 serverError ||
                 "You already have a pending registration request for this email. An administrator is reviewing it, and you'll receive an email with your login details once it's approved.";
@@ -371,8 +291,8 @@ export class RegistrationRequestComponent {
               });
             }, 100);
           } else {
-          this.errorMessage =
-              'We couldn\'t submit your registration request. Please try again later.';
+            this.errorMessage =
+              "We couldn't submit your registration request. Please try again later.";
           }
         },
       });
@@ -382,15 +302,9 @@ export class RegistrationRequestComponent {
     this.router.navigate(['/login']);
   }
 
-  showError(
-    fieldName: keyof typeof this.registrationForm.controls,
-  ): boolean {
-    const formControl =
-      this.registrationForm.controls[fieldName];
-    return (
-      formControl.invalid &&
-      (formControl.touched || this.submitted)
-    );
+  showError(fieldName: keyof typeof this.registrationForm.controls): boolean {
+    const formControl = this.registrationForm.controls[fieldName];
+    return formControl.invalid && (formControl.touched || this.submitted);
   }
 
   closeModal(): void {

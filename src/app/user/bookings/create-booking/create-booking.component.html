@@ -7,33 +7,22 @@
   ></app-page-banner>
 
   <div class="booking-layout">
-    <form
-      class="booking-form"
-      (ngSubmit)="submitBooking()"
-    >
+    <form class="booking-form" (ngSubmit)="submitBooking()">
       <!-- Meeting Details Section -->
       <section class="form-section">
         <div class="section-header">
           <div class="section-icon-wrap">
-            <app-icon
-              [icon]="LucideFileText"
-              [size]="18"
-            ></app-icon>
+            <app-icon [icon]="LucideFileText" [size]="18"></app-icon>
           </div>
           <div class="section-title-wrap">
             <h2>Meeting Details</h2>
-            <p>
-              Select a room and describe your
-              meeting.
-            </p>
+            <p>Select a room and describe your meeting.</p>
           </div>
         </div>
 
         <div class="fields-grid">
           <div class="field">
-            <label for="meetingTitle"
-              >Meeting Title</label
-            >
+            <label for="meetingTitle">Meeting Title</label>
             <div class="input-wrap">
               <input
                 id="meetingTitle"
@@ -64,19 +53,14 @@
           </div>
 
           <div class="field">
-            <label for="roomId"
-              >Select Room</label
-            >
+            <label for="roomId">Select Room</label>
             <div class="select-wrap">
               <select
                 id="roomId"
                 name="roomId"
                 [(ngModel)]="roomId"
                 required
-                [disabled]="
-                  loadingRooms ||
-                  rooms.length === 0
-                "
+                [disabled]="loadingRooms || rooms.length === 0"
               >
                 <option value="" disabled>
                   @if (loadingRooms) {
@@ -86,35 +70,22 @@
                   }
                 </option>
 
-                @for (
-                  room of rooms;
-                  track room.roomId
-                ) {
+                @for (room of rooms; track room.roomId) {
                   <option [value]="room.roomId">
-                    {{ room.roomName }} ·
-                    {{ room.capacity }} seats
+                    {{ room.roomName }} · {{ room.capacity }} seats
                   </option>
                 }
               </select>
-              <app-icon
-                [icon]="LucideChevronDown"
-                [size]="16"
-              ></app-icon>
+              <app-icon [icon]="LucideChevronDown" [size]="16"></app-icon>
             </div>
 
             @if (selectedRoom; as room) {
               <div class="room-preview">
                 <div class="room-preview-icon">
-                  <app-icon
-                    [icon]="LucideMonitor"
-                    [size]="16"
-                  ></app-icon>
+                  <app-icon [icon]="LucideMonitor" [size]="16"></app-icon>
                 </div>
                 <div class="room-preview-info">
-                  <span
-                    class="room-preview-name"
-                    >{{ room.roomName }}</span
-                  >
+                  <span class="room-preview-name">{{ room.roomName }}</span>
                   <span class="room-preview-meta"
                     >{{ room.roomType }} ·
                     {{ room.capacity }}
@@ -124,15 +95,9 @@
                 @if (room.hourlyRate != null) {
                   <div class="room-preview-rate">
                     <span class="rate-amount">{{
-                      room.hourlyRate
-                        | currency
-                          : 'KES '
-                          : 'symbol'
-                          : '1.2-2'
+                      room.hourlyRate | currency: 'KES ' : 'symbol' : '1.2-2'
                     }}</span>
-                    <span class="rate-period"
-                      >/hr</span
-                    >
+                    <span class="rate-period">/hr</span>
                   </div>
                 }
               </div>
@@ -145,17 +110,11 @@
       <section class="form-section">
         <div class="section-header">
           <div class="section-icon-wrap">
-            <app-icon
-              [icon]="LucideCalendar"
-              [size]="18"
-            ></app-icon>
+            <app-icon [icon]="LucideCalendar" [size]="18"></app-icon>
           </div>
           <div class="section-title-wrap">
             <h2>Schedule</h2>
-            <p>
-              Choose when your meeting starts and
-              ends.
-            </p>
+            <p>Choose when your meeting starts and ends.</p>
           </div>
         </div>
 
@@ -163,43 +122,30 @@
           <!-- Start Time -->
           <div class="schedule-block">
             <div class="schedule-block-header">
-              <span
-                class="schedule-block-badge start-badge"
-              >
-                <app-icon
-                  [icon]="LucideClock"
-                  [size]="12"
-                ></app-icon>
+              <span class="schedule-block-badge start-badge">
+                <app-icon [icon]="LucideClock" [size]="12"></app-icon>
                 Start
               </span>
             </div>
             <div class="schedule-fields">
               <div class="field compact">
-                <label for="startDate"
-                  >Date</label
-                >
+                <label for="startDate">Date</label>
                 <app-date-picker
                   id="startDate"
                   name="startDate"
                   [(ngModel)]="startDate"
                   [min]="today"
                   placeholder="Select start date"
-                  (ngModelChange)="
-                    onStartDateChange()
-                  "
+                  (ngModelChange)="onStartDateChange()"
                 ></app-date-picker>
               </div>
               <div class="field compact">
-                <label for="startTime"
-                  >Time</label
-                >
+                <label for="startTime">Time</label>
                 <app-time-picker
                   id="startTime"
                   name="startTime"
                   [(ngModel)]="startTime"
-                  (ngModelChange)="
-                    onStartTimeChange()
-                  "
+                  (ngModelChange)="onStartTimeChange()"
                   placeholder="Select start time"
                 ></app-time-picker>
               </div>
@@ -208,22 +154,14 @@
 
           <!-- Arrow Connector -->
           <div class="schedule-arrow">
-            <app-icon
-              [icon]="LucideArrowRight"
-              [size]="18"
-            ></app-icon>
+            <app-icon [icon]="LucideArrowRight" [size]="18"></app-icon>
           </div>
 
           <!-- End Time -->
           <div class="schedule-block">
             <div class="schedule-block-header">
-              <span
-                class="schedule-block-badge end-badge"
-              >
-                <app-icon
-                  [icon]="LucideClock"
-                  [size]="12"
-                ></app-icon>
+              <span class="schedule-block-badge end-badge">
+                <app-icon [icon]="LucideClock" [size]="12"></app-icon>
                 End
               </span>
             </div>
@@ -236,9 +174,7 @@
                   [(ngModel)]="endDate"
                   [min]="startDate || today"
                   placeholder="Select end date"
-                  (ngModelChange)="
-                    onEndDateChange()
-                  "
+                  (ngModelChange)="onEndDateChange()"
                 ></app-date-picker>
               </div>
               <div class="field compact">
@@ -247,9 +183,7 @@
                   id="endTime"
                   name="endTime"
                   [(ngModel)]="endTime"
-                  (ngModelChange)="
-                    onEndTimeChange()
-                  "
+                  (ngModelChange)="onEndTimeChange()"
                   placeholder="Select end time"
                 ></app-time-picker>
               </div>
@@ -261,40 +195,22 @@
         @if (durationMinutes > 0) {
           <div class="duration-display">
             <div class="duration-icon-wrap">
-              <app-icon
-                [icon]="LucideClock"
-                [size]="14"
-              ></app-icon>
+              <app-icon [icon]="LucideClock" [size]="14"></app-icon>
             </div>
-            <span class="duration-label"
-              >Duration</span
-            >
-            <span class="duration-value">{{
-              durationLabel
-            }}</span>
-            <span class="duration-chip"
-              >{{ durationMinutes }} min</span
-            >
+            <span class="duration-label">Duration</span>
+            <span class="duration-value">{{ durationLabel }}</span>
+            <span class="duration-chip">{{ durationMinutes }} min</span>
           </div>
         }
 
         <!-- Validation Messages -->
         @if (startDateAfterEndDate) {
-          <div
-            class="validation-message"
-            role="alert"
-          >
-            <app-icon
-              [icon]="LucideAlertCircle"
-              [size]="16"
-            ></app-icon>
+          <div class="validation-message" role="alert">
+            <app-icon [icon]="LucideAlertCircle" [size]="16"></app-icon>
             <div>
-              <strong
-                >Start date is after end date</strong
-              >
+              <strong>Start date is after end date</strong>
               <p>
-                The start date cannot be later
-                than the end date. Please adjust
+                The start date cannot be later than the end date. Please adjust
                 your dates.
               </p>
             </div>
@@ -302,21 +218,12 @@
         }
 
         @if (invalidDateRange && !startDateAfterEndDate) {
-          <div
-            class="validation-message"
-            role="alert"
-          >
-            <app-icon
-              [icon]="LucideAlertCircle"
-              [size]="16"
-            ></app-icon>
+          <div class="validation-message" role="alert">
+            <app-icon [icon]="LucideAlertCircle" [size]="16"></app-icon>
             <div>
-              <strong
-                >Check your meeting times</strong
-              >
+              <strong>Check your meeting times</strong>
               <p>
-                The end date and time must be
-                later than the start date and
+                The end date and time must be later than the start date and
                 time.
               </p>
             </div>
@@ -324,22 +231,11 @@
         }
 
         @if (startIsInPast && !invalidDateRange) {
-          <div
-            class="validation-message"
-            role="alert"
-          >
-            <app-icon
-              [icon]="LucideAlertCircle"
-              [size]="16"
-            ></app-icon>
+          <div class="validation-message" role="alert">
+            <app-icon [icon]="LucideAlertCircle" [size]="16"></app-icon>
             <div>
-              <strong
-                >Choose a future time</strong
-              >
-              <p>
-                The meeting start date and time
-                must be in the future.
-              </p>
+              <strong>Choose a future time</strong>
+              <p>The meeting start date and time must be in the future.</p>
             </div>
           </div>
         }
@@ -347,47 +243,28 @@
 
       <!-- Alerts -->
       @if (successMessage) {
-        <div
-          class="form-alert success-alert"
-          role="status"
-        >
-          <app-icon
-            [icon]="LucideCheckCircle"
-            [size]="16"
-          ></app-icon>
+        <div class="form-alert success-alert" role="status">
+          <app-icon [icon]="LucideCheckCircle" [size]="16"></app-icon>
           <span>{{ successMessage }}</span>
         </div>
       }
 
       @if (conflictMessage) {
-        <div
-          class="form-alert conflict-alert"
-          role="alert"
-        >
-          <app-icon
-            [icon]="LucideAlertTriangle"
-            [size]="16"
-          ></app-icon>
+        <div class="form-alert conflict-alert" role="alert">
+          <app-icon [icon]="LucideAlertTriangle" [size]="16"></app-icon>
           <div class="alert-content">
             <strong>Room Already Booked</strong>
             <p>{{ conflictMessage }}</p>
             <p class="alert-hint">
-              Check room availability and try a
-              different time or room.
+              Check room availability and try a different time or room.
             </p>
           </div>
         </div>
       }
 
       @if (errorMessage) {
-        <div
-          class="form-alert error-alert"
-          role="alert"
-        >
-          <app-icon
-            [icon]="LucideXCircle"
-            [size]="16"
-          ></app-icon>
+        <div class="form-alert error-alert" role="alert">
+          <app-icon [icon]="LucideXCircle" [size]="16"></app-icon>
           <span>{{ errorMessage }}</span>
         </div>
       }
@@ -395,8 +272,7 @@
       <!-- Form Actions -->
       <div class="form-actions">
         <span class="required-note"
-          ><span class="required-dot">*</span>
-          Required fields</span
+          ><span class="required-dot">*</span> Required fields</span
         >
         <button
           type="submit"
@@ -415,10 +291,7 @@
             <span>Submitting...</span>
           } @else {
             <span>Submit Booking</span>
-            <app-icon
-              [icon]="LucideArrowRight"
-              [size]="16"
-            ></app-icon>
+            <app-icon [icon]="LucideArrowRight" [size]="16"></app-icon>
           }
         </button>
       </div>
@@ -430,82 +303,46 @@
       <div class="sidebar-card summary-card">
         <div class="sidebar-card-header">
           <div class="sidebar-icon-wrap">
-            <app-icon
-              [icon]="LucideClipboardList"
-              [size]="18"
-            ></app-icon>
+            <app-icon [icon]="LucideClipboardList" [size]="18"></app-icon>
           </div>
-          <span class="sidebar-card-label"
-            >Booking Summary</span
-          >
+          <span class="sidebar-card-label">Booking Summary</span>
         </div>
 
         <div class="summary-details">
           <div class="summary-row">
-            <span class="summary-label"
-              >Meeting</span
-            >
-            <span class="summary-value">{{
-              meetingTitle || '—'
-            }}</span>
+            <span class="summary-label">Meeting</span>
+            <span class="summary-value">{{ meetingTitle || '—' }}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label"
-              >Room</span
-            >
+            <span class="summary-label">Room</span>
             <span class="summary-value">{{
               selectedRoom?.roomName || '—'
             }}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label"
-              >Starts</span
-            >
+            <span class="summary-label">Starts</span>
             <span class="summary-value">
-              {{
-                startDate
-                  ? startDate +
-                    ' at ' +
-                    (startTime || '—')
-                  : '—'
-              }}
+              {{ startDate ? startDate + ' at ' + (startTime || '—') : '—' }}
             </span>
           </div>
           <div class="summary-row">
-            <span class="summary-label"
-              >Ends</span
-            >
+            <span class="summary-label">Ends</span>
             <span class="summary-value">
-              {{
-                endDate
-                  ? endDate +
-                    ' at ' +
-                    (endTime || '—')
-                  : '—'
-              }}
+              {{ endDate ? endDate + ' at ' + (endTime || '—') : '—' }}
             </span>
           </div>
           @if (durationMinutes > 0) {
             <div class="summary-row duration-row">
-              <span class="summary-label"
-                >Duration</span
-              >
-              <span class="summary-value">{{
-                durationLabel
-              }}</span>
+              <span class="summary-label">Duration</span>
+              <span class="summary-value">{{ durationLabel }}</span>
             </div>
           }
           @if (estimatedTotal > 0) {
             <div class="summary-row total-row">
-              <span class="summary-label"
-                >Est. Total</span
-              >
-              <span
-                class="summary-value total-amount"
-                >{{
-                  estimatedTotalFormatted
-                }}</span
-              >
+              <span class="summary-label">Est. Total</span>
+              <span class="summary-value total-amount">{{
+                estimatedTotalFormatted
+              }}</span>
             </div>
           }
         </div>
@@ -515,45 +352,22 @@
       <div class="sidebar-card tips-card">
         <div class="sidebar-card-header">
           <div class="sidebar-icon-wrap">
-            <app-icon
-              [icon]="LucideLightbulb"
-              [size]="18"
-            ></app-icon>
+            <app-icon [icon]="LucideLightbulb" [size]="18"></app-icon>
           </div>
-          <span class="sidebar-card-label"
-            >Booking Tips</span
-          >
+          <span class="sidebar-card-label">Booking Tips</span>
         </div>
         <ul class="tips-list">
           <li>
-            <app-icon
-              [icon]="LucideCheck"
-              [size]="14"
-            ></app-icon>
-            <span
-              >Select the room that fits your
-              meeting size</span
-            >
+            <app-icon [icon]="LucideCheck" [size]="14"></app-icon>
+            <span>Select the room that fits your meeting size</span>
           </li>
           <li>
-            <app-icon
-              [icon]="LucideCheck"
-              [size]="14"
-            ></app-icon>
-            <span
-              >Start time must be in the
-              future</span
-            >
+            <app-icon [icon]="LucideCheck" [size]="14"></app-icon>
+            <span>Start time must be in the future</span>
           </li>
           <li>
-            <app-icon
-              [icon]="LucideCheck"
-              [size]="14"
-            ></app-icon>
-            <span
-              >End time must be after start
-              time</span
-            >
+            <app-icon [icon]="LucideCheck" [size]="14"></app-icon>
+            <span>End time must be after start time</span>
           </li>
         </ul>
       </div>
@@ -562,90 +376,61 @@
       <div class="sidebar-card rules-card">
         <div class="sidebar-card-header">
           <div class="sidebar-icon-wrap">
-            <app-icon
-              [icon]="LucideCircleHelp"
-              [size]="18"
-            ></app-icon>
+            <app-icon [icon]="LucideCircleHelp" [size]="18"></app-icon>
           </div>
-          <span class="sidebar-card-label"
-            >Booking Rules</span
-          >
+          <span class="sidebar-card-label">Booking Rules</span>
         </div>
         <ul class="rules-list">
           <li>
-            <app-icon
-              [icon]="LucideClock"
-              [size]="14"
-            ></app-icon>
+            <app-icon [icon]="LucideClock" [size]="14"></app-icon>
             <span
-              >Min {{ minDurationMinutes }} min, max {{ maxDurationHours }} hours per booking</span
+              >Min {{ minDurationMinutes }} min, max
+              {{ maxDurationHours }} hours per booking</span
             >
           </li>
           <li>
-            <app-icon
-              [icon]="LucideCalendar"
-              [size]="14"
-            ></app-icon>
-            <span
-              >Book up to {{ advanceDays }} days in advance</span
-            >
+            <app-icon [icon]="LucideCalendar" [size]="14"></app-icon>
+            <span>Book up to {{ advanceDays }} days in advance</span>
           </li>
           <li>
-            <app-icon
-              [icon]="LucideTimer"
-              [size]="14"
-            ></app-icon>
-            <span
-              >{{ bufferMinutes }} min buffer between bookings</span
-            >
+            <app-icon [icon]="LucideTimer" [size]="14"></app-icon>
+            <span>{{ bufferMinutes }} min buffer between bookings</span>
           </li>
           <li>
-            <app-icon
-              [icon]="LucideXCircle"
-              [size]="14"
-            ></app-icon>
+            <app-icon [icon]="LucideXCircle" [size]="14"></app-icon>
             <span
-              >Free cancellation {{ cancelHoursBeforeFree }} hour{{ cancelHoursBeforeFree !== 1 ? 's' : '' }} before start</span
+              >Free cancellation {{ cancelHoursBeforeFree }} hour{{
+                cancelHoursBeforeFree !== 1 ? 's' : ''
+              }}
+              before start</span
             >
           </li>
           @if (cancelFee > 0) {
             <li>
-              <app-icon
-                [icon]="LucideBan"
-                [size]="14"
-              ></app-icon>
+              <app-icon [icon]="LucideBan" [size]="14"></app-icon>
               <span
-                >Cancellation fee: KSH {{ cancelFee | number: '1.0-2' }} after window</span
+                >Cancellation fee: KSH {{ cancelFee | number: '1.0-2' }} after
+                window</span
               >
             </li>
           }
           <li>
-            <app-icon
-              [icon]="LucideBan"
-              [size]="14"
-            ></app-icon>
+            <app-icon [icon]="LucideBan" [size]="14"></app-icon>
             <span
-              >No-show fee: KSH {{ noshowFee | number: '1.0-2' }} after {{ noshowMinutes }} min</span
+              >No-show fee: KSH {{ noshowFee | number: '1.0-2' }} after
+              {{ noshowMinutes }} min</span
             >
           </li>
           <li>
-            <app-icon
-              [icon]="LucideTrendingUp"
-              [size]="14"
-            ></app-icon>
+            <app-icon [icon]="LucideTrendingUp" [size]="14"></app-icon>
             <span
               >Overrun charged at {{ overrunRateMultiplier }}x hourly rate</span
             >
           </li>
           @if (requireApproval) {
             <li>
-              <app-icon
-                [icon]="LucideAlertTriangle"
-                [size]="14"
-              ></app-icon>
-              <span
-                >Bookings require admin approval</span
-              >
+              <app-icon [icon]="LucideAlertTriangle" [size]="14"></app-icon>
+              <span>Bookings require admin approval</span>
             </li>
           }
         </ul>
@@ -655,20 +440,11 @@
 
   <!-- Conflict Modal -->
   @if (showConflictModal) {
-    <div
-      class="conflict-modal-overlay"
-      (click)="closeConflictModal()"
-    >
-      <div
-        class="conflict-modal"
-        (click)="$event.stopPropagation()"
-      >
+    <div class="conflict-modal-overlay" (click)="closeConflictModal()">
+      <div class="conflict-modal" (click)="$event.stopPropagation()">
         <div class="conflict-modal-header">
           <div class="conflict-modal-icon">
-            <app-icon
-              [icon]="LucideAlertCircle"
-              [size]="28"
-            ></app-icon>
+            <app-icon [icon]="LucideAlertCircle" [size]="28"></app-icon>
           </div>
           <div class="conflict-modal-title-block">
             <h3>{{ conflictTitle }}</h3>
@@ -679,194 +455,97 @@
             class="conflict-modal-close"
             (click)="closeConflictModal()"
           >
-            <app-icon
-              [icon]="LucideX"
-              [size]="20"
-            ></app-icon>
+            <app-icon [icon]="LucideX" [size]="20"></app-icon>
           </button>
         </div>
 
         <div class="conflict-modal-body">
           @if (conflictRoomName) {
             <div class="conflict-detail-row">
-              <app-icon
-                [icon]="LucideMonitor"
-                [size]="16"
-              ></app-icon>
-              <span class="conflict-detail-label"
-                >Room</span
-              >
-              <span
-                class="conflict-detail-value"
-                >{{ conflictRoomName }}</span
-              >
+              <app-icon [icon]="LucideMonitor" [size]="16"></app-icon>
+              <span class="conflict-detail-label">Room</span>
+              <span class="conflict-detail-value">{{ conflictRoomName }}</span>
             </div>
           }
 
-          @if (
-            conflictUserName &&
-            conflictUserName !== 'another user'
-          ) {
+          @if (conflictUserName && conflictUserName !== 'another user') {
             <div class="conflict-detail-row">
-              <app-icon
-                [icon]="LucideUser"
-                [size]="16"
-              ></app-icon>
-              <span class="conflict-detail-label"
-                >Booked by</span
-              >
-              <span
-                class="conflict-detail-value"
-                >{{ conflictUserName }}</span
-              >
+              <app-icon [icon]="LucideUser" [size]="16"></app-icon>
+              <span class="conflict-detail-label">Booked by</span>
+              <span class="conflict-detail-value">{{ conflictUserName }}</span>
             </div>
           }
 
           @if (conflictStart && conflictEnd) {
             <div class="conflict-detail-row">
-              <app-icon
-                [icon]="LucideClock"
-                [size]="16"
-              ></app-icon>
-              <span class="conflict-detail-label"
-                >Current booking</span
-              >
+              <app-icon [icon]="LucideClock" [size]="16"></app-icon>
+              <span class="conflict-detail-label">Current booking</span>
               <span class="conflict-detail-value"
-                >{{ conflictStart }} —
-                {{ conflictEnd }}</span
+                >{{ conflictStart }} — {{ conflictEnd }}</span
               >
             </div>
           }
 
-          @if (
-            conflictType === 'OVERRUN' &&
-            conflictOverrunMinutes
-          ) {
+          @if (conflictType === 'OVERRUN' && conflictOverrunMinutes) {
             <div class="conflict-cooldown-block">
-              <div
-                class="conflict-cooldown-header"
-              >
-                <app-icon
-                  [icon]="LucideClock"
-                  [size]="18"
-                ></app-icon>
-                <span
-                  class="conflict-cooldown-title"
-                  >Overrun Threshold</span
-                >
+              <div class="conflict-cooldown-header">
+                <app-icon [icon]="LucideClock" [size]="18"></app-icon>
+                <span class="conflict-cooldown-title">Overrun Threshold</span>
               </div>
-              <div
-                class="conflict-cooldown-details"
-              >
-                <div
-                  class="conflict-cooldown-row"
-                >
-                  <span
-                    class="conflict-cooldown-label"
+              <div class="conflict-cooldown-details">
+                <div class="conflict-cooldown-row">
+                  <span class="conflict-cooldown-label"
                     >Current booking ends</span
                   >
-                  <span
-                    class="conflict-cooldown-value"
-                    >{{ conflictEnd }}</span
+                  <span class="conflict-cooldown-value">{{ conflictEnd }}</span>
+                </div>
+                <div class="conflict-cooldown-row">
+                  <span class="conflict-cooldown-label">Overrun threshold</span>
+                  <span class="conflict-cooldown-value"
+                    >{{ conflictOverrunMinutes }} minutes</span
                   >
                 </div>
-                <div
-                  class="conflict-cooldown-row"
-                >
-                  <span
-                    class="conflict-cooldown-label"
-                    >Overrun threshold</span
-                  >
-                  <span
-                    class="conflict-cooldown-value"
-                    >{{
-                      conflictOverrunMinutes
-                    }}
-                    minutes</span
-                  >
-                </div>
-                <div
-                  class="conflict-cooldown-row available"
-                >
-                  <span
-                    class="conflict-cooldown-label"
+                <div class="conflict-cooldown-row available">
+                  <span class="conflict-cooldown-label"
                     >Room available from</span
                   >
-                  <span
-                    class="conflict-cooldown-value"
-                    >{{
-                      conflictAvailableFrom
-                    }}</span
-                  >
+                  <span class="conflict-cooldown-value">{{
+                    conflictAvailableFrom
+                  }}</span>
                 </div>
               </div>
             </div>
-          } @else if (
-            conflictType === 'BUFFER' &&
-            conflictOverrunMinutes
-          ) {
+          } @else if (conflictType === 'BUFFER' && conflictOverrunMinutes) {
             <div class="conflict-cooldown-block">
-              <div
-                class="conflict-cooldown-header"
-              >
-                <app-icon
-                  [icon]="LucideTimer"
-                  [size]="18"
-                ></app-icon>
-                <span
-                  class="conflict-cooldown-title"
-                  >Required Gap</span
-                >
+              <div class="conflict-cooldown-header">
+                <app-icon [icon]="LucideTimer" [size]="18"></app-icon>
+                <span class="conflict-cooldown-title">Required Gap</span>
               </div>
-              <div
-                class="conflict-cooldown-details"
-              >
-                <div
-                  class="conflict-cooldown-row"
-                >
-                  <span
-                    class="conflict-cooldown-label"
+              <div class="conflict-cooldown-details">
+                <div class="conflict-cooldown-row">
+                  <span class="conflict-cooldown-label"
                     >Previous booking ended</span
                   >
-                  <span
-                    class="conflict-cooldown-value"
-                    >{{ conflictEnd }}</span
-                  >
+                  <span class="conflict-cooldown-value">{{ conflictEnd }}</span>
                 </div>
-                <div
-                  class="conflict-cooldown-row"
-                >
-                  <span
-                    class="conflict-cooldown-label"
-                    >Required gap</span
-                  >
-                  <span
-                    class="conflict-cooldown-value"
-                    >{{
-                      conflictOverrunMinutes
-                    }}
-                    minutes</span
+                <div class="conflict-cooldown-row">
+                  <span class="conflict-cooldown-label">Required gap</span>
+                  <span class="conflict-cooldown-value"
+                    >{{ conflictOverrunMinutes }} minutes</span
                   >
                 </div>
               </div>
             </div>
           } @else if (conflictAvailableFrom) {
             <div class="conflict-available-block">
-              <app-icon
-                [icon]="LucideTimer"
-                [size]="18"
-              ></app-icon>
+              <app-icon [icon]="LucideTimer" [size]="18"></app-icon>
               <div>
-                <span
-                  class="conflict-available-label"
+                <span class="conflict-available-label"
                   >Room available from</span
                 >
-                <span
-                  class="conflict-available-time"
-                  >{{
-                    conflictAvailableFrom
-                  }}</span
-                >
+                <span class="conflict-available-time">{{
+                  conflictAvailableFrom
+                }}</span>
               </div>
             </div>
           }
@@ -878,8 +557,8 @@
 
         <div class="conflict-modal-footer">
           <p class="conflict-suggestion">
-            Try selecting a different time slot or
-            choose another available room.
+            Try selecting a different time slot or choose another available
+            room.
           </p>
           <button
             type="button"

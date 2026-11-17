@@ -34,8 +34,7 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
-  animation: modalScaleIn 0.4s
-    cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: modalScaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes modalScaleIn {
@@ -127,8 +126,7 @@
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 250ms
-    cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }

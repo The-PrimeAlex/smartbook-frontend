@@ -22,12 +22,7 @@ export type BadgeVariant =
   standalone: true,
   template: `<span
     class="status-badge badge-{{ variant() }}"
-    [attr.class]="
-      'status-badge badge-' +
-      variant() +
-      ' ' +
-      class()
-    "
+    [attr.class]="'status-badge badge-' + variant() + ' ' + class()"
     >{{ label() }}</span
   >`,
   styles: `

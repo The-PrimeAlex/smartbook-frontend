@@ -9,10 +9,7 @@
   <!-- Error -->
   @if (error()) {
     <div class="notice notice-error">
-      <app-icon
-        [icon]="LucideXCircle"
-        [size]="18"
-      ></app-icon>
+      <app-icon [icon]="LucideXCircle" [size]="18"></app-icon>
       {{ error() }}
     </div>
   }
@@ -20,10 +17,7 @@
   <!-- Success -->
   @if (saved()) {
     <div class="notice notice-success">
-      <app-icon
-        [icon]="LucideCheckCircle2"
-        [size]="18"
-      ></app-icon>
+      <app-icon [icon]="LucideCheckCircle2" [size]="18"></app-icon>
       Notification preferences saved successfully.
     </div>
   }
@@ -39,32 +33,17 @@
     <div class="notifications-card">
       <div class="section-heading">
         <div class="bell-icon" aria-hidden="true">
-          <app-icon
-            [icon]="LucideBell"
-            [size]="24"
-          ></app-icon>
+          <app-icon [icon]="LucideBell" [size]="24"></app-icon>
         </div>
         <div>
           <h2>Email Notifications</h2>
-          <p>
-            Choose which email notifications you'd
-            like to receive.
-          </p>
+          <p>Choose which email notifications you'd like to receive.</p>
         </div>
       </div>
 
       <div class="notif-list">
-        @for (
-          pref of preferenceDefinitions;
-          track pref.key;
-          let i = $index
-        ) {
-          <div
-            class="notif-row"
-            [style.animation-delay]="
-              i * 0.05 + 's'
-            "
-          >
+        @for (pref of preferenceDefinitions; track pref.key; let i = $index) {
+          <div class="notif-row" [style.animation-delay]="i * 0.05 + 's'">
             <div class="notif-info">
               <div class="notif-label">
                 {{ pref.label }}
@@ -76,19 +55,11 @@
             <div class="notif-control">
               <button
                 class="toggle-switch"
-                [class.active]="
-                  isPreferenceEnabled(pref.key)
-                "
-                (click)="
-                  togglePreference(pref.key)
-                "
-                [attr.aria-label]="
-                  'Toggle ' + pref.label
-                "
+                [class.active]="isPreferenceEnabled(pref.key)"
+                (click)="togglePreference(pref.key)"
+                [attr.aria-label]="'Toggle ' + pref.label"
               >
-                <span
-                  class="toggle-slider"
-                ></span>
+                <span class="toggle-slider"></span>
               </button>
             </div>
           </div>
@@ -98,19 +69,12 @@
 
     <!-- Save button -->
     <div class="save-bar">
-      <button
-        class="btn btn-save"
-        (click)="save()"
-        [disabled]="saving()"
-      >
+      <button class="btn btn-save" (click)="save()" [disabled]="saving()">
         @if (saving()) {
           <span class="spinner"></span>
           Saving...
         } @else {
-          <app-icon
-            [icon]="LucideFileBox"
-            [size]="18"
-          ></app-icon>
+          <app-icon [icon]="LucideFileBox" [size]="18"></app-icon>
           Save Changes
         }
       </button>

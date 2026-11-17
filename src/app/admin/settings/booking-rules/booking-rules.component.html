@@ -36,10 +36,7 @@
       }
     </div>
   } @else {
-    @for (
-      entry of getGroupedSettings() | keyvalue;
-      track entry.key
-    ) {
+    @for (entry of getGroupedSettings() | keyvalue; track entry.key) {
       @let groupKey = entry.key;
       @let groupSettings = entry.value;
       <div class="settings-group">
@@ -48,19 +45,18 @@
             <app-icon [icon]="getGroupIcon(groupKey)" [size]="20"></app-icon>
           </div>
           <h2 class="group-title">{{ getGroupLabel(groupKey) }}</h2>
-          <span class="group-count">{{ groupSettings.length }} setting{{ groupSettings.length !== 1 ? 's' : '' }}</span>
+          <span class="group-count"
+            >{{ groupSettings.length }} setting{{
+              groupSettings.length !== 1 ? 's' : ''
+            }}</span
+          >
         </div>
 
         <div class="settings-grid">
-          @for (
-            setting of groupSettings;
-            track setting.key
-          ) {
+          @for (setting of groupSettings; track setting.key) {
             <div class="setting-card">
               <div class="setting-header">
-                <label class="setting-label">{{
-                  setting.label
-                }}</label>
+                <label class="setting-label">{{ setting.label }}</label>
                 @if (!setting.systemDefault) {
                   <span class="modified-badge">Modified</span>
                 }
@@ -69,53 +65,50 @@
                 {{ setting.description }}
               </p>
 
-              @if (
-                setting.valueType === 'number'
-              ) {
+              @if (setting.valueType === 'number') {
                 <div class="input-container">
                   <input
                     type="number"
                     class="setting-input"
                     [value]="getValue(setting.key)"
-                    (input)="
-                      setValue(
-                        setting.key,
-                        $any($event).target.value
-                      )
-                    "
+                    (input)="setValue(setting.key, $any($event).target.value)"
                     aria-label="{{ setting.label }}"
                   />
-                  @if (setting.key.includes('minutes') || setting.key.includes('hours') || setting.key.includes('days')) {
+                  @if (
+                    setting.key.includes('minutes') ||
+                    setting.key.includes('hours') ||
+                    setting.key.includes('days')
+                  ) {
                     <span class="input-unit">
-                      @if (setting.key.includes('minutes')) {min} @else if (setting.key.includes('hours')) {hrs} @else {days}
+                      @if (setting.key.includes('minutes')) {
+                        min
+                      } @else if (setting.key.includes('hours')) {
+                        hrs
+                      } @else {
+                        days
+                      }
                     </span>
                   }
                 </div>
-              } @else if (
-                setting.valueType === 'boolean'
-              ) {
+              } @else if (setting.valueType === 'boolean') {
                 <div class="toggle-row">
                   <label class="toggle-switch">
                     <input
                       type="checkbox"
-                      [checked]="
-                        getValue(setting.key) ===
-                        'true'
-                      "
+                      [checked]="getValue(setting.key) === 'true'"
                       (change)="
                         setValue(
                           setting.key,
-                          $any($event).target
-                            .checked
-                            ? 'true'
-                            : 'false'
+                          $any($event).target.checked ? 'true' : 'false'
                         )
                       "
                     />
                     <span class="toggle-slider"></span>
                   </label>
                   <span class="toggle-label">
-                    {{ getValue(setting.key) === 'true' ? 'Enabled' : 'Disabled' }}
+                    {{
+                      getValue(setting.key) === 'true' ? 'Enabled' : 'Disabled'
+                    }}
                   </span>
                 </div>
               }
@@ -126,11 +119,7 @@
     }
 
     <div class="save-bar">
-      <button
-        class="btn btn-save"
-        (click)="save()"
-        [disabled]="saving()"
-      >
+      <button class="btn btn-save" (click)="save()" [disabled]="saving()">
         @if (saving()) {
           <span class="spinner"></span>
           Saving...

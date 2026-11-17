@@ -1,13 +1,5 @@
-import {
-  Component,
-  inject,
-  ChangeDetectorRef,
-} from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import {
@@ -23,20 +15,13 @@ import { IconComponent } from '../../shared/ui';
 @Component({
   selector: 'app-password-reset',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    IconComponent,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
 })
 export class PasswordResetComponent {
-  private readonly formBuilder =
-    inject(FormBuilder);
-  private readonly passwordResetService = inject(
-    PasswordResetService,
-  );
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly passwordResetService = inject(PasswordResetService);
 
   readonly LucideArrowLeft = LucideArrowLeft;
   readonly LucideArrowRight = LucideArrowRight;
@@ -44,16 +29,10 @@ export class PasswordResetComponent {
   readonly LucideMail = LucideMail;
   readonly LucideShieldCheck = LucideShieldCheck;
 
-  constructor(
-    private readonly cdr: ChangeDetectorRef,
-  ) {}
-  readonly passwordResetForm =
-    this.formBuilder.nonNullable.group({
-      email: [
-        '',
-        [Validators.required, Validators.email],
-      ],
-    });
+  constructor(private readonly cdr: ChangeDetectorRef) {}
+  readonly passwordResetForm = this.formBuilder.nonNullable.group({
+    email: ['', [Validators.required, Validators.email]],
+  });
 
   isSubmitting = false;
   requestSubmitted = false;
@@ -64,10 +43,7 @@ export class PasswordResetComponent {
     this.submitted = true;
     this.errorMessage = '';
 
-    if (
-      this.passwordResetForm.invalid ||
-      this.isSubmitting
-    ) {
+    if (this.passwordResetForm.invalid || this.isSubmitting) {
       this.passwordResetForm.markAllAsTouched();
       return;
     }
@@ -75,8 +51,7 @@ export class PasswordResetComponent {
     this.isSubmitting = true;
 
     const request = {
-      email:
-        this.passwordResetForm.controls.email.value.trim(),
+      email: this.passwordResetForm.controls.email.value.trim(),
     };
 
     this.passwordResetService
@@ -107,18 +82,13 @@ export class PasswordResetComponent {
   }
 
   get emailHasError(): boolean {
-    const emailControl =
-      this.passwordResetForm.controls.email;
+    const emailControl = this.passwordResetForm.controls.email;
 
-    return (
-      emailControl.invalid &&
-      (emailControl.touched || this.submitted)
-    );
+    return emailControl.invalid && (emailControl.touched || this.submitted);
   }
 
   get emailErrorMessage(): string {
-    const emailControl =
-      this.passwordResetForm.controls.email;
+    const emailControl = this.passwordResetForm.controls.email;
 
     if (emailControl.hasError('required')) {
       return 'Enter your email address.';

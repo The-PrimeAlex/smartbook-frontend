@@ -1,43 +1,24 @@
-import {
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import {
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { LucideLayoutGrid } from '@lucide/angular';
 
 import { RoomService } from '../../../shared/services/room.service';
-import {
-  RoomType,
-  RoomStatus,
-} from '../../../shared/models/room.model';
+import { RoomType, RoomStatus } from '../../../shared/models/room.model';
 import { PageBannerComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-new-room',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    PageBannerComponent,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, PageBannerComponent],
   templateUrl: './new-room.component.html',
   styleUrl: './new-room.component.css',
 })
 export class NewRoomComponent {
   readonly LucideLayoutGrid = LucideLayoutGrid;
   private readonly fb = inject(FormBuilder);
-  private readonly roomService =
-    inject(RoomService);
+  private readonly roomService = inject(RoomService);
   private readonly router = inject(Router);
 
   readonly submitting = signal(false);
@@ -72,47 +53,20 @@ export class NewRoomComponent {
   ];
 
   readonly roomForm = this.fb.nonNullable.group({
-    roomName: [
-      '',
-      [
-        Validators.required,
-        Validators.maxLength(100),
-      ],
-    ],
-    roomType: [
-      'BOARDROOM' as RoomType,
-      Validators.required,
-    ],
+    roomName: ['', [Validators.required, Validators.maxLength(100)]],
+    roomType: ['BOARDROOM' as RoomType, Validators.required],
     capacity: [
       8,
-      [
-        Validators.required,
-        Validators.min(1),
-        Validators.max(1000),
-      ],
+      [Validators.required, Validators.min(1), Validators.max(1000)],
     ],
-    hourlyRate: [
-      0,
-      [Validators.required, Validators.min(0)],
-    ],
-    status: [
-      'ACTIVE' as RoomStatus,
-      Validators.required,
-    ],
-    description: [
-      '',
-      [Validators.maxLength(1000)],
-    ],
+    hourlyRate: [0, [Validators.required, Validators.min(0)]],
+    status: ['ACTIVE' as RoomStatus, Validators.required],
+    description: ['', [Validators.maxLength(1000)]],
   });
 
-  fieldInvalid(
-    field: keyof typeof this.roomForm.controls,
-  ): boolean {
+  fieldInvalid(field: keyof typeof this.roomForm.controls): boolean {
     const control = this.roomForm.controls[field];
-    return (
-      control.invalid &&
-      (control.dirty || control.touched)
-    );
+    return control.invalid && (control.dirty || control.touched);
   }
 
   submitRoom(): void {
@@ -120,10 +74,7 @@ export class NewRoomComponent {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    if (
-      this.roomForm.invalid ||
-      this.submitting()
-    ) {
+    if (this.roomForm.invalid || this.submitting()) {
       return;
     }
 
@@ -143,19 +94,15 @@ export class NewRoomComponent {
       .subscribe({
         next: () => {
           this.submitting.set(false);
-          this.successMessage.set(
-            'Room created successfully.',
-          );
+          this.successMessage.set('Room created successfully.');
 
-          void this.router.navigate([
-            '/admin/rooms',
-          ]);
+          void this.router.navigate(['/admin/rooms']);
         },
         error: (error: Error) => {
           this.submitting.set(false);
           this.errorMessage.set(
             error.message ||
-              'We couldn\'t create the room. Please try again in a moment.',
+              "We couldn't create the room. Please try again in a moment.",
           );
         },
       });

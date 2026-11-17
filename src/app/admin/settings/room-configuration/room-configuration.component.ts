@@ -1,10 +1,4 @@
-import {
-  Component,
-  HostListener,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   LucideCheck,
@@ -41,8 +35,7 @@ import {
     SearchBoxComponent,
     EmptyStateComponent,
   ],
-  templateUrl:
-    './room-configuration.component.html',
+  templateUrl: './room-configuration.component.html',
   styleUrl: './room-configuration.component.css',
 })
 export class RoomConfigurationComponent implements OnInit {
@@ -53,13 +46,10 @@ export class RoomConfigurationComponent implements OnInit {
   readonly LucideSearch = LucideSearch;
   readonly LucideUsers = LucideUsers;
   readonly LucideX = LucideX;
-  private readonly roomService =
-    inject(RoomService);
+  private readonly roomService = inject(RoomService);
 
   readonly rooms = signal<MeetingRoom[]>([]);
-  readonly filteredRooms = signal<MeetingRoom[]>(
-    [],
-  );
+  readonly filteredRooms = signal<MeetingRoom[]>([]);
   readonly searchQuery = signal('');
   readonly loading = signal(false);
   readonly saving = signal(false);
@@ -67,8 +57,7 @@ export class RoomConfigurationComponent implements OnInit {
   readonly error = signal('');
 
   /* Selected room for inline editing panel */
-  readonly selectedRoom =
-    signal<MeetingRoom | null>(null);
+  readonly selectedRoom = signal<MeetingRoom | null>(null);
   readonly editing = signal(false);
   readonly draft = signal<CreateRoomRequest>({
     roomName: '',
@@ -84,11 +73,7 @@ export class RoomConfigurationComponent implements OnInit {
     'VIDEO_CONFERENCE',
     'MEETING_SUITE',
   ];
-  readonly roomStatuses: RoomStatus[] = [
-    'ACTIVE',
-    'MAINTENANCE',
-    'RETIRED',
-  ];
+  readonly roomStatuses: RoomStatus[] = ['ACTIVE', 'MAINTENANCE', 'RETIRED'];
 
   ngOnInit(): void {
     this.load();
@@ -149,37 +134,25 @@ export class RoomConfigurationComponent implements OnInit {
 
     this.saving.set(true);
     this.error.set('');
-    this.roomService
-      .updateRoom(room.roomId, draft)
-      .subscribe({
-        next: (updated) => {
-          this.rooms.update((rooms) =>
-            rooms.map((r) =>
-              r.roomId === room.roomId
-                ? updated
-                : r,
-            ),
-          );
-          this.selectedRoom.set(updated);
-          this.saved.set(true);
-          this.saving.set(false);
-          this.editing.set(false);
-          setTimeout(
-            () => this.saved.set(false),
-            3000,
-          );
-        },
-        error: (e: Error) => {
-          this.error.set(e.message);
-          this.saving.set(false);
-        },
-      });
+    this.roomService.updateRoom(room.roomId, draft).subscribe({
+      next: (updated) => {
+        this.rooms.update((rooms) =>
+          rooms.map((r) => (r.roomId === room.roomId ? updated : r)),
+        );
+        this.selectedRoom.set(updated);
+        this.saved.set(true);
+        this.saving.set(false);
+        this.editing.set(false);
+        setTimeout(() => this.saved.set(false), 3000);
+      },
+      error: (e: Error) => {
+        this.error.set(e.message);
+        this.saving.set(false);
+      },
+    });
   }
 
-  setDraftField(
-    field: keyof CreateRoomRequest,
-    value: string | number,
-  ): void {
+  setDraftField(field: keyof CreateRoomRequest, value: string | number): void {
     this.draft.update((v) => ({
       ...v,
       [field]: value,
@@ -187,9 +160,7 @@ export class RoomConfigurationComponent implements OnInit {
   }
 
   formatRoomType(type: string): string {
-    return type
-      .replace(/_/g, ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase());
+    return type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
   }
 
   setSearch(query: string): void {
@@ -198,35 +169,23 @@ export class RoomConfigurationComponent implements OnInit {
   }
 
   filterRooms(): void {
-    const query = this.searchQuery()
-      .toLowerCase()
-      .trim();
+    const query = this.searchQuery().toLowerCase().trim();
     if (!query) {
       this.filteredRooms.set(this.rooms());
     } else {
       this.filteredRooms.set(
         this.rooms().filter(
           (r) =>
-            r.roomName
-              .toLowerCase()
-              .includes(query) ||
-            r.roomType
-              .toLowerCase()
-              .includes(query) ||
-            (r.description &&
-              r.description
-                .toLowerCase()
-                .includes(query)),
+            r.roomName.toLowerCase().includes(query) ||
+            r.roomType.toLowerCase().includes(query) ||
+            (r.description && r.description.toLowerCase().includes(query)),
         ),
       );
     }
   }
 
   formatStatus(status: string): string {
-    return (
-      status.charAt(0).toUpperCase() +
-      status.slice(1).toLowerCase()
-    );
+    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
   }
 
   getStatusClass(status: string): string {
@@ -242,7 +201,9 @@ export class RoomConfigurationComponent implements OnInit {
     }
   }
 
-  getRoomTypeIcon(type: string): typeof LucideMonitor | typeof LucideUsers | typeof LucideLayoutGrid {
+  getRoomTypeIcon(
+    type: string,
+  ): typeof LucideMonitor | typeof LucideUsers | typeof LucideLayoutGrid {
     switch (type) {
       case 'VIDEO_CONFERENCE':
         return LucideMonitor;

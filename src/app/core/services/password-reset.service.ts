@@ -1,7 +1,4 @@
-import {
-  inject,
-  Injectable,
-} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
@@ -20,17 +17,14 @@ export interface ResetPasswordRequest {
 })
 export class PasswordResetService {
   private readonly http = inject(HttpClient);
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   private readonly authEndpoint = '/api/v1/auth';
   private readonly httpOptions = {
     withCredentials: true,
   };
 
-  requestPasswordReset(
-    request: PasswordResetRequest,
-  ): Observable<void> {
+  requestPasswordReset(request: PasswordResetRequest): Observable<void> {
     return this.authService
       .ensureCsrfToken()
       .pipe(
@@ -44,9 +38,7 @@ export class PasswordResetService {
       );
   }
 
-  resetPassword(
-    request: ResetPasswordRequest,
-  ): Observable<void> {
+  resetPassword(request: ResetPasswordRequest): Observable<void> {
     return this.authService
       .ensureCsrfToken()
       .pipe(

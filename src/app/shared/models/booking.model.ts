@@ -46,12 +46,11 @@ export interface BookingStatusUpdate {
   bookingStatus: BookingStatus;
 }
 
-export const BOOKING_STATUSES: readonly BookingStatus[] =
-  [
-    'PENDING',
-    'CONFIRMED',
-    'CHECKED_IN',
-    'COMPLETED',
-    'CANCELLED',
-    'NO_SHOW',
-  ];
+export const BOOKING_STATUSES: readonly BookingStatus[] = [
+  'PENDING',
+  'CONFIRMED',
+  'CHECKED_IN',
+  'COMPLETED',
+  'CANCELLED',
+  'NO_SHOW',
+];

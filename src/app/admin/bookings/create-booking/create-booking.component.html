@@ -7,17 +7,11 @@
   ></app-page-banner>
 
   <div class="booking-layout">
-    <form
-      class="booking-form"
-      (ngSubmit)="submitBooking()"
-    >
+    <form class="booking-form" (ngSubmit)="submitBooking()">
       <section class="form-section">
         <div class="section-heading">
           <div class="section-icon">
-            <app-icon
-              [icon]="LucideFileText"
-              [size]="24"
-            ></app-icon>
+            <app-icon [icon]="LucideFileText" [size]="24"></app-icon>
           </div>
 
           <div>
@@ -27,9 +21,7 @@
         </div>
 
         <div class="field">
-          <label for="meetingTitle"
-            >Meeting title <span>*</span></label
-          >
+          <label for="meetingTitle">Meeting title <span>*</span></label>
           <input
             id="meetingTitle"
             name="meetingTitle"
@@ -43,9 +35,7 @@
         </div>
 
         <div class="field">
-          <label for="purpose"
-            >Meeting purpose <span>*</span></label
-          >
+          <label for="purpose">Meeting purpose <span>*</span></label>
           <textarea
             id="purpose"
             name="purpose"
@@ -58,9 +48,7 @@
         </div>
 
         <div class="field">
-          <label for="roomId"
-            >Meeting room <span>*</span></label
-          >
+          <label for="roomId">Meeting room <span>*</span></label>
 
           <div class="select-wrapper">
             <select
@@ -68,9 +56,7 @@
               name="roomId"
               [(ngModel)]="roomId"
               required
-              [disabled]="
-                loadingRooms || rooms.length === 0
-              "
+              [disabled]="loadingRooms || rooms.length === 0"
             >
               <option value="" disabled>
                 @if (loadingRooms) {
@@ -80,51 +66,30 @@
                 }
               </option>
 
-              @for (
-                room of rooms;
-                track room.roomId
-              ) {
+              @for (room of rooms; track room.roomId) {
                 <option [value]="room.roomId">
-                  {{ room.roomName }} ·
-                  {{ room.capacity }} seats
+                  {{ room.roomName }} · {{ room.capacity }} seats
                 </option>
               }
             </select>
 
-            <app-icon
-              [icon]="LucideChevronDown"
-              [size]="24"
-            ></app-icon>
+            <app-icon [icon]="LucideChevronDown" [size]="24"></app-icon>
           </div>
 
           @if (selectedRoom; as room) {
             <div class="room-summary">
               <div class="room-summary-icon">
-                <app-icon
-                  [icon]="LucideMonitor"
-                  [size]="24"
-                ></app-icon>
+                <app-icon [icon]="LucideMonitor" [size]="24"></app-icon>
               </div>
 
               <div class="room-summary-details">
-                <strong>{{
-                  room.roomName
-                }}</strong>
-                <span
-                  >{{ room.roomType }} ·
-                  {{ room.capacity }} seats</span
-                >
+                <strong>{{ room.roomName }}</strong>
+                <span>{{ room.roomType }} · {{ room.capacity }} seats</span>
               </div>
 
               @if (room.hourlyRate != null) {
                 <div class="room-rate">
-                  {{
-                    room.hourlyRate
-                      | currency
-                        : 'KES '
-                        : 'symbol'
-                        : '1.2-2'
-                  }}
+                  {{ room.hourlyRate | currency: 'KES ' : 'symbol' : '1.2-2' }}
                   <small>/ hour</small>
                 </div>
               }
@@ -133,76 +98,53 @@
         </div>
       </section>
 
-      <section
-        class="form-section schedule-section"
-      >
+      <section class="form-section schedule-section">
         <div class="section-heading">
           <div class="section-icon">
-            <app-icon
-              [icon]="LucideCalendar"
-              [size]="24"
-            ></app-icon>
+            <app-icon [icon]="LucideCalendar" [size]="24"></app-icon>
           </div>
 
           <div>
             <h2>Date and time</h2>
-            <p>
-              Choose when your meeting starts and
-              ends.
-            </p>
+            <p>Choose when your meeting starts and ends.</p>
           </div>
         </div>
 
         <div class="schedule-card">
           <div class="schedule-card-header">
             <div>
-              <span class="step-label"
-                >01 / START</span
-              >
-              <h3>
-                Start date and time <span>*</span>
-              </h3>
+              <span class="step-label">01 / START</span>
+              <h3>Start date and time <span>*</span></h3>
             </div>
 
             <div class="schedule-icon start-icon">
-              <app-icon
-                [icon]="LucideClock"
-                [size]="24"
-              ></app-icon>
+              <app-icon [icon]="LucideClock" [size]="24"></app-icon>
             </div>
           </div>
 
           <div class="date-time-grid">
             <div class="field">
-              <label for="startDate"
-                >Meeting date</label
-              >
+              <label for="startDate">Meeting date</label>
               <input
                 id="startDate"
                 name="startDate"
                 type="date"
                 [(ngModel)]="startDate"
                 [min]="today"
-                (ngModelChange)="
-                  onStartDateChange()
-                "
+                (ngModelChange)="onStartDateChange()"
                 required
               />
             </div>
 
             <div class="field">
-              <label for="startTime"
-                >Start time</label
-              >
+              <label for="startTime">Start time</label>
               <input
                 id="startTime"
                 name="startTime"
                 type="time"
                 step="1800"
                 [(ngModel)]="startTime"
-                (ngModelChange)="
-                  onStartTimeChange()
-                "
+                (ngModelChange)="onStartTimeChange()"
                 required
               />
             </div>
@@ -210,21 +152,14 @@
 
           <p class="field-hint">
             <span class="hint-dot"></span>
-            Choose a future date and your
-            preferred start time.
+            Choose a future date and your preferred start time.
           </p>
         </div>
 
-        <div
-          class="schedule-connector"
-          aria-hidden="true"
-        >
+        <div class="schedule-connector" aria-hidden="true">
           <span></span>
           <div>
-            <app-icon
-              [icon]="LucideArrowDown"
-              [size]="24"
-            ></app-icon>
+            <app-icon [icon]="LucideArrowDown" [size]="24"></app-icon>
           </div>
           <span></span>
         </div>
@@ -232,53 +167,38 @@
         <div class="schedule-card">
           <div class="schedule-card-header">
             <div>
-              <span class="step-label"
-                >02 / END</span
-              >
-              <h3>
-                End date and time <span>*</span>
-              </h3>
+              <span class="step-label">02 / END</span>
+              <h3>End date and time <span>*</span></h3>
             </div>
 
             <div class="schedule-icon end-icon">
-              <app-icon
-                [icon]="LucideClock"
-                [size]="24"
-              ></app-icon>
+              <app-icon [icon]="LucideClock" [size]="24"></app-icon>
             </div>
           </div>
 
           <div class="date-time-grid">
             <div class="field">
-              <label for="endDate"
-                >End date</label
-              >
+              <label for="endDate">End date</label>
               <input
                 id="endDate"
                 name="endDate"
                 type="date"
                 [(ngModel)]="endDate"
                 [min]="startDate || today"
-                (ngModelChange)="
-                  onEndDateChange()
-                "
+                (ngModelChange)="onEndDateChange()"
                 required
               />
             </div>
 
             <div class="field">
-              <label for="endTime"
-                >End time</label
-              >
+              <label for="endTime">End time</label>
               <input
                 id="endTime"
                 name="endTime"
                 type="time"
                 step="1800"
                 [(ngModel)]="endTime"
-                (ngModelChange)="
-                  onEndTimeChange()
-                "
+                (ngModelChange)="onEndTimeChange()"
                 required
               />
             </div>
@@ -286,23 +206,16 @@
 
           <p class="field-hint">
             <span class="hint-dot"></span>
-            For meetings spanning midnight, choose
-            the following date.
+            For meetings spanning midnight, choose the following date.
           </p>
         </div>
 
         @if (invalidDateRange) {
-          <div
-            class="validation-message"
-            role="alert"
-          >
+          <div class="validation-message" role="alert">
             <div>
-              <strong
-                >Check your meeting times</strong
-              >
+              <strong>Check your meeting times</strong>
               <p>
-                The end date and time must be
-                later than the start date and
+                The end date and time must be later than the start date and
                 time.
               </p>
             </div>
@@ -310,28 +223,17 @@
         }
 
         @if (startIsInPast && !invalidDateRange) {
-          <div
-            class="validation-message"
-            role="alert"
-          >
+          <div class="validation-message" role="alert">
             <div>
-              <strong
-                >Choose a future time</strong
-              >
-              <p>
-                The meeting start date and time
-                must be in the future.
-              </p>
+              <strong>Choose a future time</strong>
+              <p>The meeting start date and time must be in the future.</p>
             </div>
           </div>
         }
 
         <div class="duration-summary">
           <div class="duration-icon">
-            <app-icon
-              [icon]="LucideClock"
-              [size]="24"
-            ></app-icon>
+            <app-icon [icon]="LucideClock" [size]="24"></app-icon>
           </div>
 
           <div class="duration-text">
@@ -340,18 +242,13 @@
           </div>
 
           @if (durationMinutes > 0) {
-            <span class="duration-badge"
-              >{{ durationMinutes }} min</span
-            >
+            <span class="duration-badge">{{ durationMinutes }} min</span>
           }
         </div>
       </section>
 
       @if (successMessage) {
-        <div
-          class="form-alert success-alert"
-          role="status"
-        >
+        <div class="form-alert success-alert" role="status">
           <app-icon
             [icon]="LucideCheckCircle"
             [size]="16"
@@ -362,10 +259,7 @@
       }
 
       @if (conflictMessage) {
-        <div
-          class="form-alert conflict-alert"
-          role="alert"
-        >
+        <div class="form-alert conflict-alert" role="alert">
           <app-icon
             [icon]="LucideAlertTriangle"
             [size]="16"
@@ -375,8 +269,7 @@
             <strong>Room Already Booked</strong>
             <p>{{ conflictMessage }}</p>
             <p class="alert-hint">
-              Check room availability for
-              overlapping bookings and try a
+              Check room availability for overlapping bookings and try a
               different time or room.
             </p>
           </div>
@@ -384,10 +277,7 @@
       }
 
       @if (errorMessage) {
-        <div
-          class="form-alert error-alert"
-          role="alert"
-        >
+        <div class="form-alert error-alert" role="alert">
           <span class="alert-symbol">!</span>
           {{ errorMessage }}
         </div>
@@ -420,38 +310,26 @@
     <aside class="booking-sidebar">
       <div class="preview-card">
         <div class="preview-top">
-          <span class="preview-label"
-            >BOOKING SUMMARY</span
-          >
+          <span class="preview-label">BOOKING SUMMARY</span>
 
           <div class="preview-icon">
-            <app-icon
-              [icon]="LucideCalendar"
-              [size]="24"
-            ></app-icon>
+            <app-icon [icon]="LucideCalendar" [size]="24"></app-icon>
           </div>
         </div>
 
         <h2>Your meeting</h2>
-        <p class="preview-subtitle">
-          Review your reservation details.
-        </p>
+        <p class="preview-subtitle">Review your reservation details.</p>
 
         <div class="preview-divider"></div>
 
         <div class="preview-item">
           <span>Meeting title</span>
-          <strong>{{
-            meetingTitle || 'Not entered yet'
-          }}</strong>
+          <strong>{{ meetingTitle || 'Not entered yet' }}</strong>
         </div>
 
         <div class="preview-item">
           <span>Selected room</span>
-          <strong>{{
-            selectedRoom?.roomName ||
-              'No room selected'
-          }}</strong>
+          <strong>{{ selectedRoom?.roomName || 'No room selected' }}</strong>
         </div>
 
         <div class="preview-item">
@@ -480,27 +358,15 @@
 
       <div class="help-card">
         <div class="help-icon">
-          <app-icon
-            [icon]="LucideCircleHelp"
-            [size]="24"
-          ></app-icon>
+          <app-icon [icon]="LucideCircleHelp" [size]="24"></app-icon>
         </div>
 
         <h3>Before you book</h3>
 
         <ul>
-          <li>
-            Choose the room that suits your
-            meeting.
-          </li>
-          <li>
-            Make sure your start time is in the
-            future.
-          </li>
-          <li>
-            Check that the end time is later than
-            the start time.
-          </li>
+          <li>Choose the room that suits your meeting.</li>
+          <li>Make sure your start time is in the future.</li>
+          <li>Check that the end time is later than the start time.</li>
         </ul>
       </div>
     </aside>

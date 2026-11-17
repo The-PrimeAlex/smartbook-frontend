@@ -1,16 +1,7 @@
-import {
-  effect,
-  Injectable,
-  inject,
-  signal,
-} from '@angular/core';
+import { effect, Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import {
-  Observable,
-  Subject,
-  interval,
-} from 'rxjs';
+import { Observable, Subject, interval } from 'rxjs';
 
 export interface InactivityState {
   // Whether the warning modal is currently visible
@@ -26,12 +17,10 @@ export interface InactivityState {
 @Injectable({ providedIn: 'root' })
 export class InactivityService {
   private readonly router = inject(Router);
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   // Total inactivity time before showing the warning (10 min)
-  private readonly inactivityTimeout =
-    10 * 60 * 1000;
+  private readonly inactivityTimeout = 10 * 60 * 1000;
   // Grace period after warning before actual logout (60s)
   private readonly gracePeriod = 60;
 
@@ -39,25 +28,19 @@ export class InactivityService {
   private lastActivity = Date.now();
 
   // Timer interval IDs for cleanup
-  private checkIntervalId: ReturnType<
-    typeof setInterval
-  > | null = null;
-  private countdownIntervalId: ReturnType<
-    typeof setInterval
-  > | null = null;
+  private checkIntervalId: ReturnType<typeof setInterval> | null = null;
+  private countdownIntervalId: ReturnType<typeof setInterval> | null = null;
 
   // State signal for the UI
-  private readonly state =
-    signal<InactivityState>({
-      warningVisible: false,
-      secondsRemaining: 0,
-      loggedOut: false,
-      backNavWarning: false,
-    });
+  private readonly state = signal<InactivityState>({
+    warningVisible: false,
+    secondsRemaining: 0,
+    loggedOut: false,
+    backNavWarning: false,
+  });
 
   // Subject for countdown ticks
-  private readonly countdown$ =
-    new Subject<number>();
+  private readonly countdown$ = new Subject<number>();
 
   // Observable for countdown ticks
   get countdownObservable(): Observable<number> {
@@ -103,11 +86,9 @@ export class InactivityService {
     ];
 
     for (const event of events) {
-      document.addEventListener(
-        event,
-        () => this.onActivity(),
-        { passive: true },
-      );
+      document.addEventListener(event, () => this.onActivity(), {
+        passive: true,
+      });
     }
   }
 
@@ -125,15 +106,11 @@ export class InactivityService {
   // Start the inactivity monitoring loop
   private startMonitoring() {
     this.checkIntervalId = setInterval(() => {
-      if (
-        this.state().warningVisible ||
-        this.state().loggedOut
-      ) {
+      if (this.state().warningVisible || this.state().loggedOut) {
         return;
       }
 
-      const elapsed =
-        Date.now() - this.lastActivity;
+      const elapsed = Date.now() - this.lastActivity;
       if (elapsed >= this.inactivityTimeout) {
         this.showWarning();
       }
@@ -181,10 +158,7 @@ export class InactivityService {
       backNavWarning: false,
     });
     // Mark the session as expired so the auth guard won't re-authenticate via back button
-    sessionStorage.setItem(
-      'smartbook-session-expired',
-      'true',
-    );
+    sessionStorage.setItem('smartbook-session-expired', 'true');
     // Redirect to login with a reason query param so the login page
     // can show an "auto-logged out due to inactivity" message
     window.location.replace('/login?reason=inactivity');
@@ -196,11 +170,7 @@ export class InactivityService {
       // When the user presses back after logout, prevent navigation and show warning
       if (this.state().loggedOut) {
         // Push state forward to cancel the back navigation
-        history.pushState(
-          { logout: true },
-          '',
-          window.location.pathname,
-        );
+        history.pushState({ logout: true }, '', window.location.pathname);
         // Show the back-nav warning modal
         this.state.update((s) => ({
           ...s,

@@ -11,69 +11,41 @@
     </div>
   }
   @if (saved()) {
-    <div class="notice notice-success">
-      Settings saved successfully.
-    </div>
+    <div class="notice notice-success">Settings saved successfully.</div>
   }
   @if (loading()) {
-    <div class="loading-panel">
-      Loading settings...
-    </div>
+    <div class="loading-panel">Loading settings...</div>
   } @else {
     <div class="settings-panel">
       <div class="settings-section">
-        <h2 class="section-title">
-          Audit Configuration
-        </h2>
+        <h2 class="section-title">Audit Configuration</h2>
         <div class="settings-grid">
-          @for (
-            setting of settings();
-            track setting.key
-          ) {
+          @for (setting of settings(); track setting.key) {
             <div class="setting-card">
-              <label class="setting-label">{{
-                setting.label
-              }}</label>
+              <label class="setting-label">{{ setting.label }}</label>
               <p class="setting-description">
                 {{ setting.description }}
               </p>
-              @if (
-                setting.valueType === 'number'
-              ) {
+              @if (setting.valueType === 'number') {
                 <input
                   type="number"
                   class="setting-input"
                   [value]="getValue(setting.key)"
-                  (input)="
-                    setValue(
-                      setting.key,
-                      $any($event).target.value
-                    )
-                  "
+                  (input)="setValue(setting.key, $any($event).target.value)"
                 />
-              } @else if (
-                setting.valueType === 'boolean'
-              ) {
+              } @else if (setting.valueType === 'boolean') {
                 <label class="toggle-switch">
                   <input
                     type="checkbox"
-                    [checked]="
-                      getValue(setting.key) ===
-                      'true'
-                    "
+                    [checked]="getValue(setting.key) === 'true'"
                     (change)="
                       setValue(
                         setting.key,
-                        $any($event).target
-                          .checked
-                          ? 'true'
-                          : 'false'
+                        $any($event).target.checked ? 'true' : 'false'
                       )
                     "
                   />
-                  <span
-                    class="toggle-slider"
-                  ></span>
+                  <span class="toggle-slider"></span>
                 </label>
               }
             </div>
@@ -81,11 +53,7 @@
         </div>
       </div>
       <div class="save-bar">
-        <button
-          class="btn btn-save"
-          (click)="save()"
-          [disabled]="saving()"
-        >
+        <button class="btn btn-save" (click)="save()" [disabled]="saving()">
           @if (saving()) {
             <span class="spinner"></span>
             Saving...
@@ -98,9 +66,7 @@
 
     <!-- Modified Settings Log -->
     <div class="settings-panel audit-log-panel">
-      <h2 class="section-title">
-        Modified Settings Audit Trail
-      </h2>
+      <h2 class="section-title">Modified Settings Audit Trail</h2>
       @if (sortedModifiedSettings.length === 0) {
         <app-empty-state
           [icon]="LucideFileClock"
@@ -120,38 +86,22 @@
               </tr>
             </thead>
             <tbody>
-              @for (
-                item of sortedModifiedSettings;
-                track item.id
-              ) {
+              @for (item of sortedModifiedSettings; track item.id) {
                 <tr>
                   <td>
-                    <strong>{{
-                      item.label
-                    }}</strong>
+                    <strong>{{ item.label }}</strong>
                   </td>
                   <td>
-                    <span
-                      class="category-badge"
-                      >{{ item.category }}</span
-                    >
+                    <span class="category-badge">{{ item.category }}</span>
                   </td>
                   <td>
-                    <code>{{
-                      item.defaultValue
-                    }}</code>
+                    <code>{{ item.defaultValue }}</code>
                   </td>
                   <td>
-                    <code
-                      class="modified-value"
-                      >{{ item.value }}</code
-                    >
+                    <code class="modified-value">{{ item.value }}</code>
                   </td>
                   <td>
-                    {{
-                      item.updatedAt
-                        | date: 'medium'
-                    }}
+                    {{ item.updatedAt | date: 'medium' }}
                   </td>
                 </tr>
               }

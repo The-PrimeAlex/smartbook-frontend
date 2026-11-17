@@ -1,11 +1,5 @@
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-} from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
 import { RoomEquipment } from '../models/room.model';
 
@@ -20,12 +14,9 @@ export class RoomEquipmentService {
   private readonly apiUrl = '/api/v1/rooms';
 
   private loadCsrfToken(): Observable<CsrfTokenResponse> {
-    return this.http.get<CsrfTokenResponse>(
-      '/api/v1/auth/csrf',
-      {
-        withCredentials: true,
-      },
-    );
+    return this.http.get<CsrfTokenResponse>('/api/v1/auth/csrf', {
+      withCredentials: true,
+    });
   }
 
   addEquipment(
@@ -38,10 +29,7 @@ export class RoomEquipmentService {
     );
   }
 
-  removeEquipment(
-    roomId: string,
-    assetCode: string,
-  ): Observable<void> {
+  removeEquipment(roomId: string, assetCode: string): Observable<void> {
     return this.http.delete<void>(
       `${this.apiUrl}/${encodeURIComponent(roomId)}/equipment/${encodeURIComponent(assetCode)}`,
     );

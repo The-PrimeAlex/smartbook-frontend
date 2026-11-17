@@ -19,23 +19,23 @@ export class BillingService {
   ) {}
 
   getMyBills(): Observable<Bill[]> {
-    return this.http.get<Bill[]>(
-      `${this.baseUrl}/bills/me`,
-    );
+    return this.http.get<Bill[]>(`${this.baseUrl}/bills/me`);
   }
 
   createPayment(
     billId: string,
     request: PaymentRequest,
   ): Observable<PaymentResponse> {
-    return this.authService.ensureCsrfToken().pipe(
-      switchMap(() =>
-        this.http.post<PaymentResponse>(
-          `${this.baseUrl}/payments/me/${billId}`,
-          request,
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.post<PaymentResponse>(
+            `${this.baseUrl}/payments/me/${billId}`,
+            request,
+          ),
         ),
-      ),
-    );
+      );
   }
 
   queryMpesaPaymentStatus(

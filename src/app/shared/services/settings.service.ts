@@ -1,22 +1,7 @@
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
-import {
-  HttpClient,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import {
-  Observable,
-  catchError,
-  map,
-  switchMap,
-  throwError,
-} from 'rxjs';
-import {
-  Setting,
-  UpdateSettingRequest,
-} from '../models/settings.model';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, map, switchMap, throwError } from 'rxjs';
+import { Setting, UpdateSettingRequest } from '../models/settings.model';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -31,32 +16,22 @@ export class SettingsService {
       .pipe(catchError(this.handleError));
   }
 
-  getSettingsByCategory(
-    category: string,
-  ): Observable<Setting[]> {
+  getSettingsByCategory(category: string): Observable<Setting[]> {
     return this.http
-      .get<Setting[]>(
-        `${this.apiUrl}/category/${category}`,
-      )
+      .get<Setting[]>(`${this.apiUrl}/category/${category}`)
       .pipe(catchError(this.handleError));
   }
 
-  getSettingValue(
-    key: string,
-  ): Observable<string | null> {
+  getSettingValue(key: string): Observable<string | null> {
     return this.http
-      .get<{ key: string; value: string | null }>(
-        `${this.apiUrl}/value/${key}`,
-      )
+      .get<{ key: string; value: string | null }>(`${this.apiUrl}/value/${key}`)
       .pipe(
         map((res) => res.value),
         catchError(this.handleError),
       );
   }
 
-  updateSetting(
-    request: UpdateSettingRequest,
-  ): Observable<Setting> {
+  updateSetting(request: UpdateSettingRequest): Observable<Setting> {
     return this.authService
       .ensureCsrfToken()
       .pipe(
@@ -68,37 +43,26 @@ export class SettingsService {
       );
   }
 
-  bulkUpdateSettings(
-    updates: UpdateSettingRequest[],
-  ): Observable<Setting[]> {
+  bulkUpdateSettings(updates: UpdateSettingRequest[]): Observable<Setting[]> {
     return this.authService
       .ensureCsrfToken()
       .pipe(
         switchMap(() =>
           this.http
-            .put<Setting[]>(
-              `${this.apiUrl}/bulk`,
-              updates,
-            )
+            .put<Setting[]>(`${this.apiUrl}/bulk`, updates)
             .pipe(catchError(this.handleError)),
         ),
       );
   }
 
   private handleError(error: HttpErrorResponse) {
-    let message =
-      'Something went wrong. Please try again.';
+    let message = 'Something went wrong. Please try again.';
     if (error.status === 0) {
       message = 'Could not connect to the API.';
     } else if (error.status === 400) {
-      message =
-        'Invalid request. Please check your input.';
-    } else if (
-      error.status === 401 ||
-      error.status === 403
-    ) {
-      message =
-        'You are not authorized to modify settings.';
+      message = 'Invalid request. Please check your input.';
+    } else if (error.status === 401 || error.status === 403) {
+      message = 'You are not authorized to modify settings.';
     } else if (error.status >= 500) {
       message = 'Server error. Please try again.';
     }

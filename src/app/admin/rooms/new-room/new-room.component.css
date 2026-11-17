@@ -151,11 +151,7 @@ a:focus-visible {
     transparent 1.5px
   );
   background-size: 16px 16px;
-  mask-image: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.5) 0%,
-    transparent 80%
-  );
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.5) 0%, transparent 80%);
   -webkit-mask-image: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.5) 0%,
@@ -243,10 +239,7 @@ a:focus-visible {
 }
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 20px;
 }
 .form-field {
@@ -441,11 +434,7 @@ a:focus-visible {
 .button-primary {
   border: none;
   color: var(--white);
-  background: linear-gradient(
-    135deg,
-    var(--o),
-    var(--od)
-  );
+  background: linear-gradient(135deg, var(--o), var(--od));
   box-shadow: 0 3px 10px rgb(242 140 40 / 25%);
 }
 .button-primary:hover:not(:disabled) {
@@ -524,10 +513,7 @@ a:focus-visible {
   }
   .form-actions {
     display: grid;
-    grid-template-columns: repeat(
-      2,
-      minmax(0, 1fr)
-    );
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .form-actions .button-primary {
     grid-column: 1/-1;

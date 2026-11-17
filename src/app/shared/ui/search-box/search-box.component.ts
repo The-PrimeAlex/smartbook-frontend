@@ -1,23 +1,12 @@
-import {
-  Component,
-  input,
-  output,
-} from '@angular/core';
-import {
-  LucideDynamicIcon,
-  LucideSearch,
-  LucideX,
-} from '@lucide/angular';
+import { Component, input, output } from '@angular/core';
+import { LucideDynamicIcon, LucideSearch, LucideX } from '@lucide/angular';
 
 @Component({
   selector: 'app-search-box',
   standalone: true,
   imports: [LucideDynamicIcon],
   template: `
-    <div
-      class="search-box"
-      [class.focused]="value().length > 0"
-    >
+    <div class="search-box" [class.focused]="value().length > 0">
       <svg
         [lucideIcon]="searchIcon"
         [size]="20"
@@ -28,9 +17,7 @@ import {
         type="search"
         [placeholder]="placeholder()"
         [value]="value()"
-        (input)="
-          change.emit($any($event.target).value)
-        "
+        (input)="change.emit($any($event.target).value)"
         [attr.aria-label]="placeholder()"
       />
       @if (value().length > 0) {

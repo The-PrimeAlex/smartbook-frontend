@@ -14,9 +14,7 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title"
-        >Damage Summary</span
-      >
+      <span class="stats-toggle-title">Damage Summary</span>
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -24,34 +22,21 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div
-      class="stats-row-wrapper"
-      [class.collapsed]="statsCollapsed()"
-    >
+    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
       <div class="stats-bar">
-        <app-stat-card
-          [icon]="LucideAlertTriangle"
-        >
-          <span stat-value>{{
-            totalDamageBills()
-          }}</span>
+        <app-stat-card [icon]="LucideAlertTriangle">
+          <span stat-value>{{ totalDamageBills() }}</span>
           <span stat-label>Incidents</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideAlertTriangle"
-        >
+        <app-stat-card [icon]="LucideAlertTriangle">
           <span stat-value>{{
-            totalDamageCharges()
-              | currency: 'KSH ' : 'symbol-narrow'
+            totalDamageCharges() | currency: 'KSH ' : 'symbol-narrow'
           }}</span>
           <span stat-label>Charges</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideAlertTriangle"
-        >
+        <app-stat-card [icon]="LucideAlertTriangle">
           <span stat-value>{{
-            totalDamagePaid()
-              | currency: 'KSH ' : 'symbol-narrow'
+            totalDamagePaid() | currency: 'KSH ' : 'symbol-narrow'
           }}</span>
           <span stat-label>Paid</span>
         </app-stat-card>
@@ -61,10 +46,7 @@
   <section class="bills-section">
     @if (loading() && bills().length === 0) {
       <div class="state-panel" role="status">
-        <span
-          class="loading-spinner"
-          aria-hidden="true"
-        ></span>
+        <span class="loading-spinner" aria-hidden="true"></span>
         <p>Loading damage charges...</p>
       </div>
     } @else if (damageBills().length === 0) {
@@ -76,50 +58,25 @@
       ></app-empty-state>
     } @else {
       <div class="bills-grid">
-        @for (
-          bill of damageBills();
-          track bill.billId;
-          let i = $index
-        ) {
-          <article
-            class="bill-card"
-            [style.animation-delay]="
-              i * 0.05 + 's'
-            "
-          >
+        @for (bill of damageBills(); track bill.billId; let i = $index) {
+          <article class="bill-card" [style.animation-delay]="i * 0.05 + 's'">
             <div class="bill-card-header">
               <div class="bill-header-left">
                 <div class="bill-title-block">
                   <h3 class="bill-room">
-                    {{
-                      bill.booking?.roomName ||
-                        'Incident Charge'
-                    }}
+                    {{ bill.booking?.roomName || 'Incident Charge' }}
                   </h3>
-                  <span class="bill-invoice">{{
-                    bill.billId
-                  }}</span>
+                  <span class="bill-invoice">{{ bill.billId }}</span>
                 </div>
                 <app-status-badge
-                  [label]="
-                    getStatusLabel(
-                      bill.billStatus
-                    )
-                  "
-                  [variant]="
-                    getBadgeVariant(
-                      bill.billStatus
-                    )
-                  "
+                  [label]="getStatusLabel(bill.billStatus)"
+                  [variant]="getBadgeVariant(bill.billStatus)"
                 ></app-status-badge>
               </div>
               <div class="bill-header-right">
                 <span class="bill-amount">
                   {{
-                    getIncidentTotal(bill)
-                      | currency
-                        : 'KSH '
-                        : 'symbol-narrow'
+                    getIncidentTotal(bill) | currency: 'KSH ' : 'symbol-narrow'
                   }}
                 </span>
               </div>
@@ -128,22 +85,12 @@
               @if (bill.booking) {
                 <div class="bill-meta-row">
                   <span class="bill-meta-item">
-                    <app-icon
-                      [icon]="LucideUser"
-                      [size]="14"
-                    ></app-icon>
+                    <app-icon [icon]="LucideUser" [size]="14"></app-icon>
                     {{ bill.booking.userName }}
                   </span>
                   <span class="bill-meta-item">
-                    <app-icon
-                      [icon]="LucideCalendar"
-                      [size]="14"
-                    ></app-icon>
-                    {{
-                      formatDateTime(
-                        bill.booking.startTime
-                      )
-                    }}
+                    <app-icon [icon]="LucideCalendar" [size]="14"></app-icon>
+                    {{ formatDateTime(bill.booking.startTime) }}
                   </span>
                 </div>
               }
@@ -154,31 +101,18 @@
                   track item.description;
                   let j = $index
                 ) {
-                  @if (
-                    item.itemType === 'INCIDENT'
-                  ) {
-                    <div
-                      class="item-row item-incident"
-                    >
-                      <span
-                        class="item-type-badge incident-badge"
-                      >
+                  @if (item.itemType === 'INCIDENT') {
+                    <div class="item-row item-incident">
+                      <span class="item-type-badge incident-badge">
                         <app-icon
-                          [icon]="
-                            LucideAlertTriangle
-                          "
+                          [icon]="LucideAlertTriangle"
                           [size]="12"
                         ></app-icon>
                         Incident
                       </span>
-                      <span class="item-desc">{{
-                        item.description
-                      }}</span>
+                      <span class="item-desc">{{ item.description }}</span>
                       <span class="item-amount">{{
-                        formatCurrency(
-                          item.amount,
-                          bill.currency
-                        )
+                        formatCurrency(item.amount, bill.currency)
                       }}</span>
                     </div>
                   }
@@ -186,34 +120,16 @@
               </div>
               <div class="bill-footer">
                 <div class="bill-summary-item">
-                  <span class="bill-summary-label"
-                    >Damage Total</span
-                  >
-                  <span
-                    class="bill-summary-value"
-                    >{{
-                      formatCurrency(
-                        getIncidentTotal(bill),
-                        bill.currency
-                      )
-                    }}</span
-                  >
+                  <span class="bill-summary-label">Damage Total</span>
+                  <span class="bill-summary-value">{{
+                    formatCurrency(getIncidentTotal(bill), bill.currency)
+                  }}</span>
                 </div>
-                <div
-                  class="bill-summary-item bill-paid"
-                >
-                  <span class="bill-summary-label"
-                    >Paid</span
-                  >
-                  <span
-                    class="bill-summary-value"
-                    >{{
-                      formatCurrency(
-                        bill.amountPaid,
-                        bill.currency
-                      )
-                    }}</span
-                  >
+                <div class="bill-summary-item bill-paid">
+                  <span class="bill-summary-label">Paid</span>
+                  <span class="bill-summary-value">{{
+                    formatCurrency(bill.amountPaid, bill.currency)
+                  }}</span>
                 </div>
               </div>
             </div>

@@ -18,8 +18,7 @@
     var(--page-bg-alt) 40%,
     var(--card-bg) 100%
   );
-  font-family:
-    Inter, 'Segoe UI', Arial, sans-serif;
+  font-family: Inter, 'Segoe UI', Arial, sans-serif;
   animation: fi 500ms ease both;
 }
 @keyframes fi {
@@ -62,8 +61,7 @@
     transform: translate(0, 0) rotate(0deg);
   }
   50% {
-    transform: translate(20px, -15px)
-      rotate(180deg);
+    transform: translate(20px, -15px) rotate(180deg);
   }
 }
 @keyframes fl3 {
@@ -126,11 +124,7 @@
   width: 20px;
   height: 2px;
   border-radius: 99px;
-  background: linear-gradient(
-    90deg,
-    var(--brand-accent),
-    #ffd27a
-  );
+  background: linear-gradient(90deg, var(--brand-accent), #ffd27a);
   content: '';
 }
 
@@ -216,11 +210,7 @@
     transparent 1.5px
   );
   background-size: 16px 16px;
-  mask-image: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.5) 0%,
-    transparent 80%
-  );
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.5) 0%, transparent 80%);
   -webkit-mask-image: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.5) 0%,
@@ -272,11 +262,7 @@
 .notice-error {
   border-color: var(--danger-border);
   color: var(--danger);
-  background: linear-gradient(
-    135deg,
-    var(--danger-bg),
-    rgb(254 202 202 / 90%)
-  );
+  background: linear-gradient(135deg, var(--danger-bg), rgb(254 202 202 / 90%));
   box-shadow: 0 4px 12px rgb(153 27 27 / 8%);
 }
 /* ── Panel ── */
@@ -309,10 +295,7 @@
 /* ── Settings Grid ── */
 .settings-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(340px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 20px;
 }
 .setting-card {
@@ -325,8 +308,7 @@
   border: 1.5px solid var(--b);
   border-radius: 16px;
   background: var(--w);
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: pop 400ms ease both;
 }
 .setting-card:hover {
@@ -391,31 +373,20 @@
   border-radius: 50%;
   background: var(--w);
   box-shadow: 0 2px 4px rgb(0 0 0 / 15%);
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
   content: '';
 }
 .toggle-switch input:checked + .toggle-slider {
-  background: linear-gradient(
-    135deg,
-    var(--o),
-    var(--od)
-  );
+  background: linear-gradient(135deg, var(--o), var(--od));
 }
-.toggle-switch
-  input:checked
-  + .toggle-slider::before {
+.toggle-switch input:checked + .toggle-slider::before {
   transform: translateX(22px);
 }
 .modified-badge {
   display: inline-block;
   padding: 3px 10px;
   border-radius: 99px;
-  background: linear-gradient(
-    135deg,
-    var(--ol),
-    var(--brand-accent-light)
-  );
+  background: linear-gradient(135deg, var(--ol), var(--brand-accent-light));
   color: var(--od);
   font-size: 0.68rem;
   font-weight: 800;
@@ -433,8 +404,7 @@
   border-radius: 16px;
   background: var(--w);
   padding: 24px;
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .dark-mode-card:hover {
@@ -481,14 +451,8 @@
   transition: all 250ms;
 }
 
-.dark-mode-setting
-  .toggle-switch.active
-  .toggle-slider {
-  background: linear-gradient(
-    135deg,
-    var(--o),
-    var(--od)
-  );
+.dark-mode-setting .toggle-switch.active .toggle-slider {
+  background: linear-gradient(135deg, var(--o), var(--od));
 }
 
 .dark-mode-setting .toggle-slider::before {
@@ -501,13 +465,10 @@
   border-radius: 50%;
   background: var(--w);
   box-shadow: 0 2px 4px rgb(0 0 0 / 15%);
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.dark-mode-setting
-  .toggle-switch.active
-  .toggle-slider::before {
+.dark-mode-setting .toggle-switch.active .toggle-slider::before {
   transform: translateX(22px);
 }
 
@@ -540,16 +501,11 @@
   color: var(--w);
   font-weight: 750;
   font-size: 0.88rem;
-  background: linear-gradient(
-    135deg,
-    var(--o),
-    var(--od)
-  );
+  background: linear-gradient(135deg, var(--o), var(--od));
   box-shadow:
     0 4px 12px rgb(242 140 40 / 30%),
     inset 0 1px 0 rgb(255 255 255 / 20%);
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
   display: inline-flex;
   align-items: center;
   gap: 8px;

@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -23,13 +20,10 @@ export interface RegistrationRequest {
 @Injectable({ providedIn: 'root' })
 export class RegistrationRequestsService {
   private readonly http = inject(HttpClient);
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
   private readonly baseUrl = '/api/v1/registration-requests/admin';
 
-  getRequests(
-    status?: string,
-  ): Observable<RegistrationRequest[]> {
+  getRequests(status?: string): Observable<RegistrationRequest[]> {
     const params: Record<string, string> = {};
     if (status) params['status'] = status;
     return this.http
@@ -39,9 +33,7 @@ export class RegistrationRequestsService {
       .pipe(catchError(() => of([])));
   }
 
-  approveRequest(
-    requestId: string,
-  ): Observable<{ message: string }> {
+  approveRequest(requestId: string): Observable<{ message: string }> {
     return this.authService
       .ensureCsrfToken()
       .pipe(
@@ -54,9 +46,7 @@ export class RegistrationRequestsService {
       );
   }
 
-  rejectRequest(
-    requestId: string,
-  ): Observable<{ message: string }> {
+  rejectRequest(requestId: string): Observable<{ message: string }> {
     return this.authService
       .ensureCsrfToken()
       .pipe(

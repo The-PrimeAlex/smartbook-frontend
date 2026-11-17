@@ -7,17 +7,9 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import {
-  catchError,
-  forkJoin,
-  of,
-  Subscription,
-} from 'rxjs';
+import { catchError, forkJoin, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  NavigationEnd,
-  Router,
-} from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import {
   LucideCheck,
@@ -53,20 +45,14 @@ interface RoomCardData {
 @Component({
   selector: 'app-view-rooms',
   standalone: true,
-  imports: [
-    DecimalPipe,
-    IconComponent,
-    PageBannerComponent,
-  ],
+  imports: [DecimalPipe, IconComponent, PageBannerComponent],
   templateUrl: './view-rooms.component.html',
   styleUrl: './view-rooms.component.css',
 })
 export class ViewRoomsComponent implements OnInit, OnDestroy {
-  private readonly roomService =
-    inject(RoomService);
+  private readonly roomService = inject(RoomService);
   private readonly router = inject(Router);
-  private readonly routerSubscription =
-    new Subscription();
+  private readonly routerSubscription = new Subscription();
 
   readonly LucideCheck = LucideCheck;
   readonly LucideChevronDown = LucideChevronDown;
@@ -74,9 +60,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
   readonly LucideUsers = LucideUsers;
   readonly LucideWrench = LucideWrench;
 
-  readonly selectedType = signal<
-    RoomType | 'ALL'
-  >('ALL');
+  readonly selectedType = signal<RoomType | 'ALL'>('ALL');
   readonly rooms = signal<MeetingRoom[]>([]);
   readonly roomCards = signal<RoomCardData[]>([]);
 
@@ -86,42 +70,29 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
   readonly filteredRooms = computed(() => {
     const type = this.selectedType();
     return this.rooms().filter(
-      (room) =>
-        type === 'ALL' || room.roomType === type,
+      (room) => type === 'ALL' || room.roomType === type,
     );
   });
 
   readonly filteredCards = computed(() => {
-    const filteredRoomIds = new Set(
-      this.filteredRooms().map((r) => r.roomId),
-    );
+    const filteredRoomIds = new Set(this.filteredRooms().map((r) => r.roomId));
     return this.roomCards().filter((card) =>
       filteredRoomIds.has(card.room.roomId),
     );
   });
 
   readonly activeRoomCount = computed(
-    () =>
-      this.rooms().filter(
-        (room) => room.status === 'ACTIVE',
-      ).length,
+    () => this.rooms().filter((room) => room.status === 'ACTIVE').length,
   );
 
   readonly totalCapacity = computed(() =>
     this.rooms()
       .filter((room) => room.status === 'ACTIVE')
-      .reduce(
-        (total, room) =>
-          total + (room.capacity ?? 0),
-        0,
-      ),
+      .reduce((total, room) => total + (room.capacity ?? 0), 0),
   );
 
   readonly totalEquipment = computed(() =>
-    this.roomCards().reduce(
-      (sum, card) => sum + card.equipment.length,
-      0,
-    ),
+    this.roomCards().reduce((sum, card) => sum + card.equipment.length, 0),
   );
 
   ngOnInit(): void {
@@ -130,12 +101,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
     // Reload rooms when navigating back to this page (e.g., after creating a new room)
     this.routerSubscription.add(
       this.router.events
-        .pipe(
-          filter(
-            (e): e is NavigationEnd =>
-              e instanceof NavigationEnd,
-          ),
-        )
+        .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(() => {
           this.loadRooms();
         }),
@@ -157,46 +123,32 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
 
         // Eagerly load all room equipment details in parallel
         if (roomList.length > 0) {
-          const detailsRequests = roomList.map(
-            (room) =>
-              this.roomService
-                .getRoomDetails(room.roomId)
-                .pipe(
-                  map((details) => ({
-                    roomId: room.roomId,
-                    equipment:
-                      details.equipment ?? [],
-                  })),
-                  catchError(() =>
-                    of({
-                      roomId: room.roomId,
-                      equipment:
-                        [] as RoomEquipment[],
-                    }),
-                  ),
-                ),
+          const detailsRequests = roomList.map((room) =>
+            this.roomService.getRoomDetails(room.roomId).pipe(
+              map((details) => ({
+                roomId: room.roomId,
+                equipment: details.equipment ?? [],
+              })),
+              catchError(() =>
+                of({
+                  roomId: room.roomId,
+                  equipment: [] as RoomEquipment[],
+                }),
+              ),
+            ),
           );
 
           forkJoin(detailsRequests).subscribe({
             next: (results) => {
-              const equipmentMap = new Map<
-                string,
-                RoomEquipment[]
-              >();
+              const equipmentMap = new Map<string, RoomEquipment[]>();
               results.forEach((result) =>
-                equipmentMap.set(
-                  result.roomId,
-                  result.equipment,
-                ),
+                equipmentMap.set(result.roomId, result.equipment),
               );
 
               this.roomCards.set(
                 roomList.map((room) => ({
                   room,
-                  equipment:
-                    equipmentMap.get(
-                      room.roomId,
-                    ) ?? [],
+                  equipment: equipmentMap.get(room.roomId) ?? [],
                   expanded: false,
                   detailsLoading: false,
                   detailsLoaded: true,
@@ -210,8 +162,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
               this.roomCards.set(
                 roomList.map((room) => ({
                   room,
-                  equipment:
-                    [] as RoomEquipment[],
+                  equipment: [] as RoomEquipment[],
                   expanded: false,
                   detailsLoading: false,
                   detailsLoaded: true,
@@ -229,7 +180,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
       error: (error: Error) => {
         this.errorMessage.set(
           error.message ||
-            'We couldn\'t load rooms. Please try again in a moment.',
+            "We couldn't load rooms. Please try again in a moment.",
         );
         this.loading.set(false);
       },
@@ -246,9 +197,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
 
   toggleExpand(roomId: string): void {
     const cards = this.roomCards();
-    const index = cards.findIndex(
-      (c) => c.room.roomId === roomId,
-    );
+    const index = cards.findIndex((c) => c.room.roomId === roomId);
     if (index === -1) return;
 
     const card = cards[index];
@@ -286,9 +235,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
     }
   }
 
-  equipmentStatusLabel(
-    status: RoomEquipmentStatus,
-  ): string {
+  equipmentStatusLabel(status: RoomEquipmentStatus): string {
     switch (status) {
       case 'ACTIVE':
         return 'Available';
@@ -313,9 +260,7 @@ export class ViewRoomsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getEquipStatusClass(
-    status: RoomEquipmentStatus,
-  ): string {
+  getEquipStatusClass(status: RoomEquipmentStatus): string {
     const base = 'status-badge';
     switch (status) {
       case 'ACTIVE':

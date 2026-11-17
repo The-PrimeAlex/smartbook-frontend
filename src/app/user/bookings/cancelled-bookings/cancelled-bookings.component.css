@@ -123,8 +123,7 @@ button {
   box-shadow: var(--card-shadow);
   backdrop-filter: blur(10px);
   animation: rowIn 400ms ease both;
-  transition: all 300ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
 }
@@ -136,11 +135,7 @@ button {
   height: 120px;
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(
-    circle,
-    rgb(242 140 40 / 4%) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgb(242 140 40 / 4%) 0%, transparent 70%);
   transform: translate(30%, -30%);
   transition: transform 300ms;
   content: '';
@@ -216,21 +211,14 @@ button {
 }
 .status-cancelled {
   border-color: var(--danger-border);
-  background: linear-gradient(
-    135deg,
-    var(--danger-bg),
-    var(--danger-bg)
-  );
+  background: linear-gradient(135deg, var(--danger-bg), var(--danger-bg));
   color: var(--danger);
 }
 
 /* ── Details grid ── */
 .booking-details {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 24px;
 }
 .detail-item {
@@ -401,11 +389,7 @@ button {
   height: 64px;
   place-items: center;
   border-radius: 18px;
-  background: linear-gradient(
-    135deg,
-    var(--warning-bg),
-    var(--ol)
-  );
+  background: linear-gradient(135deg, var(--warning-bg), var(--ol));
   color: var(--warning);
   font-size: 28px;
   box-shadow: 0 4px 12px rgb(242 140 40 / 15%);

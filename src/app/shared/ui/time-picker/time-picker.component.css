@@ -121,8 +121,7 @@
     0 -20px 60px rgba(0, 0, 0, 0.12),
     0 -4px 16px rgba(0, 0, 0, 0.06);
   z-index: 1000;
-  animation: timeDropdownIn 200ms
-    cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: timeDropdownIn 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
   overflow: hidden;
 }
 
@@ -144,8 +143,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-secondary, #71717a);
-  border-bottom: 1px solid
-    var(--border-color, #e2e8f0);
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
 }
 
 .time-columns {
@@ -170,8 +168,7 @@
   max-height: 180px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--border-color, #e2e8f0)
-    transparent;
+  scrollbar-color: var(--border-color, #e2e8f0) transparent;
 }
 
 .time-scroll::-webkit-scrollbar {
@@ -218,8 +215,7 @@
 
 .time-dropdown-footer {
   padding: 10px 16px;
-  border-top: 1px solid
-    var(--border-color, #e2e8f0);
+  border-top: 1px solid var(--border-color, #e2e8f0);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -251,9 +247,7 @@
   color: #71717a;
 }
 
-[data-theme='dark']
-  .time-picker-wrap.open
-  .time-icon {
+[data-theme='dark'] .time-picker-wrap.open .time-icon {
   color: #f28c28;
 }
 
@@ -261,9 +255,7 @@
   color: #71717a;
 }
 
-[data-theme='dark']
-  .time-picker-wrap.open
-  .chevron-icon {
+[data-theme='dark'] .time-picker-wrap.open .chevron-icon {
   color: #f28c28;
 }
 
@@ -302,8 +294,7 @@
   border-top-color: #334155;
 }
 
-[data-theme='dark']
-  .time-scroll::-webkit-scrollbar-thumb {
+[data-theme='dark'] .time-scroll::-webkit-scrollbar-thumb {
   background: #334155;
 }
 

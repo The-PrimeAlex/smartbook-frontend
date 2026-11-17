@@ -1,9 +1,7 @@
 import { BadgeVariant } from '../../ui/status-badge/status-badge.component';
 
 // Maps bill/payment status strings to BadgeVariant values
-export function getBillBadgeVariant(
-  status: string,
-): BadgeVariant {
+export function getBillBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case 'PAID':
       return 'paid';
@@ -21,9 +19,7 @@ export function getBillBadgeVariant(
 }
 
 // Maps payment record status strings to BadgeVariant values
-export function getPaymentBadgeVariant(
-  status: string,
-): BadgeVariant {
+export function getPaymentBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case 'SUCCESS':
       return 'paid';
@@ -39,9 +35,7 @@ export function getPaymentBadgeVariant(
 }
 
 // Maps booking status strings to BadgeVariant values
-export function getBookingBadgeVariant(
-  status: string,
-): BadgeVariant {
+export function getBookingBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case 'PENDING':
       return 'pending';
@@ -60,9 +54,7 @@ export function getBookingBadgeVariant(
 }
 
 // Maps incident status strings to BadgeVariant values
-export function getIncidentBadgeVariant(
-  status: string,
-): BadgeVariant {
+export function getIncidentBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case 'REPORTED':
       return 'pending';
@@ -82,9 +74,7 @@ export function getIncidentBadgeVariant(
 }
 
 // Maps user account status strings to BadgeVariant values
-export function getUserBadgeVariant(
-  status: string,
-): BadgeVariant {
+export function getUserBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case 'ACTIVE':
       return 'success';
@@ -102,9 +92,7 @@ export function getUserBadgeVariant(
 }
 
 // Maps registration request status strings to BadgeVariant values
-export function getRegistrationBadgeVariant(
-  status: string,
-): BadgeVariant {
+export function getRegistrationBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case 'PENDING':
       return 'pending';

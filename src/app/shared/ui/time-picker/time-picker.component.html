@@ -17,11 +17,7 @@
       (click)="toggleDropdown()"
       autocomplete="off"
     />
-    <span
-      class="time-icon"
-      aria-hidden="true"
-      (click)="toggleDropdown()"
-    >
+    <span class="time-icon" aria-hidden="true" (click)="toggleDropdown()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="18"
@@ -34,16 +30,10 @@
         stroke-linejoin="round"
       >
         <circle cx="12" cy="12" r="10"></circle>
-        <polyline
-          points="12 6 12 12 16 14"
-        ></polyline>
+        <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
     </span>
-    <span
-      class="chevron-icon"
-      aria-hidden="true"
-      (click)="toggleDropdown()"
-    >
+    <span class="chevron-icon" aria-hidden="true" (click)="toggleDropdown()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="14"
@@ -55,18 +45,14 @@
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <polyline
-          points="6 9 12 15 18 9"
-        ></polyline>
+        <polyline points="6 9 12 15 18 9"></polyline>
       </svg>
     </span>
   </div>
 
   <!-- Dropdown panel -->
   <div class="time-dropdown" *ngIf="dropdownOpen">
-    <div class="time-dropdown-header">
-      Select Time
-    </div>
+    <div class="time-dropdown-header">Select Time</div>
     <div class="time-columns">
       <div class="time-column">
         <div class="time-column-label">Hour</div>
@@ -84,17 +70,13 @@
         </div>
       </div>
       <div class="time-column">
-        <div class="time-column-label">
-          Minute
-        </div>
+        <div class="time-column-label">Minute</div>
         <div class="time-scroll">
           <button
             type="button"
             class="time-option"
             *ngFor="let m of minutes"
-            [class.selected]="
-              selectedMinute === m
-            "
+            [class.selected]="selectedMinute === m"
             (click)="selectMinute(m)"
           >
             {{ m | number: '2.0' }}
@@ -102,13 +84,8 @@
         </div>
       </div>
     </div>
-    <div
-      class="time-dropdown-footer"
-      *ngIf="isValueSet"
-    >
-      <span class="time-preview">{{
-        displayValue
-      }}</span>
+    <div class="time-dropdown-footer" *ngIf="isValueSet">
+      <span class="time-preview">{{ displayValue }}</span>
     </div>
   </div>
 </div>

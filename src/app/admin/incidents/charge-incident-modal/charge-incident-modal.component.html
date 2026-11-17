@@ -3,25 +3,16 @@
   [class.visible]="visible"
   (click)="onBackdropClick($event)"
 >
-  <div
-    class="modal-content"
-    (click)="$event.stopPropagation()"
-  >
+  <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-icon charge-icon">
-        <app-icon
-          [icon]="LucideFileText"
-          [size]="28"
-        ></app-icon>
+        <app-icon [icon]="LucideFileText" [size]="28"></app-icon>
       </div>
       <h3>Apply Charge</h3>
       <p>Charge the user for this incident</p>
     </div>
 
-    <form
-      #chargeForm="ngForm"
-      (ngSubmit)="onSubmit()"
-    >
+    <form #chargeForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="modal-body">
         <div class="form-field">
           <label>Charge Amount (KES)</label>
@@ -58,11 +49,7 @@
         <button
           type="submit"
           class="btn-primary btn-charge-action"
-          [disabled]="
-            loading ||
-            !chargeAmount ||
-            chargeForm.invalid
-          "
+          [disabled]="loading || !chargeAmount || chargeForm.invalid"
         >
           @if (loading) {
             <svg

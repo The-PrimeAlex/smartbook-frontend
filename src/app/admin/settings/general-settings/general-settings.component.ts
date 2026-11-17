@@ -1,16 +1,7 @@
-import {
-  Component,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { IconComponent } from '../../../shared/ui';
 import { FormsModule } from '@angular/forms';
-import {
-  LucideMoon,
-  LucideSettings,
-  LucideSun,
-} from '@lucide/angular';
+import { LucideMoon, LucideSettings, LucideSun } from '@lucide/angular';
 import { SettingsService } from '../../../shared/services/settings.service';
 import { Setting } from '../../../shared/models/settings.model';
 import { ThemeService } from '../../../core/services/theme.service';
@@ -19,30 +10,19 @@ import { PageBannerComponent } from '../../../shared/ui';
 @Component({
   selector: 'app-general-settings',
   standalone: true,
-  imports: [
-    FormsModule,
-
-    PageBannerComponent,
-    IconComponent,
-  ],
-  templateUrl:
-    './general-settings.component.html',
+  imports: [FormsModule, PageBannerComponent, IconComponent],
+  templateUrl: './general-settings.component.html',
   styleUrl: './general-settings.component.css',
 })
 export class GeneralSettingsComponent implements OnInit {
-  private readonly settingsService = inject(
-    SettingsService,
-  );
-  private readonly themeService =
-    inject(ThemeService);
+  private readonly settingsService = inject(SettingsService);
+  private readonly themeService = inject(ThemeService);
 
   readonly LucideMoon = LucideMoon;
   readonly LucideSettings = LucideSettings;
   readonly LucideSun = LucideSun;
 
-  readonly darkMode = signal(
-    this.themeService.isDark,
-  );
+  readonly darkMode = signal(this.themeService.isDark);
 
   toggleDarkMode(): void {
     this.themeService.toggle();
@@ -55,9 +35,7 @@ export class GeneralSettingsComponent implements OnInit {
   readonly saved = signal(false);
   readonly error = signal('');
 
-  readonly formValues = signal<
-    Record<string, string>
-  >({});
+  readonly formValues = signal<Record<string, string>>({});
 
   ngOnInit(): void {
     this.load();
@@ -66,24 +44,19 @@ export class GeneralSettingsComponent implements OnInit {
   load(): void {
     this.loading.set(true);
     this.error.set('');
-    this.settingsService
-      .getSettingsByCategory('general')
-      .subscribe({
-        next: (settings) => {
-          this.settings.set(settings);
-          const values: Record<string, string> =
-            {};
-          settings.forEach(
-            (s) => (values[s.key] = s.value),
-          );
-          this.formValues.set(values);
-          this.loading.set(false);
-        },
-        error: (e: Error) => {
-          this.error.set(e.message);
-          this.loading.set(false);
-        },
-      });
+    this.settingsService.getSettingsByCategory('general').subscribe({
+      next: (settings) => {
+        this.settings.set(settings);
+        const values: Record<string, string> = {};
+        settings.forEach((s) => (values[s.key] = s.value));
+        this.formValues.set(values);
+        this.loading.set(false);
+      },
+      error: (e: Error) => {
+        this.error.set(e.message);
+        this.loading.set(false);
+      },
+    });
   }
 
   save(): void {
@@ -93,22 +66,17 @@ export class GeneralSettingsComponent implements OnInit {
       key: s.key,
       value: this.formValues()[s.key] ?? s.value,
     }));
-    this.settingsService
-      .bulkUpdateSettings(updates)
-      .subscribe({
-        next: () => {
-          this.saved.set(true);
-          this.saving.set(false);
-          setTimeout(
-            () => this.saved.set(false),
-            3000,
-          );
-        },
-        error: (e: Error) => {
-          this.error.set(e.message);
-          this.saving.set(false);
-        },
-      });
+    this.settingsService.bulkUpdateSettings(updates).subscribe({
+      next: () => {
+        this.saved.set(true);
+        this.saving.set(false);
+        setTimeout(() => this.saved.set(false), 3000);
+      },
+      error: (e: Error) => {
+        this.error.set(e.message);
+        this.saving.set(false);
+      },
+    });
   }
 
   getValue(key: string): string {

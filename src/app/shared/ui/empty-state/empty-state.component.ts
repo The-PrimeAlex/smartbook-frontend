@@ -7,11 +7,7 @@ import { LucideDynamicIcon } from '@lucide/angular';
   imports: [LucideDynamicIcon],
   template: `
     <div class="empty-state">
-      <svg
-        [lucideIcon]="icon()"
-        [size]="iconSize()"
-        [strokeWidth]="1.5"
-      ></svg>
+      <svg [lucideIcon]="icon()" [size]="iconSize()" [strokeWidth]="1.5"></svg>
       <h3>{{ title() }}</h3>
       <p>{{ message() }}</p>
       <ng-content></ng-content>
@@ -50,7 +46,5 @@ export class EmptyStateComponent {
   icon = input<any>(null as any);
   iconSize = input<number>(64);
   title = input<string>('Nothing found');
-  message = input<string>(
-    'No items match your current filter.',
-  );
+  message = input<string>('No items match your current filter.');
 }

@@ -8,10 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, finalize } from 'rxjs';
 import {
   LucideAlertCircle,
@@ -66,35 +63,25 @@ import {
   styleUrl: './create-booking.component.css',
 })
 export class CreateBookingComponent implements OnInit {
-  private readonly bookingService = inject(
-    BookingService,
-  );
-  private readonly roomService =
-    inject(RoomService);
-  private readonly settingsService = inject(
-    SettingsService,
-  );
+  private readonly bookingService = inject(BookingService);
+  private readonly roomService = inject(RoomService);
+  private readonly settingsService = inject(SettingsService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly cdr = inject(
-    ChangeDetectorRef,
-  );
+  private readonly cdr = inject(ChangeDetectorRef);
 
   readonly LucideAlertCircle = LucideAlertCircle;
-  readonly LucideAlertTriangle =
-    LucideAlertTriangle;
+  readonly LucideAlertTriangle = LucideAlertTriangle;
   readonly LucideArrowDown = LucideArrowDown;
   readonly LucideArrowRight = LucideArrowRight;
   readonly LucideBan = LucideBan;
   readonly LucideCalendar = LucideCalendar;
-  readonly LucideCalendarCheck =
-    LucideCalendarCheck;
+  readonly LucideCalendarCheck = LucideCalendarCheck;
   readonly LucideCheck = LucideCheck;
   readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideCircleHelp = LucideCircleHelp;
-  readonly LucideClipboardList =
-    LucideClipboardList;
+  readonly LucideClipboardList = LucideClipboardList;
   readonly LucideClock = LucideClock;
   readonly LucideFileText = LucideFileText;
   readonly LucideLightbulb = LucideLightbulb;
@@ -172,16 +159,12 @@ export class CreateBookingComponent implements OnInit {
   }
 
   getSettingValue(key: string): string {
-    const setting = this.bookingRules().find(
-      (s: Setting) => s.key === key,
-    );
+    const setting = this.bookingRules().find((s: Setting) => s.key === key);
     return setting?.value ?? '';
   }
 
   getSettingLabel(key: string): string {
-    const setting = this.bookingRules().find(
-      (s: Setting) => s.key === key,
-    );
+    const setting = this.bookingRules().find((s: Setting) => s.key === key);
     return setting?.label ?? '';
   }
 
@@ -201,7 +184,6 @@ export class CreateBookingComponent implements OnInit {
     return parseInt(this.getSettingValue('room.buffer_minutes')) || 15;
   }
 
-
   get cancelHoursBeforeFree(): number {
     return parseInt(this.getSettingValue('billing.cancel_hours')) || 2;
   }
@@ -219,7 +201,9 @@ export class CreateBookingComponent implements OnInit {
   }
 
   get overrunRateMultiplier(): number {
-    return parseFloat(this.getSettingValue('billing.overrun_rate_multiplier')) || 1.5;
+    return (
+      parseFloat(this.getSettingValue('billing.overrun_rate_multiplier')) || 1.5
+    );
   }
 
   get requireApproval(): boolean {
@@ -236,23 +220,14 @@ export class CreateBookingComponent implements OnInit {
 
   private formatDate(date: Date): string {
     const year = date.getFullYear();
-    const month = String(
-      date.getMonth() + 1,
-    ).padStart(2, '0');
-    const day = String(date.getDate()).padStart(
-      2,
-      '0',
-    );
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
 
   private formatTime(date: Date): string {
-    const hours = String(
-      date.getHours(),
-    ).padStart(2, '0');
-    const minutes = String(
-      date.getMinutes(),
-    ).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
   }
 
@@ -263,20 +238,10 @@ export class CreateBookingComponent implements OnInit {
     return this.formatTime(date);
   }
 
-  private addHours(
-    time: string,
-    hoursToAdd: number,
-  ): string {
-    const [hours, minutes] = time
-      .split(':')
-      .map(Number);
+  private addHours(time: string, hoursToAdd: number): string {
+    const [hours, minutes] = time.split(':').map(Number);
     const date = new Date();
-    date.setHours(
-      hours + hoursToAdd,
-      minutes,
-      0,
-      0,
-    );
+    date.setHours(hours + hoursToAdd, minutes, 0, 0);
     return this.formatTime(date);
   }
 
@@ -286,16 +251,10 @@ export class CreateBookingComponent implements OnInit {
 
     this.roomService
       .getRooms()
-      .pipe(
-        finalize(
-          () => (this.loadingRooms = false),
-        ),
-      )
+      .pipe(finalize(() => (this.loadingRooms = false)))
       .subscribe({
         next: (rooms) => {
-          this.rooms = rooms.filter(
-            (room) => room.status === 'ACTIVE',
-          );
+          this.rooms = rooms.filter((room) => room.status === 'ACTIVE');
 
           if (this.rooms.length === 0) {
             this.errorMessage =
@@ -304,7 +263,7 @@ export class CreateBookingComponent implements OnInit {
         },
         error: () => {
           this.errorMessage =
-            'We couldn\'t load the room list. Please try again in a moment.';
+            "We couldn't load the room list. Please try again in a moment.";
         },
       });
   }
@@ -328,29 +287,18 @@ export class CreateBookingComponent implements OnInit {
     this.clearMessages();
   }
 
-  private combineDateAndTime(
-    date: string,
-    time: string,
-  ): Date | null {
+  private combineDateAndTime(date: string, time: string): Date | null {
     if (!date || !time) return null;
     const result = new Date(`${date}T${time}:00`);
-    return Number.isNaN(result.getTime())
-      ? null
-      : result;
+    return Number.isNaN(result.getTime()) ? null : result;
   }
 
   get startDateTime(): Date | null {
-    return this.combineDateAndTime(
-      this.startDate,
-      this.startTime,
-    );
+    return this.combineDateAndTime(this.startDate, this.startTime);
   }
 
   get endDateTime(): Date | null {
-    return this.combineDateAndTime(
-      this.endDate,
-      this.endTime,
-    );
+    return this.combineDateAndTime(this.endDate, this.endTime);
   }
 
   get startDateAfterEndDate(): boolean {
@@ -361,27 +309,19 @@ export class CreateBookingComponent implements OnInit {
   get invalidDateRange(): boolean {
     const start = this.startDateTime;
     const end = this.endDateTime;
-    return (
-      !!start &&
-      !!end &&
-      end.getTime() <= start.getTime()
-    );
+    return !!start && !!end && end.getTime() <= start.getTime();
   }
 
   get startIsInPast(): boolean {
     const start = this.startDateTime;
-    return (
-      !!start && start.getTime() <= Date.now()
-    );
+    return !!start && start.getTime() <= Date.now();
   }
 
   get durationMinutes(): number {
     const start = this.startDateTime;
     const end = this.endDateTime;
     if (!start || !end || end <= start) return 0;
-    return Math.round(
-      (end.getTime() - start.getTime()) / 60000,
-    );
+    return Math.round((end.getTime() - start.getTime()) / 60000);
   }
 
   get durationLabel(): string {
@@ -396,15 +336,12 @@ export class CreateBookingComponent implements OnInit {
   }
 
   get selectedRoom() {
-    return this.rooms.find(
-      (room) => room.roomId === this.roomId,
-    );
+    return this.rooms.find((room) => room.roomId === this.roomId);
   }
 
   get estimatedTotal(): number {
     const rate = this.selectedRoom?.hourlyRate;
-    if (!rate || this.durationMinutes <= 0)
-      return 0;
+    if (!rate || this.durationMinutes <= 0) return 0;
     return rate * (this.durationMinutes / 60);
   }
 
@@ -429,29 +366,21 @@ export class CreateBookingComponent implements OnInit {
 
     // Validate first before clearing messages
     if (!this.roomId) {
-      this.errorMessage =
-        'Please select a meeting room.';
+      this.errorMessage = 'Please select a meeting room.';
       return;
     }
 
     if (!this.meetingTitle.trim()) {
-      this.errorMessage =
-        'Please enter a meeting title.';
+      this.errorMessage = 'Please enter a meeting title.';
       return;
     }
 
     if (!this.purpose.trim()) {
-      this.errorMessage =
-        'Please describe the purpose of the meeting.';
+      this.errorMessage = 'Please describe the purpose of the meeting.';
       return;
     }
 
-    if (
-      !this.startDate ||
-      !this.startTime ||
-      !this.endDate ||
-      !this.endTime
-    ) {
+    if (!this.startDate || !this.startTime || !this.endDate || !this.endTime) {
       this.errorMessage =
         'Please select both the start and end dates and times.';
       return;
@@ -461,8 +390,7 @@ export class CreateBookingComponent implements OnInit {
     const end = this.endDateTime;
 
     if (!start || !end) {
-      this.errorMessage =
-        'Please enter valid dates and times.';
+      this.errorMessage = 'Please enter valid dates and times.';
       return;
     }
 
@@ -479,12 +407,9 @@ export class CreateBookingComponent implements OnInit {
     }
 
     // Check minimum duration from settings
-    const durationMin = Math.round(
-      (end.getTime() - start.getTime()) / 60000,
-    );
+    const durationMin = Math.round((end.getTime() - start.getTime()) / 60000);
     if (durationMin < this.minDurationMinutes) {
-      this.errorMessage =
-        `Your booking must be at least ${this.minDurationMinutes} minutes long. Please adjust your meeting time.`;
+      this.errorMessage = `Your booking must be at least ${this.minDurationMinutes} minutes long. Please adjust your meeting time.`;
       return;
     }
 
@@ -510,21 +435,15 @@ export class CreateBookingComponent implements OnInit {
       .subscribe({
         next: () => {
           this.saving = false;
-          this.successMessage =
-            'Your booking has been submitted successfully.';
+          this.successMessage = 'Your booking has been submitted successfully.';
 
           // Navigate to upcoming bookings after a short delay so the success message is visible
           setTimeout(() => {
-            this.router.navigate([
-              '/app/bookings/upcoming',
-            ]);
+            this.router.navigate(['/app/bookings/upcoming']);
           }, 1500);
         },
         error: (error: any) => {
-          console.log(
-            'Booking error received:',
-            error,
-          );
+          console.log('Booking error received:', error);
           this.saving = false;
 
           // If the request was cancelled (e.g., navigation away), ignore it
@@ -537,12 +456,9 @@ export class CreateBookingComponent implements OnInit {
             this.clearMessages();
             const body = error?.error;
             const message =
-              (typeof body === 'string'
-                ? body
-                : (body?.message ?? '')) || '';
+              (typeof body === 'string' ? body : (body?.message ?? '')) || '';
             this.errorMessage =
-              message ||
-              'Please check your booking details and try again.';
+              message || 'Please check your booking details and try again.';
             return;
           }
 
@@ -555,60 +471,36 @@ export class CreateBookingComponent implements OnInit {
           }
 
           if (error?.status === 409) {
-            console.log(
-              '409 conflict detected, body:',
-              error?.error,
-            );
+            console.log('409 conflict detected, body:', error?.error);
             this.clearMessages();
             const body = error?.error;
 
             // Check if we got structured conflict info from the backend
-            if (
-              body &&
-              typeof body === 'object' &&
-              body.conflictType
-            ) {
-              this.conflictType =
-                body.conflictType || '';
-              this.conflictRoomName =
-                body.roomName || '';
+            if (body && typeof body === 'object' && body.conflictType) {
+              this.conflictType = body.conflictType || '';
+              this.conflictRoomName = body.roomName || '';
               this.conflictUserName =
-                body.conflictingUserName ||
-                'another user';
-              this.conflictStart =
-                body.conflictingStart || '';
-              this.conflictEnd =
-                body.conflictingEnd || '';
-              this.conflictAvailableFrom =
-                body.availableFrom || '';
-              this.conflictOverrunMinutes =
-                body.extraMinutes ?? null;
+                body.conflictingUserName || 'another user';
+              this.conflictStart = body.conflictingStart || '';
+              this.conflictEnd = body.conflictingEnd || '';
+              this.conflictAvailableFrom = body.availableFrom || '';
+              this.conflictOverrunMinutes = body.extraMinutes ?? null;
               this.conflictMessage =
-                body.message ||
-                'This time slot is already booked.';
-              console.log(
-                'Setting showConflictModal = true',
-              );
+                body.message || 'This time slot is already booked.';
+              console.log('Setting showConflictModal = true');
               this.showConflictModal = true;
-              console.log(
-                'showConflictModal is now:',
-                this.showConflictModal,
-              );
+              console.log('showConflictModal is now:', this.showConflictModal);
               this.cdr.detectChanges();
             } else {
               // Fallback for plain text error
               const message =
-                (typeof body === 'string'
-                  ? body
-                  : (body?.message ?? '')) || '';
+                (typeof body === 'string' ? body : (body?.message ?? '')) || '';
               this.conflictMessage =
                 message ||
                 'This time slot is already booked. Please choose a different time.';
               // Scroll the alert into view so the user sees it
               setTimeout(() => {
-                const el = document.querySelector(
-                  '.conflict-alert',
-                );
+                const el = document.querySelector('.conflict-alert');
                 if (el)
                   el.scrollIntoView({
                     behavior: 'smooth',
@@ -623,9 +515,8 @@ export class CreateBookingComponent implements OnInit {
             if (
               typeof body === 'object' &&
               body !== null &&
-              (body as Record<string, string>)[
-                'error'
-              ] === 'password_change_required'
+              (body as Record<string, string>)['error'] ===
+                'password_change_required'
             ) {
               this.errorMessage =
                 'You need to change your password before making bookings. Redirecting...';
@@ -641,21 +532,17 @@ export class CreateBookingComponent implements OnInit {
             this.clearMessages();
             const body = error?.error;
             const message =
-              (typeof body === 'string'
-                ? body
-                : (body?.message ?? '')) || '';
+              (typeof body === 'string' ? body : (body?.message ?? '')) || '';
             this.errorMessage =
               message ||
-              'We couldn\'t create your booking. Please try again in a moment.';
+              "We couldn't create your booking. Please try again in a moment.";
           }
         },
       });
   }
 
   goToUpcoming(): void {
-    this.router.navigate([
-      '/app/bookings/upcoming',
-    ]);
+    this.router.navigate(['/app/bookings/upcoming']);
   }
 
   closeConflictModal(): void {

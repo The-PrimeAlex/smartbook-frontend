@@ -6,21 +6,15 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  LucideClock,
-  LucideLogOut,
-  LucideX,
-} from '@lucide/angular';
+import { LucideClock, LucideLogOut, LucideX } from '@lucide/angular';
 import { IconComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-confirm-logout-modal',
   standalone: true,
   imports: [CommonModule, IconComponent],
-  templateUrl:
-    './confirm-logout-modal.component.html',
-  styleUrl:
-    './confirm-logout-modal.component.css',
+  templateUrl: './confirm-logout-modal.component.html',
+  styleUrl: './confirm-logout-modal.component.css',
 })
 export class ConfirmLogoutModalComponent {
   readonly LucideClock = LucideClock;

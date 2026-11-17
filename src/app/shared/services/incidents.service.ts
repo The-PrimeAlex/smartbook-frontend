@@ -1,33 +1,21 @@
-import {
-  HttpClient,
-  HttpParams,
-} from '@angular/common/http';
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 
 export interface IncidentType {
-  value:
-    'EQUIPMENT_DAMAGE' | 'ROOM_DAMAGE' | 'OTHER';
+  value: 'EQUIPMENT_DAMAGE' | 'ROOM_DAMAGE' | 'OTHER';
   label: string;
 }
 
 export interface IncidentStatus {
-  value:
-    | 'REPORTED'
-    | 'VERIFIED'
-    | 'REJECTED'
-    | 'CHARGED';
+  value: 'REPORTED' | 'VERIFIED' | 'REJECTED' | 'CHARGED';
   label: string;
 }
 
 export interface CreateIncidentRequest {
   roomId: string;
-  incidentType:
-    'EQUIPMENT_DAMAGE' | 'ROOM_DAMAGE' | 'OTHER';
+  incidentType: 'EQUIPMENT_DAMAGE' | 'ROOM_DAMAGE' | 'OTHER';
   description: string;
 }
 
@@ -56,42 +44,28 @@ export class IncidentsService {
   private readonly baseUrl = '/api/v1/incidents/me';
   private readonly adminUrl = '/api/v1/incidents';
 
-  createIncident(
-    request: CreateIncidentRequest,
-  ): Observable<IncidentResponse> {
+  createIncident(request: CreateIncidentRequest): Observable<IncidentResponse> {
     return this.authService
       .ensureCsrfToken()
       .pipe(
         switchMap(() =>
-          this.http.post<IncidentResponse>(
-            this.baseUrl,
-            request,
-          ),
+          this.http.post<IncidentResponse>(this.baseUrl, request),
         ),
       );
   }
 
-  getMyIncidents(): Observable<
-    IncidentResponse[]
-  > {
-    return this.http.get<IncidentResponse[]>(
-      this.baseUrl,
-    );
+  getMyIncidents(): Observable<IncidentResponse[]> {
+    return this.http.get<IncidentResponse[]>(this.baseUrl);
   }
 
   // Admin methods
 
-  getAllIncidents(
-    status?: string,
-  ): Observable<IncidentResponse[]> {
+  getAllIncidents(status?: string): Observable<IncidentResponse[]> {
     let params = new HttpParams();
     if (status) {
       params = params.set('status', status);
     }
-    return this.http.get<IncidentResponse[]>(
-      this.adminUrl,
-      { params },
-    );
+    return this.http.get<IncidentResponse[]>(this.adminUrl, { params });
   }
 
   chargeIncident(
@@ -126,9 +100,7 @@ export class IncidentsService {
       );
   }
 
-  verifyIncident(
-    incidentId: string,
-  ): Observable<IncidentResponse> {
+  verifyIncident(incidentId: string): Observable<IncidentResponse> {
     return this.authService
       .ensureCsrfToken()
       .pipe(

@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideBell } from '@lucide/angular';
 import { SettingsService } from '../../../shared/services/settings.service';
@@ -14,24 +9,18 @@ import { PageBannerComponent } from '../../../shared/ui';
   selector: 'app-notifications-settings',
   standalone: true,
   imports: [FormsModule, PageBannerComponent],
-  templateUrl:
-    './notifications-settings.component.html',
-  styleUrl:
-    './notifications-settings.component.css',
+  templateUrl: './notifications-settings.component.html',
+  styleUrl: './notifications-settings.component.css',
 })
 export class NotificationsSettingsComponent implements OnInit {
   readonly LucideBell = LucideBell;
-  private readonly settingsService = inject(
-    SettingsService,
-  );
+  private readonly settingsService = inject(SettingsService);
   readonly settings = signal<Setting[]>([]);
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly saved = signal(false);
   readonly error = signal('');
-  readonly formValues = signal<
-    Record<string, string>
-  >({});
+  readonly formValues = signal<Record<string, string>>({});
 
   ngOnInit(): void {
     this.load();
@@ -39,24 +28,19 @@ export class NotificationsSettingsComponent implements OnInit {
   load(): void {
     this.loading.set(true);
     this.error.set('');
-    this.settingsService
-      .getSettingsByCategory('notifications')
-      .subscribe({
-        next: (settings) => {
-          this.settings.set(settings);
-          const values: Record<string, string> =
-            {};
-          settings.forEach(
-            (s) => (values[s.key] = s.value),
-          );
-          this.formValues.set(values);
-          this.loading.set(false);
-        },
-        error: (e: Error) => {
-          this.error.set(e.message);
-          this.loading.set(false);
-        },
-      });
+    this.settingsService.getSettingsByCategory('notifications').subscribe({
+      next: (settings) => {
+        this.settings.set(settings);
+        const values: Record<string, string> = {};
+        settings.forEach((s) => (values[s.key] = s.value));
+        this.formValues.set(values);
+        this.loading.set(false);
+      },
+      error: (e: Error) => {
+        this.error.set(e.message);
+        this.loading.set(false);
+      },
+    });
   }
   save(): void {
     this.saving.set(true);
@@ -65,22 +49,17 @@ export class NotificationsSettingsComponent implements OnInit {
       key: s.key,
       value: this.formValues()[s.key] ?? s.value,
     }));
-    this.settingsService
-      .bulkUpdateSettings(updates)
-      .subscribe({
-        next: () => {
-          this.saved.set(true);
-          this.saving.set(false);
-          setTimeout(
-            () => this.saved.set(false),
-            3000,
-          );
-        },
-        error: (e: Error) => {
-          this.error.set(e.message);
-          this.saving.set(false);
-        },
-      });
+    this.settingsService.bulkUpdateSettings(updates).subscribe({
+      next: () => {
+        this.saved.set(true);
+        this.saving.set(false);
+        setTimeout(() => this.saved.set(false), 3000);
+      },
+      error: (e: Error) => {
+        this.error.set(e.message);
+        this.saving.set(false);
+      },
+    });
   }
   getValue(key: string): string {
     return this.formValues()[key] ?? '';

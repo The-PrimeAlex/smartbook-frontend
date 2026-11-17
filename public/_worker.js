@@ -1,6 +1,7 @@
 // Cloudflare Pages Worker that proxies /api/* requests to the Azure backend.
 // Deployed: 2026-11-17 — fixed corsHeaders to return Headers instance.
-const BACKEND = 'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
+const BACKEND =
+  'https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net';
 
 export async function fetch(request) {
   const url = new URL(request.url);
@@ -23,13 +24,22 @@ export async function fetch(request) {
 
   // Build headers for the proxied request — manually copy only the ones we need
   const proxiedHeaders = new Headers();
-  proxiedHeaders.set('Content-Type', request.headers.get('Content-Type') || 'application/json');
-  proxiedHeaders.set('Authorization', request.headers.get('Authorization') || '');
+  proxiedHeaders.set(
+    'Content-Type',
+    request.headers.get('Content-Type') || 'application/json',
+  );
+  proxiedHeaders.set(
+    'Authorization',
+    request.headers.get('Authorization') || '',
+  );
   proxiedHeaders.set('X-XSRF-TOKEN', request.headers.get('X-XSRF-TOKEN') || '');
   proxiedHeaders.set('Cookie', request.headers.get('Cookie') || '');
   proxiedHeaders.set('Accept', request.headers.get('Accept') || '*/*');
   proxiedHeaders.set('Host', new URL(BACKEND).host);
-  proxiedHeaders.set('X-Forwarded-For', request.headers.get('cf-connecting-ip') || '');
+  proxiedHeaders.set(
+    'X-Forwarded-For',
+    request.headers.get('cf-connecting-ip') || '',
+  );
 
   // Forward the request body for POST/PUT/PATCH/DELETE
   let body = undefined;
@@ -52,7 +62,7 @@ export async function fetch(request) {
     errHeaders.set('Content-Type', 'application/json');
     return new Response(
       JSON.stringify({ error: 'Backend unavailable', message: err.message }),
-      { status: 502, headers: errHeaders }
+      { status: 502, headers: errHeaders },
     );
   }
 
@@ -80,7 +90,10 @@ function corsHeaders(origin) {
   const headers = new Headers();
   headers.set('Access-Control-Allow-Origin', origin);
   headers.set('Access-Control-Allow-Credentials', 'true');
-  headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  headers.set(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+  );
   headers.set('Access-Control-Allow-Headers', '*');
   headers.set('Access-Control-Expose-Headers', 'Set-Cookie, X-XSRF-TOKEN');
   headers.set('Access-Control-Max-Age', '86400');

@@ -9,10 +9,7 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-time-picker',
@@ -23,23 +20,18 @@ import {
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(
-        () => TimePickerComponent,
-      ),
+      useExisting: forwardRef(() => TimePickerComponent),
       multi: true,
     },
   ],
 })
-export class TimePickerComponent
-  implements OnInit, OnDestroy
-{
+export class TimePickerComponent implements OnInit, OnDestroy {
   @Input() placeholder: string = 'Select time';
   @Input() disabled: boolean = false;
   @Input() step: string = '60';
 
   private _value: string = '';
-  private _nativeInput: HTMLInputElement | null =
-    null;
+  private _nativeInput: HTMLInputElement | null = null;
 
   // Custom dropdown state
   dropdownOpen = false;
@@ -78,26 +70,14 @@ export class TimePickerComponent
     }
 
     // Click outside to close dropdown
-    document.addEventListener(
-      'click',
-      this.onClickOutside,
-    );
+    document.addEventListener('click', this.onClickOutside);
     // Escape key to close dropdown
-    document.addEventListener(
-      'keydown',
-      this.onKeyDown,
-    );
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   ngOnDestroy() {
-    document.removeEventListener(
-      'click',
-      this.onClickOutside,
-    );
-    document.removeEventListener(
-      'keydown',
-      this.onKeyDown,
-    );
+    document.removeEventListener('click', this.onClickOutside);
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   private onKeyDown = (e: KeyboardEvent) => {
@@ -109,9 +89,7 @@ export class TimePickerComponent
   };
 
   private onClickOutside = (e: MouseEvent) => {
-    if (
-      !this.el.nativeElement.contains(e.target)
-    ) {
+    if (!this.el.nativeElement.contains(e.target)) {
       this.restorePending();
       this.dropdownOpen = false;
       this.cdr.detectChanges();
@@ -119,10 +97,7 @@ export class TimePickerComponent
   };
 
   private restorePending(): void {
-    if (
-      this.pendingHour !== null &&
-      this.pendingMinute !== null
-    ) {
+    if (this.pendingHour !== null && this.pendingMinute !== null) {
       this.selectedHour = this.pendingHour;
       this.selectedMinute = this.pendingMinute;
       this.inputBuffer = '';
@@ -152,16 +127,9 @@ export class TimePickerComponent
   }
 
   private updateValue(): void {
-    if (
-      this.selectedHour !== null &&
-      this.selectedMinute !== null
-    ) {
-      const h = String(
-        this.selectedHour,
-      ).padStart(2, '0');
-      const m = String(
-        this.selectedMinute,
-      ).padStart(2, '0');
+    if (this.selectedHour !== null && this.selectedMinute !== null) {
+      const h = String(this.selectedHour).padStart(2, '0');
+      const m = String(this.selectedMinute).padStart(2, '0');
       this._value = `${h}:${m}`;
       this.inputBuffer = '';
       this.isTyping = false;
@@ -175,10 +143,7 @@ export class TimePickerComponent
     const parts = value.split(':');
     if (parts.length === 2) {
       this.selectedHour = parseInt(parts[0], 10);
-      this.selectedMinute = parseInt(
-        parts[1],
-        10,
-      );
+      this.selectedMinute = parseInt(parts[1], 10);
     }
   }
 
@@ -187,32 +152,22 @@ export class TimePickerComponent
     if (this.isTyping && this.inputBuffer) {
       return this.inputBuffer;
     }
-    if (
-      this.selectedHour !== null &&
-      this.selectedMinute !== null
-    ) {
+    if (this.selectedHour !== null && this.selectedMinute !== null) {
       const h12 = this.selectedHour % 12 || 12;
-      const ampm =
-        this.selectedHour < 12 ? 'AM' : 'PM';
-      const m = String(
-        this.selectedMinute,
-      ).padStart(2, '0');
+      const ampm = this.selectedHour < 12 ? 'AM' : 'PM';
+      const m = String(this.selectedMinute).padStart(2, '0');
       return `${h12}:${m} ${ampm}`;
     }
     return this.placeholder;
   }
 
   get isValueSet(): boolean {
-    return (
-      this.selectedHour !== null &&
-      this.selectedMinute !== null
-    );
+    return this.selectedHour !== null && this.selectedMinute !== null;
   }
 
   // Handle direct typing in the input
   onInputChange(event: Event): void {
-    const raw = (event.target as HTMLInputElement)
-      .value;
+    const raw = (event.target as HTMLInputElement).value;
     this.inputBuffer = raw;
     this.isTyping = true;
 
@@ -221,14 +176,8 @@ export class TimePickerComponent
     if (parsed) {
       this.selectedHour = parsed.hour;
       this.selectedMinute = parsed.minute;
-      const h = String(parsed.hour).padStart(
-        2,
-        '0',
-      );
-      const m = String(parsed.minute).padStart(
-        2,
-        '0',
-      );
+      const h = String(parsed.hour).padStart(2, '0');
+      const m = String(parsed.minute).padStart(2, '0');
       this._value = `${h}:${m}`;
       this.onChangeCallback(this._value);
     } else {
@@ -258,26 +207,16 @@ export class TimePickerComponent
     } else {
       // Format: "HHMM" or "HMM"
       const digits = cleaned.replace(/\D/g, '');
-      if (digits.length < 2 || digits.length > 4)
-        return null;
+      if (digits.length < 2 || digits.length > 4) return null;
       if (digits.length === 2) {
         hour = parseInt(digits, 10);
         minute = 0;
       } else if (digits.length === 3) {
         hour = parseInt(digits[0], 10);
-        minute = parseInt(
-          digits.substring(1),
-          10,
-        );
+        minute = parseInt(digits.substring(1), 10);
       } else {
-        hour = parseInt(
-          digits.substring(0, 2),
-          10,
-        );
-        minute = parseInt(
-          digits.substring(2),
-          10,
-        );
+        hour = parseInt(digits.substring(0, 2), 10);
+        minute = parseInt(digits.substring(2), 10);
       }
     }
 
@@ -292,12 +231,8 @@ export class TimePickerComponent
   onInputFocus(): void {
     if (this.isValueSet && !this.isTyping) {
       // Show 24-hour format when focusing for easy editing
-      const h = String(
-        this.selectedHour!,
-      ).padStart(2, '0');
-      const m = String(
-        this.selectedMinute!,
-      ).padStart(2, '0');
+      const h = String(this.selectedHour!).padStart(2, '0');
+      const m = String(this.selectedMinute!).padStart(2, '0');
       this.inputBuffer = `${h}:${m}`;
       this.isTyping = true;
     }
@@ -307,30 +242,19 @@ export class TimePickerComponent
     // After a short delay, check if the value is valid
     setTimeout(() => {
       if (this.inputBuffer) {
-        const parsed = this.tryParseTypedTime(
-          this.inputBuffer,
-        );
+        const parsed = this.tryParseTypedTime(this.inputBuffer);
         if (parsed) {
           this.selectedHour = parsed.hour;
           this.selectedMinute = parsed.minute;
-          const h = String(parsed.hour).padStart(
-            2,
-            '0',
-          );
-          const m = String(
-            parsed.minute,
-          ).padStart(2, '0');
+          const h = String(parsed.hour).padStart(2, '0');
+          const m = String(parsed.minute).padStart(2, '0');
           this._value = `${h}:${m}`;
           this.onChangeCallback(this._value);
         } else {
           // Revert to previous valid value
           if (this.isValueSet) {
-            const h = String(
-              this.selectedHour!,
-            ).padStart(2, '0');
-            const m = String(
-              this.selectedMinute!,
-            ).padStart(2, '0');
+            const h = String(this.selectedHour!).padStart(2, '0');
+            const m = String(this.selectedMinute!).padStart(2, '0');
             this.inputBuffer = '';
             this._value = `${h}:${m}`;
           } else {

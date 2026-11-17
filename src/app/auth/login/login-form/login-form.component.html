@@ -1,24 +1,12 @@
-<section
-  class="form-panel"
-  aria-labelledby="login-heading"
->
-  <form
-    [formGroup]="form"
-    class="login-form"
-    (ngSubmit)="onSubmit()"
-  >
+<section class="form-panel" aria-labelledby="login-heading">
+  <form [formGroup]="form" class="login-form" (ngSubmit)="onSubmit()">
     <h2 id="login-heading">Sign In.</h2>
     <p class="form-description">
-      Welcome back. Sign in to manage your
-      meetings and workspaces.
+      Welcome back. Sign in to manage your meetings and workspaces.
     </p>
 
     @if (inactivityMessage()) {
-      <div
-        class="inactivity-notice"
-        role="alert"
-        aria-live="polite"
-      >
+      <div class="inactivity-notice" role="alert" aria-live="polite">
         {{ inactivityMessage() }}
       </div>
     }
@@ -31,13 +19,11 @@
         formControlName="email"
         [class.email-required]="
           emailControl?.hasError('required') &&
-          (emailControl?.dirty ||
-            emailControl?.touched)
+          (emailControl?.dirty || emailControl?.touched)
         "
         [placeholder]="
           emailControl?.hasError('required') &&
-          (emailControl?.dirty ||
-            emailControl?.touched)
+          (emailControl?.dirty || emailControl?.touched)
             ? 'Email is required'
             : ' '
         "
@@ -46,12 +32,9 @@
       <label for="email">Email</label>
       @if (
         emailControl?.hasError('email') &&
-        (emailControl?.dirty ||
-          emailControl?.touched)
+        (emailControl?.dirty || emailControl?.touched)
       ) {
-        <small class="error-message">
-          Please enter a valid email.
-        </small>
+        <small class="error-message"> Please enter a valid email. </small>
       }
     </div>
 
@@ -59,9 +42,7 @@
       <input
         class="login-form-input"
         [class.auth-invalid]="!!errorMessage()"
-        [type]="
-          showPassword() ? 'text' : 'password'
-        "
+        [type]="showPassword() ? 'text' : 'password'"
         id="password"
         name="password"
         placeholder=" "
@@ -76,11 +57,7 @@
         type="button"
         class="password-toggle"
         (click)="setShowPassword()"
-        [attr.aria-label]="
-          showPassword()
-            ? 'Hide password'
-            : 'Show password'
-        "
+        [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
       >
         {{ showPassword() ? 'Hide' : 'Show' }}
       </button>
@@ -106,28 +83,16 @@
     </button>
 
     @if (errorMessage()) {
-      <div
-        class="auth-error"
-        role="alert"
-        aria-live="polite"
-      >
-        <span
-          class="auth-error-icon"
-          aria-hidden="true"
-          >!</span
-        >
+      <div class="auth-error" role="alert" aria-live="polite">
+        <span class="auth-error-icon" aria-hidden="true">!</span>
         <p>{{ errorMessage() }}</p>
       </div>
     }
 
     <p class="account-help">
       Don't have an account? <br />
-      <a
-        class="admin-link"
-        [routerLink]="['/registration-request']"
-      >
-        Ask your administrator to create one for
-        you
+      <a class="admin-link" [routerLink]="['/registration-request']">
+        Ask your administrator to create one for you
       </a>
     </p>
   </form>

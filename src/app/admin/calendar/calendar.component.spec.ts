@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CalendarComponent } from './calendar.component.css';
 
 describe('CalendarComponent', () => {
@@ -13,9 +10,7 @@ describe('CalendarComponent', () => {
       imports: [CalendarComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      CalendarComponent,
-    );
+    fixture = TestBed.createComponent(CalendarComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

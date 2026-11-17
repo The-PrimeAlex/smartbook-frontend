@@ -37,8 +37,7 @@
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s
-    cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .filter-btn:hover {
   border-color: var(--brand-accent);
@@ -76,10 +75,7 @@
 /* ── Incidents Grid ── */
 .incidents-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(380px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 1.5rem;
 }
 .incident-card {
@@ -89,8 +85,7 @@
   border-radius: var(--radius-lg);
   padding: 0;
   animation: fadeUp 0.4s ease-out both;
-  transition: all 0.3s
-    cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -300,8 +295,7 @@ gg .status-badge.status-verified::before {
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s
-    cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   flex: 1;
   justify-content: center;
 }
@@ -431,10 +425,7 @@ gg .status-badge.status-verified::before {
 
 @media (max-width: 1024px) {
   .incidents-grid {
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(320px, 1fr)
-    );
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   }
 }
 
@@ -506,8 +497,7 @@ gg .status-badge.status-verified::before {
   flex-direction: column;
   overflow: hidden;
   transform: translateX(100%);
-  transition: transform 0.35s
-    cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .side-panel-overlay.visible .side-panel {

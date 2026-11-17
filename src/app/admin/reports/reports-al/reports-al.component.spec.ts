@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReportsAlComponent } from './reports-al.component.css';
 
 describe('ReportsAlComponent', () => {
@@ -13,9 +10,7 @@ describe('ReportsAlComponent', () => {
       imports: [ReportsAlComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      ReportsAlComponent,
-    );
+    fixture = TestBed.createComponent(ReportsAlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

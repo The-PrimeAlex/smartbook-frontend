@@ -1,7 +1,4 @@
-import {
-  CommonModule,
-  DatePipe,
-} from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -22,11 +19,7 @@ import {
   LucideUserCheck,
   LucideX,
 } from '@lucide/angular';
-import {
-  AccountStatus,
-  SmartBookUser,
-  UserFilter,
-} from '../users.service';
+import { AccountStatus, SmartBookUser, UserFilter } from '../users.service';
 import { UsersService } from '../users.service';
 import { UserRole } from '../add-user/add-user.model';
 import {
@@ -70,26 +63,21 @@ export class ViewUsersComponent {
   readonly LucidePhone = LucidePhone;
   readonly LucideSearch = LucideSearch;
   readonly LucideShield = LucideShield;
-  readonly LucideTriangleAlert =
-    LucideTriangleAlert;
+  readonly LucideTriangleAlert = LucideTriangleAlert;
   readonly LucideUser = LucideUser;
   readonly LucideUserCheck = LucideUserCheck;
   readonly LucideX = LucideX;
   readonly searchTerm = signal('');
-  readonly activeFilter =
-    signal<UserFilter>('ALL');
-  readonly selectedUser =
-    signal<SmartBookUser | null>(null);
-  readonly deactivateConfirm =
-    signal<SmartBookUser | null>(null);
+  readonly activeFilter = signal<UserFilter>('ALL');
+  readonly selectedUser = signal<SmartBookUser | null>(null);
+  readonly deactivateConfirm = signal<SmartBookUser | null>(null);
   readonly deactivating = signal(false);
   readonly message = signal<{
     type: 'success' | 'error';
     text: string;
   } | null>(null);
 
-  protected users =
-    this.usersService.readOnlyUsers;
+  protected users = this.usersService.readOnlyUsers;
   protected loading = this.usersService.isLoading;
 
   readonly filters: {
@@ -106,9 +94,7 @@ export class ViewUsersComponent {
   constructor() {}
 
   readonly filteredUsers = computed(() => {
-    const term = this.searchTerm()
-      .trim()
-      .toLowerCase();
+    const term = this.searchTerm().trim().toLowerCase();
     const filter = this.activeFilter();
     const users = this.users();
 
@@ -119,9 +105,7 @@ export class ViewUsersComponent {
       switch (filter) {
         case 'ADMINS':
           // Safe navigation added (?.) to prevent crashes if roles is undefined
-          matchesFilter =
-            user.roles?.includes('ADMIN') ??
-            false;
+          matchesFilter = user.roles?.includes('ADMIN') ?? false;
           break;
         case 'ACTIVE':
         case 'DISABLED':
@@ -150,24 +134,15 @@ export class ViewUsersComponent {
   });
 
   readonly activeCount = computed(
-    () =>
-      this.users()?.filter(
-        (user) => user.status === 'ACTIVE',
-      ).length,
+    () => this.users()?.filter((user) => user.status === 'ACTIVE').length,
   );
 
   readonly adminCount = computed(
-    () =>
-      this.users()?.filter((user) =>
-        user.roles.includes('ADMIN'),
-      ).length,
+    () => this.users()?.filter((user) => user.roles.includes('ADMIN')).length,
   );
 
   readonly tenantCount = computed(
-    () =>
-      this.users()?.filter((user) =>
-        user.roles.includes('USER'),
-      ).length,
+    () => this.users()?.filter((user) => user.roles.includes('USER')).length,
   );
 
   setFilter(filter: UserFilter): void {
@@ -215,9 +190,7 @@ export class ViewUsersComponent {
 
   getStatusLabel = getUserStatusLabel;
 
-  hasCompanyDetails(
-    user: SmartBookUser,
-  ): boolean {
+  hasCompanyDetails(user: SmartBookUser): boolean {
     return (
       !this.isAdminUser(user) &&
       Boolean(
@@ -228,16 +201,11 @@ export class ViewUsersComponent {
     );
   }
 
-  trackByUserId(
-    _index: number,
-    user: SmartBookUser,
-  ): string {
+  trackByUserId(_index: number, user: SmartBookUser): string {
     return user.id;
   }
 
-  openDeactivateConfirm(
-    user: SmartBookUser,
-  ): void {
+  openDeactivateConfirm(user: SmartBookUser): void {
     this.deactivateConfirm.set(user);
   }
 
@@ -249,40 +217,29 @@ export class ViewUsersComponent {
     const user = this.deactivateConfirm();
     if (!user) return;
     this.deactivating.set(true);
-    this.usersService
-      .deactivateUser(user.id)
-      .subscribe({
-        next: () => {
-          this.deactivating.set(false);
-          this.deactivateConfirm.set(null);
-          this.message.set({
-            type: 'success',
-            text: `${user.firstName} ${user.lastName} has been deactivated.`,
-          });
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
-        },
-        error: (err) => {
-          this.deactivating.set(false);
-          this.message.set({
-            type: 'error',
-            text: 'We couldn\'t deactivate this user. Please try again in a moment.',
-          });
-          setTimeout(
-            () => this.message.set(null),
-            4000,
-          );
-        },
-      });
+    this.usersService.deactivateUser(user.id).subscribe({
+      next: () => {
+        this.deactivating.set(false);
+        this.deactivateConfirm.set(null);
+        this.message.set({
+          type: 'success',
+          text: `${user.firstName} ${user.lastName} has been deactivated.`,
+        });
+        setTimeout(() => this.message.set(null), 4000);
+      },
+      error: (err) => {
+        this.deactivating.set(false);
+        this.message.set({
+          type: 'error',
+          text: "We couldn't deactivate this user. Please try again in a moment.",
+        });
+        setTimeout(() => this.message.set(null), 4000);
+      },
+    });
   }
 
   canDeactivate(user: SmartBookUser): boolean {
-    return (
-      user.status === 'ACTIVE' ||
-      user.status === 'PENDING'
-    );
+    return user.status === 'ACTIVE' || user.status === 'PENDING';
   }
 
   getBadgeVariant = getUserBadgeVariant;

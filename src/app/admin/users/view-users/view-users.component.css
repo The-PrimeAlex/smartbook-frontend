@@ -2,8 +2,7 @@
   display: block;
   min-width: 0;
   color: var(--text-primary);
-  font-family:
-    Inter, Roboto, 'Segoe UI', Arial, sans-serif;
+  font-family: Inter, Roboto, 'Segoe UI', Arial, sans-serif;
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
 }
@@ -278,8 +277,7 @@ button {
   cursor: pointer;
   font-size: 13px;
   font-weight: 700;
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .filter-button:hover {
@@ -291,11 +289,7 @@ button {
 
 .filter-button.active {
   color: var(--white);
-  background: linear-gradient(
-    135deg,
-    var(--navy),
-    var(--brand-primary-light)
-  );
+  background: linear-gradient(135deg, var(--navy), var(--brand-primary-light));
   border-color: transparent;
   box-shadow:
     0 4px 16px rgb(20 33 61 / 20%),
@@ -320,10 +314,7 @@ button {
 
 .users-grid {
   display: grid;
-  grid-template-columns: repeat(
-    3,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
   gap: 22px;
 }
@@ -339,8 +330,7 @@ button {
   border-radius: 18px;
   box-shadow: var(--shadow-sm);
   backdrop-filter: blur(8px);
-  transition: all 250ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .user-card:hover {
@@ -371,19 +361,11 @@ button {
 }
 
 .admin-card .card-accent {
-  background: linear-gradient(
-    90deg,
-    #14213d 0%,
-    #395b91 100%
-  );
+  background: linear-gradient(90deg, #14213d 0%, #395b91 100%);
 }
 
 .tenant-card .card-accent {
-  background: linear-gradient(
-    90deg,
-    #fca311 0%,
-    #ffd27a 100%
-  );
+  background: linear-gradient(90deg, #fca311 0%, #ffd27a 100%);
 }
 
 .card-top {
@@ -639,8 +621,7 @@ button {
   cursor: pointer;
   font-size: 13px;
   font-weight: 750;
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .view-profile-button svg {
@@ -690,8 +671,7 @@ button {
   cursor: pointer;
   font-size: 12px;
   font-weight: 750;
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .deactivate-button svg {
@@ -850,8 +830,7 @@ button {
   font-size: 13px;
   font-weight: 700;
   box-shadow: 0 3px 10px rgb(220 38 38 / 25%);
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .btn-deactivate:hover {
   transform: translateY(-2px);
@@ -924,19 +903,14 @@ button {
 .empty-reset {
   padding: 11px 22px;
   color: var(--white);
-  background: linear-gradient(
-    135deg,
-    var(--navy),
-    var(--brand-primary-light)
-  );
+  background: linear-gradient(135deg, var(--navy), var(--brand-primary-light));
   border: none;
   border-radius: 12px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 700;
   box-shadow: 0 3px 10px rgb(20 33 61 / 25%);
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .empty-reset:hover {
   transform: translateY(-2px);
@@ -973,19 +947,11 @@ button {
 
 .modal-accent {
   height: 5px;
-  background: linear-gradient(
-    90deg,
-    var(--orange),
-    #ffd27a
-  );
+  background: linear-gradient(90deg, var(--orange), #ffd27a);
 }
 
 .admin-profile .modal-accent {
-  background: linear-gradient(
-    90deg,
-    var(--navy),
-    #5279b6
-  );
+  background: linear-gradient(90deg, var(--navy), #5279b6);
 }
 
 .modal-header {
@@ -1107,10 +1073,7 @@ button {
 
 .profile-fields {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 20px;
 }
 
@@ -1176,19 +1139,14 @@ button {
   min-height: 41px;
   padding: 10px 18px;
   color: var(--white);
-  background: linear-gradient(
-    135deg,
-    var(--navy),
-    var(--brand-primary-light)
-  );
+  background: linear-gradient(135deg, var(--navy), var(--brand-primary-light));
   border: none;
   border-radius: 12px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 750;
   box-shadow: 0 3px 10px rgb(20 33 61 / 25%);
-  transition: all 200ms
-    cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .modal-done:hover {
@@ -1220,10 +1178,7 @@ button {
 
 @media (min-width: 1650px) {
   .users-grid {
-    grid-template-columns: repeat(
-      4,
-      minmax(0, 1fr)
-    );
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 24px;
   }
 
@@ -1250,10 +1205,7 @@ button {
 
 @media (max-width: 1250px) {
   .users-grid {
-    grid-template-columns: repeat(
-      2,
-      minmax(0, 1fr)
-    );
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
   }
 

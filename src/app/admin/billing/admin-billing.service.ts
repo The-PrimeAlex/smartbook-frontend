@@ -78,22 +78,14 @@ export class AdminBillingService {
   constructor(private http: HttpClient) {}
 
   getAllBills(): Observable<AdminBill[]> {
-    return this.http.get<AdminBill[]>(
-      `${this.baseUrl}/bills`,
-    );
+    return this.http.get<AdminBill[]>(`${this.baseUrl}/bills`);
   }
 
-  getAllPayments(): Observable<
-    AdminPaymentRecord[]
-  > {
-    return this.http.get<AdminPaymentRecord[]>(
-      `${this.baseUrl}/payments`,
-    );
+  getAllPayments(): Observable<AdminPaymentRecord[]> {
+    return this.http.get<AdminPaymentRecord[]>(`${this.baseUrl}/payments`);
   }
 
   getAllUsage(): Observable<AdminUsageRecord[]> {
-    return this.http.get<AdminUsageRecord[]>(
-      `${this.baseUrl}/usage`,
-    );
+    return this.http.get<AdminUsageRecord[]>(`${this.baseUrl}/usage`);
   }
 }

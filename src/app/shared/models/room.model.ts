@@ -1,13 +1,8 @@
-export type RoomType =
-  | 'BOARDROOM'
-  | 'VIDEO_CONFERENCE'
-  | 'MEETING_SUITE';
+export type RoomType = 'BOARDROOM' | 'VIDEO_CONFERENCE' | 'MEETING_SUITE';
 
-export type RoomStatus =
-  'ACTIVE' | 'MAINTENANCE' | 'RETIRED';
+export type RoomStatus = 'ACTIVE' | 'MAINTENANCE' | 'RETIRED';
 
-export type RoomEquipmentStatus =
-  'ACTIVE' | 'OUT_OF_SERVICE' | 'RETIRED';
+export type RoomEquipmentStatus = 'ACTIVE' | 'OUT_OF_SERVICE' | 'RETIRED';
 
 // Request sent when creating a room.
 // No roomId is included.

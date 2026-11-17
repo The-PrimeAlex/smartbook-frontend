@@ -1,9 +1,4 @@
-import {
-  CanActivateFn,
-  CanMatchFn,
-  Route,
-  Router,
-} from '@angular/router';
+import { CanActivateFn, CanMatchFn, Route, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { map, of } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -38,18 +33,18 @@ export function restoreSessionOnce(authService: AuthService): void {
 }
 
 // Shared logic for checking authentication and roles
-function checkAuth(authService: AuthService, router: Router, route: Route, stateUrl: string): boolean | import('@angular/router').UrlTree {
+function checkAuth(
+  authService: AuthService,
+  router: Router,
+  route: Route,
+  stateUrl: string,
+): boolean | import('@angular/router').UrlTree {
   // If the session was expired by auto-logout, redirect to login immediately
-  if (
-    sessionStorage.getItem(
-      'smartbook-session-expired',
-    ) === 'true'
-  ) {
+  if (sessionStorage.getItem('smartbook-session-expired') === 'true') {
     return router.createUrlTree(['/login']);
   }
 
-  const requiredRoles =
-    (route.data?.['roles'] as string[] | undefined) ?? [];
+  const requiredRoles = (route.data?.['roles'] as string[] | undefined) ?? [];
 
   // Check if we have a valid access token in memory
   if (!authService.getAccessToken()) {
@@ -63,9 +58,7 @@ function checkAuth(authService: AuthService, router: Router, route: Route, state
   // Check roles if required
   if (
     requiredRoles.length &&
-    !requiredRoles.some((role) =>
-      authService.hasRole(role),
-    )
+    !requiredRoles.some((role) => authService.hasRole(role))
   ) {
     return router.createUrlTree(['/forbidden']);
   }
@@ -74,9 +67,7 @@ function checkAuth(authService: AuthService, router: Router, route: Route, state
 }
 
 // CanMatch guard — runs before CanActivate and before lazy-loading child routes
-export const authMatchGuard: CanMatchFn = (
-  route,
-) => {
+export const authMatchGuard: CanMatchFn = (route) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -90,10 +81,7 @@ export const authMatchGuard: CanMatchFn = (
 };
 
 // CanActivate guard — runs after CanMatch, validates the full session
-export const authGuard: CanActivateFn = (
-  route,
-  state,
-) => {
+export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -101,25 +89,18 @@ export const authGuard: CanActivateFn = (
   restoreSessionOnce(authService);
 
   // If the session was expired by auto-logout, redirect to login immediately
-  if (
-    sessionStorage.getItem(
-      'smartbook-session-expired',
-    ) === 'true'
-  ) {
+  if (sessionStorage.getItem('smartbook-session-expired') === 'true') {
     return of(router.createUrlTree(['/login']));
   }
 
   // If we already have a token in memory (from CanMatch or previous navigation),
   // just check roles and return quickly
   if (authService.getAccessToken()) {
-    const requiredRoles =
-      (route.data?.['roles'] as string[] | undefined) ?? [];
+    const requiredRoles = (route.data?.['roles'] as string[] | undefined) ?? [];
 
     if (
       requiredRoles.length &&
-      !requiredRoles.some((role) =>
-        authService.hasRole(role),
-      )
+      !requiredRoles.some((role) => authService.hasRole(role))
     ) {
       return of(router.createUrlTree(['/forbidden']));
     }
@@ -141,9 +122,7 @@ export const authGuard: CanActivateFn = (
 
       if (
         requiredRoles.length &&
-        !requiredRoles.some((role) =>
-          authService.hasRole(role),
-        )
+        !requiredRoles.some((role) => authService.hasRole(role))
       ) {
         return router.createUrlTree(['/forbidden']);
       }

@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ViewUsersComponent } from './view-users.component.css';
 
 describe('ViewUsersComponent', () => {
@@ -13,9 +10,7 @@ describe('ViewUsersComponent', () => {
       imports: [ViewUsersComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      ViewUsersComponent,
-    );
+    fixture = TestBed.createComponent(ViewUsersComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

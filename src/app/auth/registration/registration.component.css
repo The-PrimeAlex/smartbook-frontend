@@ -13,9 +13,7 @@
   --error-color: #dc2626;
 
   color: var(--text-primary);
-  font-family:
-    Inter, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
+  font-family: Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -30,11 +28,7 @@
   min-height: 100vh;
   padding: 48px 24px 28px;
   background:
-    radial-gradient(
-      circle at 8% 5%,
-      rgb(252 163 17 / 7%),
-      transparent 27rem
-    ),
+    radial-gradient(circle at 8% 5%, rgb(252 163 17 / 7%), transparent 27rem),
     var(--page-background);
 }
 
@@ -53,12 +47,7 @@
   min-height: 300px;
   padding: 28px 42px 40px;
   border-radius: 22px;
-  background: linear-gradient(
-    130deg,
-    #14213d 0%,
-    #192b49 65%,
-    #243653 100%
-  );
+  background: linear-gradient(130deg, #14213d 0%, #192b49 65%, #243653 100%);
   color: #ffffff;
   box-shadow: 0 16px 40px rgb(20 33 61 / 12%);
 }
@@ -295,10 +284,7 @@
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 28px;
   row-gap: 26px;
 }

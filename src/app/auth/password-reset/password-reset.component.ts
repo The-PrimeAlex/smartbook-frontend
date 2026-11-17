@@ -11,10 +11,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import {
-  ActivatedRoute,
-  RouterLink,
-} from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 
@@ -34,47 +31,29 @@ import { IconComponent } from '../../shared/ui';
 function passwordsMatchValidator(
   control: AbstractControl,
 ): ValidationErrors | null {
-  const newPassword = control.get(
-    'newPassword',
-  )?.value;
-  const confirmPassword = control.get(
-    'confirmPassword',
-  )?.value;
+  const newPassword = control.get('newPassword')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
 
   if (!confirmPassword) {
     return null;
   }
 
-  return newPassword === confirmPassword
-    ? null
-    : { passwordsDoNotMatch: true };
+  return newPassword === confirmPassword ? null : { passwordsDoNotMatch: true };
 }
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    IconComponent,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
   templateUrl: './password-reset.component.html',
   styleUrl: './password-reset.component.css',
 })
 export class ResetPasswordComponent {
-  private readonly formBuilder =
-    inject(FormBuilder);
-  private readonly activatedRoute = inject(
-    ActivatedRoute,
-  );
-  private readonly passwordResetService = inject(
-    PasswordResetService,
-  );
-  private readonly changeDetectorRef = inject(
-    ChangeDetectorRef,
-  );
-  private readonly destroyRef =
-    inject(DestroyRef);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly passwordResetService = inject(PasswordResetService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly LucideArrowLeft = LucideArrowLeft;
   readonly LucideArrowRight = LucideArrowRight;
@@ -84,33 +63,27 @@ export class ResetPasswordComponent {
   readonly LucideLockKeyhole = LucideLockKeyhole;
   readonly LucideShieldCheck = LucideShieldCheck;
 
-  readonly resetPasswordForm =
-    this.formBuilder.nonNullable.group(
-      {
-        newPassword: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(12),
-            Validators.pattern(/[a-z]/),
-            Validators.pattern(/[A-Z]/),
-            Validators.pattern(/[0-9]/),
-          ],
+  readonly resetPasswordForm = this.formBuilder.nonNullable.group(
+    {
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(12),
+          Validators.pattern(/[a-z]/),
+          Validators.pattern(/[A-Z]/),
+          Validators.pattern(/[0-9]/),
         ],
-        confirmPassword: [
-          '',
-          [Validators.required],
-        ],
-      },
-      {
-        validators: passwordsMatchValidator,
-      },
-    );
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    {
+      validators: passwordsMatchValidator,
+    },
+  );
 
   readonly resetToken =
-    this.activatedRoute.snapshot.queryParamMap
-      .get('token')
-      ?.trim() ?? '';
+    this.activatedRoute.snapshot.queryParamMap.get('token')?.trim() ?? '';
 
   isSubmitting = false;
   submitted = false;
@@ -124,67 +97,50 @@ export class ResetPasswordComponent {
   }
 
   get newPasswordControl() {
-    return this.resetPasswordForm.controls
-      .newPassword;
+    return this.resetPasswordForm.controls.newPassword;
   }
 
   get confirmPasswordControl() {
-    return this.resetPasswordForm.controls
-      .confirmPassword;
+    return this.resetPasswordForm.controls.confirmPassword;
   }
 
   get newPasswordHasError(): boolean {
     return (
       this.newPasswordControl.invalid &&
-      (this.newPasswordControl.touched ||
-        this.submitted)
+      (this.newPasswordControl.touched || this.submitted)
     );
   }
 
   get confirmPasswordHasError(): boolean {
     return (
       (this.confirmPasswordControl.invalid ||
-        this.resetPasswordForm.hasError(
-          'passwordsDoNotMatch',
-        )) &&
-      (this.confirmPasswordControl.touched ||
-        this.submitted)
+        this.resetPasswordForm.hasError('passwordsDoNotMatch')) &&
+      (this.confirmPasswordControl.touched || this.submitted)
     );
   }
 
   get passwordsMatch(): boolean {
-    const confirmation =
-      this.confirmPasswordControl.value;
+    const confirmation = this.confirmPasswordControl.value;
 
     return (
-      confirmation.length > 0 &&
-      this.newPasswordControl.value ===
-        confirmation
+      confirmation.length > 0 && this.newPasswordControl.value === confirmation
     );
   }
 
   get passwordLengthValid(): boolean {
-    return (
-      this.newPasswordControl.value.length >= 12
-    );
+    return this.newPasswordControl.value.length >= 12;
   }
 
   get passwordHasLowercase(): boolean {
-    return /[a-z]/.test(
-      this.newPasswordControl.value,
-    );
+    return /[a-z]/.test(this.newPasswordControl.value);
   }
 
   get passwordHasUppercase(): boolean {
-    return /[A-Z]/.test(
-      this.newPasswordControl.value,
-    );
+    return /[A-Z]/.test(this.newPasswordControl.value);
   }
 
   get passwordHasNumber(): boolean {
-    return /[0-9]/.test(
-      this.newPasswordControl.value,
-    );
+    return /[0-9]/.test(this.newPasswordControl.value);
   }
 
   toggleNewPasswordVisibility(): void {
@@ -192,8 +148,7 @@ export class ResetPasswordComponent {
   }
 
   toggleConfirmPasswordVisibility(): void {
-    this.showConfirmPassword =
-      !this.showConfirmPassword;
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   onSubmit(): void {
@@ -206,10 +161,7 @@ export class ResetPasswordComponent {
       return;
     }
 
-    if (
-      this.resetPasswordForm.invalid ||
-      this.isSubmitting
-    ) {
+    if (this.resetPasswordForm.invalid || this.isSubmitting) {
       this.resetPasswordForm.markAllAsTouched();
       return;
     }
@@ -239,9 +191,7 @@ export class ResetPasswordComponent {
           });
           this.changeDetectorRef.detectChanges();
         },
-        error: (error: {
-          error?: { message?: string };
-        }) => {
+        error: (error: { error?: { message?: string } }) => {
           this.errorMessage =
             error.error?.message ??
             'We could not reset your password. The link may have expired or already been used. Request a new one and try again.';

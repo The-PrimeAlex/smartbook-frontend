@@ -15,9 +15,7 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title"
-        >Payment Summary</span
-      >
+      <span class="stats-toggle-title">Payment Summary</span>
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -25,55 +23,31 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div
-      class="stats-row-wrapper"
-      [class.collapsed]="statsCollapsed()"
-    >
+    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
       <div class="stats-bar">
-        <app-stat-card
-          [icon]="LucideCreditCard"
-        >
-          <span stat-value>{{
-            totalPayments()
-          }}</span>
+        <app-stat-card [icon]="LucideCreditCard">
+          <span stat-value>{{ totalPayments() }}</span>
           <span stat-label>Total Payments</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideCreditCard"
-        >
-          <span stat-value>{{
-            successCount()
-          }}</span>
+        <app-stat-card [icon]="LucideCreditCard">
+          <span stat-value>{{ successCount() }}</span>
           <span stat-label>Successful</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideCreditCard"
-        >
-          <span stat-value>{{
-            pendingCount()
-          }}</span>
+        <app-stat-card [icon]="LucideCreditCard">
+          <span stat-value>{{ pendingCount() }}</span>
           <span stat-label>Pending</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideCreditCard"
-        >
-          <span stat-value>{{
-            failedCount()
-          }}</span>
+        <app-stat-card [icon]="LucideCreditCard">
+          <span stat-value>{{ failedCount() }}</span>
           <span stat-label>Failed</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideCreditCard"
-        >
+        <app-stat-card [icon]="LucideCreditCard">
           <span stat-value
             >KES
             {{
-              totalAmount().toLocaleString(
-                'en-US',
-                {
-                  minimumFractionDigits: 2,
-                }
-              )
+              totalAmount().toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+              })
             }}</span
           >
           <span stat-label>Total Collected</span>
@@ -93,10 +67,7 @@
   <section class="payments-section">
     @if (loading() && payments().length === 0) {
       <div class="state-panel" role="status">
-        <span
-          class="loading-spinner"
-          aria-hidden="true"
-        ></span>
+        <span class="loading-spinner" aria-hidden="true"></span>
         <p>Loading payment records...</p>
       </div>
     } @else if (filteredPayments().length === 0) {
@@ -118,70 +89,41 @@
         ) {
           <article
             class="payment-card"
-            [style.animation-delay]="
-              i * 0.05 + 's'
-            "
+            [style.animation-delay]="i * 0.05 + 's'"
           >
             <div class="payment-card-header">
               <div class="payment-header-left">
                 <app-status-badge
-                  [label]="
-                    getStatusLabel(
-                      payment.paymentStatus
-                    )
-                  "
-                  [variant]="
-                    getBadgeVariant(
-                      payment.paymentStatus
-                    )
-                  "
+                  [label]="getStatusLabel(payment.paymentStatus)"
+                  [variant]="getBadgeVariant(payment.paymentStatus)"
                 ></app-status-badge>
                 <span class="method-badge">{{
-                  getMethodLabel(
-                    payment.paymentMethod
-                  )
+                  getMethodLabel(payment.paymentMethod)
                 }}</span>
               </div>
               <span class="payment-amount">{{
-                formatCurrency(
-                  payment.amount,
-                  payment.currency
-                )
+                formatCurrency(payment.amount, payment.currency)
               }}</span>
             </div>
 
             <div class="payment-card-body">
               <div class="payment-info-row">
-                <span class="payment-label"
-                  >User</span
-                >
-                <span class="payment-value">{{
-                  payment.userName
-                }}</span>
+                <span class="payment-label">User</span>
+                <span class="payment-value">{{ payment.userName }}</span>
               </div>
               <div class="payment-info-row">
-                <span class="payment-label"
-                  >Room</span
-                >
-                <span class="payment-value">{{
-                  payment.roomName
-                }}</span>
+                <span class="payment-label">Room</span>
+                <span class="payment-value">{{ payment.roomName }}</span>
               </div>
               <div class="payment-info-row">
-                <span class="payment-label"
-                  >Date</span
-                >
+                <span class="payment-label">Date</span>
                 <span class="payment-value">{{
-                  formatDateTime(
-                    payment.createdAt
-                  )
+                  formatDateTime(payment.createdAt)
                 }}</span>
               </div>
               @if (payment.transactionReference) {
                 <div class="payment-info-row">
-                  <span class="payment-label"
-                    >Reference</span
-                  >
+                  <span class="payment-label">Reference</span>
                   <span class="payment-value">{{
                     payment.transactionReference
                   }}</span>
@@ -189,9 +131,7 @@
               }
               @if (payment.paidAt) {
                 <div class="payment-info-row">
-                  <span class="payment-label"
-                    >Paid At</span
-                  >
+                  <span class="payment-label">Paid At</span>
                   <span class="payment-value">{{
                     formatDateTime(payment.paidAt)
                   }}</span>

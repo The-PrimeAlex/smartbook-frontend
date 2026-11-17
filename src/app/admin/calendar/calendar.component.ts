@@ -37,18 +37,10 @@ import {
   startOfDay,
   timeKey,
 } from './util/calendar-date-utils';
-import {
-  EmptyStateComponent,
-  StatCardComponent,
-} from '../../shared/ui';
+import { EmptyStateComponent, StatCardComponent } from '../../shared/ui';
 
-type BookingStatus =
-  'Confirmed' | 'Pending' | 'Cancelled';
-type RoomType =
-  | 'All Rooms'
-  | 'Boardroom'
-  | 'Meeting Room'
-  | 'Video Suite';
+type BookingStatus = 'Confirmed' | 'Pending' | 'Cancelled';
+type RoomType = 'All Rooms' | 'Boardroom' | 'Meeting Room' | 'Video Suite';
 
 interface CalendarDay {
   date: Date;
@@ -69,9 +61,7 @@ export class CalendarComponent implements OnInit {
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideClock = LucideClock;
-  private readonly calendarService = inject(
-    CalendarService,
-  );
+  private readonly calendarService = inject(CalendarService);
 
   @Input() isAdmin = false;
   @Input() customerId = '';
@@ -82,15 +72,11 @@ export class CalendarComponent implements OnInit {
 
   readonly googleEventsLoading = signal(false);
   readonly googleEventsError = signal('');
-  readonly googleEvents = signal<
-    CalendarBooking[]
-  >([]);
+  readonly googleEvents = signal<CalendarBooking[]>([]);
 
   readonly bookingsLoading = signal(false);
   readonly bookingsError = signal('');
-  readonly smartBookBookings = signal<
-    CalendarBooking[]
-  >([]);
+  readonly smartBookBookings = signal<CalendarBooking[]>([]);
 
   readonly googleSyncing = signal(false);
   readonly googleSyncMessage = signal('');
@@ -107,135 +93,90 @@ export class CalendarComponent implements OnInit {
     'Video Suite',
   ];
 
-  readonly selectedDate = signal(
-    startOfDay(new Date()),
-  );
-  readonly selectedRoomType =
-    signal<RoomType>('All Rooms');
+  readonly selectedDate = signal(startOfDay(new Date()));
+  readonly selectedRoomType = signal<RoomType>('All Rooms');
 
-  readonly bookings = computed<CalendarBooking[]>(
-    () => {
-      const combined = [
-        ...this.smartBookBookings(),
-        ...this.googleEvents(),
-      ];
+  readonly bookings = computed<CalendarBooking[]>(() => {
+    const combined = [...this.smartBookBookings(), ...this.googleEvents()];
 
-      return combined.sort((a, b) => {
-        const dateComparison =
-          a.date.localeCompare(b.date);
+    return combined.sort((a, b) => {
+      const dateComparison = a.date.localeCompare(b.date);
 
-        if (dateComparison !== 0) {
-          return dateComparison;
-        }
+      if (dateComparison !== 0) {
+        return dateComparison;
+      }
 
-        return a.startTime.localeCompare(
-          b.startTime,
-        );
-      });
-    },
-  );
+      return a.startTime.localeCompare(b.startTime);
+    });
+  });
 
   readonly visibleBookings = computed(() => {
     const roomType = this.selectedRoomType();
 
     return this.bookings().filter((booking) => {
-      return (
-        roomType === 'All Rooms' ||
-        booking.roomType === roomType
-      );
+      return roomType === 'All Rooms' || booking.roomType === roomType;
     });
   });
 
-  readonly monthDays = computed<CalendarDay[]>(
-    () => {
-      const selected = this.selectedDate();
-      const firstOfMonth = new Date(
-        selected.getFullYear(),
-        selected.getMonth(),
-        1,
-      );
+  readonly monthDays = computed<CalendarDay[]>(() => {
+    const selected = this.selectedDate();
+    const firstOfMonth = new Date(
+      selected.getFullYear(),
+      selected.getMonth(),
+      1,
+    );
 
-      const gridStart = new Date(firstOfMonth);
-      const weekday =
-        (gridStart.getDay() + 6) % 7;
+    const gridStart = new Date(firstOfMonth);
+    const weekday = (gridStart.getDay() + 6) % 7;
 
-      gridStart.setDate(
-        gridStart.getDate() - weekday,
-      );
+    gridStart.setDate(gridStart.getDate() - weekday);
 
-      return Array.from(
-        { length: 42 },
-        (_, index) => {
-          const date = new Date(gridStart);
-          date.setDate(
-            gridStart.getDate() + index,
-          );
+    return Array.from({ length: 42 }, (_, index) => {
+      const date = new Date(gridStart);
+      date.setDate(gridStart.getDate() + index);
 
-          return {
-            date,
-            key: dateKey(date),
-            isCurrentMonth:
-              date.getMonth() ===
-              selected.getMonth(),
-            isToday:
-              dateKey(date) ===
-              dateKey(new Date()),
-            isSelected:
-              dateKey(date) === dateKey(selected),
-          };
-        },
-      );
-    },
-  );
+      return {
+        date,
+        key: dateKey(date),
+        isCurrentMonth: date.getMonth() === selected.getMonth(),
+        isToday: dateKey(date) === dateKey(new Date()),
+        isSelected: dateKey(date) === dateKey(selected),
+      };
+    });
+  });
 
-  readonly weekDays = computed<CalendarDay[]>(
-    () => {
-      const selected = this.selectedDate();
-      const start = startOfDay(selected);
-      const weekday = (start.getDay() + 6) % 7;
+  readonly weekDays = computed<CalendarDay[]>(() => {
+    const selected = this.selectedDate();
+    const start = startOfDay(selected);
+    const weekday = (start.getDay() + 6) % 7;
 
-      start.setDate(start.getDate() - weekday);
+    start.setDate(start.getDate() - weekday);
 
-      return Array.from(
-        { length: 7 },
-        (_, index) => {
-          const date = new Date(start);
-          date.setDate(start.getDate() + index);
+    return Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(start);
+      date.setDate(start.getDate() + index);
 
-          return {
-            date,
-            key: dateKey(date),
-            isCurrentMonth:
-              date.getMonth() ===
-              this.selectedDate().getMonth(),
-            isToday:
-              dateKey(date) ===
-              dateKey(new Date()),
-            isSelected:
-              dateKey(date) ===
-              dateKey(this.selectedDate()),
-          };
-        },
-      );
-    },
-  );
+      return {
+        date,
+        key: dateKey(date),
+        isCurrentMonth: date.getMonth() === this.selectedDate().getMonth(),
+        isToday: dateKey(date) === dateKey(new Date()),
+        isSelected: dateKey(date) === dateKey(this.selectedDate()),
+      };
+    });
+  });
 
   readonly dayBookings = computed(() => {
     const key = dateKey(this.selectedDate());
 
-    return this.visibleBookings().filter(
-      (booking) => booking.date === key,
-    );
+    return this.visibleBookings().filter((booking) => booking.date === key);
   });
 
   readonly monthTitle = computed(() =>
-    this.selectedDate().toLocaleDateString(
-      undefined,
-      {
-        month: 'long',
-        year: 'numeric',
-      },
-    ),
+    this.selectedDate().toLocaleDateString(undefined, {
+      month: 'long',
+      year: 'numeric',
+    }),
   );
 
   readonly weekTitle = computed(() => {
@@ -248,63 +189,48 @@ export class CalendarComponent implements OnInit {
     const first = days[0].date;
     const last = days[days.length - 1].date;
 
-    const firstLabel = first.toLocaleDateString(
-      undefined,
-      {
-        month: 'short',
-        day: 'numeric',
-      },
-    );
+    const firstLabel = first.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+    });
 
-    const lastLabel = last.toLocaleDateString(
-      undefined,
-      {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      },
-    );
+    const lastLabel = last.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
 
     return `${firstLabel} – ${lastLabel}`;
   });
 
   readonly selectedDateTitle = computed(() =>
-    this.selectedDate().toLocaleDateString(
-      undefined,
-      {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      },
-    ),
+    this.selectedDate().toLocaleDateString(undefined, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }),
   );
 
-  readonly totalBookings = computed(
-    () => this.visibleBookings().length,
-  );
+  readonly totalBookings = computed(() => this.visibleBookings().length);
 
   readonly todayBookings = computed(() => {
     const today = dateKey(new Date());
 
-    return this.visibleBookings().filter(
-      (booking) => booking.date === today,
-    ).length;
+    return this.visibleBookings().filter((booking) => booking.date === today)
+      .length;
   });
 
   readonly confirmedBookings = computed(
     () =>
-      this.visibleBookings().filter(
-        (booking) =>
-          booking.status === 'Confirmed',
-      ).length,
+      this.visibleBookings().filter((booking) => booking.status === 'Confirmed')
+        .length,
   );
 
   readonly pendingBookings = computed(
     () =>
-      this.visibleBookings().filter(
-        (booking) => booking.status === 'Pending',
-      ).length,
+      this.visibleBookings().filter((booking) => booking.status === 'Pending')
+        .length,
   );
 
   ngOnInit(): void {
@@ -318,28 +244,15 @@ export class CalendarComponent implements OnInit {
 
     this.calendarService
       .getMyBookings()
-      .pipe(
-        finalize(() =>
-          this.bookingsLoading.set(false),
-        ),
-      )
+      .pipe(finalize(() => this.bookingsLoading.set(false)))
       .subscribe({
         next: (response: unknown) => {
-          const rows =
-            extractBookingArray(response);
+          const rows = extractBookingArray(response);
           this.smartBookBookings.set(
             rows
-              .map((booking, index) =>
-                mapSmartBookBooking(
-                  booking,
-                  index,
-                ),
-              )
+              .map((booking, index) => mapSmartBookBooking(booking, index))
               .filter(
-                (
-                  booking,
-                ): booking is CalendarBooking =>
-                  booking !== null,
+                (booking): booking is CalendarBooking => booking !== null,
               ),
           );
         },
@@ -347,7 +260,7 @@ export class CalendarComponent implements OnInit {
           this.bookingsError.set(
             getErrorMessage(
               error,
-              'We couldn\'t load your bookings. Please try again in a moment.',
+              "We couldn't load your bookings. Please try again in a moment.",
             ),
           );
         },
@@ -371,27 +284,13 @@ export class CalendarComponent implements OnInit {
     this.googleConnectionMessage.set('');
 
     this.calendarService
-      .getGoogleEvents(
-        fromDate.toISOString(),
-        toDate.toISOString(),
-      )
-      .pipe(
-        finalize(() =>
-          this.googleEventsLoading.set(false),
-        ),
-      )
+      .getGoogleEvents(fromDate.toISOString(), toDate.toISOString())
+      .pipe(finalize(() => this.googleEventsLoading.set(false)))
       .subscribe({
-        next: (
-          events: GoogleCalendarEventDto[],
-        ) => {
+        next: (events: GoogleCalendarEventDto[]) => {
           const mapped = (events ?? [])
             .map((event) => mapGoogleEvent(event))
-            .filter(
-              (
-                booking,
-              ): booking is CalendarBooking =>
-                booking !== null,
-            );
+            .filter((booking): booking is CalendarBooking => booking !== null);
 
           this.googleEvents.set(mapped);
           this.googleConnectionMessage.set(
@@ -404,13 +303,13 @@ export class CalendarComponent implements OnInit {
 
           if (status === 502) {
             this.googleEventsError.set(
-              'We couldn\'t reach Google Calendar. Your connection may have expired — please disconnect and reconnect your Google Calendar to try again.',
+              "We couldn't reach Google Calendar. Your connection may have expired — please disconnect and reconnect your Google Calendar to try again.",
             );
           } else {
             this.googleEventsError.set(
               getErrorMessage(
                 error,
-                'We couldn\'t load Google Calendar events. Make sure your Google Calendar is connected.',
+                "We couldn't load Google Calendar events. Make sure your Google Calendar is connected.",
               ),
             );
           }
@@ -425,29 +324,23 @@ export class CalendarComponent implements OnInit {
 
     this.calendarService
       .connectGoogleCalendar()
-      .pipe(
-        finalize(() =>
-          this.googleConnecting.set(false),
-        ),
-      )
+      .pipe(finalize(() => this.googleConnecting.set(false)))
       .subscribe({
         next: (response) => {
           if (!response?.authorizationUrl) {
             this.googleConnectionError.set(
-              'We couldn\'t start the connection to Google Calendar. Please try again.',
+              "We couldn't start the connection to Google Calendar. Please try again.",
             );
             return;
           }
 
-          window.location.assign(
-            response.authorizationUrl,
-          );
+          window.location.assign(response.authorizationUrl);
         },
         error: (error: unknown) => {
           this.googleConnectionError.set(
             getErrorMessage(
               error,
-              'We couldn\'t connect to Google Calendar. Please check your internet connection and try again.',
+              "We couldn't connect to Google Calendar. Please check your internet connection and try again.",
             ),
           );
         },
@@ -461,16 +354,10 @@ export class CalendarComponent implements OnInit {
 
     this.calendarService
       .syncBookings()
-      .pipe(
-        finalize(() =>
-          this.googleSyncing.set(false),
-        ),
-      )
+      .pipe(finalize(() => this.googleSyncing.set(false)))
       .subscribe({
         next: (result: BookingSyncResult) => {
-          this.googleSyncMessage.set(
-            formatSyncResult(result),
-          );
+          this.googleSyncMessage.set(formatSyncResult(result));
 
           this.loadSmartBookBookings();
           this.loadGoogleEvents();
@@ -479,7 +366,7 @@ export class CalendarComponent implements OnInit {
           this.googleSyncError.set(
             getErrorMessage(
               error,
-              'We couldn\'t sync your bookings to Google Calendar. Please try again in a moment.',
+              "We couldn't sync your bookings to Google Calendar. Please try again in a moment.",
             ),
           );
         },
@@ -493,32 +380,21 @@ export class CalendarComponent implements OnInit {
 
     this.calendarService
       .disconnectGoogleCalendar()
-      .pipe(
-        finalize(() =>
-          this.googleDisconnecting.set(false),
-        ),
-      )
+      .pipe(finalize(() => this.googleDisconnecting.set(false)))
       .subscribe({
         next: (response) => {
           this.googleDisconnectMessage.set(
-            response?.message ??
-              'Google Calendar disconnected.',
+            response?.message ?? 'Google Calendar disconnected.',
           );
           this.googleEvents.set([]);
           this.googleEventsError.set('');
-          setTimeout(
-            () =>
-              this.googleDisconnectMessage.set(
-                '',
-              ),
-            5000,
-          );
+          setTimeout(() => this.googleDisconnectMessage.set(''), 5000);
         },
         error: (error: unknown) => {
           this.googleDisconnectError.set(
             getErrorMessage(
               error,
-              'We couldn\'t disconnect Google Calendar. Please try again in a moment.',
+              "We couldn't disconnect Google Calendar. Please try again in a moment.",
             ),
           );
         },
@@ -538,48 +414,32 @@ export class CalendarComponent implements OnInit {
   }
 
   previousMonth(): void {
-    this.selectedDate.set(
-      previousMonthDate(this.selectedDate()),
-    );
+    this.selectedDate.set(previousMonthDate(this.selectedDate()));
   }
 
   nextMonth(): void {
-    this.selectedDate.set(
-      nextMonthDate(this.selectedDate()),
-    );
+    this.selectedDate.set(nextMonthDate(this.selectedDate()));
   }
 
   previousWeek(): void {
-    this.selectedDate.set(
-      previousWeekDate(this.selectedDate()),
-    );
+    this.selectedDate.set(previousWeekDate(this.selectedDate()));
   }
 
   nextWeek(): void {
-    this.selectedDate.set(
-      nextWeekDate(this.selectedDate()),
-    );
+    this.selectedDate.set(nextWeekDate(this.selectedDate()));
   }
 
   bookingsForDate(date: Date): CalendarBooking[] {
     const key = dateKey(date);
 
-    return this.visibleBookings().filter(
-      (booking) => booking.date === key,
-    );
+    return this.visibleBookings().filter((booking) => booking.date === key);
   }
 
-  trackBooking(
-    _index: number,
-    booking: CalendarBooking,
-  ): string {
+  trackBooking(_index: number, booking: CalendarBooking): string {
     return `${booking.source}-${booking.id}`;
   }
 
-  trackDay(
-    _index: number,
-    day: CalendarDay,
-  ): string {
+  trackDay(_index: number, day: CalendarDay): string {
     return day.key;
   }
 

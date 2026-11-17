@@ -14,9 +14,7 @@
       [attr.aria-expanded]="!statsCollapsed()"
       aria-label="Toggle statistics"
     >
-      <span class="stats-toggle-title"
-        >Invoice Summary</span
-      >
+      <span class="stats-toggle-title">Invoice Summary</span>
       <app-icon
         [icon]="LucideChevronDown"
         [size]="20"
@@ -24,58 +22,33 @@
         [class.rotated]="!statsCollapsed()"
       ></app-icon>
     </button>
-    <div
-      class="stats-row-wrapper"
-      [class.collapsed]="statsCollapsed()"
-    >
+    <div class="stats-row-wrapper" [class.collapsed]="statsCollapsed()">
       <div class="stats-bar">
-        <app-stat-card
-          [icon]="LucideFileText"
-        >
-          <span stat-value>{{
-            totalBills()
-          }}</span>
+        <app-stat-card [icon]="LucideFileText">
+          <span stat-value>{{ totalBills() }}</span>
           <span stat-label>Invoices</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideFileText"
-        >
-          <span stat-value>{{
-            unpaidCount()
-          }}</span>
+        <app-stat-card [icon]="LucideFileText">
+          <span stat-value>{{ unpaidCount() }}</span>
           <span stat-label>Unpaid</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideFileText"
-        >
-          <span stat-value>{{
-            paidCount()
-          }}</span>
+        <app-stat-card [icon]="LucideFileText">
+          <span stat-value>{{ paidCount() }}</span>
           <span stat-label>Paid</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideFileText"
-        >
-          <span stat-value>{{
-            partialCount()
-          }}</span>
+        <app-stat-card [icon]="LucideFileText">
+          <span stat-value>{{ partialCount() }}</span>
           <span stat-label>Partial</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideFileText"
-        >
+        <app-stat-card [icon]="LucideFileText">
           <span stat-value>{{
-            totalRevenue()
-              | currency: 'KSH ' : 'symbol-narrow'
+            totalRevenue() | currency: 'KSH ' : 'symbol-narrow'
           }}</span>
           <span stat-label>Revenue</span>
         </app-stat-card>
-        <app-stat-card
-          [icon]="LucideFileText"
-        >
+        <app-stat-card [icon]="LucideFileText">
           <span stat-value>{{
-            totalPaid()
-              | currency: 'KSH ' : 'symbol-narrow'
+            totalPaid() | currency: 'KSH ' : 'symbol-narrow'
           }}</span>
           <span stat-label>Collected</span>
         </app-stat-card>
@@ -94,21 +67,13 @@
       (select)="setFilter($event)"
     ></app-filter-group>
     <div class="sort-bar">
-      <app-icon
-        [icon]="LucideArrowUpDown"
-        [size]="14"
-      ></app-icon>
+      <app-icon [icon]="LucideArrowUpDown" [size]="14"></app-icon>
       <select
         class="sort-select"
         [value]="sortBy()"
-        (change)="
-          setSort($any($event.target).value)
-        "
+        (change)="setSort($any($event.target).value)"
       >
-        @for (
-          opt of sortOptions;
-          track opt.value
-        ) {
+        @for (opt of sortOptions; track opt.value) {
           <option [value]="opt.value">
             {{ opt.label }}
           </option>
@@ -120,10 +85,7 @@
   <section class="bills-section">
     @if (loading() && bills().length === 0) {
       <div class="state-panel" role="status">
-        <span
-          class="loading-spinner"
-          aria-hidden="true"
-        ></span>
+        <span class="loading-spinner" aria-hidden="true"></span>
         <p>Loading invoices...</p>
       </div>
     } @else if (filteredBills().length === 0) {
@@ -138,52 +100,25 @@
       ></app-empty-state>
     } @else {
       <div class="bills-grid">
-        @for (
-          bill of filteredBills();
-          track bill.billId;
-          let i = $index
-        ) {
-          <article
-            class="bill-card"
-            [style.animation-delay]="
-              i * 0.05 + 's'
-            "
-          >
+        @for (bill of filteredBills(); track bill.billId; let i = $index) {
+          <article class="bill-card" [style.animation-delay]="i * 0.05 + 's'">
             <!-- Card Header -->
             <div class="bill-card-header">
               <div class="bill-header-left">
                 <div class="bill-title-block">
                   <h3 class="bill-room">
-                    {{
-                      bill.booking?.roomName ||
-                        'Incident Charge'
-                    }}
+                    {{ bill.booking?.roomName || 'Incident Charge' }}
                   </h3>
-                  <span class="bill-invoice">{{
-                    bill.billId
-                  }}</span>
+                  <span class="bill-invoice">{{ bill.billId }}</span>
                 </div>
                 <app-status-badge
-                  [label]="
-                    getStatusLabel(
-                      bill.billStatus
-                    )
-                  "
-                  [variant]="
-                    getBadgeVariant(
-                      bill.billStatus
-                    )
-                  "
+                  [label]="getStatusLabel(bill.billStatus)"
+                  [variant]="getBadgeVariant(bill.billStatus)"
                 ></app-status-badge>
               </div>
               <div class="bill-header-right">
                 <span class="bill-amount">
-                  {{
-                    bill.totalAmount
-                      | currency
-                        : 'KSH '
-                        : 'symbol-narrow'
-                  }}
+                  {{ bill.totalAmount | currency: 'KSH ' : 'symbol-narrow' }}
                 </span>
               </div>
             </div>
@@ -192,22 +127,12 @@
               @if (bill.booking) {
                 <div class="bill-meta-row">
                   <span class="bill-meta-item">
-                    <app-icon
-                      [icon]="LucideUser"
-                      [size]="14"
-                    ></app-icon>
+                    <app-icon [icon]="LucideUser" [size]="14"></app-icon>
                     {{ bill.booking.userName }}
                   </span>
                   <span class="bill-meta-item">
-                    <app-icon
-                      [icon]="LucideCalendar"
-                      [size]="14"
-                    ></app-icon>
-                    {{
-                      formatDateTime(
-                        bill.booking.startTime
-                      )
-                    }}
+                    <app-icon [icon]="LucideCalendar" [size]="14"></app-icon>
+                    {{ formatDateTime(bill.booking.startTime) }}
                   </span>
                 </div>
                 @if (bill.booking.purpose) {
@@ -219,51 +144,30 @@
               <!-- Bill Items -->
               @if (bill.items.length > 0) {
                 <div class="bill-items">
-                  @for (
-                    item of bill.items;
-                    track item.description
-                  ) {
+                  @for (item of bill.items; track item.description) {
                     <div
                       class="item-row"
-                      [class.item-incident]="
-                        item.itemType ===
-                        'INCIDENT'
-                      "
+                      [class.item-incident]="item.itemType === 'INCIDENT'"
                       [class.item-cancellation]="
-                        item.itemType ===
-                        'CANCELLATION_FEE'
+                        item.itemType === 'CANCELLATION_FEE'
                       "
                     >
-                      @if (
-                        item.itemType ===
-                        'INCIDENT'
-                      ) {
-                        <span
-                          class="item-type-badge incident-badge"
+                      @if (item.itemType === 'INCIDENT') {
+                        <span class="item-type-badge incident-badge"
                           >Incident
                         </span>
-                      } @else if (
-                        item.itemType ===
-                        'CANCELLATION_FEE'
-                      ) {
-                        <span
-                          class="item-type-badge cancellation-badge"
+                      } @else if (item.itemType === 'CANCELLATION_FEE') {
+                        <span class="item-type-badge cancellation-badge"
                           >Cancellation
                         </span>
                       } @else {
-                        <span
-                          class="item-type-badge meeting-badge"
+                        <span class="item-type-badge meeting-badge"
                           >Meeting</span
                         >
                       }
-                      <span class="item-desc">{{
-                        item.description
-                      }}</span>
+                      <span class="item-desc">{{ item.description }}</span>
                       <span class="item-amount">{{
-                        formatCurrency(
-                          item.amount,
-                          bill.currency
-                        )
+                        formatCurrency(item.amount, bill.currency)
                       }}</span>
                     </div>
                   }
@@ -272,61 +176,28 @@
               <!-- Bill Summary Footer -->
               <div class="bill-footer">
                 <div class="bill-summary-item">
-                  <span class="bill-summary-label"
-                    >Subtotal</span
-                  >
-                  <span
-                    class="bill-summary-value"
-                    >{{
-                      formatCurrency(
-                        bill.subtotal,
-                        bill.currency
-                      )
-                    }}</span
-                  >
+                  <span class="bill-summary-label">Subtotal</span>
+                  <span class="bill-summary-value">{{
+                    formatCurrency(bill.subtotal, bill.currency)
+                  }}</span>
                 </div>
                 <div class="bill-summary-item">
-                  <span class="bill-summary-label"
-                    >Tax</span
-                  >
-                  <span
-                    class="bill-summary-value"
-                    >{{
-                      formatCurrency(
-                        bill.taxAmount,
-                        bill.currency
-                      )
-                    }}</span
-                  >
+                  <span class="bill-summary-label">Tax</span>
+                  <span class="bill-summary-value">{{
+                    formatCurrency(bill.taxAmount, bill.currency)
+                  }}</span>
                 </div>
-                <div
-                  class="bill-summary-item bill-paid"
-                >
-                  <span class="bill-summary-label"
-                    >Paid</span
-                  >
-                  <span
-                    class="bill-summary-value"
-                    >{{
-                      formatCurrency(
-                        bill.amountPaid,
-                        bill.currency
-                      )
-                    }}</span
-                  >
+                <div class="bill-summary-item bill-paid">
+                  <span class="bill-summary-label">Paid</span>
+                  <span class="bill-summary-value">{{
+                    formatCurrency(bill.amountPaid, bill.currency)
+                  }}</span>
                 </div>
-                <div
-                  class="bill-summary-item bill-due"
-                >
-                  <span class="bill-summary-label"
-                    >Due</span
-                  >
-                  <span
-                    class="bill-summary-value"
-                    >{{
-                      formatDate(bill.dueAt)
-                    }}</span
-                  >
+                <div class="bill-summary-item bill-due">
+                  <span class="bill-summary-label">Due</span>
+                  <span class="bill-summary-value">{{
+                    formatDate(bill.dueAt)
+                  }}</span>
                 </div>
               </div>
             </div>

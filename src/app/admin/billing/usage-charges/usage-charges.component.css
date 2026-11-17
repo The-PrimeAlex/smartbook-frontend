@@ -60,10 +60,7 @@
 /* ── Usage Grid ── */
 .usage-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(380px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 8px;
 }
 @media (max-width: 768px) {
@@ -231,8 +228,7 @@
   align-items: center;
   gap: 5px;
 }
-.usage-charge-row.has-overrun
-  .usage-charge-label {
+.usage-charge-row.has-overrun .usage-charge-label {
   color: var(--warning);
 }
 .usage-charge-value {

@@ -1,11 +1,5 @@
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
-import {
-  HttpClient,
-  HttpParams,
-} from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -37,28 +31,24 @@ export class CalendarService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
 
-  private readonly apiBaseUrl =
-    '/api/v1';
+  private readonly apiBaseUrl = '/api/v1';
 
   getMyBookings(): Observable<unknown> {
-    return this.http.get<unknown>(
-      `${this.apiBaseUrl}/bookings/me`,
-    );
+    return this.http.get<unknown>(`${this.apiBaseUrl}/bookings/me`);
   }
 
   getGoogleEvents(
     from: string,
     to: string,
   ): Observable<GoogleCalendarEventDto[]> {
-    const params = new HttpParams()
-      .set('from', from)
-      .set('to', to);
+    const params = new HttpParams().set('from', from).set('to', to);
 
-    return this.http.get<
-      GoogleCalendarEventDto[]
-    >(`${this.apiBaseUrl}/calendar/events`, {
-      params,
-    });
+    return this.http.get<GoogleCalendarEventDto[]>(
+      `${this.apiBaseUrl}/calendar/events`,
+      {
+        params,
+      },
+    );
   }
 
   connectGoogleCalendar(): Observable<{
@@ -66,31 +56,33 @@ export class CalendarService {
   }> {
     return this.http.get<{
       authorizationUrl: string;
-    }>(
-      `${this.apiBaseUrl}/calendar/integrations/google/connect`,
-    );
+    }>(`${this.apiBaseUrl}/calendar/integrations/google/connect`);
   }
 
   syncBookings(): Observable<BookingSyncResult> {
-    return this.authService.ensureCsrfToken().pipe(
-      switchMap(() =>
-        this.http.post<BookingSyncResult>(
-          `${this.apiBaseUrl}/calendar/sync-bookings`,
-          {},
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.post<BookingSyncResult>(
+            `${this.apiBaseUrl}/calendar/sync-bookings`,
+            {},
+          ),
         ),
-      ),
-    );
+      );
   }
 
   disconnectGoogleCalendar(): Observable<{
     message: string;
   }> {
-    return this.authService.ensureCsrfToken().pipe(
-      switchMap(() =>
-        this.http.delete<{ message: string }>(
-          `${this.apiBaseUrl}/calendar/integrations/google`,
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.delete<{ message: string }>(
+            `${this.apiBaseUrl}/calendar/integrations/google`,
+          ),
         ),
-      ),
-    );
+      );
   }
 }

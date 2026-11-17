@@ -1,7 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MainLayoutComponent } from './main-layout.component.css';
 
 describe('MainLayoutComponent', () => {
@@ -13,9 +10,7 @@ describe('MainLayoutComponent', () => {
       imports: [MainLayoutComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      MainLayoutComponent,
-    );
+    fixture = TestBed.createComponent(MainLayoutComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

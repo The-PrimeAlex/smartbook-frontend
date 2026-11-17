@@ -1,8 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  Injectable,
-  inject,
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { map, mergeMap } from 'rxjs';
 
@@ -15,20 +12,13 @@ export class NotificationService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = '/api/v1/notifications/me';
 
-  getNotifications(
-    unreadOnly = false,
-  ): Observable<Notification[]> {
-    return this.http.get<Notification[]>(
-      this.apiUrl,
-      {
-        params: { unreadOnly },
-      },
-    );
+  getNotifications(unreadOnly = false): Observable<Notification[]> {
+    return this.http.get<Notification[]>(this.apiUrl, {
+      params: { unreadOnly },
+    });
   }
 
-  markAsRead(
-    notificationId: string,
-  ): Observable<void> {
+  markAsRead(notificationId: string): Observable<void> {
     return this.ensureCsrfToken().pipe(
       switchMap(() =>
         this.http.post<void>(
@@ -52,12 +42,9 @@ export class NotificationService {
           ),
         );
         // Run all mark-as-read requests in parallel and return when all complete
-        let combined: Observable<void> =
-          of(void 0);
+        let combined: Observable<void> = of(void 0);
         marks.forEach((req) => {
-          combined = combined.pipe(
-            mergeMap(() => req),
-          );
+          combined = combined.pipe(mergeMap(() => req));
         });
         return combined;
       }),
@@ -69,9 +56,7 @@ export class NotificationService {
       typeof document !== 'undefined' &&
       document.cookie
         .split(';')
-        .some((cookie) =>
-          cookie.trim().startsWith('XSRF-TOKEN='),
-        );
+        .some((cookie) => cookie.trim().startsWith('XSRF-TOKEN='));
 
     if (hasCsrfCookie) {
       return of(void 0);

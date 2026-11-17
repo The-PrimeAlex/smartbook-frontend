@@ -8,10 +8,7 @@ import { LucideDynamicIcon } from '@lucide/angular';
   template: `
     <div class="stat-card">
       @if (icon()) {
-        <div
-          class="stat-icon"
-          [style.color]="iconColor()"
-        >
+        <div class="stat-icon" [style.color]="iconColor()">
           <svg
             [lucideIcon]="icon()"
             [size]="iconSize()"
@@ -20,12 +17,8 @@ import { LucideDynamicIcon } from '@lucide/angular';
         </div>
       }
       <div class="stat-info">
-        <span class="stat-value"
-          ><ng-content select="[stat-value]"
-        /></span>
-        <span class="stat-label"
-          ><ng-content select="[stat-label]"
-        /></span>
+        <span class="stat-value"><ng-content select="[stat-value]" /></span>
+        <span class="stat-label"><ng-content select="[stat-label]" /></span>
       </div>
     </div>
   `,

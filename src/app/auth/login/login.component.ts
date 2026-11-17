@@ -5,10 +5,7 @@ import { BrandPanelComponent } from './brand-panel/brand-panel.component';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    LoginFormComponent,
-    BrandPanelComponent,
-  ],
+  imports: [LoginFormComponent, BrandPanelComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
