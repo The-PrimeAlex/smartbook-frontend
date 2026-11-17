@@ -37,7 +37,20 @@ export async function fetch(request) {
   });
 
   // Send the request to the Azure backend
-  const response = await fetch(proxiedRequest);
+  let response;
+  try {
+    response = await fetch(proxiedRequest);
+  } catch (error) {
+    // If the backend is unreachable, return 502 with error details
+    const errorHeaders = new Headers();
+    errorHeaders.set('Content-Type', 'application/json');
+    errorHeaders.set('Access-Control-Allow-Origin', url.origin);
+    errorHeaders.set('Access-Control-Allow-Credentials', 'true');
+    return new Response(
+      JSON.stringify({ error: 'Backend unavailable', message: error.message }),
+      { status: 502, headers: errorHeaders }
+    );
+  }
 
   // Build the response with CORS headers
   const responseHeaders = new Headers(response.headers);
