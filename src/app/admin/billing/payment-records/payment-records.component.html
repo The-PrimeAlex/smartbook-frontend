@@ -3,8 +3,7 @@
     [icon]="LucideCreditCard"
     eyebrow="Billing"
     title="Payment Records"
-    description="View all payment transactions — M-Pesa
-    , card, bank transfer, and cash payments."
+    description="Review and approve cash payments submitted by users."
   ></app-page-banner>
 
   <section class="stats-section">
@@ -30,16 +29,16 @@
           <span stat-label>Total Payments</span>
         </app-stat-card>
         <app-stat-card [icon]="LucideCreditCard">
-          <span stat-value>{{ successCount() }}</span>
-          <span stat-label>Successful</span>
+          <span stat-value>{{ approvedCount() }}</span>
+          <span stat-label>Approved</span>
         </app-stat-card>
         <app-stat-card [icon]="LucideCreditCard">
-          <span stat-value>{{ pendingCount() }}</span>
-          <span stat-label>Pending</span>
+          <span stat-value>{{ pendingApprovalCount() }}</span>
+          <span stat-label>Pending Approval</span>
         </app-stat-card>
         <app-stat-card [icon]="LucideCreditCard">
-          <span stat-value>{{ failedCount() }}</span>
-          <span stat-label>Failed</span>
+          <span stat-value>{{ rejectedCount() }}</span>
+          <span stat-label>Rejected</span>
         </app-stat-card>
         <app-stat-card [icon]="LucideCreditCard">
           <span stat-value
@@ -50,12 +49,95 @@
               })
             }}</span
           >
-          <span stat-label>Total Collected</span>
+          <span stat-label>Total Approved</span>
         </app-stat-card>
       </div>
     </div>
   </section>
 
+  <!-- Pending Payments Section -->
+  @if (pendingPayments().length > 0) {
+    <section class="pending-section">
+      <h2 class="section-title">Pending Cash Payments</h2>
+      <div class="pending-grid">
+        @for (
+          payment of pendingPayments();
+          track payment.paymentId;
+          let i = $index
+        ) {
+          <article class="payment-card pending-card">
+            <div class="payment-card-header">
+              <div class="payment-header-left">
+                <app-status-badge
+                  label="Pending Approval"
+                  variant="warning"
+                ></app-status-badge>
+                <span class="method-badge">{{
+                  getMethodLabel(payment.paymentMethod)
+                }}</span>
+              </div>
+              <span class="payment-amount">{{
+                formatCurrency(payment.amount, payment.currency)
+              }}</span>
+            </div>
+
+            <div class="payment-card-body">
+              <div class="payment-info-row">
+                <span class="payment-label">User</span>
+                <span class="payment-value">{{ payment.userName }}</span>
+              </div>
+              <div class="payment-info-row">
+                <span class="payment-label">Room</span>
+                <span class="payment-value">{{ payment.roomName }}</span>
+              </div>
+              <div class="payment-info-row">
+                <span class="payment-label">Date</span>
+                <span class="payment-value">{{
+                  formatDateTime(payment.createdAt)
+                }}</span>
+              </div>
+              @if (payment.transactionReference) {
+                <div class="payment-info-row">
+                  <span class="payment-label">Reference</span>
+                  <span class="payment-value">{{
+                    payment.transactionReference
+                  }}</span>
+                </div>
+              }
+            </div>
+
+            <div class="payment-card-actions">
+              <button
+                type="button"
+                class="btn-approve"
+                (click)="approvePayment(payment.paymentId)"
+                [disabled]="approving() === payment.paymentId"
+              >
+                <app-icon
+                  *ngIf="approving() !== payment.paymentId"
+                  [icon]="LucideCheckCircle"
+                  [size]="16"
+                ></app-icon>
+                {{
+                  approving() === payment.paymentId ? 'Approving...' : 'Approve'
+                }}
+              </button>
+              <button
+                type="button"
+                class="btn-reject"
+                (click)="openRejectDialog(payment.paymentId)"
+              >
+                <app-icon [icon]="LucideXCircle" [size]="16"></app-icon>
+                Reject
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- All Payments Filter -->
   <div class="filter-bar">
     <app-filter-group
       [filters]="filterOptions"
@@ -143,4 +225,40 @@
       </div>
     }
   </section>
+
+  <!-- Reject Dialog Overlay -->
+  @if (paymentToReject()) {
+    <div class="reject-overlay" (click)="closeRejectDialog()">
+      <div class="reject-dialog" (click)="$event.stopPropagation()">
+        <h3>Reject Payment</h3>
+        <p>Enter a reason for rejecting this payment (optional):</p>
+        <textarea
+          [(ngModel)]="rejectReason"
+          placeholder="e.g., Amount doesn't match receipt"
+          rows="3"
+        ></textarea>
+        <div class="reject-dialog-actions">
+          <button
+            type="button"
+            class="btn-cancel"
+            (click)="closeRejectDialog()"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn-confirm-reject"
+            (click)="rejectPayment()"
+            [disabled]="rejecting() === paymentToReject()"
+          >
+            {{
+              rejecting() === paymentToReject()
+                ? 'Rejecting...'
+                : 'Confirm Reject'
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </div>

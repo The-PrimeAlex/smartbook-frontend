@@ -56,6 +56,16 @@ export interface AdminPaymentRecord {
   userName: string;
 }
 
+export interface AdminPaymentResponse {
+  paymentId: string;
+  amount: number;
+  currency: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  transactionReference: string;
+  paidAt: string | null;
+}
+
 export interface AdminUsageRecord {
   usageId: string;
   roomName: string;
@@ -87,5 +97,26 @@ export class AdminBillingService {
 
   getAllUsage(): Observable<AdminUsageRecord[]> {
     return this.http.get<AdminUsageRecord[]>(`${this.baseUrl}/usage`);
+  }
+
+  getPendingPayments(): Observable<AdminPaymentRecord[]> {
+    return this.http.get<AdminPaymentRecord[]>(`${this.baseUrl}/payments/pending`);
+  }
+
+  approvePayment(paymentId: string): Observable<AdminPaymentResponse> {
+    return this.http.post<AdminPaymentResponse>(
+      `${this.baseUrl}/payments/${paymentId}/approve`,
+      {},
+    );
+  }
+
+  rejectPayment(
+    paymentId: string,
+    reason?: string,
+  ): Observable<AdminPaymentResponse> {
+    return this.http.post<AdminPaymentResponse>(
+      `${this.baseUrl}/payments/${paymentId}/reject`,
+      { reason },
+    );
   }
 }
