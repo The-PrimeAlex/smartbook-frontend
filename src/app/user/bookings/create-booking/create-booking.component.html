@@ -262,12 +262,6 @@
         </div>
       }
 
-      @if (errorMessage) {
-        <div class="form-alert error-alert" role="alert">
-          <app-icon [icon]="LucideXCircle" [size]="16"></app-icon>
-          <span>{{ errorMessage }}</span>
-        </div>
-      }
 
       <!-- Form Actions -->
       <div class="form-actions">
@@ -283,7 +277,7 @@
             rooms.length === 0 ||
             startDateAfterEndDate ||
             invalidDateRange ||
-            (startIsInPast && !conflictMessage)
+            startIsInPast
           "
         >
           @if (saving) {
@@ -566,6 +560,43 @@
             (click)="closeConflictModal()"
           >
             Got it
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Error Modal -->
+  @if (showErrorModal) {
+    <div class="error-modal-overlay" (click)="closeErrorModal()">
+      <div class="error-modal" (click)="$event.stopPropagation()">
+        <div class="error-modal-header">
+          <div class="error-modal-icon">
+            <app-icon [icon]="LucideXCircle" [size]="28"></app-icon>
+          </div>
+          <div class="error-modal-title-block">
+            <h3>{{ errorModalTitle }}</h3>
+          </div>
+          <button
+            type="button"
+            class="error-modal-close"
+            (click)="closeErrorModal()"
+          >
+            <app-icon [icon]="LucideX" [size]="20"></app-icon>
+          </button>
+        </div>
+
+        <div class="error-modal-body">
+          <p>{{ errorModalMessage }}</p>
+        </div>
+
+        <div class="error-modal-footer">
+          <button
+            type="button"
+            class="error-modal-action"
+            (click)="closeErrorModal()"
+          >
+            OK
           </button>
         </div>
       </div>

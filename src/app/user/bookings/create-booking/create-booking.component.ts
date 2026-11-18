@@ -123,6 +123,11 @@ export class CreateBookingComponent implements OnInit {
   conflictAvailableFrom = '';
   conflictOverrunMinutes: number | null = null;
 
+  // Error modal state
+  showErrorModal = false;
+  errorModalMessage = '';
+  errorModalTitle = 'Booking Error';
+
   ngOnInit(): void {
     this.loadRooms();
     this.loadBookingRules();
@@ -457,16 +462,22 @@ export class CreateBookingComponent implements OnInit {
             const body = error?.error;
             const message =
               (typeof body === 'string' ? body : (body?.message ?? '')) || '';
-            this.errorMessage =
+            this.showErrorModal = true;
+            this.errorModalTitle = 'Booking Error';
+            this.errorModalMessage =
               message || 'Please check your booking details and try again.';
+            this.cdr.detectChanges();
             return;
           }
 
           if (error?.status === 401) {
             // Token expired or invalid — the auth interceptor will handle the redirect
             this.clearMessages();
-            this.errorMessage =
+            this.showErrorModal = true;
+            this.errorModalTitle = 'Session Expired';
+            this.errorModalMessage =
               'Your session has expired. Please log in again.';
+            this.cdr.detectChanges();
             return;
           }
 
@@ -518,24 +529,35 @@ export class CreateBookingComponent implements OnInit {
               (body as Record<string, string>)['error'] ===
                 'password_change_required'
             ) {
-              this.errorMessage =
-                'You need to change your password before making bookings. Redirecting...';
+              this.showErrorModal = true;
+              this.errorModalTitle = 'Password Change Required';
+              this.errorModalMessage =
+                'You need to change your password before making bookings.';
             } else {
-              this.errorMessage =
+              this.showErrorModal = true;
+              this.errorModalTitle = 'Request Blocked';
+              this.errorModalMessage =
                 'Request blocked due to a security check. Please refresh the page and try again.';
             }
+            this.cdr.detectChanges();
           } else if (error?.status === 0) {
             this.clearMessages();
-            this.errorMessage =
+            this.showErrorModal = true;
+            this.errorModalTitle = 'Connection Error';
+            this.errorModalMessage =
               'Cannot reach the server. Make sure the backend is running.';
+            this.cdr.detectChanges();
           } else {
             this.clearMessages();
             const body = error?.error;
             const message =
               (typeof body === 'string' ? body : (body?.message ?? '')) || '';
-            this.errorMessage =
+            this.showErrorModal = true;
+            this.errorModalTitle = 'Booking Error';
+            this.errorModalMessage =
               message ||
               "We couldn't create your booking. Please try again in a moment.";
+            this.cdr.detectChanges();
           }
         },
       });
@@ -549,9 +571,17 @@ export class CreateBookingComponent implements OnInit {
     this.showConflictModal = false;
   }
 
+  closeErrorModal(): void {
+    this.showErrorModal = false;
+    this.errorModalMessage = '';
+  }
+
   @HostListener('window:keydown.escape', ['$event'])
   onEscapeKey(event: Event): void {
-    if (this.showConflictModal) {
+    if (this.showErrorModal) {
+      event.stopPropagation();
+      this.closeErrorModal();
+    } else if (this.showConflictModal) {
       event.stopPropagation();
       this.closeConflictModal();
     }
