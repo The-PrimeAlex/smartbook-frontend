@@ -35,14 +35,16 @@ export class TimePickerComponent implements OnInit, OnDestroy {
 
   // Custom dropdown state
   dropdownOpen = false;
-  hours: number[] = [];
+  hours12: number[] = [];
   minutes: number[] = [];
   selectedHour: number | null = null;
   selectedMinute: number | null = null;
+  selectedAmPm: 'AM' | 'PM' | null = null;
 
   // Snapshot of the value before opening the dropdown, for Escape/cancel restore
   private pendingHour: number | null = null;
   private pendingMinute: number | null = null;
+  private pendingAmPm: 'AM' | 'PM' | null = null;
 
   // Typable input state
   inputBuffer = '';
@@ -55,9 +57,9 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Build hour list (0-23)
-    for (let h = 0; h < 24; h++) {
-      this.hours.push(h);
+    // Build hour list (1-12)
+    for (let h = 1; h <= 12; h++) {
+      this.hours12.push(h);
     }
     // Build minute list — every minute (0-59)
     for (let m = 0; m < 60; m++) {
@@ -97,9 +99,10 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   };
 
   private restorePending(): void {
-    if (this.pendingHour !== null && this.pendingMinute !== null) {
+    if (this.pendingHour !== null && this.pendingMinute !== null && this.pendingAmPm !== null) {
       this.selectedHour = this.pendingHour;
       this.selectedMinute = this.pendingMinute;
+      this.selectedAmPm = this.pendingAmPm;
       this.inputBuffer = '';
       this.isTyping = false;
     }
@@ -112,23 +115,37 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       // Save current value so we can restore on Escape/cancel
       this.pendingHour = this.selectedHour;
       this.pendingMinute = this.selectedMinute;
+      this.pendingAmPm = this.selectedAmPm;
       this.cdr.detectChanges();
     }
   }
 
   selectHour(hour: number): void {
     this.selectedHour = hour;
-    // Don't auto-close, let user pick minute too
+    this.tryUpdateValue();
+  }
+
+  selectAmPm(ampm: 'AM' | 'PM'): void {
+    this.selectedAmPm = ampm;
+    this.tryUpdateValue();
   }
 
   selectMinute(minute: number): void {
     this.selectedMinute = minute;
-    this.updateValue();
+    this.tryUpdateValue();
   }
 
-  private updateValue(): void {
-    if (this.selectedHour !== null && this.selectedMinute !== null) {
-      const h = String(this.selectedHour).padStart(2, '0');
+  private tryUpdateValue(): void {
+    if (this.selectedHour !== null && this.selectedMinute !== null && this.selectedAmPm !== null) {
+      // Convert 12-hour to 24-hour
+      let hour24 = this.selectedHour;
+      if (this.selectedAmPm === 'PM' && hour24 !== 12) {
+        hour24 += 12;
+      }
+      if (this.selectedAmPm === 'AM' && hour24 === 12) {
+        hour24 = 0;
+      }
+      const h = String(hour24).padStart(2, '0');
       const m = String(this.selectedMinute).padStart(2, '0');
       this._value = `${h}:${m}`;
       this.inputBuffer = '';
@@ -142,8 +159,25 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   private parseTime(value: string): void {
     const parts = value.split(':');
     if (parts.length === 2) {
-      this.selectedHour = parseInt(parts[0], 10);
-      this.selectedMinute = parseInt(parts[1], 10);
+      const hour24 = parseInt(parts[0], 10);
+      const minute = parseInt(parts[1], 10);
+      if (!isNaN(hour24) && !isNaN(minute)) {
+        this.selectedMinute = minute;
+        // Convert 24-hour to 12-hour
+        if (hour24 === 0) {
+          this.selectedHour = 12;
+          this.selectedAmPm = 'AM';
+        } else if (hour24 < 12) {
+          this.selectedHour = hour24;
+          this.selectedAmPm = 'AM';
+        } else if (hour24 === 12) {
+          this.selectedHour = 12;
+          this.selectedAmPm = 'PM';
+        } else {
+          this.selectedHour = hour24 - 12;
+          this.selectedAmPm = 'PM';
+        }
+      }
     }
   }
 
@@ -152,17 +186,15 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     if (this.isTyping && this.inputBuffer) {
       return this.inputBuffer;
     }
-    if (this.selectedHour !== null && this.selectedMinute !== null) {
-      const h12 = this.selectedHour % 12 || 12;
-      const ampm = this.selectedHour < 12 ? 'AM' : 'PM';
+    if (this.selectedHour !== null && this.selectedMinute !== null && this.selectedAmPm !== null) {
       const m = String(this.selectedMinute).padStart(2, '0');
-      return `${h12}:${m} ${ampm}`;
+      return `${this.selectedHour}:${m} ${this.selectedAmPm}`;
     }
     return this.placeholder;
   }
 
   get isValueSet(): boolean {
-    return this.selectedHour !== null && this.selectedMinute !== null;
+    return this.selectedHour !== null && this.selectedMinute !== null && this.selectedAmPm !== null;
   }
 
   // Handle direct typing in the input
@@ -187,7 +219,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Parse typed input: supports "14:30", "2:30", "1430", "230"
+  // Parse typed input: supports "14:30", "2:30", "2:30 PM", "2:30PM", "1430", "230"
   private tryParseTypedTime(
     input: string,
   ): { hour: number; minute: number } | null {
@@ -195,18 +227,32 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     const cleaned = input.trim();
     if (!cleaned) return null;
 
+    // Check for AM/PM suffix
+    const upper = cleaned.toUpperCase();
+    let isPm = false;
+    let isAm = false;
+    let timePart = cleaned;
+
+    if (upper.includes('PM')) {
+      isPm = true;
+      timePart = cleaned.replace(/PM/i, '').trim();
+    } else if (upper.includes('AM')) {
+      isAm = true;
+      timePart = cleaned.replace(/AM/i, '').trim();
+    }
+
     let hour: number;
     let minute: number;
 
-    if (cleaned.includes(':')) {
+    if (timePart.includes(':')) {
       // Format: "H:MM" or "HH:MM"
-      const parts = cleaned.split(':');
+      const parts = timePart.split(':');
       if (parts.length !== 2) return null;
       hour = parseInt(parts[0], 10);
       minute = parseInt(parts[1], 10);
     } else {
       // Format: "HHMM" or "HMM"
-      const digits = cleaned.replace(/\D/g, '');
+      const digits = timePart.replace(/\D/g, '');
       if (digits.length < 2 || digits.length > 4) return null;
       if (digits.length === 2) {
         hour = parseInt(digits, 10);
@@ -222,18 +268,31 @@ export class TimePickerComponent implements OnInit, OnDestroy {
 
     // Validate
     if (isNaN(hour) || isNaN(minute)) return null;
-    if (hour < 0 || hour > 23) return null;
     if (minute < 0 || minute > 59) return null;
+
+    // If AM/PM was specified, treat as 12-hour format
+    if (isAm || isPm) {
+      if (hour < 1 || hour > 12) return null;
+      // Convert 12-hour to 24-hour
+      if (isPm && hour !== 12) {
+        hour += 12;
+      }
+      if (isAm && hour === 12) {
+        hour = 0;
+      }
+    } else {
+      // No AM/PM — treat as 24-hour format
+      if (hour < 0 || hour > 23) return null;
+    }
 
     return { hour, minute };
   }
 
   onInputFocus(): void {
     if (this.isValueSet && !this.isTyping) {
-      // Show 24-hour format when focusing for easy editing
-      const h = String(this.selectedHour!).padStart(2, '0');
+      // Show 12-hour format when focusing for easy editing
       const m = String(this.selectedMinute!).padStart(2, '0');
-      this.inputBuffer = `${h}:${m}`;
+      this.inputBuffer = `${this.selectedHour}:${m} ${this.selectedAmPm}`;
       this.isTyping = true;
     }
   }
@@ -244,8 +303,21 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       if (this.inputBuffer) {
         const parsed = this.tryParseTypedTime(this.inputBuffer);
         if (parsed) {
-          this.selectedHour = parsed.hour;
           this.selectedMinute = parsed.minute;
+          // Convert 24-hour to 12-hour + AM/PM
+          if (parsed.hour === 0) {
+            this.selectedHour = 12;
+            this.selectedAmPm = 'AM';
+          } else if (parsed.hour < 12) {
+            this.selectedHour = parsed.hour;
+            this.selectedAmPm = 'AM';
+          } else if (parsed.hour === 12) {
+            this.selectedHour = 12;
+            this.selectedAmPm = 'PM';
+          } else {
+            this.selectedHour = parsed.hour - 12;
+            this.selectedAmPm = 'PM';
+          }
           const h = String(parsed.hour).padStart(2, '0');
           const m = String(parsed.minute).padStart(2, '0');
           this._value = `${h}:${m}`;
@@ -253,7 +325,11 @@ export class TimePickerComponent implements OnInit, OnDestroy {
         } else {
           // Revert to previous valid value
           if (this.isValueSet) {
-            const h = String(this.selectedHour!).padStart(2, '0');
+            // Recalculate 24-hour value
+            let hour24 = this.selectedHour!;
+            if (this.selectedAmPm === 'PM' && hour24 !== 12) hour24 += 12;
+            if (this.selectedAmPm === 'AM' && hour24 === 12) hour24 = 0;
+            const h = String(hour24).padStart(2, '0');
             const m = String(this.selectedMinute!).padStart(2, '0');
             this.inputBuffer = '';
             this._value = `${h}:${m}`;
@@ -276,6 +352,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     } else {
       this.selectedHour = null;
       this.selectedMinute = null;
+      this.selectedAmPm = null;
     }
   }
 

@@ -60,12 +60,32 @@
           <button
             type="button"
             class="time-option"
-            *ngFor="let h of hours"
+            *ngFor="let h of hours12"
             [class.selected]="selectedHour === h"
             (click)="selectHour(h)"
           >
-            {{ h % 12 || 12 }}
-            {{ h < 12 ? 'AM' : 'PM' }}
+            {{ h }}
+          </button>
+        </div>
+      </div>
+      <div class="time-column time-column-ampm">
+        <div class="time-column-label">Period</div>
+        <div class="time-scroll">
+          <button
+            type="button"
+            class="time-option ampm-option"
+            [class.selected]="selectedAmPm === 'AM'"
+            (click)="selectAmPm('AM')"
+          >
+            AM
+          </button>
+          <button
+            type="button"
+            class="time-option ampm-option"
+            [class.selected]="selectedAmPm === 'PM'"
+            (click)="selectAmPm('PM')"
+          >
+            PM
           </button>
         </div>
       </div>
