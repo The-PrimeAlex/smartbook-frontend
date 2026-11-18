@@ -50,8 +50,8 @@ export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
   inputBuffer = '';
   isTyping = false;
 
-  // Flag to prevent onInputBlur from overwriting a value just committed from the dropdown
-  private committedFromDropdown = false;
+  // Flag to prevent onInputBlur from overwriting a value selected via dropdown
+  private selectedFromDropdown = false;
 
   // Direct reference to the native input element
   private nativeInput: HTMLInputElement | null = null;
@@ -135,11 +135,13 @@ export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   selectHour(hour: number): void {
     this.selectedHour = hour;
+    this.selectedFromDropdown = true;
     this.setInputDisplayValue();
   }
 
   selectAmPm(ampm: 'AM' | 'PM'): void {
     this.selectedAmPm = ampm;
+    this.selectedFromDropdown = true;
     this.setInputDisplayValue();
   }
 
@@ -179,9 +181,7 @@ export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
       const h = String(hour24).padStart(2, '0');
       const m = String(this.selectedMinute).padStart(2, '0');
       this._value = `${h}:${m}`;
-      this.inputBuffer = '';
-      this.isTyping = false;
-      this.committedFromDropdown = true;
+      this.selectedFromDropdown = true;
       this.onChangeCallback(this._value);
       this.dropdownOpen = false;
       this.cdr.detectChanges();
@@ -329,9 +329,9 @@ export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onInputBlur(): void {
     setTimeout(() => {
-      // If a value was just committed from the dropdown, don't overwrite it
-      if (this.committedFromDropdown) {
-        this.committedFromDropdown = false;
+      // If a value was just selected from the dropdown, don't overwrite it
+      if (this.selectedFromDropdown) {
+        this.selectedFromDropdown = false;
         this.inputBuffer = '';
         this.isTyping = false;
         this.setInputDisplayValue();
