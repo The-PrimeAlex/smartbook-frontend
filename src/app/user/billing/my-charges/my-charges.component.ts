@@ -130,10 +130,21 @@ export class MyChargesComponent implements OnInit, OnDestroy {
     this.loading.set(true);
     this.billingService.getMyBills().subscribe({
       next: (bills) => {
-        this.bills.set(bills);
+        // Defensively handle null totalAmount on any bill
+        const safeBills = bills.map((b) => ({
+          ...b,
+          totalAmount: b.totalAmount ?? 0,
+          amountPaid: b.amountPaid ?? 0,
+        }));
+        this.bills.set(safeBills);
         this.loading.set(false);
       },
       error: (err) => {
+        // If the user was logged out (401), redirect to login
+        if (err.status === 401) {
+          this.router.navigate(['/login'], { replaceUrl: true });
+          return;
+        }
         this.error.set(
           "We couldn't load your charges. Please try again in a moment.",
         );
@@ -145,7 +156,8 @@ export class MyChargesComponent implements OnInit, OnDestroy {
 
   openPayment(bill: Bill): void {
     this.selectedBill.set(bill);
-    this.paymentAmount.set(bill.totalAmount - bill.amountPaid);
+    const outstanding = (bill.totalAmount ?? 0) - (bill.amountPaid ?? 0);
+    this.paymentAmount.set(outstanding > 0 ? outstanding : 0);
     this.transactionReference.set('');
     this.paymentSuccess.set(false);
     this.paymentError.set(null);
@@ -179,7 +191,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
     if (!bill) return;
 
     const amount = this.paymentAmount();
-    const outstanding = bill.totalAmount - bill.amountPaid;
+    const outstanding = (bill.totalAmount ?? 0) - (bill.amountPaid ?? 0);
 
     // Validate amount
     if (amount <= 0) {
@@ -224,13 +236,13 @@ export class MyChargesComponent implements OnInit, OnDestroy {
 
   get totalOutstanding(): number {
     return this.bills().reduce(
-      (sum, b) => sum + (b.totalAmount - b.amountPaid),
+      (sum, b) => sum + ((b.totalAmount ?? 0) - (b.amountPaid ?? 0)),
       0,
     );
   }
 
   get totalPaid(): number {
-    return this.bills().reduce((sum, b) => sum + b.amountPaid, 0);
+    return this.bills().reduce((sum, b) => sum + (b.amountPaid ?? 0), 0);
   }
 
   get unpaidCount(): number {
