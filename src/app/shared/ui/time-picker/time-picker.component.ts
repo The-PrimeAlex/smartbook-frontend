@@ -149,6 +149,9 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     this.isTyping = false;
     this.displayText = this.displayValue;
     this.cdr.detectChanges();
+    // Force the native input to show the updated 12-hour display value
+    // Angular [value] binding does not update the native input after user interaction
+    setTimeout(() => this.forceInputValue(), 0);
   }
 
   private forceInputValue(): void {
