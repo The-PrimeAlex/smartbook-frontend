@@ -261,18 +261,20 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   }
 
   private pollCount = 0;
-  readonly maxPollCount = 24; // 24 polls * 5s = 120 seconds (2 minutes) max
+  readonly maxPollCount = 12; // 12 polls * 5s = 60 seconds max
+  paymentTimedOut = false;
 
   startPolling(): void {
     this.pollCount = 0;
     this.pollingSeconds.set(0);
+    this.paymentTimedOut = false;
     // Check status immediately after STK push, then poll every 5 seconds
     const checkoutId = this.mpesaCheckoutRequestId();
     if (checkoutId) {
       this.checkPaymentStatus(checkoutId);
     }
 
-    // Poll every 5 seconds for up to 2 minutes (24 polls max)
+    // Poll every 5 seconds for up to 60 seconds (12 polls max)
     this.pollSubscription = interval(5000).subscribe({
       next: () => {
         this.pollCount++;
@@ -284,13 +286,37 @@ export class MyChargesComponent implements OnInit, OnDestroy {
         if (this.pollCount >= this.maxPollCount) {
           this.stopPolling();
           this.paymentWaiting.set(false);
+          this.paymentTimedOut = true;
           this.paymentError.set(
-            'Payment confirmation timed out after 2 minutes. Check your M-Pesa SIM toolkit. If payment was successful, it will be reflected in your charges.',
+            'Waiting for M-Pesa confirmation timed out. In sandbox mode, M-Pesa does not send callbacks to public servers. If you completed the payment on your phone, click "I\'ve Paid" to confirm manually.',
           );
           return;
         }
 
         this.checkPaymentStatus(currentCheckoutId);
+      },
+    });
+  }
+
+  // Manually confirm payment — used when M-Pesa sandbox callbacks don't reach the backend
+  confirmPaymentManually(): void {
+    const checkoutId = this.mpesaCheckoutRequestId();
+    if (!checkoutId) return;
+
+    this.paymentWaiting.set(true);
+    this.paymentError.set(null);
+    this.billingService.confirmMpesaPayment(checkoutId).subscribe({
+      next: () => {
+        this.paymentWaiting.set(false);
+        this.paymentTimedOut = false;
+        this.paymentSuccess.set(true);
+        this.mpesaCheckoutRequestId.set(null);
+        this.loadBills();
+      },
+      error: (err) => {
+        this.paymentWaiting.set(false);
+        const serverMsg = err.error?.error || err.error?.message;
+        this.paymentError.set(serverMsg || 'Failed to confirm payment. Please try again.');
       },
     });
   }

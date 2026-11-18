@@ -48,4 +48,20 @@ export class BillingService {
       },
     );
   }
+
+  // Manually confirm M-Pesa payment — used when sandbox callbacks don't reach the backend
+  confirmMpesaPayment(
+    checkoutRequestId: string,
+  ): Observable<{ message: string; paymentId: string }> {
+    return this.authService
+      .ensureCsrfToken()
+      .pipe(
+        switchMap(() =>
+          this.http.post<{ message: string; paymentId: string }>(
+            `${this.baseUrl}/payments/mpesa/confirm/${checkoutRequestId}`,
+            {},
+          ),
+        ),
+      );
+  }
 }

@@ -907,6 +907,48 @@
   font-size: 0.75rem;
 }
 
+/* Manual confirm box for sandbox mode */
+.manual-confirm-box {
+  background: var(--warning-bg, #fff7ed);
+  border: 1px solid var(--warning-border, #fed7aa);
+  border-radius: var(--radius-md, 0.5rem);
+  padding: 1rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.manual-confirm-box p {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary, #1f2937);
+}
+
+.manual-confirm-box .manual-confirm-hint {
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 1rem;
+}
+
+.manual-confirm-btn {
+  background: var(--brand, #2563eb);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md, 0.5rem);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.manual-confirm-btn:hover:not(:disabled) {
+  background: var(--brand-hover, #1d4ed8);
+}
+
+.manual-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Required field indicator */
 .form-group .required {
   color: var(--danger, #ef4444);

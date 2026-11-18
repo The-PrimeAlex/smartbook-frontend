@@ -215,7 +215,7 @@
             </p>
           </div>
           <p class="waiting-hint">
-            This may take up to 2 minutes. We'll automatically detect when your payment is confirmed.
+            Checking for M-Pesa confirmation... This may take up to 60 seconds.
           </p>
           <button class="cancel-waiting-btn" (click)="cancelWaiting()">
             Cancel & Close
@@ -343,6 +343,28 @@
             <div class="error-message">
               {{ paymentError() }}
             </div>
+            @if (paymentTimedOut) {
+              <div class="manual-confirm-box">
+                <p>
+                  <strong>Did you complete the payment on your phone?</strong>
+                </p>
+                <p class="manual-confirm-hint">
+                  In sandbox mode, M-Pesa doesn't send automatic confirmations.
+                  Click below to confirm your payment manually.
+                </p>
+                <button
+                  class="manual-confirm-btn"
+                  (click)="confirmPaymentManually()"
+                  [disabled]="paymentWaiting()"
+                >
+                  @if (paymentWaiting()) {
+                    Confirming...
+                  } @else {
+                    I've Paid – Confirm Manually
+                  }
+                </button>
+              </div>
+            }
           }
           <div class="form-actions">
             <button
