@@ -181,7 +181,7 @@ export class CreateBookingComponent implements OnInit {
   }
 
   get bufferMinutes(): number {
-    return parseInt(this.getSettingValue('room.buffer_minutes')) || 15;
+    return parseInt(this.getSettingValue('booking.cleaning_time_minutes')) || 15;
   }
 
   get cancelHoursBeforeFree(): number {
@@ -562,7 +562,7 @@ export class CreateBookingComponent implements OnInit {
       case 'OVERLAP':
         return 'Room Already Booked';
       case 'BUFFER':
-        return 'Buffer Time Required';
+        return 'Cleaning Time Required';
       case 'OVERRUN':
         return 'Room in Overrun Threshold';
       default:
@@ -575,7 +575,7 @@ export class CreateBookingComponent implements OnInit {
       case 'OVERLAP':
         return 'This room has an overlapping booking during your requested time.';
       case 'BUFFER':
-        return 'A minimum gap is required between bookings for room cleanup.';
+        return 'A minimum gap is required between bookings for room cleaning.';
       case 'OVERRUN':
         return 'This room is currently booked and needs overrun threshold time before the next booking.';
       default:

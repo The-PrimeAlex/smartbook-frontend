@@ -118,6 +118,7 @@ export class BookingRulesComponent implements OnInit {
       'booking.max_duration_hours': 'duration',
       'booking.advance_days': 'scheduling',
       'booking.auto_checkin': 'scheduling',
+      'booking.cleaning_time_minutes': 'scheduling',
       'booking.auto_checkout_overrun_minutes': 'scheduling',
       'booking.noshow_minutes': 'policy',
       'booking.require_approval': 'policy',
