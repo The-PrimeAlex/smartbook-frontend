@@ -123,7 +123,7 @@ export class BookingRulesComponent implements OnInit {
       'booking.noshow_minutes': 'policy',
       'booking.require_approval': 'policy',
       'booking.allow_overlap': 'policy',
-      'booking.auto_approve_payments': 'policy',
+      'booking.require_payment_approval': 'policy',
     };
     this.settings().forEach((s) => {
       const group = groupMap[s.key] || 'other';
