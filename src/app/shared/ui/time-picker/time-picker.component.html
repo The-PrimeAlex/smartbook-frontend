@@ -6,10 +6,8 @@
   <!-- Typable input with trigger -->
   <div class="time-input-wrap">
     <input
-      #timeInput
       type="text"
       class="time-input login-form-input"
-      [value]="displayText"
       [placeholder]="placeholder"
       [disabled]="disabled"
       (input)="onInputChange($event)"
@@ -106,7 +104,7 @@
       </div>
     </div>
     <div class="time-dropdown-footer" *ngIf="selectedHour !== null && selectedAmPm !== null">
-      <span class="time-preview">{{ displayValue }}</span>
+      <span class="time-preview">{{ selectedHour }}:{{ selectedMinute !== null ? (selectedMinute | number: '2.0') : '--' }} {{ selectedAmPm }}</span>
     </div>
   </div>
 </div>

@@ -7,7 +7,7 @@ import {
   ElementRef,
   Renderer2,
   ChangeDetectorRef,
-  ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -26,15 +26,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
 })
-export class TimePickerComponent implements OnInit, OnDestroy {
+export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() placeholder: string = 'Select time';
   @Input() disabled: boolean = false;
   @Input() step: string = '60';
 
   private _value: string = '';
-  
-  // Track the display string to force input re-render
-  displayText: string = '';
 
   // Custom dropdown state
   dropdownOpen = false;
@@ -53,7 +50,8 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   inputBuffer = '';
   isTyping = false;
 
-  @ViewChild('timeInput', { static: true }) timeInputRef: ElementRef<HTMLInputElement> | undefined;
+  // Direct reference to the native input element
+  private nativeInput: HTMLInputElement | null = null;
 
   constructor(
     private el: ElementRef,
@@ -75,12 +73,17 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     if (this._value) {
       this.parseTime(this._value);
     }
-    this.displayText = this.displayValue;
 
     // Click outside to close dropdown
     document.addEventListener('click', this.onClickOutside);
     // Escape key to close dropdown
     document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  ngAfterViewInit() {
+    // Get direct reference to the native input element
+    this.nativeInput = this.el.nativeElement.querySelector('input.time-input');
+    this.setInputDisplayValue();
   }
 
   ngOnDestroy() {
@@ -111,9 +114,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.selectedAmPm = this.pendingAmPm;
       this.inputBuffer = '';
       this.isTyping = false;
-      this.displayText = this.displayValue;
-      this.cdr.detectChanges();
-      this.forceInputValue();
+      this.setInputDisplayValue();
     }
   }
 
@@ -131,36 +132,38 @@ export class TimePickerComponent implements OnInit, OnDestroy {
 
   selectHour(hour: number): void {
     this.selectedHour = hour;
-    this.updateDisplay();
+    this.setInputDisplayValue();
   }
 
   selectAmPm(ampm: 'AM' | 'PM'): void {
     this.selectedAmPm = ampm;
-    this.updateDisplay();
+    this.setInputDisplayValue();
   }
 
   selectMinute(minute: number): void {
     this.selectedMinute = minute;
-    this.updateValueAndClose();
+    this.commitAndClose();
   }
 
-  private updateDisplay(): void {
-    this.inputBuffer = '';
-    this.isTyping = false;
-    this.displayText = this.displayValue;
-    this.cdr.detectChanges();
-    // Force the native input to show the updated 12-hour display value
-    // Angular [value] binding does not update the native input after user interaction
-    setTimeout(() => this.forceInputValue(), 0);
-  }
-
-  private forceInputValue(): void {
-    if (this.timeInputRef) {
-      this.timeInputRef.nativeElement.value = this.displayText;
+  // Directly set the native input value, bypassing Angular's [value] binding
+  private setInputDisplayValue(): void {
+    if (this.nativeInput) {
+      this.nativeInput.value = this.getDisplayString();
     }
   }
 
-  private updateValueAndClose(): void {
+  private getDisplayString(): string {
+    if (this.isTyping && this.inputBuffer) {
+      return this.inputBuffer;
+    }
+    if (this.selectedHour !== null && this.selectedAmPm !== null) {
+      const m = this.selectedMinute !== null ? String(this.selectedMinute).padStart(2, '0') : '--';
+      return `${this.selectedHour}:${m} ${this.selectedAmPm}`;
+    }
+    return '';
+  }
+
+  private commitAndClose(): void {
     if (this.selectedHour !== null && this.selectedMinute !== null && this.selectedAmPm !== null) {
       // Convert 12-hour to 24-hour
       let hour24 = this.selectedHour;
@@ -175,12 +178,11 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this._value = `${h}:${m}`;
       this.inputBuffer = '';
       this.isTyping = false;
-      this.displayText = this.displayValue;
       this.onChangeCallback(this._value);
       this.dropdownOpen = false;
       this.cdr.detectChanges();
-      // Force the native input to show the 12-hour display value after dropdown closes
-      setTimeout(() => this.forceInputValue(), 0);
+      // Set the display value after dropdown closes
+      setTimeout(() => this.setInputDisplayValue(), 0);
     }
   }
 
@@ -207,18 +209,6 @@ export class TimePickerComponent implements OnInit, OnDestroy {
         }
       }
     }
-  }
-
-  get displayValue(): string {
-    // If user is typing, show the buffer
-    if (this.isTyping && this.inputBuffer) {
-      return this.inputBuffer;
-    }
-    if (this.selectedHour !== null && this.selectedAmPm !== null) {
-      const m = this.selectedMinute !== null ? String(this.selectedMinute).padStart(2, '0') : '--';
-      return `${this.selectedHour}:${m} ${this.selectedAmPm}`;
-    }
-    return this.placeholder;
   }
 
   get isValueSet(): boolean {
@@ -264,11 +254,9 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   private tryParseTypedTime(
     input: string,
   ): { hour: number; minute: number } | null {
-    // Remove any whitespace
     const cleaned = input.trim();
     if (!cleaned) return null;
 
-    // Check for AM/PM suffix
     const upper = cleaned.toUpperCase();
     let isPm = false;
     let isAm = false;
@@ -286,13 +274,11 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     let minute: number;
 
     if (timePart.includes(':')) {
-      // Format: "H:MM" or "HH:MM"
       const parts = timePart.split(':');
       if (parts.length !== 2) return null;
       hour = parseInt(parts[0], 10);
       minute = parseInt(parts[1], 10);
     } else {
-      // Format: "HHMM" or "HMM"
       const digits = timePart.replace(/\D/g, '');
       if (digits.length < 2 || digits.length > 4) return null;
       if (digits.length === 2) {
@@ -307,14 +293,11 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Validate
     if (isNaN(hour) || isNaN(minute)) return null;
     if (minute < 0 || minute > 59) return null;
 
-    // If AM/PM was specified, treat as 12-hour format
     if (isAm || isPm) {
       if (hour < 1 || hour > 12) return null;
-      // Convert 12-hour to 24-hour
       if (isPm && hour !== 12) {
         hour += 12;
       }
@@ -322,7 +305,6 @@ export class TimePickerComponent implements OnInit, OnDestroy {
         hour = 0;
       }
     } else {
-      // No AM/PM — treat as 24-hour format
       if (hour < 0 || hour > 23) return null;
     }
 
@@ -331,21 +313,22 @@ export class TimePickerComponent implements OnInit, OnDestroy {
 
   onInputFocus(): void {
     if (this.isValueSet && !this.isTyping) {
-      // Show 12-hour format when focusing for easy editing
       const m = String(this.selectedMinute!).padStart(2, '0');
       this.inputBuffer = `${this.selectedHour}:${m} ${this.selectedAmPm}`;
       this.isTyping = true;
+      // Update the input to show the 12-hour format for editing
+      if (this.nativeInput) {
+        this.nativeInput.value = this.inputBuffer;
+      }
     }
   }
 
   onInputBlur(): void {
-    // After a short delay, check if the value is valid
     setTimeout(() => {
       if (this.inputBuffer) {
         const parsed = this.tryParseTypedTime(this.inputBuffer);
         if (parsed) {
           this.selectedMinute = parsed.minute;
-          // Convert 24-hour to 12-hour + AM/PM
           if (parsed.hour === 0) {
             this.selectedHour = 12;
             this.selectedAmPm = 'AM';
@@ -364,9 +347,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
           this._value = `${h}:${m}`;
           this.onChangeCallback(this._value);
         } else {
-          // Revert to previous valid value
           if (this.isValueSet) {
-            // Recalculate 24-hour value
             let hour24 = this.selectedHour!;
             if (this.selectedAmPm === 'PM' && hour24 !== 12) hour24 += 12;
             if (this.selectedAmPm === 'AM' && hour24 === 12) hour24 = 0;
@@ -382,15 +363,11 @@ export class TimePickerComponent implements OnInit, OnDestroy {
         }
       }
       this.isTyping = false;
-      this.displayText = this.isValueSet ? this.displayValue : '';
-      this.cdr.detectChanges();
-      this.forceInputValue();
+      this.setInputDisplayValue();
     }, 150);
   }
 
   writeValue(value: string): void {
-    // Skip if the value hasn't actually changed — prevents Angular's form binding
-    // from resetting displayText after updateValueAndClose() already set it correctly
     if (value === this._value) return;
     this._value = value || '';
     if (value) {
@@ -400,8 +377,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.selectedMinute = null;
       this.selectedAmPm = null;
     }
-    this.displayText = this.isValueSet ? this.displayValue : '';
-    setTimeout(() => this.forceInputValue(), 0);
+    setTimeout(() => this.setInputDisplayValue(), 0);
   }
 
   registerOnChange(fn: any): void {
