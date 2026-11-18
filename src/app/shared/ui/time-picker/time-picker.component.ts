@@ -389,6 +389,9 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   }
 
   writeValue(value: string): void {
+    // Skip if the value hasn't actually changed — prevents Angular's form binding
+    // from resetting displayText after updateValueAndClose() already set it correctly
+    if (value === this._value) return;
     this._value = value || '';
     if (value) {
       this.parseTime(value);
