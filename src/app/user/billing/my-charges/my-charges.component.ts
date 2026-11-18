@@ -109,6 +109,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   paying = signal(false);
   paymentSuccess = signal(false);
   paymentError = signal<string | null>(null);
+  pollingSeconds = signal(0); // Track seconds elapsed while polling
   paymentWaiting = signal(false); // Waiting for M-Pesa confirmation
   mpesaCheckoutRequestId = signal<string | null>(null);
   private pollSubscription: Subscription | null = null;
@@ -260,14 +261,16 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   }
 
   private pollCount = 0;
-  readonly maxPollCount = 40; // 40 polls * 3s = 2 minutes max
+  readonly maxPollCount = 6; // 6 polls * 5s = 30 seconds max
 
   startPolling(): void {
     this.pollCount = 0;
-    // Poll every 5 seconds for up to 2 minutes (40 polls max)
+    this.pollingSeconds.set(0);
+    // Poll every 5 seconds for up to 30 seconds (6 polls max)
     this.pollSubscription = interval(5000).subscribe({
       next: () => {
         this.pollCount++;
+        this.pollingSeconds.update(s => s + 5);
         const checkoutId = this.mpesaCheckoutRequestId();
         if (!checkoutId) return;
 
@@ -276,7 +279,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
           this.stopPolling();
           this.paymentWaiting.set(false);
           this.paymentError.set(
-            'Payment confirmation timed out. Check your M-Pesa SIM toolkit. If payment was successful, it will be reflected in your charges.',
+            'Payment confirmation timed out after 30 seconds. Check your M-Pesa SIM toolkit. If payment was successful, it will be reflected in your charges.',
           );
           return;
         }
@@ -309,6 +312,30 @@ export class MyChargesComponent implements OnInit, OnDestroy {
       this.pollSubscription.unsubscribe();
       this.pollSubscription = null;
     }
+  }
+
+  cancelWaiting(): void {
+    this.stopPolling();
+    this.paymentWaiting.set(false);
+    this.pollingSeconds.set(0);
+    this.mpesaCheckoutRequestId.set(null);
+    // Reset to show the payment form again
+    this.paymentError.set(null);
+    this.paymentSuccess.set(false);
+  }
+
+  get pollingProgressPercent(): number {
+    return Math.min((this.pollingSeconds() / (this.maxPollCount * 5)) * 100, 100);
+  }
+
+  get pollingTimeRemaining(): string {
+    const remaining = Math.max(0, (this.maxPollCount * 5) - this.pollingSeconds());
+    const minutes = Math.floor(remaining / 60);
+    const seconds = remaining % 60;
+    if (minutes > 0) {
+      return `${minutes}m ${seconds}s`;
+    }
+    return `${seconds}s`;
   }
 
   get filteredBills(): Bill[] {

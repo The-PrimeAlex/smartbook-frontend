@@ -723,6 +723,77 @@
   }
 }
 
+/* Waiting Progress Bar */
+.waiting-progress {
+  width: 100%;
+  max-width: 320px;
+  margin: 1rem 0;
+}
+
+.progress-bar-wrapper {
+  width: 100%;
+  height: 6px;
+  background: var(--border-color, #e5e7eb);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--brand-accent, #f28c28);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  animation: progressPulse 2s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.waiting-timer {
+  margin: 0.5rem 0 0 !important;
+  font-size: 0.8125rem !important;
+  color: var(--text-secondary, #6b7280) !important;
+  font-style: normal !important;
+  animation: none !important;
+}
+
+.cancel-waiting-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: transparent;
+  color: var(--text-secondary, #6b7280);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: var(--radius-md, 0.5rem);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-waiting-btn:hover {
+  background: var(--border-color, #e5e7eb);
+  color: var(--text-primary, #111827);
+}
+
+[data-theme='dark'] .progress-bar-wrapper {
+  background: var(--border-color, #374151);
+}
+
+[data-theme='dark'] .waiting-timer {
+  color: var(--text-secondary, #9ca3af) !important;
+}
+
+[data-theme='dark'] .cancel-waiting-btn {
+  color: var(--text-secondary, #9ca3af);
+  border-color: var(--border-color, #374151);
+}
+
+[data-theme='dark'] .cancel-waiting-btn:hover {
+  background: var(--border-color, #374151);
+  color: var(--text-primary, #f3f4f6);
+}
+
 [data-theme='dark'] .waiting-state h3 {
   color: var(--text-primary, #f3f4f6);
 }

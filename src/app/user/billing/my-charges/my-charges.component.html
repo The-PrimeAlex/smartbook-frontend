@@ -203,7 +203,23 @@
             Please check your phone and enter your M-Pesa PIN to complete the
             payment.
           </p>
-          <p class="waiting-hint">We are checking for confirmation...</p>
+          <div class="waiting-progress">
+            <div class="progress-bar-wrapper">
+              <div
+                class="progress-bar-fill"
+                [style.width.%]="pollingProgressPercent"
+              ></div>
+            </div>
+            <p class="waiting-timer">
+              Checking for confirmation... {{ pollingTimeRemaining }} remaining
+            </p>
+          </div>
+          <p class="waiting-hint">
+            If you already paid, confirmation may take up to 30 seconds.
+          </p>
+          <button class="cancel-waiting-btn" (click)="cancelWaiting()">
+            Cancel & Close
+          </button>
         </div>
       }
       <!-- Success State -->

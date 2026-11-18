@@ -1,7 +1,7 @@
 {
   "/api": {
     "target": "https://smartbook-api-bsfnbchccfbwgvdn.centralindia-01.azurewebsites.net",
-    "secure": true,
+    "secure": false,
     "changeOrigin": true
   }
 }
