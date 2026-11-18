@@ -261,48 +261,58 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   }
 
   private pollCount = 0;
-  readonly maxPollCount = 6; // 6 polls * 5s = 30 seconds max
+  readonly maxPollCount = 24; // 24 polls * 5s = 120 seconds (2 minutes) max
 
   startPolling(): void {
     this.pollCount = 0;
     this.pollingSeconds.set(0);
-    // Poll every 5 seconds for up to 30 seconds (6 polls max)
+    // Check status immediately after STK push, then poll every 5 seconds
+    const checkoutId = this.mpesaCheckoutRequestId();
+    if (checkoutId) {
+      this.checkPaymentStatus(checkoutId);
+    }
+
+    // Poll every 5 seconds for up to 2 minutes (24 polls max)
     this.pollSubscription = interval(5000).subscribe({
       next: () => {
         this.pollCount++;
         this.pollingSeconds.update(s => s + 5);
-        const checkoutId = this.mpesaCheckoutRequestId();
-        if (!checkoutId) return;
+        const currentCheckoutId = this.mpesaCheckoutRequestId();
+        if (!currentCheckoutId) return;
 
         // Stop after max polls
         if (this.pollCount >= this.maxPollCount) {
           this.stopPolling();
           this.paymentWaiting.set(false);
           this.paymentError.set(
-            'Payment confirmation timed out after 30 seconds. Check your M-Pesa SIM toolkit. If payment was successful, it will be reflected in your charges.',
+            'Payment confirmation timed out after 2 minutes. Check your M-Pesa SIM toolkit. If payment was successful, it will be reflected in your charges.',
           );
           return;
         }
 
-        this.billingService.queryMpesaPaymentStatus(checkoutId).subscribe({
-          next: (status) => {
-            if (status.paymentStatus === 'SUCCESS') {
-              this.stopPolling();
-              this.paymentWaiting.set(false);
-              this.paymentSuccess.set(true);
-              this.loadBills();
-            } else if (status.paymentStatus === 'FAILED') {
-              this.stopPolling();
-              this.paymentWaiting.set(false);
-              this.paymentError.set('Payment was declined. Please try again.');
-            }
-            // If still PENDING, keep polling
-          },
-          error: (err) => {
-            // Ignore polling errors — keep trying
-            this.log.error('Polling error:', err);
-          },
-        });
+        this.checkPaymentStatus(currentCheckoutId);
+      },
+    });
+  }
+
+  checkPaymentStatus(checkoutId: string): void {
+    this.billingService.queryMpesaPaymentStatus(checkoutId).subscribe({
+      next: (status) => {
+        if (status.paymentStatus === 'SUCCESS') {
+          this.stopPolling();
+          this.paymentWaiting.set(false);
+          this.paymentSuccess.set(true);
+          this.loadBills();
+        } else if (status.paymentStatus === 'FAILED') {
+          this.stopPolling();
+          this.paymentWaiting.set(false);
+          this.paymentError.set('Payment was declined. Please try again.');
+        }
+        // If still PENDING, keep polling
+      },
+      error: (err) => {
+        // Ignore polling errors — keep trying
+        this.log.error('Polling error:', err);
       },
     });
   }
@@ -336,6 +346,10 @@ export class MyChargesComponent implements OnInit, OnDestroy {
       return `${minutes}m ${seconds}s`;
     }
     return `${seconds}s`;
+  }
+
+  get pollingMaxSeconds(): number {
+    return this.maxPollCount * 5; // 120 seconds (2 minutes)
   }
 
   get filteredBills(): Bill[] {

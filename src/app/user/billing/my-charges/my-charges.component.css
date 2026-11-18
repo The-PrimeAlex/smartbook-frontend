@@ -893,6 +893,20 @@
   line-height: 1.5;
 }
 
+.mpesa-info-content .mpesa-test-hint {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--brand-accent, #f28c28);
+}
+
+.mpesa-info-content .mpesa-test-hint code {
+  background: rgba(242, 140, 40, 0.15);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
 /* Required field indicator */
 .form-group .required {
   color: var(--danger, #ef4444);
