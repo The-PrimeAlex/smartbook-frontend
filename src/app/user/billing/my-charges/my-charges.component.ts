@@ -271,4 +271,11 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   formatCurrency = formatCurrency;
   formatDate = formatDate;
   formatDateTime = formatDateTime;
+
+  hasPendingPayments(bill: Bill): boolean {
+    if (!bill.payments || bill.payments.length === 0) return false;
+    return bill.payments.some(
+      (p) => p.paymentStatus === 'PENDING_ADMIN_APPROVAL',
+    );
+  }
 }

@@ -104,10 +104,18 @@
               }
             </div>
             <div class="bill-amount-section">
-              <app-status-badge
-                [label]="getStatusLabel(bill.billStatus)"
-                [variant]="getBadgeVariant(bill.billStatus)"
-              ></app-status-badge>
+              <div class="bill-status-badges">
+                <app-status-badge
+                  [label]="getStatusLabel(bill.billStatus)"
+                  [variant]="getBadgeVariant(bill.billStatus)"
+                ></app-status-badge>
+                @if (hasPendingPayments(bill)) {
+                  <span class="pending-verification-badge" title="Payment awaiting admin approval">
+                    <app-icon [icon]="LucideClock" [size]="12"></app-icon>
+                    Pending Approval
+                  </span>
+                }
+              </div>
               <div class="bill-amount">
                 {{ formatCurrency(bill.totalAmount, bill.currency) }}
               </div>
