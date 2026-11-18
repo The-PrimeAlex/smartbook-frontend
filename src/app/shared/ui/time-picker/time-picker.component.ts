@@ -31,7 +31,9 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   @Input() step: string = '60';
 
   private _value: string = '';
-  private _nativeInput: HTMLInputElement | null = null;
+  
+  // Track the display string to force input re-render
+  displayText: string = '';
 
   // Custom dropdown state
   dropdownOpen = false;
@@ -70,6 +72,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     if (this._value) {
       this.parseTime(this._value);
     }
+    this.displayText = this.displayValue;
 
     // Click outside to close dropdown
     document.addEventListener('click', this.onClickOutside);
@@ -105,14 +108,8 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.selectedAmPm = this.pendingAmPm;
       this.inputBuffer = '';
       this.isTyping = false;
+      this.displayText = this.displayValue;
       this.cdr.detectChanges();
-      // Force the native input to show the restored 12-hour display value
-      setTimeout(() => {
-        const input = this.el.nativeElement.querySelector('input.time-input');
-        if (input) {
-          input.value = this.displayValue;
-        }
-      }, 0);
     }
   }
 
@@ -146,6 +143,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   private updateDisplay(): void {
     this.inputBuffer = '';
     this.isTyping = false;
+    this.displayText = this.displayValue;
     this.cdr.detectChanges();
   }
 
@@ -164,16 +162,10 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this._value = `${h}:${m}`;
       this.inputBuffer = '';
       this.isTyping = false;
+      this.displayText = this.displayValue;
       this.onChangeCallback(this._value);
       this.dropdownOpen = false;
       this.cdr.detectChanges();
-      // Force the native input to show the 12-hour display value after dropdown closes
-      setTimeout(() => {
-        const input = this.el.nativeElement.querySelector('input.time-input');
-        if (input) {
-          input.value = this.displayValue;
-        }
-      }, 0);
     }
   }
 
@@ -375,12 +367,8 @@ export class TimePickerComponent implements OnInit, OnDestroy {
         }
       }
       this.isTyping = false;
+      this.displayText = this.isValueSet ? this.displayValue : '';
       this.cdr.detectChanges();
-      // Force the native input to show the correct 12-hour display value
-      const input = this.el.nativeElement.querySelector('input.time-input');
-      if (input && this.isValueSet) {
-        input.value = this.displayValue;
-      }
     }, 150);
   }
 
@@ -393,6 +381,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.selectedMinute = null;
       this.selectedAmPm = null;
     }
+    this.displayText = this.isValueSet ? this.displayValue : '';
   }
 
   registerOnChange(fn: any): void {

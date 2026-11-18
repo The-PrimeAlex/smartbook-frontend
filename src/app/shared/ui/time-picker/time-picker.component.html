@@ -6,9 +6,10 @@
   <!-- Typable input with trigger -->
   <div class="time-input-wrap">
     <input
+      #timeInput
       type="text"
       class="time-input login-form-input"
-      [value]="displayValue"
+      [value]="displayText"
       [placeholder]="placeholder"
       [disabled]="disabled"
       (input)="onInputChange($event)"
