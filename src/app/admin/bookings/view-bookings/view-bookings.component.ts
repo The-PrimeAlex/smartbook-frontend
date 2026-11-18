@@ -160,7 +160,7 @@ export class ViewBookingsComponent implements OnInit {
   }
 
   canConfirm(booking: Booking): boolean {
-    return booking.bookingStatus === 'PENDING';
+    return booking.bookingStatus === 'PENDING' || booking.bookingStatus === 'BOOKED';
   }
 
   canCheckIn(booking: Booking): boolean {
@@ -171,10 +171,11 @@ export class ViewBookingsComponent implements OnInit {
     return booking.bookingStatus === 'CHECKED_IN';
   }
 
-  // Admins can cancel pending and confirmed bookings.
+  // Admins can cancel pending, booked, and confirmed bookings.
   canCancel(booking: Booking): boolean {
     return (
       booking.bookingStatus === 'PENDING' ||
+      booking.bookingStatus === 'BOOKED' ||
       booking.bookingStatus === 'CONFIRMED'
     );
   }

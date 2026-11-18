@@ -65,6 +65,10 @@
           <span stat-value>{{ pendingCount() }}</span>
           <span stat-label>Pending</span>
         </app-stat-card>
+        <app-stat-card [icon]="LucideCalendar">
+          <span stat-value>{{ bookedCount() }}</span>
+          <span stat-label>Booked</span>
+        </app-stat-card>
         <app-stat-card [icon]="LucideCheckCircle">
           <span stat-value>{{ confirmedCount() }}</span>
           <span stat-label>Confirmed</span>
@@ -81,7 +85,7 @@
     <div class="section-heading">
       <div>
         <h2>Your upcoming reservations</h2>
-        <p>Bookings that are pending, confirmed, or currently checked in.</p>
+        <p>Bookings that are pending, booked, confirmed, or currently checked in.</p>
       </div>
 
       <span class="result-count">
@@ -99,7 +103,7 @@
       <app-empty-state
         [icon]="LucideCalendar"
         title="No upcoming bookings"
-        message="You don't have any pending, confirmed, or checked-in bookings right now."
+        message="You don't have any pending, booked, confirmed, or checked-in bookings right now."
       >
       </app-empty-state>
     } @else {
