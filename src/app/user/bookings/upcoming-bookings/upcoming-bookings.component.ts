@@ -37,7 +37,6 @@ import {
 
 const UPCOMING_STATUSES: readonly BookingStatus[] = [
   'PENDING',
-  'BOOKED',
   'CONFIRMED',
   'CHECKED_IN',
 ];
@@ -95,11 +94,6 @@ export class UpcomingBookingsComponent implements OnInit {
       this.upcomingBookings().filter((b) => b.bookingStatus === 'PENDING')
         .length,
   );
-  readonly bookedCount = computed(
-    () =>
-      this.upcomingBookings().filter((b) => b.bookingStatus === 'BOOKED')
-        .length,
-  );
   readonly confirmedCount = computed(
     () =>
       this.upcomingBookings().filter((b) => b.bookingStatus === 'CONFIRMED')
@@ -140,7 +134,7 @@ export class UpcomingBookingsComponent implements OnInit {
   }
 
   canConfirm(booking: Booking): boolean {
-    return booking.bookingStatus === 'PENDING' || booking.bookingStatus === 'BOOKED';
+    return booking.bookingStatus === 'PENDING';
   }
 
   canCheckIn(booking: Booking): boolean {
@@ -152,10 +146,9 @@ export class UpcomingBookingsComponent implements OnInit {
   }
 
   canCancel(booking: Booking): boolean {
-    // Allow cancellation before check-in (PENDING, BOOKED, or CONFIRMED)
+    // Allow cancellation before check-in (PENDING or CONFIRMED)
     return (
       booking.bookingStatus === 'PENDING' ||
-      booking.bookingStatus === 'BOOKED' ||
       booking.bookingStatus === 'CONFIRMED'
     );
   }

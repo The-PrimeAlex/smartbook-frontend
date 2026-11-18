@@ -5,7 +5,6 @@ import { RoomStatus } from '../../models/room.model';
 export function getBookingStatusLabel(status: string): string {
   const labels: Record<string, string> = {
     PENDING: 'Pending',
-    BOOKED: 'Booked',
     CONFIRMED: 'Confirmed',
     CHECKED_IN: 'Checked In',
     COMPLETED: 'Completed',

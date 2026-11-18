@@ -118,7 +118,7 @@ export class Dashboard implements OnInit {
         const startTime = new Date(b.startTime);
         return (
           startTime >= now &&
-          ['PENDING', 'BOOKED', 'CONFIRMED', 'CHECKED_IN'].includes(b.bookingStatus)
+          ['PENDING', 'CONFIRMED', 'CHECKED_IN'].includes(b.bookingStatus)
         );
       })
       .sort(

@@ -1,6 +1,5 @@
 export type BookingStatus =
   | 'PENDING'
-  | 'BOOKED'
   | 'CONFIRMED'
   | 'CHECKED_IN'
   | 'COMPLETED'
@@ -49,7 +48,6 @@ export interface BookingStatusUpdate {
 
 export const BOOKING_STATUSES: readonly BookingStatus[] = [
   'PENDING',
-  'BOOKED',
   'CONFIRMED',
   'CHECKED_IN',
   'COMPLETED',

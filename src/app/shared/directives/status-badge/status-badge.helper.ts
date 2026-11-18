@@ -39,8 +39,6 @@ export function getBookingBadgeVariant(status: string): BadgeVariant {
   switch (status) {
     case 'PENDING':
       return 'pending';
-    case 'BOOKED':
-      return 'info';
     case 'CONFIRMED':
     case 'CHECKED_IN':
       return 'success';
