@@ -104,7 +104,7 @@
         </div>
       </div>
     </div>
-    <div class="time-dropdown-footer" *ngIf="isValueSet">
+    <div class="time-dropdown-footer" *ngIf="selectedHour !== null && selectedAmPm !== null">
       <span class="time-preview">{{ displayValue }}</span>
     </div>
   </div>

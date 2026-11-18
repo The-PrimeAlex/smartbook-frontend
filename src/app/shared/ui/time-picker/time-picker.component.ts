@@ -192,8 +192,8 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     if (this.isTyping && this.inputBuffer) {
       return this.inputBuffer;
     }
-    if (this.selectedHour !== null && this.selectedMinute !== null && this.selectedAmPm !== null) {
-      const m = String(this.selectedMinute).padStart(2, '0');
+    if (this.selectedHour !== null && this.selectedAmPm !== null) {
+      const m = this.selectedMinute !== null ? String(this.selectedMinute).padStart(2, '0') : '--';
       return `${this.selectedHour}:${m} ${this.selectedAmPm}`;
     }
     return this.placeholder;
@@ -212,8 +212,21 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     // Try to parse the typed value
     const parsed = this.tryParseTypedTime(raw);
     if (parsed) {
-      this.selectedHour = parsed.hour;
       this.selectedMinute = parsed.minute;
+      // Convert 24-hour to 12-hour + AM/PM
+      if (parsed.hour === 0) {
+        this.selectedHour = 12;
+        this.selectedAmPm = 'AM';
+      } else if (parsed.hour < 12) {
+        this.selectedHour = parsed.hour;
+        this.selectedAmPm = 'AM';
+      } else if (parsed.hour === 12) {
+        this.selectedHour = 12;
+        this.selectedAmPm = 'PM';
+      } else {
+        this.selectedHour = parsed.hour - 12;
+        this.selectedAmPm = 'PM';
+      }
       const h = String(parsed.hour).padStart(2, '0');
       const m = String(parsed.minute).padStart(2, '0');
       this._value = `${h}:${m}`;
