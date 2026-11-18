@@ -105,6 +105,14 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.selectedAmPm = this.pendingAmPm;
       this.inputBuffer = '';
       this.isTyping = false;
+      this.cdr.detectChanges();
+      // Force the native input to show the restored 12-hour display value
+      setTimeout(() => {
+        const input = this.el.nativeElement.querySelector('input.time-input');
+        if (input) {
+          input.value = this.displayValue;
+        }
+      }, 0);
     }
   }
 
@@ -159,6 +167,13 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.onChangeCallback(this._value);
       this.dropdownOpen = false;
       this.cdr.detectChanges();
+      // Force the native input to show the 12-hour display value after dropdown closes
+      setTimeout(() => {
+        const input = this.el.nativeElement.querySelector('input.time-input');
+        if (input) {
+          input.value = this.displayValue;
+        }
+      }, 0);
     }
   }
 
@@ -361,6 +376,11 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       }
       this.isTyping = false;
       this.cdr.detectChanges();
+      // Force the native input to show the correct 12-hour display value
+      const input = this.el.nativeElement.querySelector('input.time-input');
+      if (input && this.isValueSet) {
+        input.value = this.displayValue;
+      }
     }, 150);
   }
 
