@@ -42,7 +42,6 @@ export interface PaymentRequest {
   paymentMethod: string;
   amount: number;
   transactionReference: string;
-  phoneNumber?: string;
 }
 
 export interface PaymentResponse {
@@ -51,13 +50,6 @@ export interface PaymentResponse {
   currency: string;
   paymentMethod: string;
   paymentStatus: string;
-  transactionReference: string; // For M-Pesa, this is the checkoutRequestId
-  paidAt: string | null;
-}
-
-export interface PaymentStatusResponse {
-  paymentId: string;
-  paymentStatus: string;
-  transactionReference: string | null;
+  transactionReference: string;
   paidAt: string | null;
 }

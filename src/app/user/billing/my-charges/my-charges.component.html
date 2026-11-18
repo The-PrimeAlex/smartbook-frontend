@@ -189,50 +189,22 @@
   >
     <div class="payment-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Make Payment</h2>
+        <h2>Pay with Cash</h2>
         <button class="close-btn" (click)="closePaymentModal()">
           <app-icon [icon]="LucideX" [size]="20"></app-icon>
         </button>
       </div>
-      <!-- Waiting for M-Pesa Confirmation -->
-      @if (paymentWaiting()) {
-        <div class="waiting-state">
-          <div class="waiting-spinner"></div>
-          <h3>Waiting for Payment</h3>
-          <p>
-            Please check your phone and enter your M-Pesa PIN to complete the
-            payment.
-          </p>
-          <div class="waiting-progress">
-            <div class="progress-bar-wrapper">
-              <div
-                class="progress-bar-fill"
-                [style.width.%]="pollingProgressPercent"
-              ></div>
-            </div>
-            <p class="waiting-timer">
-              Checking for confirmation... {{ pollingTimeRemaining }} remaining
-            </p>
-          </div>
-          <p class="waiting-hint">
-            Checking for M-Pesa confirmation... This may take up to 60 seconds.
-          </p>
-          <button class="cancel-waiting-btn" (click)="cancelWaiting()">
-            Cancel & Close
-          </button>
-        </div>
-      }
       <!-- Success State -->
-      @if (!paymentWaiting() && paymentSuccess()) {
+      @if (paymentSuccess()) {
         <div class="success-state">
           <app-icon [icon]="LucideCheckCircle" [size]="64"></app-icon>
-          <h3>Payment Confirmed</h3>
-          <p>Your payment has been confirmed successfully.</p>
+          <h3>Payment Submitted</h3>
+          <p>Your cash payment has been recorded and is pending admin approval.</p>
           <button class="done-btn" (click)="closePaymentModal()">Done</button>
         </div>
       }
       <!-- Payment Form -->
-      @if (!paymentWaiting() && !paymentSuccess()) {
+      @if (!paymentSuccess()) {
         <div class="payment-form">
           @if (selectedBill()) {
             <div class="bill-summary">
@@ -259,112 +231,47 @@
               </div>
             </div>
           }
-          <div class="form-group">
-            <label for="payment-method">Payment Method</label>
-            <select
-              id="payment-method"
-              [ngModel]="paymentMethod()"
-              (ngModelChange)="paymentMethod.set($event)"
-              name="paymentMethod"
-            >
-              @for (method of paymentMethods; track method.value) {
-                <option [value]="method.value">
-                  {{ method.label }}
-                </option>
-              }
-            </select>
+          <div class="cash-info-box">
+            <p>
+              Pay cash at the reception desk. Your payment will be reviewed and
+              approved by admin.
+            </p>
           </div>
-          <!-- M-Pesa Info Box -->
-          @if (paymentMethod() === 'MPESA') {
-            <div class="mpesa-info-box">
-              <app-icon [icon]="LucideSmartphone" [size]="20"></app-icon>
-              <div class="mpesa-info-content">
-                <h4>M-Pesa STK Push</h4>
-                <p>
-                  A payment prompt will be sent to your phone. Enter your M-Pesa
-                  PIN to complete the payment.
-                </p>
-                <p class="mpesa-test-hint">
-                  <strong>Testing:</strong> Use <code>0708374149</code> or <code>0748193693</code> for M-Pesa sandbox testing.
-                </p>
-              </div>
-            </div>
-          }
-          <!-- Phone Number - M-Pesa only -->
-          @if (paymentMethod() === 'MPESA') {
-            <div class="form-group">
-              <label for="phone-number"
-                >Phone Number <span class="required">*</span></label
-              >
-              <input
-                type="tel"
-                id="phone-number"
-                [ngModel]="phoneNumber()"
-                (ngModelChange)="phoneNumber.set($event)"
-                name="phoneNumber"
-                placeholder="e.g. 0712345678 or 254712345678"
-              />
-              <span class="field-hint"
-                >Enter the phone number to receive the M-Pesa prompt</span
-              >
-            </div>
-          }
           <div class="form-group">
-            <label for="payment-amount">Amount</label>
+            <label for="payment-amount">
+              Payment Amount <span class="required">*</span>
+            </label>
             <input
               type="number"
               id="payment-amount"
               [ngModel]="paymentAmount()"
               (ngModelChange)="paymentAmount.set($event)"
               name="paymentAmount"
-              min="0"
+              min="0.01"
               step="0.01"
               placeholder="Enter amount"
             />
+            <span class="field-hint">
+              Maximum: {{ formatCurrency(selectedBill()!.totalAmount - selectedBill()!.amountPaid, selectedBill()!.currency) }}
+            </span>
           </div>
-
-          @if (paymentMethod() !== 'MPESA') {
-            <div class="form-group">
-              <label for="transaction-ref"
-                >Transaction Reference
-                <span class="optional">(optional)</span></label
-              >
-              <input
-                type="text"
-                id="transaction-ref"
-                [ngModel]="transactionReference()"
-                (ngModelChange)="transactionReference.set($event)"
-                name="transactionReference"
-                placeholder="e.g. Bank transfer reference"
-              />
-            </div>
-          }
+          <div class="form-group">
+            <label for="transaction-ref">
+              Reference <span class="optional">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="transaction-ref"
+              [ngModel]="transactionReference()"
+              (ngModelChange)="transactionReference.set($event)"
+              name="transactionReference"
+              placeholder="e.g. receipt number"
+            />
+          </div>
           @if (paymentError()) {
             <div class="error-message">
               {{ paymentError() }}
             </div>
-            @if (paymentTimedOut) {
-              <div class="manual-confirm-box">
-                <p>
-                  <strong>Did you complete the payment on your phone?</strong>
-                </p>
-                <p class="manual-confirm-hint">
-                  In sandbox mode, M-Pesa doesn't send automatic confirmations.
-                  Click below to confirm your payment manually.
-                </p>
-                <button
-                  class="manual-confirm-btn"
-                  (click)="confirmPaymentManually()"
-                  [disabled]="paymentWaiting()"
-                >
-                  @if (paymentWaiting()) {
-                    Confirming...
-                  } @else {
-                    I've Paid – Confirm Manually
-                  }
-                </button>
-              </div>
-            }
           }
           <div class="form-actions">
             <button
@@ -379,8 +286,7 @@
               (click)="submitPayment($event)"
               [disabled]="paying()"
             >
-              @if (paying()) {}
-              {{ paying() ? 'Processing...' : 'Confirm Payment' }}
+              {{ paying() ? 'Submitting...' : 'Submit Payment' }}
             </button>
           </div>
         </div>
