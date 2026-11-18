@@ -7,6 +7,7 @@ import {
   ElementRef,
   Renderer2,
   ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -51,6 +52,8 @@ export class TimePickerComponent implements OnInit, OnDestroy {
   // Typable input state
   inputBuffer = '';
   isTyping = false;
+
+  @ViewChild('timeInput', { static: true }) timeInputRef: ElementRef<HTMLInputElement> | undefined;
 
   constructor(
     private el: ElementRef,
@@ -110,6 +113,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.isTyping = false;
       this.displayText = this.displayValue;
       this.cdr.detectChanges();
+      this.forceInputValue();
     }
   }
 
@@ -147,6 +151,12 @@ export class TimePickerComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  private forceInputValue(): void {
+    if (this.timeInputRef) {
+      this.timeInputRef.nativeElement.value = this.displayText;
+    }
+  }
+
   private updateValueAndClose(): void {
     if (this.selectedHour !== null && this.selectedMinute !== null && this.selectedAmPm !== null) {
       // Convert 12-hour to 24-hour
@@ -166,6 +176,8 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.onChangeCallback(this._value);
       this.dropdownOpen = false;
       this.cdr.detectChanges();
+      // Force the native input to show the 12-hour display value after dropdown closes
+      setTimeout(() => this.forceInputValue(), 0);
     }
   }
 
@@ -369,6 +381,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.isTyping = false;
       this.displayText = this.isValueSet ? this.displayValue : '';
       this.cdr.detectChanges();
+      this.forceInputValue();
     }, 150);
   }
 
@@ -382,6 +395,7 @@ export class TimePickerComponent implements OnInit, OnDestroy {
       this.selectedAmPm = null;
     }
     this.displayText = this.isValueSet ? this.displayValue : '';
+    setTimeout(() => this.forceInputValue(), 0);
   }
 
   registerOnChange(fn: any): void {
