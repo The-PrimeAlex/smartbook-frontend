@@ -3,16 +3,14 @@
   [class.disabled]="disabled"
   [class.open]="dropdownOpen"
 >
-  <!-- Typable input with trigger -->
+  <!-- Readonly input with trigger -->
   <div class="time-input-wrap">
     <input
       type="text"
       class="time-input login-form-input"
       [placeholder]="placeholder"
       [disabled]="disabled"
-      (input)="onInputChange($event)"
-      (focus)="onInputFocus()"
-      (blur)="onInputBlur()"
+      readonly
       (click)="toggleDropdown()"
       autocomplete="off"
     />
