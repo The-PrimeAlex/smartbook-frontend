@@ -50,6 +50,9 @@ export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
   inputBuffer = '';
   isTyping = false;
 
+  // Flag to prevent onInputBlur from overwriting a value just committed from the dropdown
+  private committedFromDropdown = false;
+
   // Direct reference to the native input element
   private nativeInput: HTMLInputElement | null = null;
 
@@ -178,6 +181,7 @@ export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
       this._value = `${h}:${m}`;
       this.inputBuffer = '';
       this.isTyping = false;
+      this.committedFromDropdown = true;
       this.onChangeCallback(this._value);
       this.dropdownOpen = false;
       this.cdr.detectChanges();
@@ -325,6 +329,14 @@ export class TimePickerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onInputBlur(): void {
     setTimeout(() => {
+      // If a value was just committed from the dropdown, don't overwrite it
+      if (this.committedFromDropdown) {
+        this.committedFromDropdown = false;
+        this.inputBuffer = '';
+        this.isTyping = false;
+        this.setInputDisplayValue();
+        return;
+      }
       if (this.inputBuffer) {
         const parsed = this.tryParseTypedTime(this.inputBuffer);
         if (parsed) {
