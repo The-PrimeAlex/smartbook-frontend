@@ -122,20 +122,26 @@ export class TimePickerComponent implements OnInit, OnDestroy {
 
   selectHour(hour: number): void {
     this.selectedHour = hour;
-    this.tryUpdateValue();
+    this.updateDisplay();
   }
 
   selectAmPm(ampm: 'AM' | 'PM'): void {
     this.selectedAmPm = ampm;
-    this.tryUpdateValue();
+    this.updateDisplay();
   }
 
   selectMinute(minute: number): void {
     this.selectedMinute = minute;
-    this.tryUpdateValue();
+    this.updateValueAndClose();
   }
 
-  private tryUpdateValue(): void {
+  private updateDisplay(): void {
+    this.inputBuffer = '';
+    this.isTyping = false;
+    this.cdr.detectChanges();
+  }
+
+  private updateValueAndClose(): void {
     if (this.selectedHour !== null && this.selectedMinute !== null && this.selectedAmPm !== null) {
       // Convert 12-hour to 24-hour
       let hour24 = this.selectedHour;
