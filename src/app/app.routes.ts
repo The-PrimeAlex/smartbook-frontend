@@ -372,13 +372,6 @@ export const routes: Routes = [
                 (m) => m.NotificationsSettingsComponent,
               ),
           },
-          {
-            path: 'settings/audit-logs',
-            loadComponent: () =>
-              import('./admin/settings/audit-logs/audit-logs.component').then(
-                (m) => m.AuditLogsComponent,
-              ),
-          },
         ],
       },
     ],

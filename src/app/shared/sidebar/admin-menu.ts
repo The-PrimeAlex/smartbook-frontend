@@ -50,11 +50,11 @@ export const ADMIN_MENU: MenuSection[] = [
             icon: 'list',
             route: '/admin/bookings',
           },
-          {
-            label: 'Create Booking',
-            icon: 'plus',
-            route: '/admin/bookings/new',
-          },
+          // {
+          //   label: 'Create Booking',
+          //   icon: 'plus',
+          //   route: '/admin/bookings/new',
+          // },
           // { label: 'Pending Approvals', icon: 'clock', route: '/admin/bookings/pending' },
           // { label: 'Booking History', icon: 'history', route: '/admin/bookings/history' },
         ],
@@ -233,11 +233,6 @@ export const ADMIN_MENU: MenuSection[] = [
             route: '/admin/settings/notifications',
           },
           // { label: 'Calendar Integration', icon: 'calendar', route: '/admin/settings/calendar' },
-          {
-            label: 'Audit Logs',
-            icon: 'history',
-            route: '/admin/settings/audit-logs',
-          },
         ],
       },
     ],
