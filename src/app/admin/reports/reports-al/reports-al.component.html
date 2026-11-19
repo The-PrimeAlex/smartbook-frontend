@@ -45,6 +45,27 @@
     >
       <app-icon [icon]="LucideRefreshCw" [size]="16"></app-icon>
     </button>
+    <!-- Export Dropdown -->
+    <div class="export-wrapper">
+      <button
+        type="button"
+        class="export-button"
+        (click)="toggleExportMenu()"
+        aria-label="Export data"
+      >
+        <app-icon [icon]="LucideDownload" [size]="16"></app-icon>
+      </button>
+      @if (showExportMenu()) {
+        <div class="export-dropdown" (click)="$event.stopPropagation()">
+          <button type="button" class="export-option" (click)="exportCurrentTab('csv')">
+            Export as CSV
+          </button>
+          <button type="button" class="export-option" (click)="exportCurrentTab('pdf')">
+            Export as PDF
+          </button>
+        </div>
+      }
+    </div>
   </nav>
   <!-- ═══════════════════════════════════════════════════════ -->
   <!-- Occupancy Tab                                          -->

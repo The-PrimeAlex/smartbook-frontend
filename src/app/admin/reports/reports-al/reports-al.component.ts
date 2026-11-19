@@ -1,6 +1,6 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Observable } from 'rxjs';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, effect } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   LucideCalendar,
@@ -13,6 +13,7 @@ import {
   LucideChevronDown,
   LucideTimer,
   LucideUser,
+  LucideDownload,
 } from '@lucide/angular';
 import {
   ReportsAlService,
@@ -25,6 +26,7 @@ import {
   EmptyStateComponent,
   PageBannerComponent,
 } from '../../../shared/ui';
+import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 
 type TabMode = 'occupancy' | 'bookings' | 'revenue';
 
@@ -55,9 +57,10 @@ interface RoomRanking {
   templateUrl: './reports-al.component.html',
   styleUrl: './reports-al.component.css',
 })
-export class ReportsAlComponent implements OnInit {
+export class ReportsAlComponent implements OnInit, OnDestroy {
   private readonly reportsService = inject(ReportsAlService);
   private readonly route = inject(ActivatedRoute);
+  private readonly exportService = inject(ExportService);
 
   readonly LucideAlertCircle = LucideAlertCircle;
   readonly LucideCalendar = LucideCalendar;
@@ -65,10 +68,30 @@ export class ReportsAlComponent implements OnInit {
   readonly LucideChevronDown = LucideChevronDown;
   readonly LucideClock = LucideClock;
   readonly LucideDollarSign = LucideDollarSign;
+  readonly LucideDownload = LucideDownload;
   readonly LucideLayoutGrid = LucideLayoutGrid;
   readonly LucideRefreshCw = LucideRefreshCw;
   readonly LucideTimer = LucideTimer;
   readonly LucideUser = LucideUser;
+
+  readonly showExportMenu = signal(false);
+
+  // Close export dropdown when clicking outside
+  private clickOutsideEffect = effect(() => {
+    if (this.showExportMenu()) {
+      const handler = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest('.export-wrapper')) {
+          this.closeExportMenu();
+        }
+      };
+      document.addEventListener('click', handler);
+      // Clean up on next change detection cycle
+      setTimeout(() => {
+        document.removeEventListener('click', handler);
+      }, 100);
+    }
+  });
 
   readonly activeTab = signal<TabMode>('occupancy');
   readonly occupancyRecords = signal<OccupancyReportAl[]>([]);
@@ -115,6 +138,10 @@ export class ReportsAlComponent implements OnInit {
     }
     this.activeTab.set(initialTab);
     this.loadTab(initialTab);
+  }
+
+  ngOnDestroy(): void {
+    this.closeExportMenu();
   }
 
   selectTab(tab: TabMode): void {
@@ -438,5 +465,141 @@ export class ReportsAlComponent implements OnInit {
   formatMinutesShort(minutes: number | null): string {
     if (minutes == null) return '—';
     return this.formatMinutes(minutes);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Export helpers                                                     */
+  /* ------------------------------------------------------------------ */
+
+  toggleExportMenu(): void {
+    this.showExportMenu.update((v) => !v);
+  }
+
+  closeExportMenu(): void {
+    this.showExportMenu.set(false);
+  }
+
+  exportCurrentTab(format: 'csv' | 'pdf'): void {
+    const tab = this.activeTab();
+    const timestamp = new Date().toISOString().slice(0, 10);
+    let data: Record<string, unknown>[];
+    let columns: ExportColumn[];
+    let title: string;
+    let fileName: string;
+
+    switch (tab) {
+      case 'occupancy':
+        data = this.occupancyRecords().map(r => ({
+          'Room Name': r.roomName,
+          'Total Bookings': r.totalBookings,
+          'Checked In': r.checkedInBookings,
+          'No-Shows': r.noShowBookings,
+          'Occupancy Rate (%)': r.occupancyRate,
+          'Hours Booked': r.totalHoursBooked,
+          'Hours Used': r.totalHoursUsed,
+          'Period Start': r.periodStart,
+          'Period End': r.periodEnd,
+        }));
+        columns = [
+          { header: 'Room Name', key: 'Room Name' },
+          { header: 'Total Bookings', key: 'Total Bookings' },
+          { header: 'Checked In', key: 'Checked In' },
+          { header: 'No-Shows', key: 'No-Shows' },
+          { header: 'Occupancy Rate (%)', key: 'Occupancy Rate (%)' },
+          { header: 'Hours Booked', key: 'Hours Booked' },
+          { header: 'Hours Used', key: 'Hours Used' },
+          { header: 'Period Start', key: 'Period Start' },
+          { header: 'Period End', key: 'Period End' },
+        ];
+        title = 'Occupancy Report';
+        fileName = `occupancy-report-${timestamp}`;
+        break;
+
+      case 'bookings':
+        data = this.bookingRecords().map(r => ({
+          'Booking ID': r.bookingId,
+          'Room Name': r.roomName,
+          'Booker': r.bookerName,
+          'Purpose': r.purpose,
+          'Status': r.bookingStatus,
+          'Start Time': r.startTime,
+          'End Time': r.endTime,
+          'Duration (min)': r.durationMinutes,
+          'Check In': r.checkInTime,
+          'Check Out': r.checkOutTime,
+          'Actual Duration (min)': r.actualDurationMinutes,
+          'Overrun (min)': r.overrunMinutes,
+        }));
+        columns = [
+          { header: 'Booking ID', key: 'Booking ID' },
+          { header: 'Room Name', key: 'Room Name' },
+          { header: 'Booker', key: 'Booker' },
+          { header: 'Purpose', key: 'Purpose' },
+          { header: 'Status', key: 'Status' },
+          { header: 'Start Time', key: 'Start Time' },
+          { header: 'End Time', key: 'End Time' },
+          { header: 'Duration (min)', key: 'Duration (min)' },
+          { header: 'Check In', key: 'Check In' },
+          { header: 'Check Out', key: 'Check Out' },
+          { header: 'Actual Duration (min)', key: 'Actual Duration (min)' },
+          { header: 'Overrun (min)', key: 'Overrun (min)' },
+        ];
+        title = 'Bookings Report';
+        fileName = `bookings-report-${timestamp}`;
+        break;
+
+      case 'revenue':
+        data = this.revenueRecords().map(r => ({
+          'Booking ID': r.bookingId,
+          'Room Name': r.roomName,
+          'Booker': r.bookerName,
+          'Purpose': r.purpose,
+          'Hourly Rate': r.bookedHourlyRate,
+          'Duration (min)': r.durationMinutes,
+          'Overrun (min)': r.overrunMinutes,
+          'Overrun Charge': r.overrunCharge,
+          'Cancellation Fee': r.cancellationFee,
+          'No-Show Fee': r.noShowFee,
+          'Incident Fee': r.incidentFee,
+          'Subtotal': r.subtotal,
+          'Tax': r.taxAmount,
+          'Total': r.totalAmount,
+          'Bill Status': r.billStatus,
+          'Currency': r.currency,
+          'Issued At': r.issuedAt,
+          'Paid At': r.paidAt,
+        }));
+        columns = [
+          { header: 'Booking ID', key: 'Booking ID' },
+          { header: 'Room Name', key: 'Room Name' },
+          { header: 'Booker', key: 'Booker' },
+          { header: 'Purpose', key: 'Purpose' },
+          { header: 'Hourly Rate', key: 'Hourly Rate' },
+          { header: 'Duration (min)', key: 'Duration (min)' },
+          { header: 'Overrun (min)', key: 'Overrun (min)' },
+          { header: 'Overrun Charge', key: 'Overrun Charge' },
+          { header: 'Cancellation Fee', key: 'Cancellation Fee' },
+          { header: 'No-Show Fee', key: 'No-Show Fee' },
+          { header: 'Incident Fee', key: 'Incident Fee' },
+          { header: 'Subtotal', key: 'Subtotal' },
+          { header: 'Tax', key: 'Tax' },
+          { header: 'Total', key: 'Total' },
+          { header: 'Bill Status', key: 'Bill Status' },
+          { header: 'Currency', key: 'Currency' },
+          { header: 'Issued At', key: 'Issued At' },
+          { header: 'Paid At', key: 'Paid At' },
+        ];
+        title = 'Revenue Report';
+        fileName = `revenue-report-${timestamp}`;
+        break;
+    }
+
+    if (format === 'csv') {
+      this.exportService.exportToCsv(data, columns, fileName);
+    } else {
+      this.exportService.exportToPdf(data, columns, title, fileName);
+    }
+
+    this.closeExportMenu();
   }
 }
