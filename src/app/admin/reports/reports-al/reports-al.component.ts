@@ -497,8 +497,6 @@ export class ReportsAlComponent implements OnInit, OnDestroy {
           'Occupancy Rate (%)': r.occupancyRate,
           'Hours Booked': r.totalHoursBooked,
           'Hours Used': r.totalHoursUsed,
-          'Period Start': r.periodStart,
-          'Period End': r.periodEnd,
         }));
         columns = [
           { header: 'Room Name', key: 'Room Name' },
@@ -508,8 +506,6 @@ export class ReportsAlComponent implements OnInit, OnDestroy {
           { header: 'Occupancy Rate (%)', key: 'Occupancy Rate (%)' },
           { header: 'Hours Booked', key: 'Hours Booked' },
           { header: 'Hours Used', key: 'Hours Used' },
-          { header: 'Period Start', key: 'Period Start' },
-          { header: 'Period End', key: 'Period End' },
         ];
         title = 'Occupancy Report';
         fileName = `occupancy-report-${timestamp}`;
