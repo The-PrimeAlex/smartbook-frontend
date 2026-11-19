@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import {
@@ -57,7 +57,7 @@ const UPCOMING_STATUSES: readonly BookingStatus[] = [
   templateUrl: './upcoming-bookings.component.html',
   styleUrl: './upcoming-bookings.component.css',
 })
-export class UpcomingBookingsComponent implements OnInit {
+export class UpcomingBookingsComponent implements OnInit, OnDestroy {
   readonly LucideCalendar = LucideCalendar;
   readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideChevronDown = LucideChevronDown;
@@ -84,6 +84,31 @@ export class UpcomingBookingsComponent implements OnInit {
   readonly showCancelModal = signal(false);
   readonly cancelModalData = signal<CancelBookingModalData | null>(null);
 
+  private refreshInterval: any = null;
+
+  // Auto-refresh bookings every 30 seconds so auto-check-in updates appear in real-time
+  private autoRefreshEffect = effect(() => {
+    if (!this.loading()) {
+      this.startAutoRefresh();
+    } else {
+      this.stopAutoRefresh();
+    }
+  });
+
+  private startAutoRefresh(): void {
+    this.stopAutoRefresh();
+    this.refreshInterval = setInterval(() => {
+      this.loadBookings();
+    }, 30000); // 30 seconds
+  }
+
+  private stopAutoRefresh(): void {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+      this.refreshInterval = null;
+    }
+  }
+
   readonly upcomingBookings = computed(() =>
     this.bookings().filter((b) => UPCOMING_STATUSES.includes(b.bookingStatus)),
   );
@@ -107,6 +132,10 @@ export class UpcomingBookingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBookings();
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoRefresh();
   }
 
   loadBookings(): void {
