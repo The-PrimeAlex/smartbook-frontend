@@ -113,11 +113,6 @@ export const USER_MENU: MenuSection[] = [
             icon: 'bell',
             route: '/app/settings/notifications',
           },
-          {
-            label: 'Calendar Integration',
-            icon: 'calendar',
-            route: '/app/settings/calendar',
-          },
         ],
       },
     ],

@@ -3,24 +3,8 @@
     [icon]="LucideBell"
     eyebrow="Settings"
     title="Notifications"
-    description="Manage how and when you receive booking notifications and alerts."
+    description="Manage your notification preferences."
   ></app-page-banner>
-
-  <!-- Error -->
-  @if (error()) {
-    <div class="notice notice-error">
-      <app-icon [icon]="LucideXCircle" [size]="18"></app-icon>
-      {{ error() }}
-    </div>
-  }
-
-  <!-- Success -->
-  @if (saved()) {
-    <div class="notice notice-success">
-      <app-icon [icon]="LucideCheckCircle2" [size]="18"></app-icon>
-      Notification preferences saved successfully.
-    </div>
-  }
 
   <!-- Loading -->
   @if (loading()) {
@@ -42,42 +26,27 @@
       </div>
 
       <div class="notif-list">
-        @for (pref of preferenceDefinitions; track pref.key; let i = $index) {
-          <div class="notif-row" [style.animation-delay]="i * 0.05 + 's'">
-            <div class="notif-info">
-              <div class="notif-label">
-                {{ pref.label }}
-              </div>
-              <div class="notif-description">
-                {{ pref.description }}
-              </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-label">
+              Meeting Reminders
             </div>
-            <div class="notif-control">
-              <button
-                class="toggle-switch"
-                [class.active]="isPreferenceEnabled(pref.key)"
-                (click)="togglePreference(pref.key)"
-                [attr.aria-label]="'Toggle ' + pref.label"
-              >
-                <span class="toggle-slider"></span>
-              </button>
+            <div class="notif-description">
+              Receive a reminder email before your meeting starts.
             </div>
           </div>
-        }
+          <div class="notif-control">
+            <button
+              class="toggle-switch"
+              [class.active]="preferences().send_reminders"
+              (click)="toggleReminders()"
+              aria-label="Toggle meeting reminders"
+            >
+              <span class="toggle-slider"></span>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!-- Save button -->
-    <div class="save-bar">
-      <button class="btn btn-save" (click)="save()" [disabled]="saving()">
-        @if (saving()) {
-          <span class="spinner"></span>
-          Saving...
-        } @else {
-          <app-icon [icon]="LucideFileBox" [size]="18"></app-icon>
-          Save Changes
-        }
-      </button>
     </div>
   }
 </div>

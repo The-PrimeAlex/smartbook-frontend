@@ -161,13 +161,6 @@ export const routes: Routes = [
                 (m) => m.CalendarComponent,
               ),
           },
-          {
-            path: 'settings/calendar',
-            loadComponent: () =>
-              import('./admin/settings/calendar-integration/calendar-integration.component').then(
-                (m) => m.CalendarIntegrationComponent,
-              ),
-          },
         ],
       },
       {
@@ -377,13 +370,6 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./admin/settings/notifications-settings/notifications-settings.component').then(
                 (m) => m.NotificationsSettingsComponent,
-              ),
-          },
-          {
-            path: 'settings/calendar',
-            loadComponent: () =>
-              import('./admin/settings/calendar-integration/calendar-integration.component').then(
-                (m) => m.CalendarIntegrationComponent,
               ),
           },
           {

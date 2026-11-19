@@ -4,11 +4,7 @@ import { Observable, map, switchMap } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 
 export interface UserNotificationPreferences {
-  booking_confirmation: boolean;
   send_reminders: boolean;
-  noshow_notification: boolean;
-  overrun_notification: boolean;
-  invoice_email: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -21,11 +17,7 @@ export class UserNotificationPreferencesService {
   getPreferences(): Observable<UserNotificationPreferences> {
     return this.http.get<Record<string, boolean>>(this.baseUrl).pipe(
       map((raw) => ({
-        booking_confirmation: raw['booking_confirmation'] ?? true,
         send_reminders: raw['send_reminders'] ?? true,
-        noshow_notification: raw['noshow_notification'] ?? true,
-        overrun_notification: raw['overrun_notification'] ?? true,
-        invoice_email: raw['invoice_email'] ?? true,
       })),
     );
   }

@@ -106,7 +106,6 @@ export class SidebarComponent {
     'general-settings': LucideSettings,
     'room-configuration': LucideSettings,
     'booking-rules': LucideCalendarCheck,
-    'calendar-integration': LucideCalendarDays,
     'audit-logs': LucideHistory,
     mail: LucideMail,
     bell: LucideBell,
