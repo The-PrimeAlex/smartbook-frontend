@@ -25,6 +25,8 @@ export class NotificationsComponent implements OnInit {
 
   readonly preferences = signal<UserNotificationPreferences>({
     send_reminders: true,
+    send_checkin: true,
+    send_checkout: true,
   });
   readonly loading = signal(false);
   readonly error = signal('');
@@ -54,6 +56,30 @@ export class NotificationsComponent implements OnInit {
       send_reminders: !prefs.send_reminders,
     }));
     // Auto-save
+    this.preferencesService
+      .bulkUpdatePreferences(this.preferences())
+      .subscribe({
+        error: (e: Error) => this.error.set(e.message),
+      });
+  }
+
+  toggleCheckin(): void {
+    this.preferences.update((prefs) => ({
+      ...prefs,
+      send_checkin: !prefs.send_checkin,
+    }));
+    this.preferencesService
+      .bulkUpdatePreferences(this.preferences())
+      .subscribe({
+        error: (e: Error) => this.error.set(e.message),
+      });
+  }
+
+  toggleCheckout(): void {
+    this.preferences.update((prefs) => ({
+      ...prefs,
+      send_checkout: !prefs.send_checkout,
+    }));
     this.preferencesService
       .bulkUpdatePreferences(this.preferences())
       .subscribe({

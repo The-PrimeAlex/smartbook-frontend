@@ -204,6 +204,18 @@
   color: #7c3aed;
   background: rgba(124, 58, 237, 0.1);
 }
+.event-checkin {
+  color: var(--success);
+  background: rgba(22, 163, 74, 0.1);
+}
+.event-checkout {
+  color: #0891b2;
+  background: rgba(8, 145, 178, 0.1);
+}
+.event-auto-checkout {
+  color: #0891b2;
+  background: rgba(8, 145, 178, 0.1);
+}
 .event-default {
   color: var(--brand-primary, var(--brand-primary));
   background: rgba(20, 43, 74, 0.08);
@@ -244,6 +256,18 @@
 .event-badge.event-no-show {
   color: #7c3aed;
   background: rgba(124, 58, 237, 0.1);
+}
+.event-badge.event-checkin {
+  color: var(--success);
+  background: rgba(22, 163, 74, 0.1);
+}
+.event-badge.event-checkout {
+  color: #0891b2;
+  background: rgba(8, 145, 178, 0.1);
+}
+.event-badge.event-auto-checkout {
+  color: #0891b2;
+  background: rgba(8, 145, 178, 0.1);
 }
 .event-badge.event-default {
   color: var(--brand-primary, var(--brand-primary));

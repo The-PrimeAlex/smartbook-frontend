@@ -5,6 +5,8 @@ import { AuthService } from '../../core/auth/auth.service';
 
 export interface UserNotificationPreferences {
   send_reminders: boolean;
+  send_checkin: boolean;
+  send_checkout: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -18,6 +20,8 @@ export class UserNotificationPreferencesService {
     return this.http.get<Record<string, boolean>>(this.baseUrl).pipe(
       map((raw) => ({
         send_reminders: raw['send_reminders'] ?? true,
+        send_checkin: raw['send_checkin'] ?? true,
+        send_checkout: raw['send_checkout'] ?? true,
       })),
     );
   }

@@ -126,12 +126,18 @@ export class NotificationInboxComponent implements OnInit {
     switch (eventType) {
       case 'AUTO_CHECK_IN':
         return 'event-auto-checkin';
+      case 'CHECK_IN':
+        return 'event-checkin';
       case 'OVERRUN':
         return 'event-overrun';
       case 'BOOKING_CONFLICT':
         return 'event-conflict';
       case 'NO_SHOW':
         return 'event-no-show';
+      case 'AUTO_CHECK_OUT':
+        return 'event-auto-checkout';
+      case 'CHECKOUT':
+        return 'event-checkout';
       default:
         return 'event-default';
     }
@@ -141,12 +147,18 @@ export class NotificationInboxComponent implements OnInit {
     switch (eventType) {
       case 'AUTO_CHECK_IN':
         return 'Auto Check-in';
+      case 'CHECK_IN':
+        return 'Check-in';
       case 'OVERRUN':
         return 'Overrun';
       case 'BOOKING_CONFLICT':
         return 'Booking Conflict';
       case 'NO_SHOW':
         return 'No-show';
+      case 'AUTO_CHECK_OUT':
+        return 'Auto Check-out';
+      case 'CHECKOUT':
+        return 'Check-out';
       default:
         return eventType;
     }
