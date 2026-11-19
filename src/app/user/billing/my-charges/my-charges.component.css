@@ -540,11 +540,9 @@
   transform: scale(1.1);
 }
 
-/* Modal Overlay — use ng-deep to bypass view encapsulation so
-   pointer-events: none actually blocks the overlay when hidden.
-   The overlay sits above the sidebar (z-index 1000) and would
-   intercept hamburger button clicks if pointer-events isn't applied. */
-::ng-deep .modal-overlay {
+/* Modal Overlay — only rendered when visible via @if in the template,
+   so it never intercepts clicks on the hamburger button when hidden. */
+.modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -553,14 +551,6 @@
   align-items: center;
   justify-content: center;
   z-index: 997;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-::ng-deep .modal-overlay.visible {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 @keyframes fadeIn {

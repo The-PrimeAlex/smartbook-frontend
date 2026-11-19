@@ -190,9 +190,9 @@
     </div>
   }
   <!-- Payment Modal -->
+  @if (showPaymentModal()) {
   <div
-    class="modal-overlay"
-    [class.visible]="showPaymentModal()"
+    class="modal-overlay visible"
     (click)="closePaymentModalIfOverlayClick($event)"
   >
     <div class="payment-modal" (click)="$event.stopPropagation()">
@@ -301,4 +301,5 @@
       }
     </div>
   </div>
+  }
 </div>
