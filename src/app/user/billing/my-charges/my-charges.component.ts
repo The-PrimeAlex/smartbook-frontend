@@ -4,6 +4,7 @@ import {
   OnInit,
   OnDestroy,
   signal,
+  effect,
 } from '@angular/core';
 import { createLogger } from '../../../shared/services/logger.service';
 import { CommonModule } from '@angular/common';
@@ -72,6 +73,31 @@ export class MyChargesComponent implements OnInit, OnDestroy {
   error = signal<string | null>(null);
   statsCollapsed = signal(true);
   private routerSubscription: Subscription | null = null;
+  private refreshInterval: any = null;
+
+  // Auto-refresh bills every 30 seconds so new charges appear in real-time
+  private autoRefreshEffect = effect(() => {
+    // Re-establish interval whenever loading state changes to false
+    if (!this.loading()) {
+      this.startAutoRefresh();
+    } else {
+      this.stopAutoRefresh();
+    }
+  });
+
+  private startAutoRefresh(): void {
+    this.stopAutoRefresh();
+    this.refreshInterval = setInterval(() => {
+      this.loadBills();
+    }, 30000); // 30 seconds
+  }
+
+  private stopAutoRefresh(): void {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+      this.refreshInterval = null;
+    }
+  }
 
   toggleStatsCollapsed(): void {
     this.statsCollapsed.update((v) => !v);
@@ -124,6 +150,7 @@ export class MyChargesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routerSubscription?.unsubscribe();
+    this.stopAutoRefresh();
   }
 
   loadBills(): void {
