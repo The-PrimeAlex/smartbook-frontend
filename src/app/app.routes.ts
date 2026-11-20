@@ -181,6 +181,7 @@ export const routes: Routes = [
               import('./admin/calendar/calendar.component').then(
                 (m) => m.CalendarComponent,
               ),
+            data: { isAdmin: true },
           },
           {
             path: 'bookings',

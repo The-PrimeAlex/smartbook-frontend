@@ -37,6 +37,10 @@ export class CalendarService {
     return this.http.get<unknown>(`${this.apiBaseUrl}/bookings/me`);
   }
 
+  getAllBookings(): Observable<unknown> {
+    return this.http.get<unknown>(`${this.apiBaseUrl}/admin/bookings`);
+  }
+
   getGoogleEvents(
     from: string,
     to: string,

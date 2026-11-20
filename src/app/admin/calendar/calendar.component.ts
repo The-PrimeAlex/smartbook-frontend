@@ -7,6 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {
   LucideCalendar,
   LucideCheckCircle,
@@ -62,6 +63,7 @@ export class CalendarComponent implements OnInit {
   readonly LucideCheckCircle = LucideCheckCircle;
   readonly LucideClock = LucideClock;
   private readonly calendarService = inject(CalendarService);
+  private readonly route = inject(ActivatedRoute);
 
   @Input() isAdmin = false;
   @Input() customerId = '';
@@ -234,16 +236,23 @@ export class CalendarComponent implements OnInit {
   );
 
   ngOnInit(): void {
+    const routeData = this.route.snapshot.data as { isAdmin?: boolean };
+    this.isAdmin = routeData.isAdmin ?? this.isAdmin;
     this.loadSmartBookBookings();
-    this.loadGoogleEvents();
+    if (!this.isAdmin) {
+      this.loadGoogleEvents();
+    }
   }
 
   loadSmartBookBookings(): void {
     this.bookingsLoading.set(true);
     this.bookingsError.set('');
 
-    this.calendarService
-      .getMyBookings()
+    const bookingsObservable = this.isAdmin
+      ? this.calendarService.getAllBookings()
+      : this.calendarService.getMyBookings();
+
+    bookingsObservable
       .pipe(finalize(() => this.bookingsLoading.set(false)))
       .subscribe({
         next: (response: unknown) => {
@@ -260,7 +269,7 @@ export class CalendarComponent implements OnInit {
           this.bookingsError.set(
             getErrorMessage(
               error,
-              "We couldn't load your bookings. Please try again in a moment.",
+              "We couldn't load bookings. Please try again in a moment.",
             ),
           );
         },

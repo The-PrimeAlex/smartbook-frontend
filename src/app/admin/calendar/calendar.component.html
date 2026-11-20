@@ -3,11 +3,18 @@
     <div class="calendar-heading">
       <p class="eyebrow">SMARTBOOK</p>
       <h1>Booking Calendar</h1>
+      @if (isAdmin) {
+      <p class="calendar-subtitle">
+        View all room bookings across the facility.
+      </p>
+      } @else {
       <p class="calendar-subtitle">
         Manage room bookings and keep your Google Calendar in sync.
       </p>
+      }
     </div>
     <div class="calendar-actions">
+      @if (!isAdmin) {
       <button
         type="button"
         class="btn btn-google"
@@ -36,19 +43,20 @@
             : 'Disconnect Google Calendar'
         }}
       </button>
+      }
     </div>
   </header>
-  @if (googleConnectionMessage()) {
+  @if (!isAdmin && googleConnectionMessage()) {
     <div class="notice notice-success" role="status">
       {{ googleConnectionMessage() }}
     </div>
   }
-  @if (googleConnectionError()) {
+  @if (!isAdmin && googleConnectionError()) {
     <div class="notice notice-error" role="alert">
       {{ googleConnectionError() }}
     </div>
   }
-  @if (googleEventsError()) {
+  @if (!isAdmin && googleEventsError()) {
     <div class="notice notice-error" role="alert">
       {{ googleEventsError() }}
     </div>
@@ -65,22 +73,22 @@
       </button>
     </div>
   }
-  @if (googleSyncMessage()) {
+  @if (!isAdmin && googleSyncMessage()) {
     <div class="notice notice-success" role="status">
       {{ googleSyncMessage() }}
     </div>
   }
-  @if (googleSyncError()) {
+  @if (!isAdmin && googleSyncError()) {
     <div class="notice notice-error" role="alert">
       {{ googleSyncError() }}
     </div>
   }
-  @if (googleDisconnectMessage()) {
+  @if (!isAdmin && googleDisconnectMessage()) {
     <div class="notice notice-success" role="status">
       {{ googleDisconnectMessage() }}
     </div>
   }
-  @if (googleDisconnectError()) {
+  @if (!isAdmin && googleDisconnectError()) {
     <div class="notice notice-error" role="alert">
       {{ googleDisconnectError() }}
     </div>
