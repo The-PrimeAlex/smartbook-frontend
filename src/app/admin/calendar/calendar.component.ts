@@ -99,7 +99,35 @@ export class CalendarComponent implements OnInit {
   readonly selectedRoomType = signal<RoomType>('All Rooms');
 
   readonly bookings = computed<CalendarBooking[]>(() => {
-    const combined = [...this.smartBookBookings(), ...this.googleEvents()];
+    const smartBook = this.smartBookBookings();
+    const google = this.googleEvents();
+
+    // Deduplicate: skip Google Calendar events that match a SmartBook booking
+    // (same date, start time, and similar room/title)
+    const deduplicatedGoogle = google.filter((gEvent) => {
+      const isDuplicate = smartBook.some((sBooking) => {
+        if (sBooking.date !== gEvent.date || sBooking.startTime !== gEvent.startTime) {
+          return false;
+        }
+        // Check if the room or title overlaps (case-insensitive)
+        const sRoom = sBooking.room.toLowerCase();
+        const sTitle = sBooking.title.toLowerCase();
+        const gTitle = gEvent.title.toLowerCase();
+        const gLocation = gEvent.room.toLowerCase();
+        // Normalize separators: both "—" (em dash) and "-" (hyphen) are used
+        const sTitleBase = sTitle.replace(/\s*—\s*|\s*-\s*/g, ' ').trim();
+        const gTitleBase = gTitle.replace(/\s*—\s*|\s*-\s*/g, ' ').trim();
+        return (
+          gTitle.includes(sRoom) ||
+          gLocation.includes(sRoom) ||
+          sTitleBase.includes(gTitleBase) ||
+          gTitleBase.includes(sTitleBase)
+        );
+      });
+      return !isDuplicate;
+    });
+
+    const combined = [...smartBook, ...deduplicatedGoogle];
 
     return combined.sort((a, b) => {
       const dateComparison = a.date.localeCompare(b.date);
